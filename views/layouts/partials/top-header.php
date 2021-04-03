@@ -56,10 +56,10 @@ use app\modules\user\models\User;
                     <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Commission Summary', Url::to(), ['class' => 'text-light'])?>
                 </li>
                 <li class="dropdown nav-item tour-step" data-content="Daily Awarding Report" title="Daily Awarding Report">
-                    <?= Html::a('<i class="nav-link-icon fa fa-cog"></i> Daily Awarding Report', Url::to(), ['class' => 'text-light'])?>
+                    <?= Html::a('<i class="nav-link-icon fa fa-address-book"></i> Daily Awarding Report', Url::to(), ['class' => 'text-light'])?>
                 </li>
                 <li class="dropdown nav-item tour-step" data-content="Revenue Report" title="Revenue Report">
-                    <?= Html::a('<i class="nav-link-icon fa fa-cog"></i> Revenue Report', Url::to(), ['class' => 'text-light'])?>
+                    <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Revenue Report', Url::to(), ['class' => 'text-light'])?>
                 </li>
                 <?php if(Yii::$app->request->userIP !== '127.0.0.1'): ?>
                 <li class="dropdown nav-item tour-step" data-content="Click to go to the configuration for the applications module" title="Settings/Apps Setup">

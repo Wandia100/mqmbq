@@ -43,25 +43,62 @@ use luc\tourist\Tourist;
                 <li>
                     <?= Html::a('<i class="metismenu-icon fa fa-home"></i> Home', Url::home(), ['class' => ''])?>
                 </li>
-                <li class="app-sidebar__heading tour-step" data-content="Application Management Options. Add/Edit/View Application(s) options"
-                    title="Application Management">
-                    Application Management
-                </li>
-                <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-chalkboard"></i> Activity logs', Url::to(['/activitylog/index']), ['class' => '', 'id' => 'appmenu'])?>
-                </li>
-                <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-cog"></i> Stations', Url::to(['/stations/index']), ['class' => '', 'id'=>'manage_categories'])?>
-                </li>
-                <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-plus-circle"></i> Prizes', Url::to(['/prizes/index']), ['class' => '', 'id' => 'newapp'])?>
-                </li>
                 <li class="app-sidebar__heading tour-step" title="User Administration"
                     data-content="User Management Module. Menu options to manage, edit, view, create users.">
-                    User Administration
+                    USER MANAGEMENT
                 </li>
                 <li>
                     <?= Html::a('<i class="metismenu-icon fa fa-users"></i> List All Users', Url::to(['/users/index']), ['class' => '', 'id' => 'users'])?>
+                </li>
+                <li class="app-sidebar__heading tour-step" title="User Administration"
+                    data-content="User Management Module. Menu options to manage, edit, view, create users.">
+                    STATION MANAGEMENT
+                </li>
+                <li>
+                    <?= Html::a('<i class="metismenu-icon fa fa-signal"></i> Stations', Url::to(['/stations/index']), ['class' => '', 'id'=>'manage_categories'])?>
+                </li>
+                <li>
+                    <?= Html::a('<i class="metismenu-icon fa fa-microphone"></i> Station Shows', Url::to(['/stationshows/index']), ['class' => '', 'id'=>'manage_categories'])?>
+                </li>
+                <li>
+                    <?= Html::a('<i class="metismenu-icon fa fa-gift"></i> Prizes', Url::to(['/prizes/index']), ['class' => '', 'id' => 'newapp'])?>
+                </li>
+                <li class="app-sidebar__heading tour-step" data-content="Application Management Options. Add/Edit/View Application(s) options"
+                    title="Application Management">
+                    REPORTS
+                </li>
+                <li>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Mpesa Report', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                <li>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Transactions Report', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                <li>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Winners Report', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                <li>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Financial Summary', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                <li>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Commission', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                <li>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Management Commission', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                <li>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursement Report', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                
+                <li class="app-sidebar__heading tour-step" data-content="Application Management Options. Add/Edit/View Application(s) options"
+                    title="Application Management">
+                    FINANCE
+                </li>
+                <li>
+                    <?= Html::a('<i class="metismenu-icon fa fa-paper-plane
+                    "></i> Disbursement', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                <li>
+                    <?= Html::a('<i class="metismenu-icon fa fa-user"></i> Presenter Disbursement', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 
                 <li class="app-sidebar__heading tour-step" title=" Module"
