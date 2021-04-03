@@ -19,20 +19,24 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['create', 'update','index','logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['create', 'update','index','logout'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            if(!Yii::$app->user->isGuest){
+                                return TRUE;
+                            }
+                        }
                     ],
                 ],
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    #'logout' => ['post'],
                 ],
             ],
         ];
