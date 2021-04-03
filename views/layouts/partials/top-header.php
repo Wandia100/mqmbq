@@ -102,22 +102,10 @@ use app\modules\user\models\User;
                         </div>
                         <div class="widget-content-left  ml-3 header-user-info">
                             <div class="widget-heading">
-                                <?php if(is_object($user_meta)):?>
-                                    <?php if( isset($user_meta->login_scenario) && $user_meta->login_scenario == User::LOGIN_SCENARIO_DB):?>
-                                        <?= $user_meta->other_names ?>
-                                    <?php endif;?>
-                                <?php else:?>
-                                    <?= ArrayHelper::getValue($user_meta, 'cn', '')?>
-                                <?php endif;?>
+                                
                             </div>
                             <div class="widget-subheading">
-                                <?php if(is_object($user_meta)):?>
-                                    <?php if( isset($user_meta->login_scenario) && $user_meta->login_scenario == User::LOGIN_SCENARIO_DB):?>
-                                        <?= $user_meta->email ?>
-                                    <?php endif;?>
-                                <?php else:?>
-                                    <?= ArrayHelper::getValue($user_meta, 'userprincipalname', '')?>
-                                <?php endif;?>
+                                
                             </div>
                         </div>
                     </div>
