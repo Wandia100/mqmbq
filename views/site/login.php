@@ -1,47 +1,46 @@
 <?php
 
+use yii\helpers\Html;
+use kartik\form\ActiveForm;
+
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $model app\models\LoginForm */
+/* @var $model \common\models\LoginForm */
 
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
-
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Sign In';
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+<div class="signupform">
+    <div class="container">
+        <!-- main content -->
+        <div class="agile_info">
+            <div class="w3l_form">
+                <div class="left_grid_info">
+                    <h1>Com21</h1>
+                        <p>Welcome to the Com21 Raffle platform. This is a management platform for all Com21 Raffle features</p>
+                        
+                </div>
+            </div>
+            <div class="w3_info">
+                <h2>Login to your Account</h2>
+                <p>Enter your details to login.</p>
+                <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-    <?php $form = ActiveForm::begin([
-        'id' => 'login-form',
-        'layout' => 'horizontal',
-        'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-1 control-label'],
-        ],
-    ]); ?>
+                <label>Username</label>
+                <?= $form->field($model, 'username')->textInput(['required' => true, 'placeholder' => 'Enter username'])->label(false) ?>
 
-        <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+                <label>Password</label>
+                <?= $form->field($model, 'password')->passwordInput(['required' => true, 'placeholder' => "Enter Password"])->label(false) ?>
 
-        <?= $form->field($model, 'password')->passwordInput() ?>
-
-        <?= $form->field($model, 'rememberMe')->checkbox([
-            'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-        ]) ?>
-
-        <div class="form-group">
-            <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                <div class="login-check">
+                    <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i> </i> Remember me</label>
+                </div>	
+                <?= Html::submitButton('Login', ['class' => 'btn btn-danger btn-block', 'name' => 'login-button']) ?>
+                <?php ActiveForm::end(); ?>
+                <p class="account">By clicking login, you agree to our <a href="#">Terms & Conditions!</a></p>
             </div>
         </div>
-
-    <?php ActiveForm::end(); ?>
-
-    <div class="col-lg-offset-1" style="color:#999;">
-        You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-        To modify the username/password, please check out the code <code>app\models\User::$users</code>.
+        <!-- //main content -->
     </div>
 </div>
+
