@@ -17,7 +17,7 @@ class UsersSearch extends Users
     public function rules()
     {
         return [
-            [['id', 'first_name', 'last_name', 'national_id', 'date_of_birth', 'phone_number', 'email', 'profile_image', 'defaultpermissiondenied', 'extpermission', 'password', 'created_at', 'updated_at', 'created_by'], 'safe'],
+            [['id', 'first_name', 'last_name', 'national_id', 'date_of_birth', 'phone_number', 'email', 'profile_image', 'defaultpermissiondenied', 'extpermission', 'password', 'created_at', 'updated_at', 'created_by','deleted_at'], 'safe'],
             [['perm_group', 'enabled'], 'integer'],
         ];
     }

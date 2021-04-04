@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'perm_group',
             'defaultpermissiondenied',
             'extpermission',
-            'password',
+            //'password',
             'enabled',
             'created_at',
             'updated_at',

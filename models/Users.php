@@ -41,7 +41,7 @@ class Users extends \yii\db\ActiveRecord
     {
         return [
             [['id', 'first_name', 'last_name', 'email', 'password'], 'required'],
-            [['date_of_birth', 'created_at', 'updated_at'], 'safe'],
+            [['date_of_birth', 'created_at', 'updated_at','deleted_at'], 'safe'],
             [['perm_group', 'enabled'], 'integer'],
             [['id', 'created_by'], 'string', 'max' => 36],
             [['first_name', 'last_name', 'profile_image'], 'string', 'max' => 50],

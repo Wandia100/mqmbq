@@ -23,6 +23,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     public $created_at;
     public $updated_at;
     public $created_by;
+    public $deleted_at;
 
     private static $users = [
         '100' => [
