@@ -12,7 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="users-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Create Users', ['create'], ['class' => 'btn btn-success']) ?>
@@ -43,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'updated_at',
             //'created_by',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}'],
         ],
     ]); ?>
 

@@ -83,9 +83,18 @@ class UsersController extends Controller
     public function actionCreate()
     {
         $model = new Users();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $userscount = Users::find()->count() + 1;
+            $model->id = md5($userscount);
+            $model->password = password_hash($model->password, PASSWORD_BCRYPT, array('cost' => 5));
+            if($model->save(FALSE)){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }else{ 
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+                
+            }
         }
 
         return $this->render('create', [
