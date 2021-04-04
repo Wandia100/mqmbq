@@ -28,7 +28,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'profile_image')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'perm_group')->dropDownList(\app\models\PermissionGroup::getPermissionGroup()) ?>
+    <?= $form->field($model, 'perm_group')->dropDownList(\app\models\PermissionGroup::getPermissionGroup(),['prompt'=>'--Select--']) ?>
 
 
     <?php
@@ -36,11 +36,8 @@ use yii\widgets\ActiveForm;
             echo $form->field($model, 'password')->passwordInput(['maxlength' => true]) 
     ?>
 
-    <?= $form->field($model, 'enabled')->textInput() ?>
+    <?= $form->field($model, 'enabled')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--']) ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
 
 
     <div class="form-group">
