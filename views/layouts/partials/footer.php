@@ -17,13 +17,13 @@
     <div class="app-footer-right">
         <ul class="nav">
         <li class="nav-item">
-                <a href="http://baraza" target="_blank" class="nav-link">
-                        Baraza
+                <a href="#" target="_blank" class="nav-link">
+                        COM21
                 </a>
             </li>
             <li class="nav-item">
-                <a href="https://www.kemri-wellcome.org" target="_blank" class="nav-link">
-                        KEMRI-Wellcome Trust Program
+                <a href="#" target="_blank" class="nav-link">
+                        COM21
                 </a>
             </li>            
         </ul>

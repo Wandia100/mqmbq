@@ -58,7 +58,10 @@ class UsersController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
+	public function actionRefreshschema() {
+        Yii::$app->db->schema->refresh();
+        Yii::$app->cache->flush();
+}
     /**
      * Displays a single Users model.
      * @param string $id
