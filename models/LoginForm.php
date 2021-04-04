@@ -15,6 +15,7 @@ class LoginForm extends Model
 {
     public $username;
     public $password;
+    public $first_name;
     public $rememberMe = true;
 
     private $_user = false;
@@ -57,12 +58,32 @@ class LoginForm extends Model
      * Logs in a user using the provided username and password.
      * @return bool whether the user is logged in successfully
      */
-    public function login()
+    public function loginold()
     {
         if ($this->validate()) {
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
         }
         return false;
+    }
+    
+     /**
+     * Logs in a user using the provided username and password.
+     * @return bool whether the user is logged in successfully
+     */
+    public function login()
+    {
+        $user = Users::findOne(['email' => $this->username]);
+        if($user){
+            if (password_verify($this->password, $user->password)) {
+                return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            } else {
+                Yii::$app->session->setFlash('authorizationerror');
+                return false;
+            }
+        }else{
+            Yii::$app->session->setFlash('accesserror');
+            return false;
+        }
     }
 
     /**

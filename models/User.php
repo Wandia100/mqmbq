@@ -9,6 +9,20 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     public $password;
     public $authKey;
     public $accessToken;
+    public $first_name;
+    public $last_name;
+    public $national_id;
+    public $date_of_birth;
+    public $email;
+    public $phone_number;
+    public $profile_image;
+    public $perm_group ;
+    public $defaultpermissiondenied;
+    public $extpermission;
+    public $enabled;
+    public $created_at;
+    public $updated_at;
+    public $created_by;
 
     private static $users = [
         '100' => [
@@ -33,7 +47,9 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        $dbUser = Users::findOne($id);
+       
+       return new static($dbUser);
     }
 
     /**
@@ -56,7 +72,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      * @param string $username
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByUsernameOld($username)
     {
         foreach (self::$users as $user) {
             if (strcasecmp($user['username'], $username) === 0) {
@@ -65,6 +81,25 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
         }
 
         return null;
+    }
+
+    /**
+     * Finds user by username
+     *
+     * @param  string      $username
+     * @return static|null
+     */
+    public static function findByUsername($username)
+    {
+       $dbuser = Users::find()
+            ->where([
+                "email" => $username
+            ])
+           ->one();
+        if(!$dbuser){
+            return null;
+        }
+        return new static($dbuser);
     }
 
     /**

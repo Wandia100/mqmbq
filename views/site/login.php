@@ -21,9 +21,24 @@ $this->title = 'Sign In';
                         
                 </div>
             </div>
+            <div class="row"> 
+                <div class="col-sm-12">
+                    <?php if (Yii::$app->session->hasFlash('accesserror')){ ?>
+                    <br/><div class="alert alert-danger">
+                      Error:  Incorrect username or password
+                    </div>
+                <?php } else if(Yii::$app->session->hasFlash('authorizationerror')){ ?>
+                    <br/><div class="alert alert-danger">
+                        Error: You dont have permission to access this study
+                    </div>
+                <?php } ?>
+                </div>          
+            </div>  
             <div class="w3_info">
                 <h2>Login to your Account</h2>
                 <p>Enter your details to login.</p>
+                  
+            
                 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
                 <label>Username</label>

@@ -77,4 +77,23 @@ class Users extends \yii\db\ActiveRecord
             'created_by' => 'Created By',
         ];
     }
+    
+    /**
+     * Finds user by username
+     *
+     * @param  string      $username
+     * @return static|null
+     */
+    public static function findByUsername($username)
+    {
+       $dbuser = Users::find()
+            ->where([
+                "email" => $username
+            ])
+           ->one();
+        if(!$dbuser){
+            return null;
+        }
+        return new static($dbuser);
+    }
 }
