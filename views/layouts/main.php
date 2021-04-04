@@ -35,7 +35,9 @@ AdminAsset::register($this);
 
         <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header closed-sidebar">
             <?= $this->render('partials/top-header', []); ?>
-            <?php// echo $this->render('partials/theme-setting', []); ?>
+            <?php
+            // echo $this->render('partials/theme-setting', []); 
+            ?>
             <div class="app-main">
                 <?= $this->render('partials/sidebar', []); ?>
                 <div class="app-main__outer">
