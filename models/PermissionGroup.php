@@ -48,4 +48,16 @@ class PermissionGroup extends \yii\db\ActiveRecord
             'defaultPermissions' => 'Default Permissions',
         ];
     }
+    /**
+     * Method to getPermission group list
+     * @return type
+     */
+    public static function getPermissionGroup(){
+        $list = [];
+        $records = PermissionGroup::findAll(['status'=>1]);
+        foreach ($records as $record) {
+            $list[$record -> id] = $record->name;
+        }
+        return $list;
+    }
 }

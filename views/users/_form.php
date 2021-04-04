@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id')->textInput(['maxlength' => true]) ?>
+    <?php //$form->field($model, 'id')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
 
@@ -28,13 +28,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'profile_image')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'perm_group')->textInput() ?>
+    <?= $form->field($model, 'perm_group')->dropDownList(\app\models\PermissionGroup::getPermissionGroup()) ?>
 
-    <?= $form->field($model, 'defaultpermissiondenied')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'extpermission')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
+    <?php
+        if($model -> isNewRecord)
+            echo $form->field($model, 'password')->passwordInput(['maxlength' => true]) 
+    ?>
 
     <?= $form->field($model, 'enabled')->textInput() ?>
 
@@ -42,10 +42,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'updated_at')->textInput() ?>
 
-    <?= $form->field($model, 'created_by')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-block btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

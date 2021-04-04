@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'description',
             'causer_id',
-            'properties',
+            //'properties',
             'created_at',
             //'updated_at',
             //'is_deleted',
