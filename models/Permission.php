@@ -44,4 +44,18 @@ class Permission extends \yii\db\ActiveRecord
             'status' => 'Status',
         ];
     }
+    
+
+	/**
+	 * Function to get permissions in an array.
+	 */
+	public static function getPermissions() {
+		$arr = [];
+		$mod = Permission::find()->where( "status = 1" )->all();
+		foreach ( $mod as $value ) {
+			$arr[ $value->id ] = $value->name . '(' . $value->id . ') ';
+		}
+
+		return $arr;
+	}
 }

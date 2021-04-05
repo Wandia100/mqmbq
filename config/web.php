@@ -44,6 +44,9 @@ $config = [
             ],
         ],
         'db' => $db,
+        'myhelper'        => [
+                'class' => 'app\components\Myhelper',
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,

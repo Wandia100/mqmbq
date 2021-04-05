@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Users */
@@ -20,7 +21,19 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'national_id')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'date_of_birth')->textInput() ?>
+    <?php
+        //$form->field($model, 'date_of_birth')->textInput();
+    echo  $form-> field($model, 'date_of_birth')->widget(DatePicker::classname(), [
+
+                    'options' => ['placeholder' => 'Date of birth'],
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'format' => 'yyyy-mm-dd', 
+                    ]
+                ]);
+        
+            
+    ?>
 
     <?= $form->field($model, 'phone_number')->textInput(['maxlength' => true]) ?>
 
