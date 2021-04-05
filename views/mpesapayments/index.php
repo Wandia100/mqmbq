@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'BillRefNumber',
             //'TransAmount',
             //'is_archived',
-            //'created_at',
+            'created_at',
             //'updated_at',
             //'deleted_at',
 

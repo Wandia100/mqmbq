@@ -8,6 +8,8 @@ use app\models\MpesaPaymentsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Webpatser\Uuid\Uuid;
+
 
 /**
  * MpesapaymentsController implements the CRUD actions for MpesaPayments model.
@@ -89,6 +91,33 @@ class MpesapaymentsController extends Controller
             'model' => $model,
         ]);
     }
+    //function for savebatch transactions
+    public function actionSave()
+    {
+        $jsondata = file_get_contents('php://input');
+        $value = json_decode($jsondata,true);
+        $model = new MpesaPayments();
+        $model->id=Uuid::generate()->string;
+        $model->TransID = $value['TransID'];
+        $model->FirstName = $value['FirstName'];
+        $model->MiddleName = $value['MiddleName'];
+        $model->LastName = $value['LastName'];
+        $model->MSISDN = $value['MSISDN'];
+        $model->InvoiceNumber = $value['InvoiceNumber'];
+        $model->BusinessShortCode = $value['BusinessShortCode'];
+        $model->ThirdPartyTransID = $value['ThirdPartyTransID'];
+        $model->TransactionType = $value['TransactionType'];
+        $model->OrgAccountBalance = $value['OrgAccountBalance'];
+        $model->BillRefNumber = $value['BillRefNumber'];
+        $model->TransAmount = $value['TransAmount'];
+        $model->created_at=date("Y-m-d H:i:s");
+        $model->updated_at=date("Y-m-d H:i:s");
+        $model->save(false);
+        $response['status'] = 'success';
+        $response['message'] = 'success';
+        $response['data'] = [];
+        \Yii::$app->response->data = json_encode($response);
+    }
 
     /**
      * Updates an existing MpesaPayments model.
@@ -139,4 +168,12 @@ class MpesapaymentsController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+    public function beforeAction($action)
+{            
+    if ($action->id == 'save') {
+        $this->enableCsrfValidation = false;
+    }
+
+    return parent::beforeAction($action);
+}
 }
