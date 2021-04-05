@@ -8,6 +8,8 @@ use app\models\UsersSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\PermissionGroup;
+use app\models\Permission;
 
 /**
  * UsersController implements the CRUD actions for Users model.
@@ -28,8 +30,9 @@ class UsersController extends Controller
                         'actions' => ['create', 'update','index'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
-                            if(!Yii::$app->user->isGuest){
-                                return TRUE;
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array( 1 ) );
+                                return in_array( Yii::$app->user->identity->email, $users );
                             }
                         }
                     ],
@@ -70,7 +73,38 @@ class UsersController extends Controller
      */
     public function actionView($id)
     {
+        $model     = $this->findModel($id);
+        $groupPerm = PermissionGroup::findOne( $model->perm_group );
+        if ( $groupPerm ) {
+            $defaultpermarray         = explode( ',', $groupPerm->defaultPermissions );
+            $extrapermarray           = explode( ',', $model->extpermission );
+            $denieddefaultPermissions = explode( ',', $model->defaultpermissiondenied );
+            if ( $model->load( Yii::$app->request->post() ) ) {
+                $newpermissions     = $model->extpermission;
+                $newdefaultPerm     = array_intersect( $newpermissions, $defaultpermarray );
+                $newextrapermission = array_diff( $newpermissions, $newdefaultPerm );
+
+                $newdenied             = array_diff( $defaultpermarray, $newdefaultPerm );
+                $denied                = array_filter( $denieddefaultPermissions );
+                $prevdeniedbutnowgiven = array_intersect( $newpermissions, $denied );
+
+                $defaultPermissionsdenied = array_merge( $denied, $newdenied );
+                $defaultPermissionsdenied = array_diff( $defaultPermissionsdenied, $prevdeniedbutnowgiven );
+
+                $unique                         = array_unique( $defaultPermissionsdenied );
+                $model->defaultpermissiondenied = implode( ',', $unique );
+                $model->extpermission           = implode( ',', $newextrapermission );
+                $model->save(false);
+                return $this->redirect(['view','id'=>$id]);
+                
+            }
+            $perm                 = array_merge( $defaultpermarray, $extrapermarray ); // all permissions
+            $perm                 = array_diff( $perm, $denieddefaultPermissions ); // Substract denied permissions
+            
+            
+        }
         return $this->render('view', [
+            'perm' => $perm,
             'model' => $this->findModel($id),
         ]);
     }
