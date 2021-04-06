@@ -8,6 +8,7 @@ use app\models\StationsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Webpatser\Uuid\Uuid;
 
 /**
  * StationsController implements the CRUD actions for Stations model.
@@ -81,7 +82,10 @@ class StationsController extends Controller
     {
         $model = new Stations();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) ) {
+            
+            $model->id=Uuid::generate()->string;
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

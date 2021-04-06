@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\PermissionGroup;
 use app\models\Permission;
+use Webpatser\Uuid\Uuid;
 
 /**
  * UsersController implements the CRUD actions for Users model.
@@ -117,8 +118,9 @@ class UsersController extends Controller
     {
         $model = new Users();
         if ($model->load(Yii::$app->request->post())) {
-            $userscount = Users::find()->count() + 1;
-            $model->id = md5($userscount);
+           // $userscount = Users::find()->count() + 1;
+            //$model->id = md5($userscount);
+            $model->id=Uuid::generate()->string;
             $model->password = password_hash($model->password, PASSWORD_BCRYPT, array('cost' => 5));
             if($model->save(FALSE)){
                 return $this->redirect(['view', 'id' => $model->id]);

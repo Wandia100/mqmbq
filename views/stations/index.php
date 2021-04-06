@@ -11,9 +11,6 @@ $this->title = 'Stations';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="stations-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a('Create Stations', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
@@ -26,17 +23,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'name',
             'address',
-            'enabled',
-            'station_code',
+            //'enabled',
+           // 'station_code',
             //'invalid_percentage',
-            //'created_at',
+            'created_at',
             //'updated_at',
             //'deleted_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}'],
         ],
     ]); ?>
 

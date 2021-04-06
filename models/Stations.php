@@ -62,4 +62,16 @@ class Stations extends \yii\db\ActiveRecord
             'deleted_at' => 'Deleted At',
         ];
     }
+    /**
+     * Method to getPermission group list
+     * @return type
+     */
+    public static function getStations(){
+        $list = [];
+        $records = Stations::findAll(['enabled'=>1]);
+        foreach ($records as $record) {
+            $list[$record -> id] = $record->name;
+        }
+        return $list;
+    }
 }

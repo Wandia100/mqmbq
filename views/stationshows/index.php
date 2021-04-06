@@ -12,8 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="station-shows-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a('Create Station Shows', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
@@ -26,10 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'station_id',
             'name',
-            'description:ntext',
+           // 'description:ntext',
             'show_code',
             //'amount',
             //'commission',
@@ -45,14 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
             //'friday',
             //'saturday',
             //'sunday',
-            //'start_time',
-            //'end_time',
+            'start_time',
+            'end_time',
             //'enabled',
             //'created_at',
             //'updated_at',
             //'deleted_at',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}'],
         ],
     ]); ?>
 
