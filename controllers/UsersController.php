@@ -31,7 +31,7 @@ class UsersController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
-                                $users = Yii::$app->myhelper->getMembers( array( '' ), array( 1 ) );
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(1) );
                                 return in_array( Yii::$app->user->identity->email, $users );
                             }
                         }
@@ -100,7 +100,6 @@ class UsersController extends Controller
             }
             $perm                 = array_merge( $defaultpermarray, $extrapermarray ); // all permissions
             $perm                 = array_diff( $perm, $denieddefaultPermissions ); // Substract denied permissions
-            
             
         }
         return $this->render('view', [

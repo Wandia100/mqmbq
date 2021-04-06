@@ -22,17 +22,7 @@ $this->title = 'Sign In';
                 </div>
             </div>
             <div class="row"> 
-                <div class="col-sm-12">
-                    <?php if (Yii::$app->session->hasFlash('accesserror')){ ?>
-                    <br/><div class="alert alert-danger">
-                      Error:  Incorrect username or password
-                    </div>
-                <?php } else if(Yii::$app->session->hasFlash('authorizationerror')){ ?>
-                    <br/><div class="alert alert-danger">
-                        Error: You dont have permission to access this study
-                    </div>
-                <?php } ?>
-                </div>          
+                 <?= $this->render('//_notification'); ?>         
             </div>  
             <div class="w3_info">
                 <h2>Login to your Account</h2>

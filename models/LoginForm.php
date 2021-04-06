@@ -77,11 +77,13 @@ class LoginForm extends Model
             if (password_verify($this->password, $user->password)) {
                 return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
             } else {
-                Yii::$app->session->setFlash('authorizationerror');
+                //Yii::$app->session->setFlash('authorizationerror');
+                Yii::$app->session->setFlash('error', 'Error: You dont have permission to access this app');
                 return false;
             }
         }else{
-            Yii::$app->session->setFlash('accesserror');
+            //Yii::$app->session->setFlash('accesserror');
+            Yii::$app->session->setFlash('error', 'Error:  Incorrect username or password');
             return false;
         }
     }
