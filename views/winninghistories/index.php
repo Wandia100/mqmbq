@@ -11,14 +11,23 @@ $this->title = 'Winning Histories';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="winning-histories-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Winning Histories', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <div class="panel panel-info">
+        <div class="panel-heading"> Filters</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                        <?=$this->renderFile('@app/views/layouts/partials/_date_filter.php', [
+                                'data' => [],
+                                'url'  => '/winninghistories/index',
+                                'from' => date( 'Y-m-d', strtotime( '-42 days' ) )
+                        ])?>
+                </div>
+            </div>
+            <div class="row">
+                <?= $this->render('//_notification'); ?>  
+            </div>
+        </div>
+    </div>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -26,26 +35,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+           // 'id',
             'prize_id',
             'station_show_prize_id',
             'reference_name',
             'reference_phone',
             //'reference_code',
-            //'station_id',
-            //'presenter_id',
-            //'station_show_id',
-            //'amount',
-            //'transaction_cost',
+            'station_id',
+            'presenter_id',
+            'station_show_id',
+            'amount',
+            'transaction_cost',
             //'conversation_id',
             //'transaction_reference',
-            //'status',
+            'status',
             //'remember_token',
-            //'created_at',
+            'created_at',
             //'updated_at',
             //'deleted_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 
