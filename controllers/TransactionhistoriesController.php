@@ -6,6 +6,7 @@ use Yii;
 use app\models\TransactionHistories;
 use app\models\StationShowPresenters;
 use app\models\Users;
+use app\models\WinningHistories;
 use app\models\TransactionHistoriesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -137,20 +138,25 @@ class TransactionhistoriesController extends Controller
             $show_transactions=TransactionHistories::getShowTransactions($station_show_id,$start_time,$end_time);
             $transaction_total=TransactionHistories::getTransactionTotal($station_show_id,$start_time,$end_time)['total'];
             $transaction_count=count($show_transactions);
-            $total_achievement=($transaction_total/$presenter_station_show['target'])*100;
-
+            $target_achievement=($transaction_total/$presenter_station_show['target'])*100;
+            $show_name=$presenter_station_show['show_name']." ".$presenter_station_show['start_time']." - ".$presenter_station_show['end_time'];
+            $recent_winners=WinningHistories::getRecentWinners($presenter_station_show['station_show_id'],date("Y-m-d"));
         }
         else
         {
             $transaction_total=0;
             $transaction_count=0;
-            $total_achievement=0;
+            $target_achievement=0;
+            $show_name="No draw at this moment";
+            $recent_winners=array();
         }
         
         return $this->render('presenter', [
+            'show_name' => $show_name,
             'transaction_total' => $transaction_total,
             'transaction_count' => $transaction_count,
-            'total_achievement' => $total_achievement
+            'target_achievement' => $target_achievement,
+            'recent_winners' => $recent_winners
         ]);
     }
 

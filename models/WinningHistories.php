@@ -79,4 +79,13 @@ class WinningHistories extends \yii\db\ActiveRecord
             'deleted_at' => 'Deleted At',
         ];
     }
+    public static function getRecentWinners($station_show_id,$today)
+    {
+        $sql="SELECT reference_name,reference_code,amount,created_at FROM winning_histories WHERE 
+        station_show_id=:station_show_id AND created_at >:today";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':station_show_id',$station_show_id)
+        ->bindValue(':today',$today)
+        ->queryAll();
+    }
 }
