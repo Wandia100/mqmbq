@@ -39,7 +39,7 @@ class CommissionsSearch extends Commissions
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $daily = false, $monthly = false, $from = null, $to = null,$t = 'p')
     {
         $query = Commissions::find();
 
@@ -72,6 +72,20 @@ class CommissionsSearch extends Commissions
             ->andFilterWhere(['like', 'station_id', $this->station_id])
             ->andFilterWhere(['like', 'station_show_id', $this->station_show_id])
             ->andFilterWhere(['like', 'transaction_reference', $this->transaction_reference]);
+        $today     = date( 'Y-m-d' );
+        $yesterday = date( 'Y-m-d', strtotime( '-1 day' ) );
+        if ( $daily ) {
+                $query->andWhere( "DATE(created_at)>= DATE('" . $yesterday . "')" );
+                $query->andWhere( "DATE(created_at)<= DATE('" . $today . "')" );
+        }
+        if ( $monthly ) {
+                $query->andWhere( "MONTH(created_at)= MONTH(CURDATE())" );
+                $query->andWhere( "YEAR(created_at)= YEAR(CURDATE())" );
+        }
+        if ( $from != null && $to != null ) {
+                $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
+                $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
+        }
 
         return $dataProvider;
     }

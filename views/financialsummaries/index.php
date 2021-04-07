@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="col-md-12">
                         <?=$this->renderFile('@app/views/layouts/partials/_date_filter.php', [
                                 'data' => [],
-                                'url'  => '/mpesapayments/index',
+                                'url'  => '/financialsummaries/index',
                                 'from' => date( 'Y-m-d', strtotime( '-42 days' ) )
                         ])?>
                 </div>
