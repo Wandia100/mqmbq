@@ -42,7 +42,12 @@ AdminAsset::register($this);
                 <?= $this->render('partials/sidebar', []); ?>
                 <div class="app-main__outer">
                     <div class="app-main__inner">
-                        <?= $this->render('partials/title-section', ['title' => $this->title]); ?>
+                        
+                        <?php
+                            if(!in_array(Yii::$app->controller->id, Yii::$app->params['reportscontrollers'])){
+                               echo $this->render('partials/title-section', ['title' => $this->title]); 
+                            }
+                        ?>
                         <?=$content; ?>
                     </div>
                     <div class="app-wrapper-footer">

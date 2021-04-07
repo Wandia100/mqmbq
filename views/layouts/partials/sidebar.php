@@ -68,25 +68,25 @@ use luc\tourist\Tourist;
                     REPORTS
                 </li>
                 <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Mpesa Report', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Mpesa Report', Url::to(['/mpesapayments/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Transactions Report', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Transactions Report', Url::to(['/transactionhistories/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Winners Report', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Winners Report',  Url::to(['/winninghistories/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Financial Summary', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Financial Summary', Url::to(['/financialsummaries/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Commission', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Commission', Url::to(['/commissions/index','t'=>'p']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Management Commission', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Management Commission', Url::to(['/commissions/index','t'=>'m']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursement Report', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursement Report', Url::to(['/disbursements/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 
                 <li class="app-sidebar__heading tour-step" data-content="Application Management Options. Add/Edit/View Application(s) options"

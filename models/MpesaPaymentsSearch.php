@@ -38,7 +38,7 @@ class MpesaPaymentsSearch extends MpesaPayments
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $daily = false, $monthly = false, $from = null, $to = null)
     {
         $query = MpesaPayments::find();
 
@@ -77,7 +77,20 @@ class MpesaPaymentsSearch extends MpesaPayments
             ->andFilterWhere(['like', 'BillRefNumber', $this->BillRefNumber])
             ->andFilterWhere(['like', 'TransAmount', $this->TransAmount])
             ->andFilterWhere(['like', 'deleted_at', $this->deleted_at]);
-
+        $today     = date( 'Y-m-d' );
+        $yesterday = date( 'Y-m-d', strtotime( '-1 day' ) );
+        if ( $daily ) {
+                $query->andWhere( "DATE(created_at)>= DATE('" . $yesterday . "')" );
+                $query->andWhere( "DATE(created_at)<= DATE('" . $today . "')" );
+        }
+        if ( $monthly ) {
+                $query->andWhere( "MONTH(created_at)= MONTH(CURDATE())" );
+                $query->andWhere( "YEAR(created_at)= YEAR(CURDATE())" );
+        }
+        if ( $from != null && $to != null ) {
+                $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
+                $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
+        }
         return $dataProvider;
     }
 }

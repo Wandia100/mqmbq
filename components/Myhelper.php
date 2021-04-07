@@ -703,6 +703,35 @@ class Myhelper extends Component {
     {
         return \Yii::$app->db->createCommand($sql)->execute(); 
     }
-
+    /**
+     * Method to get dataprovider
+     * @param object $searchModel search model
+     * @return type
+     */
+    public  function getdataprovider($searchModel){
+        $today           = date( 'Y-m-d' );
+        $dateSixWeeksAgo = date( 'Y-m-d', strtotime( '-42 day' ) );
+        if ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'daily' ) {
+                $dataProvider = $searchModel->search( Yii::$app->request->queryParams, true, false );
+        } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'monthly' ) {
+                $dataProvider = $searchModel->search( Yii::$app->request->queryParams, false, true );
+        } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'range' ) {
+                if ( isset( $_GET['from'] ) && isset( $_GET['to'] ) ) {
+                        $to       = $_GET['to'];
+                        $from     = $_GET['from'];
+                        $date1    = strtotime( $to );
+                        $date2    = strtotime( $from );
+                        if ( $date1 < $date2 ) {
+                                Yii::$app->session->setFlash('error', 'Error: start date should be before the end date' );
+                        }
+                        $dataProvider = $searchModel->search( Yii::$app->request->queryParams, false, false, $from, $to );
+                } else {
+                        $dataProvider = $searchModel->search( Yii::$app->request->queryParams, false, false, $dateSixWeeksAgo, $today );
+                }
+        } else {
+                $dataProvider = $searchModel->search( Yii::$app->request->queryParams, true, false );
+        }
+        return $dataProvider;
+    }
 }
 

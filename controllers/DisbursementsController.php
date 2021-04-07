@@ -51,7 +51,7 @@ class DisbursementsController extends Controller
     public function actionIndex()
     {
         $searchModel = new DisbursementsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

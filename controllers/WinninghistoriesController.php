@@ -51,7 +51,7 @@ class WinninghistoriesController extends Controller
     public function actionIndex()
     {
         $searchModel = new WinningHistoriesSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

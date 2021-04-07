@@ -53,7 +53,8 @@ class MpesapaymentsController extends Controller
     public function actionIndex()
     {
         $searchModel = new MpesaPaymentsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
+       
 
         return $this->render('index', [
             'searchModel' => $searchModel,

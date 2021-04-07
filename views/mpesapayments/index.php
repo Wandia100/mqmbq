@@ -11,14 +11,23 @@ $this->title = 'Mpesa Payments';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="mpesa-payments-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Mpesa Payments', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <div class="panel panel-info">
+        <div class="panel-heading"> Filters</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                        <?=$this->renderFile('@app/views/layouts/partials/_date_filter.php', [
+                                'data' => [],
+                                'url'  => '/mpesapayments/index',
+                                'from' => date( 'Y-m-d', strtotime( '-42 days' ) )
+                        ])?>
+                </div>
+            </div>
+            <div class="row">
+                <?= $this->render('//_notification'); ?>  
+            </div>
+        </div>
+    </div>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -26,25 +35,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+           // 'id',
             'TransID',
             'FirstName',
             'MiddleName',
             'LastName',
-            //'MSISDN',
+            'MSISDN',
             //'InvoiceNumber',
             //'BusinessShortCode',
             //'ThirdPartyTransID',
             //'TransactionType',
             //'OrgAccountBalance',
-            //'BillRefNumber',
-            //'TransAmount',
+            'BillRefNumber',
+            'TransAmount',
             //'is_archived',
             'created_at',
             //'updated_at',
             //'deleted_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 
