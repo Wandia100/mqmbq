@@ -38,7 +38,7 @@ class FinancialSummariesSearch extends FinancialSummaries
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $daily = false, $monthly = false, $from = null, $to = null)
     {
         $query = FinancialSummaries::find();
 
@@ -67,6 +67,20 @@ class FinancialSummariesSearch extends FinancialSummaries
         ]);
 
         $query->andFilterWhere(['like', 'id', $this->id]);
+        $today     = date( 'Y-m-d' );
+        $yesterday = date( 'Y-m-d', strtotime( '-1 day' ) );
+        if ( $daily ) {
+                $query->andWhere( "DATE(created_at)>= DATE('" . $yesterday . "')" );
+                $query->andWhere( "DATE(created_at)<= DATE('" . $today . "')" );
+        }
+        if ( $monthly ) {
+                $query->andWhere( "MONTH(created_at)= MONTH(CURDATE())" );
+                $query->andWhere( "YEAR(created_at)= YEAR(CURDATE())" );
+        }
+        if ( $from != null && $to != null ) {
+                $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
+                $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
+        }
 
         return $dataProvider;
     }
