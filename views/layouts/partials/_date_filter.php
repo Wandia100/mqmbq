@@ -3,7 +3,7 @@
 ||  Required Parameters
 ||
 |+-----------------------------------------------------------------------
-||         url:  @param string - path to the filter url e.g /requisition/tray-requests
+||         url:  @param string - path to the filter url e.g /mpesapayment/index
 ||
 ||        data:  @param array - Parameter passed to the url. Should be passed as key=>value.
 ||                   e.g ['id'=>$id]

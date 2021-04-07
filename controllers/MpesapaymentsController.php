@@ -53,28 +53,7 @@ class MpesapaymentsController extends Controller
     public function actionIndex()
     {
         $searchModel = new MpesaPaymentsSearch();
-        $today           = date( 'Y-m-d' );
-        $dateSixWeeksAgo = date( 'Y-m-d', strtotime( '-42 day' ) );
-        if ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'daily' ) {
-                $dataProvider = $searchModel->search( Yii::$app->request->queryParams, true, false,$type );
-        } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'monthly' ) {
-                $dataProvider = $searchModel->search( Yii::$app->request->queryParams, false, true,$type );
-        } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'range' ) {
-                if ( isset( $_GET['from'] ) && isset( $_GET['to'] ) ) {
-                        $to       = $_GET['to'];
-                        $from     = $_GET['from'];
-                        $date1    = strtotime( $to );
-                        $date2    = strtotime( $from );
-                        if ( $date1 < $date2 ) {
-                                Yii::$app->session->setFlash( 'startdate_enddate' );
-                        }
-                        $dataProvider = $searchModel->search( Yii::$app->request->queryParams, false, false, $from, $to,$type );
-                } else {
-                        $dataProvider = $searchModel->search( Yii::$app->request->queryParams, false, false, $dateSixWeeksAgo, $today,$type );
-                }
-        } else {
-                $dataProvider = $searchModel->search( Yii::$app->request->queryParams, true, false,$type );
-        }
+        $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
        
 
         return $this->render('index', [

@@ -11,14 +11,24 @@ $this->title = 'Transaction Histories';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transaction-histories-index">
+    <div class="panel panel-info">
+        <div class="panel-heading"> Filters</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                        <?=$this->renderFile('@app/views/layouts/partials/_date_filter.php', [
+                                'data' => [],
+                                'url'  => '/transactionhistories/index',
+                                'from' => date( 'Y-m-d', strtotime( '-42 days' ) )
+                        ])?>
+                </div>
+            </div>
+            <div class="row">
+                <?= $this->render('//_notification'); ?>  
+            </div>
+        </div>
+    </div>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Transaction Histories', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -26,22 +36,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+           // 'id',
             'mpesa_payment_id',
             'reference_name',
             'reference_phone',
             'reference_code',
-            //'station_id',
-            //'station_show_id',
-            //'amount',
-            //'commission',
+            'station_id',
+            'station_show_id',
+            'amount',
+            'commission',
             //'status',
             //'is_archived',
-            //'created_at',
+            'created_at',
             //'updated_at',
             //'deleted_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 

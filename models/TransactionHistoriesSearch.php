@@ -39,7 +39,7 @@ class TransactionHistoriesSearch extends TransactionHistories
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $daily = false, $monthly = false, $from = null, $to = null)
     {
         $query = TransactionHistories::find();
 
@@ -75,7 +75,20 @@ class TransactionHistoriesSearch extends TransactionHistories
             ->andFilterWhere(['like', 'reference_code', $this->reference_code])
             ->andFilterWhere(['like', 'station_id', $this->station_id])
             ->andFilterWhere(['like', 'station_show_id', $this->station_show_id]);
-
+        $today     = date( 'Y-m-d' );
+        $yesterday = date( 'Y-m-d', strtotime( '-1 day' ) );
+        if ( $daily ) {
+                $query->andWhere( "DATE(created_at)>= DATE('" . $yesterday . "')" );
+                $query->andWhere( "DATE(created_at)<= DATE('" . $today . "')" );
+        }
+        if ( $monthly ) {
+                $query->andWhere( "MONTH(created_at)= MONTH(CURDATE())" );
+                $query->andWhere( "YEAR(created_at)= YEAR(CURDATE())" );
+        }
+        if ( $from != null && $to != null ) {
+                $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
+                $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
+        }
         return $dataProvider;
     }
 }

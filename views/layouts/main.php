@@ -44,7 +44,7 @@ AdminAsset::register($this);
                     <div class="app-main__inner">
                         
                         <?php
-                            if(!in_array(Yii::$app->controller->id, ['mpesapayments'])){
+                            if(!in_array(Yii::$app->controller->id, Yii::$app->params['reportscontrollers'])){
                                echo $this->render('partials/title-section', ['title' => $this->title]); 
                             }
                         ?>
