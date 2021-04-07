@@ -71,4 +71,26 @@ class TransactionHistories extends \yii\db\ActiveRecord
             'deleted_at' => 'Deleted At',
         ];
     }
+    public static function getShowTransactions($station_show_id,$start_time,$end_time)
+    {
+        $sql="SELECT reference_name,reference_phone,amount,commission,created_at FROM transaction_histories 
+        WHERE station_show_id=:station_show_id
+        AND deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':station_show_id',$station_show_id)
+        ->bindValue(':start_time',$end_time)
+        ->bindValue(':end_time',$end_time)
+        ->queryAll();
+    }
+    public static function getTransactionTotal($station_show_id,$start_time,$end_time)
+    {
+        $sql="SELECT coalesce(sum(amount),0) as total FROM transaction_histories 
+        WHERE station_show_id=:station_show_id
+        AND deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':station_show_id',$station_show_id)
+        ->bindValue(':start_time',$end_time)
+        ->bindValue(':end_time',$end_time)
+        ->queryOne();
+    }
 }

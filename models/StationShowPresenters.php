@@ -57,4 +57,16 @@ class StationShowPresenters extends \yii\db\ActiveRecord
             'deleted_at' => 'Deleted At',
         ];
     }
+    public static function presenterStationShow($presenter_id,$current_time,$current_day)
+    {
+        $sql="SELECT b.station_id,a.station_show_id,b.name AS station_show_name,b.description,b.show_code,b.amount,b.commission,
+        b.management_commission,b.price_amount,b.target,b.draw_count,b.start_time,b.end_time 
+        FROM station_show_presenters a LEFT JOIN station_shows b ON a.station_show_id=b.id 
+        WHERE a.presenter_id=:presenter_id AND b.enabled=1 AND b.".$current_day."=1
+        AND  start_time <=:curr_time  AND end_time >=:curr_time";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':presenter_id',$presenter_id)
+        ->bindValue(':curr_time',$current_time)
+        ->queryOne();
+    }
 }

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\TransactionHistories;
+use app\models\StationShowPresenters;
 use app\models\Users;
 use app\models\TransactionHistoriesSearch;
 use yii\web\Controller;
@@ -127,16 +128,29 @@ class TransactionhistoriesController extends Controller
     public function actionPresenter()
     {
         $presenter=Yii::$app->user->identity;
-        $show_count=Users::getPresenterShowCount($presenter->id);
-        echo $show_count; exit();
-        $target_achieved=0;
-        $total_transactions=0;
-        $transaction_stats=0;
-        $winners=0;
+        $presenter_station_show=StationShowPresenters::presenterStationShow($presenter->id,date("H"),strtolower(date("l")));
+        if($presenter_station_show)
+        {
+            $station_show_id=$presenter_station_show['station_show_id'];
+            $start_time=date("Y-m-d")." ".$presenter_station_show['start_time'];
+            $end_time=date("Y-m-d")." ".$presenter_station_show['end_time'];
+            $show_transactions=TransactionHistories::getShowTransactions($station_show_id,$start_time,$end_time);
+            $transaction_total=TransactionHistories::getTransactionTotal($station_show_id,$start_time,$end_time)['total'];
+            $transaction_count=count($show_transactions);
+            $total_achievement=($transaction_total/$presenter_station_show['target'])*100;
 
+        }
+        else
+        {
+            $transaction_total=0;
+            $transaction_count=0;
+            $total_achievement=0;
+        }
+        
         return $this->render('presenter', [
-            'target_achieved' => $target_achieved,
-            'total_transactions' => $total_transactions,
+            'transaction_total' => $transaction_total,
+            'transaction_count' => $transaction_count,
+            'total_achievement' => $total_achievement
         ]);
     }
 
