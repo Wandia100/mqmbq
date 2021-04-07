@@ -12,8 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="prizes-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a('Create Prizes', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
@@ -26,16 +24,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+           // 'id',
             'name',
             'description',
-            'mpesa_disbursement',
-            'enabled',
-            //'created_at',
+           // 'mpesa_disbursement',
+           // 'enabled',
+            'created_at',
             //'updated_at',
             //'deleted_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}'],
         ],
     ]); ?>
 

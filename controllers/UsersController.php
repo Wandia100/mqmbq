@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\PermissionGroup;
 use app\models\Permission;
+use Webpatser\Uuid\Uuid;
 
 /**
  * UsersController implements the CRUD actions for Users model.
@@ -31,7 +32,7 @@ class UsersController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
-                                $users = Yii::$app->myhelper->getMembers( array( '' ), array( 1 ) );
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(1) );
                                 return in_array( Yii::$app->user->identity->email, $users );
                             }
                         }
@@ -101,7 +102,6 @@ class UsersController extends Controller
             $perm                 = array_merge( $defaultpermarray, $extrapermarray ); // all permissions
             $perm                 = array_diff( $perm, $denieddefaultPermissions ); // Substract denied permissions
             
-            
         }
         return $this->render('view', [
             'perm' => $perm,
@@ -118,8 +118,9 @@ class UsersController extends Controller
     {
         $model = new Users();
         if ($model->load(Yii::$app->request->post())) {
-            $userscount = Users::find()->count() + 1;
-            $model->id = md5($userscount);
+           // $userscount = Users::find()->count() + 1;
+            //$model->id = md5($userscount);
+            $model->id=Uuid::generate()->string;
             $model->password = password_hash($model->password, PASSWORD_BCRYPT, array('cost' => 5));
             if($model->save(FALSE)){
                 return $this->redirect(['view', 'id' => $model->id]);

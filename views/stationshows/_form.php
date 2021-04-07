@@ -12,9 +12,8 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'station_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'station_id')->dropDownList(\app\models\Stations::getStations(),['prompt' => '--Select--']) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
@@ -32,38 +31,30 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'target')->textInput() ?>
 
-    <?= $form->field($model, 'draw_count')->textInput() ?>
 
-    <?= $form->field($model, 'invalid_percentage')->textInput() ?>
+    <?= $form->field($model, 'monday')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--']) ?>
 
-    <?= $form->field($model, 'monday')->textInput() ?>
+    <?= $form->field($model, 'tuesday')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--']) ?>
 
-    <?= $form->field($model, 'tuesday')->textInput() ?>
+    <?= $form->field($model, 'wednesday')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--'])?>
 
-    <?= $form->field($model, 'wednesday')->textInput() ?>
+    <?= $form->field($model, 'thursday')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--']) ?>
 
-    <?= $form->field($model, 'thursday')->textInput() ?>
+    <?= $form->field($model, 'friday')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--'])?>
 
-    <?= $form->field($model, 'friday')->textInput() ?>
+    <?= $form->field($model, 'saturday')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--']) ?>
 
-    <?= $form->field($model, 'saturday')->textInput() ?>
-
-    <?= $form->field($model, 'sunday')->textInput() ?>
+    <?= $form->field($model, 'sunday')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--']) ?>
 
     <?= $form->field($model, 'start_time')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'end_time')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'enabled')->textInput() ?>
+    <?= $form->field($model, 'enabled')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--']) ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?= $form->field($model, 'deleted_at')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-block btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
