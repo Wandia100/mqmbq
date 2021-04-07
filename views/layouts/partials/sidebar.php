@@ -68,7 +68,7 @@ use luc\tourist\Tourist;
                     REPORTS
                 </li>
                 <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Mpesa Report', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Mpesa Report', Url::to(['/mpesapayments/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li>
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Transactions Report', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
