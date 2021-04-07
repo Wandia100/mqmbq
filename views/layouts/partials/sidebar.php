@@ -86,7 +86,7 @@ use luc\tourist\Tourist;
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Management Commission', Url::to(['/commissions/index','t'=>'m']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursement Report', Url::to(['/disbursements/index','t'=>'m']), ['class' => '', 'id' => 'appmenu'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursement Report', Url::to(['/disbursements/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 
                 <li class="app-sidebar__heading tour-step" data-content="Application Management Options. Add/Edit/View Application(s) options"

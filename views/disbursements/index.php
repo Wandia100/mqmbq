@@ -11,14 +11,23 @@ $this->title = 'Disbursements';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="disbursements-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Disbursements', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <div class="panel panel-info">
+        <div class="panel-heading"> Filters</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                        <?=$this->renderFile('@app/views/layouts/partials/_date_filter.php', [
+                                'data' => [],
+                                'url'  => '/disbursements/index',
+                                'from' => date( 'Y-m-d', strtotime( '-42 days' ) )
+                        ])?>
+                </div>
+            </div>
+            <div class="row">
+                <?= $this->render('//_notification'); ?>  
+            </div>
+        </div>
+    </div>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -26,20 +35,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+           // 'id',
             'reference_id',
             'reference_name',
             'phone_number',
             'amount',
             //'conversation_id',
-            //'status',
-            //'disbursement_type',
+            'status',
+            'disbursement_type',
             //'transaction_reference',
-            //'created_at',
+            'created_at',
             //'updated_at',
             //'deleted_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            
         ],
     ]); ?>
 

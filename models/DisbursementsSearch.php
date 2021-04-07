@@ -39,7 +39,7 @@ class DisbursementsSearch extends Disbursements
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $daily = false, $monthly = false, $from = null, $to = null)
     {
         $query = Disbursements::find();
 
@@ -73,6 +73,20 @@ class DisbursementsSearch extends Disbursements
             ->andFilterWhere(['like', 'conversation_id', $this->conversation_id])
             ->andFilterWhere(['like', 'disbursement_type', $this->disbursement_type])
             ->andFilterWhere(['like', 'transaction_reference', $this->transaction_reference]);
+        $today     = date( 'Y-m-d' );
+        $yesterday = date( 'Y-m-d', strtotime( '-1 day' ) );
+        if ( $daily ) {
+                $query->andWhere( "DATE(created_at)>= DATE('" . $yesterday . "')" );
+                $query->andWhere( "DATE(created_at)<= DATE('" . $today . "')" );
+        }
+        if ( $monthly ) {
+                $query->andWhere( "MONTH(created_at)= MONTH(CURDATE())" );
+                $query->andWhere( "YEAR(created_at)= YEAR(CURDATE())" );
+        }
+        if ( $from != null && $to != null ) {
+                $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
+                $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
+        }
 
         return $dataProvider;
     }
