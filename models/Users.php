@@ -96,4 +96,11 @@ class Users extends \yii\db\ActiveRecord
         }
         return new static($dbuser);
     }
+    public static function getPresenterShowCount($presenter_id)
+    {
+        $shows = Yii::$app->db->createCommand('SELECT count(id) as total FROM station_show_presenters WHERE presenter_id=:presenter_id AND deleted_at IS NULL')
+           ->bindValue(':presenter_id',$presenter_id)
+           ->queryOne();
+        return  $shows['total']; 
+    }
 }

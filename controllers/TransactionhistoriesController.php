@@ -4,11 +4,12 @@ namespace app\controllers;
 
 use Yii;
 use app\models\TransactionHistories;
+use app\models\Users;
 use app\models\TransactionHistoriesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use app\components\Myhelper;
 /**
  * TransactionhistoriesController implements the CRUD actions for TransactionHistories model.
  */
@@ -122,6 +123,21 @@ class TransactionhistoriesController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+    public function actionPresenter()
+    {
+        $presenter=Yii::$app->user->identity;
+        $show_count=Users::getPresenterShowCount($presenter->id);
+        echo $show_count; exit();
+        $target_achieved=0;
+        $total_transactions=0;
+        $transaction_stats=0;
+        $winners=0;
+
+        return $this->render('presenter', [
+            'target_achieved' => $target_achieved,
+            'total_transactions' => $total_transactions,
+        ]);
     }
 
     /**

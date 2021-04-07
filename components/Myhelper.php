@@ -691,6 +691,18 @@ class Myhelper extends Component {
 		\yii\helpers\VarDumper::dump($v, 10, true);
 		exit();
 	}
+	public static function getAll($sql)
+    {
+        return \Yii::$app->db->createCommand($sql)->queryAll(); 
+    }
+    public static function getOne($sql)
+    {
+        return \Yii::$app->db->createCommand($sql)->queryOne(); 
+    }
+    public static function runQuery($sql)
+    {
+        return \Yii::$app->db->createCommand($sql)->execute(); 
+    }
 
 }
 
