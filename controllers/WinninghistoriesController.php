@@ -4,10 +4,14 @@ namespace app\controllers;
 
 use Yii;
 use app\models\WinningHistories;
+use app\models\StationShowPresenters;
 use app\models\WinningHistoriesSearch;
+use app\models\StationShowPrizes;
+use app\models\TransactionHistories;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Webpatser\Uuid\Uuid;
 
 /**
  * WinninghistoriesController implements the CRUD actions for WinningHistories model.
@@ -89,6 +93,67 @@ class WinninghistoriesController extends Controller
             'model' => $model,
         ]);
     }
+    public function actionDraw()
+    {
+        $response['status']="fail";
+        $response['message']="FAILED TO DRAW!";
+        $response['data']=[];
+        $value=Yii::$app->request->post();
+        $station_show_id=$value['station_show_id'];
+        $presenter_id=$value['presenter_id'];
+        $prize_id=$value['prize_id'];
+        //if presenter is not admin drop him
+        $presenter_show=StationShowPresenters::presenterStationShow($presenter_id,date("H"),strtolower(date("l")));
+        if(!$presenter_show['is_admin'])
+        {
+            $response['status']="fail";
+            $response['message']="PRESENTER MUST BE ADMIN";
+        }
+        $show_prize=StationShowPrizes::getShowPrize(strtolower(date("l")),$station_show_id,$prize_id);
+        if($show_prize)
+        {
+            //pick a random person
+            $transaction_history=TransactionHistories::pickRandom($station_show_id);
+            if($transaction_history)
+            {
+                $model=new WinningHistories();
+                $model->id=Uuid::generate()->string;
+                $model->prize_id =$prize_id;
+                $model->station_show_prize_id =$prize_id;
+                $model->reference_name =$transaction_history['reference_name'];
+                $model->reference_phone =$transaction_history['reference_phone'];
+                $model->reference_code =$transaction_history['reference_code'];
+                $model->station_id =$transaction_history['station_id'];
+                $model->station_show_id =$transaction_history['station_show_id'];
+                $model->presenter_id =$presenter_id;
+                $model->amount =$transaction_history['amount'];
+                $model->created_at =date("Y-m-d H:i:s");
+                $model->status =0;
+                //print_r($model);die();
+                if($model->save(false))
+                {
+                    //send an sms
+                    //$sms_message = "Hi ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs $station_show_prize->amount from $station_name. You shall be called shortly with more details";
+                    $response['status']="success";
+                    $response['message']="all went well";
+                    $response['data']=$model;
+                }
+            }
+            else{
+                $response['status']="fail";
+                $response['message']="FAILED TO DRAW! NO TRANSACTION!";
+            }
+            
+        }
+        else
+        {
+            $response['status']="fail";
+            $response['message']="ALREADY DRAWN";
+        }
+        
+        \Yii::$app->response->data = json_encode($response);
+
+    }
 
     /**
      * Updates an existing WinningHistories model.
@@ -138,5 +203,13 @@ class WinninghistoriesController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    public function beforeAction($action)
+    {            
+        if ($action->id == '') {
+            $this->enableCsrfValidation = false;
+        }
+    
+        return parent::beforeAction($action);
     }
 }

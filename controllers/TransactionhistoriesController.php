@@ -161,7 +161,8 @@ class TransactionhistoriesController extends Controller
             'transaction_count' => $transaction_count,
             'target_achievement' => $target_achievement,
             'presenter_station_show' => $presenter_station_show,
-            'recent_winners' => $recent_winners
+            'recent_winners' => $recent_winners,
+            'show_prizes' => $show_prizes
         ]);
     }
 

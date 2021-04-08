@@ -74,4 +74,16 @@ class StationShowPrizes extends \yii\db\ActiveRecord
         ->queryAll();
 
     }
+    public static function getShowPrize($current_day,$station_show_id,$prize_id)
+    {
+        $sql="SELECT a.draw_count,a.".$current_day." as prize_id,b.amount,b.name,b.description,a.enabled,
+        (SELECT COUNT(id) FROM winning_histories WHERE station_show_id=:station_show_id AND station_show_prize_id=
+        a.".$current_day." AND created_at > CURDATE()) AS prizes_given FROM station_show_prizes a  LEFT JOIN prizes b ON a.".$current_day."=b.id 
+        WHERE station_show_id=:station_show_id AND b.id=:prize_id AND a.enabled=1 HAVING (a.draw_count > prizes_given)";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':station_show_id',$station_show_id)
+        ->bindValue(':prize_id',$prize_id)
+        ->queryOne();
+
+    }
 }

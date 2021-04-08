@@ -93,4 +93,11 @@ class TransactionHistories extends \yii\db\ActiveRecord
         ->bindValue(':end_time',$end_time)
         ->queryOne();
     }
+    public static function pickRandom($station_show_id)
+    {
+        $sql="SELECT * FROM transaction_histories WHERE station_show_id=:station_show_id AND created_at > CURDATE() ORDER BY RAND() LIMIT 1";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':station_show_id',$station_show_id)
+        ->queryOne();
+    }
 }

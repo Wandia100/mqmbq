@@ -85,6 +85,21 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
     </div>
     </div> 
+    <!--start of hidden divs -->
+    <div id="draw_prizes" style="display:none;"><?=json_encode($show_prizes);?></div>
+    <!--end of hidden divs -->
+
+
+
+
+
+
+</div>
+
+
+
+
+
 <!--  draw winner Modal    -->
 <div id="draw_winner_modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -109,8 +124,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="container-fluid">
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-sm-12" id="salereceiptgrid">
-                                <i>Loading...</i>
+                            <div class="col-sm-12 text-center" id="prizes-grid">
+                            <h4><span id="winner_number">0 0 0 0 0 0 0 0 0 0 0 0</span></h4>
+                            <h4><span id="winner_name">WAITING FOR DRAW</span></h4>
+                                <?php
+                                for($i=0;$i < count($show_prizes); $i++)
+                                {
+                                    $row=$show_prizes[$i];
+                                    $station_show_id=$presenter_station_show['station_show_id'];
+                                    $presenter_id=$presenter_station_show['presenter_id'];
+                                    $prize_id=$row['prize_id'];
+                                    ?>
+                                    <button id="<?=$row['prize_id'];?>" class="btn btn-danger" onclick="drawPrize('<?=$station_show_id;?>','<?=$presenter_id;?>','<?=$prize_id;?>')" type="button"><?=$row['name'];?></button>
+                                    <?php
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -120,11 +148,4 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-</div>
-
-
-
-
-
-
 </div>
