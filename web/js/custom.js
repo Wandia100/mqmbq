@@ -1,12 +1,12 @@
-function runDraw () {
+function runDraw() {
     // alert(saleid);
-    $('##winner_draw').modal({
+    $('#draw_winner_modal').modal({
       backdrop: 'static',
       keyboard: false
     })
   
-    $('#winner_draw .modal-dialog').addClass('modal-lg')
-    $('#winner_draw .modal-dialog').addClass('largerwidth')
-    $('#sale_datum').html('Receipt for sale no:')
+    $('#draw_winner_modal .modal-dialog').addClass('modal-lg')
+    $('#draw_winner_modal .modal-dialog').addClass('largerwidth')
+    $('#draw_title').html('Draw Winner')
 
   }

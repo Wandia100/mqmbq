@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
     if ($presenter_station_show['is_admin'])
     {
         ?>
-        <button class="btn btn-primary" type="button">Draw Winner</button>
+        <button class="btn btn-primary" onclick="runDraw()" type="button">Draw Winner</button>
         <?php
     }
     ?>
@@ -85,5 +85,46 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
     </div>
     </div> 
+<!--  draw winner Modal    -->
+<div id="draw_winner_modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">X</a>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <h4><span id="draw_title"></span><b><span id="receipt_no"></span> </b></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <input type=hidden name=bu id=bu value="">
+                <input type=hidden name=bunit id=bunit value="">
+
+                <div class="container-fluid">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-12" id="salereceiptgrid">
+                                <i>Loading...</i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 
 </div>

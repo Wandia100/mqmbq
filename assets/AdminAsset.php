@@ -36,6 +36,7 @@ class AdminAsset extends AssetBundle
         'js/globalFunctions.js',
         'js/admin/admin.js',
         'js/appTour.js',
+        'js/custom.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
