@@ -95,8 +95,8 @@ class WinninghistoriesController extends Controller
     }
     public function actionDraw()
     {
-        $response['status']="fail";
-        $response['message']="FAILED TO DRAW!";
+        $response['status']="";
+        $response['message']="";
         $response['data']=[];
         $value=Yii::$app->request->post();
         $station_show_id=$value['station_show_id'];
@@ -135,8 +135,8 @@ class WinninghistoriesController extends Controller
                     //send an sms
                     //$sms_message = "Hi ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs $station_show_prize->amount from $station_name. You shall be called shortly with more details";
                     $response['status']="success";
-                    $response['message']="all went well";
-                    $response['data']=$model;
+                    $response['message']="no message";
+                    $response['data']=$transaction_history;
                 }
             }
             else{

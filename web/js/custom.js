@@ -25,7 +25,17 @@ function runDraw() {
     $.post(host + '/winninghistories/draw', {station_show_id: station_show_id, presenter_id: presenter_id,prize_id:prize_id}, function (data) {
       //$('#actionsviewgrid').text('')
       //$('#actionsviewgrid').append(data).trigger('create')
+      var data=JSON.parse(data);
+      if(data.status=="fail")
+      {
+        $('#winner_name').html(data['message'])
+      }
+      else{
+        $('#winner_number').html(data.data.reference_phone)
+        $('#winner_name').html(data.data.reference_name)
+      }
+      //console.log( typeof data)
       console.log(data)
     })
-    console.log("You clicked "+presenter_id)
+    //console.log("You clicked "+presenter_id)
   }
