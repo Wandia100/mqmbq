@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use yii\helpers\Url;
 
 class SiteController extends Controller
 {
@@ -77,12 +78,29 @@ class SiteController extends Controller
     {
         $this->layout = 'login';
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
+            if(Yii::$app->user->identity->perm_group==4)
+            {
+                //return Yii::$app->getResponse()->redirect(Url::to('/transactionhistories/presenter'));
+                return $this->redirect( [ '/transactionhistories/presenter' ] );
+            }
+            else
+            {
+                return $this->goHome();
+            }
+        }            
+
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            if(Yii::$app->user->identity->perm_group==4)
+            {
+                return $this->redirect( [ '/transactionhistories/presenter' ] );
+            }
+            else
+            {
+                return $this->goBack();
+            }
+            
         }
 
         $model->password = '';
