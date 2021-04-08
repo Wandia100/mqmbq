@@ -7,6 +7,7 @@ use app\models\TransactionHistories;
 use app\models\StationShowPresenters;
 use app\models\Users;
 use app\models\WinningHistories;
+use app\models\StationShowPrizes;
 use app\models\TransactionHistoriesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -141,6 +142,7 @@ class TransactionhistoriesController extends Controller
             $target_achievement=($transaction_total/$presenter_station_show['target'])*100;
             $show_name=$presenter_station_show['show_name']." ".$presenter_station_show['start_time']." - ".$presenter_station_show['end_time'];
             $recent_winners=WinningHistories::getRecentWinners($presenter_station_show['station_show_id'],date("Y-m-d"));
+            $show_prizes=StationShowPrizes::getShowPrizes(strtolower(date("l")),$presenter_station_show['station_show_id']);
         }
         else
         {
@@ -149,13 +151,16 @@ class TransactionhistoriesController extends Controller
             $target_achievement=0;
             $show_name="No draw at this moment";
             $recent_winners=array();
+            $show_prizes=array();
         }
+        //echo json_encode($show_prizes); exit();
         
         return $this->render('presenter', [
             'show_name' => $show_name,
             'transaction_total' => $transaction_total,
             'transaction_count' => $transaction_count,
             'target_achievement' => $target_achievement,
+            'presenter_station_show' => $presenter_station_show,
             'recent_winners' => $recent_winners
         ]);
     }

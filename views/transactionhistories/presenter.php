@@ -36,7 +36,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-4">
     <div class="card text-dark bg-light mb-3">
     <div class="card-body">
-    <button class="btn btn-primary" type="button">Draw Winner</button>
+    <?php
+    if ($presenter_station_show['is_admin'])
+    {
+        ?>
+        <button class="btn btn-primary" type="button">Draw Winner</button>
+        <?php
+    }
+    ?>
+    
     <p class="card-text"></p>
   </div>
 </div>

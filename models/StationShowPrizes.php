@@ -40,6 +40,7 @@ class StationShowPrizes extends \yii\db\ActiveRecord
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
             [['station_id', 'station_show_id', 'prize_id'], 'string', 'max' => 255],
+            [['monday', 'tuesday', 'wednesday','thursday','friday'], 'string', 'max' => 255],
             [['id'], 'unique'],
         ];
     }
@@ -61,5 +62,16 @@ class StationShowPrizes extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
         ];
+    }
+    public static function getShowPrizes($current_day,$station_show_id)
+    {
+        $sql="SELECT a.draw_count,a.".$current_day." as prize_id,b.amount,b.name,b.description,a.enabled,
+        (SELECT COUNT(id) FROM winning_histories WHERE station_show_id=:station_show_id AND station_show_prize_id=
+        a.".$current_day." AND created_at > CURDATE()) AS prizes_given FROM station_show_prizes a  LEFT JOIN prizes b ON a.".$current_day."=b.id 
+        WHERE station_show_id=:station_show_id AND a.enabled=1 HAVING (a.draw_count > prizes_given)";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':station_show_id',$station_show_id)
+        ->queryAll();
+
     }
 }
