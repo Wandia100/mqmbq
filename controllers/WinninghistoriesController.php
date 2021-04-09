@@ -8,6 +8,7 @@ use app\models\StationShowPresenters;
 use app\models\WinningHistoriesSearch;
 use app\models\StationShowPrizes;
 use app\models\TransactionHistories;
+use app\models\Outbox;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -134,8 +135,14 @@ class WinninghistoriesController extends Controller
                 {
                     $draw_count_balance=$show_prize['draw_count']-$show_prize['prizes_given']-1;
                     $transaction_history['draw_count_balance']=$draw_count_balance;
+                    $outbox=new Outbox();
+                    $outbox->receiver=$transaction_history['reference_phone'];
+                    $station_name=$presenter_show['station_name'];
+                    $outbox->message="Hi ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. You shall be called shortly with more details";
+                    $outbox->category=1;
+                    $outbox->save(false);
                     //send an sms
-                    //$sms_message = "Hi ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs $station_show_prize->amount from $station_name. You shall be called shortly with more details";
+                    //$sms_message = 
                     $response['status']="success";
                     $response['message']="no message";
                     $response['data']=$transaction_history;

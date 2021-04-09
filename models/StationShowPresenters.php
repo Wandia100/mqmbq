@@ -59,9 +59,10 @@ class StationShowPresenters extends \yii\db\ActiveRecord
     }
     public static function presenterStationShow($presenter_id,$current_time,$current_day)
     {
-        $sql="SELECT b.station_id,a.station_show_id,b.name AS show_name,b.description,b.show_code,b.amount,b.commission,
+        $sql="SELECT b.station_id,a.station_show_id,b.name AS show_name,c.name as station_name,b.description,b.show_code,b.amount,b.commission,
         b.management_commission,b.price_amount,b.target,b.draw_count,b.start_time,b.end_time,a.is_admin,a.presenter_id 
         FROM station_show_presenters a LEFT JOIN station_shows b ON a.station_show_id=b.id 
+        LEFT JOIN stations c ON b.station_id=c.id 
         WHERE a.presenter_id=:presenter_id AND b.enabled=1 AND b.".$current_day."=1
         AND  start_time <=:curr_time  AND end_time >=:curr_time";
         return Yii::$app->db->createCommand($sql)
