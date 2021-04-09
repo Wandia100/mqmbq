@@ -127,7 +127,7 @@ class WinninghistoriesController extends Controller
                 $model->station_id =$transaction_history['station_id'];
                 $model->station_show_id =$transaction_history['station_show_id'];
                 $model->presenter_id =$presenter_id;
-                $model->amount =$transaction_history['amount'];
+                $model->amount =$show_prize['amount'];
                 $model->created_at =date("Y-m-d H:i:s");
                 $model->status =0;
                 //print_r($model);die();
