@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php
     }
     ?>
-    
+    <div id="pie-chart" style="width:100%; height:400px;"></div>
     <p class="card-text"></p>
   </div>
 </div>
@@ -86,7 +86,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     </div> 
     <!--start of hidden divs -->
-    <div id="draw_prizes" style="display:none;"><?=json_encode($show_prizes);?></div>
+    <div id="percent_raised" style="display:none;"><?=$percent_raised;?></div>
+    <div id="percent_pending" style="display:none;"><?=$percent_pending;?></div>
     <!--end of hidden divs -->
 
 

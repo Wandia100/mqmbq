@@ -143,6 +143,8 @@ class TransactionhistoriesController extends Controller
             $show_name=$presenter_station_show['show_name']." ".$presenter_station_show['start_time']." - ".$presenter_station_show['end_time'];
             $recent_winners=WinningHistories::getRecentWinners($presenter_station_show['station_show_id'],date("Y-m-d"));
             $show_prizes=StationShowPrizes::getShowPrizes(strtolower(date("l")),$presenter_station_show['station_show_id']);
+            $percent_raised=round(($transaction_total/$presenter_station_show['target'])*100,2);
+            $percent_pending=round((($presenter_station_show['target']-$transaction_total)/$presenter_station_show['target'])*100,2);
         }
         else
         {
@@ -152,6 +154,8 @@ class TransactionhistoriesController extends Controller
             $show_name="No draw at this moment";
             $recent_winners=array();
             $show_prizes=array();
+            $percent_raised=0;
+            $percent_pending=0;
         }
         //echo json_encode($show_prizes); exit();
         
@@ -162,7 +166,9 @@ class TransactionhistoriesController extends Controller
             'target_achievement' => $target_achievement,
             'presenter_station_show' => $presenter_station_show,
             'recent_winners' => $recent_winners,
-            'show_prizes' => $show_prizes
+            'show_prizes' => $show_prizes,
+            'percent_raised' => $percent_raised,
+            'percent_pending' => $percent_pending
         ]);
     }
 
