@@ -15,6 +15,9 @@ function runDraw() {
     $('#draw_winner_modal .modal-dialog').addClass('largerwidth')
     $('#draw_title').html('Draw Winner')
    $('.modal-backdrop').hide();
+   $('#draw_winner_modal').on('hidden.bs.modal', function () {
+    location.reload();
+  })
 
   }
   function drawPrize(station_show_id,presenter_id,prize_id)
@@ -35,6 +38,7 @@ function runDraw() {
         {
           document.getElementById(prize_id).disabled=true;
         }
+        
       }
       //console.log( typeof data)
       console.log(data)
