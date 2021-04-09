@@ -125,8 +125,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-12 text-center" id="prizes-grid">
-                            <h4><span id="winner_number">0 0 0 0 0 0 0 0 0 0 0 0</span></h4>
-                            <h4><span id="winner_name">WAITING FOR DRAW</span></h4>
+                            <h4><span id="winner_number"> 0 0 0 0 0 0 0 0 0 0 0 0</span></h4>
+                            <h4><span id="winner_name"><?=(count($show_prizes) > 0?"WAITING FOR DRAW":"NO DRAWS LEFT FOR PRIZE(S)");?></span></h4>
                                 <?php
                                 for($i=0;$i < count($show_prizes); $i++)
                                 {

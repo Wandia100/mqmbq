@@ -148,7 +148,7 @@ class WinninghistoriesController extends Controller
         else
         {
             $response['status']="fail";
-            $response['message']="ALREADY DRAWN";
+            $response['message']="NO DRAWS LEFT FOR PRIZE(S)";
         }
         
         \Yii::$app->response->data = json_encode($response);

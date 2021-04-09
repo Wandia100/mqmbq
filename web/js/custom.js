@@ -14,9 +14,6 @@ function runDraw() {
     $('#draw_winner_modal .modal-dialog').addClass('modal-lg')
     $('#draw_winner_modal .modal-dialog').addClass('largerwidth')
     $('#draw_title').html('Draw Winner')
-    //var draw_prizes=$('#draw_prizes').val();
-    var draw_prizes=document.getElementById("draw_prizes").innerHTML;
-    console.log(draw_prizes)
    $('.modal-backdrop').hide();
 
   }
@@ -28,6 +25,7 @@ function runDraw() {
       var data=JSON.parse(data);
       if(data.status=="fail")
       {
+        $('#winner_number').html("0 0 0 0 0 0 0 0 0 0 0 0")
         $('#winner_name').html(data['message'])
       }
       else{
