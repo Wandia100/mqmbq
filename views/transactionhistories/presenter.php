@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transaction-histories-index">
 
-    <h1><?= Html::encode($show_name) ?></h1>
+    <h1><?= Html::encode(strtoupper($show_name)) ?></h1>
     <div class="row">
     <div class="col-md-6">
     <div class="card text-white bg-danger mb-3">
@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
     if ($presenter_station_show['is_admin'])
     {
         ?>
-        <button class="btn btn-primary" onclick="runDraw()" type="button">Draw Winner</button>
+        <button class="btn btn-primary" onclick="runDraw()" type="button">DRAW WINNER</button>
         <?php
     }
     ?>
@@ -112,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-5">
-                            <h4><span id="draw_title"></span><b><span id="receipt_no"></span> </b></h4>
+                            <h4><span id="draw_title"></span></h4>
                         </div>
                     </div>
                 </div>

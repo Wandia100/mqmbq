@@ -13,7 +13,7 @@ function runDraw() {
   
     $('#draw_winner_modal .modal-dialog').addClass('modal-lg')
     $('#draw_winner_modal .modal-dialog').addClass('largerwidth')
-    $('#draw_title').html('Draw Winner')
+    $('#draw_title').html('DRAW WINNER')
    $('.modal-backdrop').hide();
    $('#draw_winner_modal').on('hidden.bs.modal', function () {
     location.reload();
