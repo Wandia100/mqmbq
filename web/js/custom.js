@@ -31,6 +31,10 @@ function runDraw() {
       else{
         $('#winner_number').html(data.data.reference_phone)
         $('#winner_name').html(data.data.reference_name)
+        if(data.data.draw_count_balance==0)
+        {
+          document.getElementById(prize_id).disabled=true;
+        }
       }
       //console.log( typeof data)
       console.log(data)

@@ -132,6 +132,8 @@ class WinninghistoriesController extends Controller
                 //print_r($model);die();
                 if($model->save(false))
                 {
+                    $draw_count_balance=$show_prize['draw_count']-$show_prize['prizes_given']-1;
+                    $transaction_history['draw_count_balance']=$draw_count_balance;
                     //send an sms
                     //$sms_message = "Hi ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs $station_show_prize->amount from $station_name. You shall be called shortly with more details";
                     $response['status']="success";
