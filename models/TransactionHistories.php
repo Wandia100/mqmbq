@@ -78,7 +78,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
         AND deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':station_show_id',$station_show_id)
-        ->bindValue(':start_time',$end_time)
+        ->bindValue(':start_time',$start_time)
         ->bindValue(':end_time',$end_time)
         ->queryAll();
     }
@@ -89,7 +89,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
         AND deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':station_show_id',$station_show_id)
-        ->bindValue(':start_time',$end_time)
+        ->bindValue(':start_time',$start_time)
         ->bindValue(':end_time',$end_time)
         ->queryOne();
     }

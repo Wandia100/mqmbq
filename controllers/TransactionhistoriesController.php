@@ -139,7 +139,7 @@ class TransactionhistoriesController extends Controller
             $show_transactions=TransactionHistories::getShowTransactions($station_show_id,$start_time,$end_time);
             $transaction_total=TransactionHistories::getTransactionTotal($station_show_id,$start_time,$end_time)['total'];
             $transaction_count=count($show_transactions);
-            $target_achievement=($transaction_total/$presenter_station_show['target'])*100;
+            $target_achievement=round(($transaction_total/$presenter_station_show['target'])*100,2);
             $show_name=$presenter_station_show['show_name']." ".$presenter_station_show['start_time']." - ".$presenter_station_show['end_time'];
             $recent_winners=WinningHistories::getRecentWinners($presenter_station_show['station_show_id'],date("Y-m-d"));
             $show_prizes=StationShowPrizes::getShowPrizes(strtolower(date("l")),$presenter_station_show['station_show_id']);
