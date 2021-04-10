@@ -121,6 +121,8 @@ class UsersController extends Controller
            // $userscount = Users::find()->count() + 1;
             //$model->id = md5($userscount);
             $model->id=Uuid::generate()->string;
+            $model->created_at = date('Y-m-d H:i:s');
+            $model->created_by = Yii::$app->user->identity->id;
             $model->password = password_hash($model->password, PASSWORD_BCRYPT, array('cost' => 5));
             if($model->save(FALSE)){
                 return $this->redirect(['view', 'id' => $model->id]);

@@ -96,7 +96,7 @@ class StationShowsSearch extends StationShows
             ->andFilterWhere(['like', 'start_time', $this->start_time])
             ->andFilterWhere(['like', 'end_time', $this->end_time])
             ->andFilterWhere(['like', 'stations.name', $this->stationname]);
-
+        $query->orderBy('created_at DESC');
         return $dataProvider;
     }
 }

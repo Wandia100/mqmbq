@@ -94,11 +94,10 @@ use luc\tourist\Tourist;
                     FINANCE
                 </li>
                 <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-paper-plane
-                    "></i> Disbursement', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursement', Url::to(['/disbursements/indexc']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li>
-                    <?= Html::a('<i class="metismenu-icon fa fa-user"></i> Presenter Disbursement', Url::home(), ['class' => '', 'id' => 'appmenu'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Disbursement', Url::to(['/disbursements/indexc','t'=>'p']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 
                 <li class="app-sidebar__heading tour-step" title=" Module"

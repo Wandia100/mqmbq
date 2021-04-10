@@ -44,8 +44,10 @@ AdminAsset::register($this);
                     <div class="app-main__inner">
                         
                         <?php
-                            if(!in_array(Yii::$app->controller->id, Yii::$app->params['reportscontrollers'])){
-                               echo $this->render('partials/title-section', ['title' => $this->title]); 
+                            if(in_array(Yii::$app->controller->id, Yii::$app->params['reportscontrollers']) && Yii::$app->controller->action->id == 'index'){
+                                //do nothing
+                            }else{
+                                echo $this->render('partials/title-section', ['title' => $this->title]); 
                             }
                         ?>
                         <?=$content; ?>

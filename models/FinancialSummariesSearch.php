@@ -81,7 +81,7 @@ class FinancialSummariesSearch extends FinancialSummaries
                 $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
                 $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
         }
-
+        $query->orderBy('created_at DESC');
         return $dataProvider;
     }
 }

@@ -137,6 +137,7 @@ class WinningHistoriesSearch extends WinningHistories
                 $query->andWhere( "DATE(winning_histories.created_at)>= DATE('" . $from . "')" );
                 $query->andWhere( "DATE(winning_histories.created_at)<= DATE('" . $to . "')" );
         }
+        $query->orderBy('winning_histories.created_at DESC');
         return $dataProvider;
     }
 }

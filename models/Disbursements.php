@@ -36,7 +36,7 @@ class Disbursements extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id'], 'required'],
+            [['id','amount','disbursement_type','phone_number','reference_name'], 'required'],
             [['amount'], 'number'],
             [['status'], 'integer'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],

@@ -108,6 +108,7 @@ class TransactionHistoriesSearch extends TransactionHistories
                 $query->andWhere( "DATE(transaction_histories.created_at)>= DATE('" . $from . "')" );
                 $query->andWhere( "DATE(transaction_histories.created_at)<= DATE('" . $to . "')" );
         }
+        $query->orderBy('transaction_histories.created_at DESC');
         return $dataProvider;
     }
 }

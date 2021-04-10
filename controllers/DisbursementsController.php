@@ -8,6 +8,7 @@ use app\models\DisbursementsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Webpatser\Uuid\Uuid;
 
 /**
  * DisbursementsController implements the CRUD actions for Disbursements model.
@@ -25,7 +26,7 @@ class DisbursementsController extends Controller
                 'only' => ['create', 'update','index'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index'],
+                        'actions' => ['create', 'update','index','indexc'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if(!Yii::$app->user->isGuest){
@@ -57,6 +58,20 @@ class DisbursementsController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    } 
+    /**
+     * Lists all Disbursements models.
+     * @return mixed
+     */
+    public function actionIndexc()
+    {
+        $searchModel = new DisbursementsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('indexc', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -81,7 +96,10 @@ class DisbursementsController extends Controller
     {
         $model = new Disbursements();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) ) {
+            $model->id=Uuid::generate()->string;
+            $model->created_at = date('Y-m-d H:i:s');
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

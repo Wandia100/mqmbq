@@ -68,7 +68,7 @@ class PrizesSearch extends Prizes
         $query->andFilterWhere(['like', 'id', $this->id])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description]);
-
+        $query->orderBy('created_at DESC');
         return $dataProvider;
     }
 }

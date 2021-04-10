@@ -76,7 +76,7 @@ class UsersSearch extends Users
             ->andFilterWhere(['like', 'extpermission', $this->extpermission])
             ->andFilterWhere(['like', 'password', $this->password])
             ->andFilterWhere(['like', 'created_by', $this->created_by]);
-
+        $query->orderBy('created_at DESC');
         return $dataProvider;
     }
 }

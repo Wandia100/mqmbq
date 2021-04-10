@@ -85,6 +85,7 @@ class StationshowsController extends Controller
         if ($model->load(Yii::$app->request->post()) ) {
             
             $model->id=Uuid::generate()->string;
+            $model->created_at = date('Y-m-d H:i:s');
             $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
