@@ -11,13 +11,20 @@ use app\models\WinningHistories;
  */
 class WinningHistoriesSearch extends WinningHistories
 {
+    public $stationname;
+    public $stationshowname;
+    public $stationshowprizeamount;
+    public $prizename;
+    public $presenter;
+    
+    
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'prize_id', 'station_show_prize_id', 'reference_name', 'reference_phone', 'reference_code', 'station_id', 'presenter_id', 'station_show_id', 'conversation_id', 'transaction_reference', 'remember_token', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['id', 'prize_id', 'station_show_prize_id', 'reference_name', 'reference_phone', 'reference_code', 'station_id', 'presenter_id', 'station_show_id', 'conversation_id', 'transaction_reference', 'remember_token', 'created_at', 'updated_at', 'deleted_at','stationname','stationshowname','stationshowprizeamount','prizename','presenter'], 'safe'],
             [['amount', 'transaction_cost'], 'number'],
             [['status'], 'integer'],
         ];
@@ -48,6 +55,34 @@ class WinningHistoriesSearch extends WinningHistories
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        
+        $query->joinWith(['stations']);
+        $query->joinWith(['stationshows']);
+        $query->joinWith(['prizes']);
+        $query->joinWith(['stationshowprize']);
+        $query->joinWith(['presenter']);
+        
+        $dataProvider->sort->attributes['stationname'] = [
+            'asc'  => [ 'station.name' => SORT_ASC ],
+            'desc' => [ 'station.name' => SORT_DESC ],
+        ];
+
+         $dataProvider->sort->attributes['stationshowname'] = [
+            'asc'  => [ 'station_shows.name' => SORT_ASC ],
+            'desc' => [ 'station_shows.name' => SORT_DESC ],
+        ];
+          $dataProvider->sort->attributes['stationshowprizeamount'] = [
+            'asc'  => [ 'station_show_prizes.amount' => SORT_ASC ],
+            'desc' => [ 'station_show_prizes.amount' => SORT_DESC ],
+        ];
+           $dataProvider->sort->attributes['prizename'] = [
+            'asc'  => [ 'prizes.name' => SORT_ASC ],
+            'desc' => [ 'prizes.name' => SORT_DESC ],
+        ];
+            $dataProvider->sort->attributes['presenter'] = [
+            'asc'  => [ 'users.first_name' => SORT_ASC ],
+            'desc' => [ 'users.first_name' => SORT_DESC ],
+        ];
 
         $this->load($params);
 
@@ -67,7 +102,7 @@ class WinningHistoriesSearch extends WinningHistories
             'deleted_at' => $this->deleted_at,
         ]);
 
-        $query->andFilterWhere(['like', 'id', $this->id])
+        $query->andFilterWhere(['like', 'winning_histories.id', $this->id])
             ->andFilterWhere(['like', 'prize_id', $this->prize_id])
             ->andFilterWhere(['like', 'station_show_prize_id', $this->station_show_prize_id])
             ->andFilterWhere(['like', 'reference_name', $this->reference_name])
@@ -78,21 +113,29 @@ class WinningHistoriesSearch extends WinningHistories
             ->andFilterWhere(['like', 'station_show_id', $this->station_show_id])
             ->andFilterWhere(['like', 'conversation_id', $this->conversation_id])
             ->andFilterWhere(['like', 'transaction_reference', $this->transaction_reference])
-            ->andFilterWhere(['like', 'remember_token', $this->remember_token]);
+            ->andFilterWhere(['like', 'remember_token', $this->remember_token])
+            ->andFilterWhere(['like', 'stations.name', $this->stationname])
+            ->andFilterWhere(['like', 'station_shows.name', $this->stationshowname])
+            ->andFilterWhere(['like', 'prizes.name', $this->prizename])
+            ->andFilterWhere(['like', 'station_show_prizes.amount', $this->stationshowprizeamount]);
+            if(!empty( $this->presenter)){
+                $query->andWhere('users.first_name LIKE "%'.trim($this->presenter). '%" ' .
+                'OR users.last_name LIKE "%'.trim($this->presenter). '%"');
+            }
 
         $today     = date( 'Y-m-d' );
         $yesterday = date( 'Y-m-d', strtotime( '-1 day' ) );
         if ( $daily ) {
-                $query->andWhere( "DATE(created_at)>= DATE('" . $yesterday . "')" );
-                $query->andWhere( "DATE(created_at)<= DATE('" . $today . "')" );
+                $query->andWhere( "DATE(winning_histories.created_at)>= DATE('" . $yesterday . "')" );
+                $query->andWhere( "DATE(winning_histories.created_at)<= DATE('" . $today . "')" );
         }
         if ( $monthly ) {
-                $query->andWhere( "MONTH(created_at)= MONTH(CURDATE())" );
-                $query->andWhere( "YEAR(created_at)= YEAR(CURDATE())" );
+                $query->andWhere( "MONTH(winning_histories.created_at)= MONTH(CURDATE())" );
+                $query->andWhere( "YEAR(winning_histories.created_at)= YEAR(CURDATE())" );
         }
         if ( $from != null && $to != null ) {
-                $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
-                $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
+                $query->andWhere( "DATE(winning_histories.created_at)>= DATE('" . $from . "')" );
+                $query->andWhere( "DATE(winning_histories.created_at)<= DATE('" . $to . "')" );
         }
         return $dataProvider;
     }

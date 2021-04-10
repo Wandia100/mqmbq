@@ -41,8 +41,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'reference_name',
             'reference_phone',
             'reference_code',
-            'station_id',
-            'station_show_id',
+            #'station_id',
+            #'station_show_id',
+            [
+                'attribute' => 'stationname',
+                'value'     => 'stations.name'
+            ],
+            [
+                'attribute' => 'stationshowname',
+                'value'     => 'stationshows.name'
+            ],
             'amount',
             'commission',
             //'status',

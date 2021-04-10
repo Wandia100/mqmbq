@@ -36,9 +36,21 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'user_id',
-            'station_id',
-            'station_show_id',
+           # 'user_id',
+            [
+                'attribute' => 'user',
+                'value'     => 'fullname'
+            ],
+            #'station_id',
+            [
+                'attribute' => 'stationname',
+                'value'     => 'stations.name'
+            ],
+            #'station_show_id',
+            [
+                'attribute' => 'stationshowname',
+                'value'     => 'stationshows.name'
+            ],
             'amount',
             'transaction_cost',
             'transaction_reference',

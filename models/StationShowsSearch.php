@@ -11,13 +11,15 @@ use app\models\StationShows;
  */
 class StationShowsSearch extends StationShows
 {
+    public $stationname;
+    
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'station_id', 'name', 'description', 'show_code', 'start_time', 'end_time', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['id', 'station_id', 'name', 'description', 'show_code', 'start_time', 'end_time', 'created_at', 'updated_at', 'deleted_at', 'stationname'], 'safe'],
             [['amount', 'commission', 'management_commission', 'price_amount', 'target', 'invalid_percentage'], 'number'],
             [['draw_count', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'enabled'], 'integer'],
         ];
@@ -48,7 +50,14 @@ class StationShowsSearch extends StationShows
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
+        
+        $query->joinWith(['stations']);
+        
+        $dataProvider->sort->attributes['stationname'] = [
+            'asc'  => [ 'station.name' => SORT_ASC ],
+            'desc' => [ 'station.name' => SORT_DESC ],
+        ];
+        
         $this->load($params);
 
         if (!$this->validate()) {
@@ -74,9 +83,9 @@ class StationShowsSearch extends StationShows
             'saturday' => $this->saturday,
             'sunday' => $this->sunday,
             'enabled' => $this->enabled,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'deleted_at' => $this->deleted_at,
+            'station_shows.created_at' => $this->created_at,
+            'station_shows.updated_at' => $this->updated_at,
+            'station_shows.deleted_at' => $this->deleted_at,
         ]);
 
         $query->andFilterWhere(['like', 'id', $this->id])
@@ -85,7 +94,8 @@ class StationShowsSearch extends StationShows
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'show_code', $this->show_code])
             ->andFilterWhere(['like', 'start_time', $this->start_time])
-            ->andFilterWhere(['like', 'end_time', $this->end_time]);
+            ->andFilterWhere(['like', 'end_time', $this->end_time])
+            ->andFilterWhere(['like', 'stations.name', $this->stationname]);
 
         return $dataProvider;
     }

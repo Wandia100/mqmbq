@@ -35,7 +35,60 @@ class WinningHistories extends \yii\db\ActiveRecord
     {
         return 'winning_histories';
     }
+    
+    /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getStations() {
+        return $this->hasOne(Stations::className(), [ 'id' => 'station_id' ] );
+    }
+    
+    /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getStationshows(){
+        return $this->hasOne(StationShows::className(), ['id' => 'station_show_id']);
+    }
 
+    /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getPrizes() {
+        return $this->hasOne(Prizes::className(), [ 'id' => 'prize_id' ] );
+    }
+    
+    /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getStationshowprize() {
+        return $this->hasOne(StationShowPrizes::className(), [ 'id' => 'station_show_prize_id' ] );
+    }
+    /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getPresenter() {
+        return $this->hasOne(Users::className(), [ 'id' => 'presenter_id' ] );
+    }
+    
+    
+    /**
+     * Getter for users full name
+     * @return string
+     */
+    public function getFullname() {
+        if ( isset( $this->presenter->first_name ) && isset( $this->presenter->last_name ) ) {
+                return $this->presenter->first_name . " " . $this->presenter->last_name;
+        } elseif ( isset( $this->presenter->first_name ) ) {
+                return $this->presenter->first_name;
+        } elseif ( isset( $this->presenter->last_name ) ) {
+            return $this->presenter->last_name;
+        }
+    }
     /**
      * {@inheritdoc}
      */
@@ -77,6 +130,9 @@ class WinningHistories extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
+            'stationshowprizeamount' => 'Prizeamount',
+            'stationshowname' => 'Showname',
+            'stationname' => 'Station'
         ];
     }
     public static function getRecentWinners($station_show_id,$today)

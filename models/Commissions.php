@@ -28,7 +28,40 @@ class Commissions extends \yii\db\ActiveRecord
     {
         return 'commissions';
     }
+/**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getStations() {
+        return $this->hasOne(Stations::className(), [ 'id' => 'station_id' ] );
+    }
+    
+    /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getStationshows(){
+        return $this->hasOne(StationShows::className(), ['id' => 'station_show_id']);
+    }
 
+    /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getUser() {
+        return $this->hasOne(Users::className(), [ 'id' => 'user_id' ] );
+    }
+    
+    
+    /**
+     * Getter for users full name
+     * @return string
+     */
+    public function getFullname() {
+        if ( isset( $this->user->first_name ) ) {
+                return $this->user->first_name;
+        }
+    }
     /**
      * {@inheritdoc}
      */

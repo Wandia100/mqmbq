@@ -62,6 +62,14 @@ class StationShows extends \yii\db\ActiveRecord
     }
 
     /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getStations() {
+        return $this->hasOne(Stations::className(), [ 'id' => 'station_id' ] );
+    }
+        
+    /**
      * {@inheritdoc}
      */
     public function attributeLabels()

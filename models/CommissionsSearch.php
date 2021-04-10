@@ -11,13 +11,16 @@ use app\models\Commissions;
  */
 class CommissionsSearch extends Commissions
 {
+    public $stationname;
+    public $stationshowname;
+    public $user;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'user_id', 'station_id', 'station_show_id', 'transaction_reference', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['id', 'user_id', 'station_id', 'station_show_id', 'transaction_reference', 'created_at', 'updated_at', 'deleted_at','stationname','stationshowname','user'], 'safe'],
             [['amount', 'transaction_cost'], 'number'],
             [['status'], 'integer'],
         ];
@@ -48,6 +51,25 @@ class CommissionsSearch extends Commissions
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        
+        $query->joinWith(['stations']);
+        $query->joinWith(['stationshows']);
+        $query->joinWith(['user']);
+        
+        $dataProvider->sort->attributes['stationname'] = [
+            'asc'  => [ 'station.name' => SORT_ASC ],
+            'desc' => [ 'station.name' => SORT_DESC ],
+        ];
+
+        $dataProvider->sort->attributes['stationshowname'] = [
+            'asc'  => [ 'station_shows.name' => SORT_ASC ],
+            'desc' => [ 'station_shows.name' => SORT_DESC ],
+        ];
+        
+        $dataProvider->sort->attributes['user'] = [
+            'asc'  => [ 'users.first_name' => SORT_ASC ],
+            'desc' => [ 'users.first_name' => SORT_DESC ],
+        ];
 
         $this->load($params);
 
@@ -67,24 +89,30 @@ class CommissionsSearch extends Commissions
             'deleted_at' => $this->deleted_at,
         ]);
 
-        $query->andFilterWhere(['like', 'id', $this->id])
+        $query->andFilterWhere(['like', 'commissions.id', $this->id])
             ->andFilterWhere(['like', 'user_id', $this->user_id])
             ->andFilterWhere(['like', 'station_id', $this->station_id])
             ->andFilterWhere(['like', 'station_show_id', $this->station_show_id])
-            ->andFilterWhere(['like', 'transaction_reference', $this->transaction_reference]);
+            ->andFilterWhere(['like', 'transaction_reference', $this->transaction_reference])
+            ->andFilterWhere(['like', 'stations.name', $this->stationname])
+            ->andFilterWhere(['like', 'station_shows.name', $this->stationshowname]);
+        if(!empty( $this->user)){
+            $query->andWhere('users.first_name LIKE "%'.trim($this->user). '%" ' .
+            'OR users.last_name LIKE "%'.trim($this->user). '%"');
+        }
         $today     = date( 'Y-m-d' );
         $yesterday = date( 'Y-m-d', strtotime( '-1 day' ) );
         if ( $daily ) {
-                $query->andWhere( "DATE(created_at)>= DATE('" . $yesterday . "')" );
-                $query->andWhere( "DATE(created_at)<= DATE('" . $today . "')" );
+                $query->andWhere( "DATE(commissions.created_at)>= DATE('" . $yesterday . "')" );
+                $query->andWhere( "DATE(commissions.created_at)<= DATE('" . $today . "')" );
         }
         if ( $monthly ) {
-                $query->andWhere( "MONTH(created_at)= MONTH(CURDATE())" );
-                $query->andWhere( "YEAR(created_at)= YEAR(CURDATE())" );
+                $query->andWhere( "MONTH(commissions.created_at)= MONTH(CURDATE())" );
+                $query->andWhere( "YEAR(commissions.created_at)= YEAR(CURDATE())" );
         }
         if ( $from != null && $to != null ) {
-                $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
-                $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
+                $query->andWhere( "DATE(commissions.created_at)>= DATE('" . $from . "')" );
+                $query->andWhere( "DATE(commissions.created_at)<= DATE('" . $to . "')" );
         }
 
         return $dataProvider;

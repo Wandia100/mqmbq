@@ -33,6 +33,21 @@ class TransactionHistories extends \yii\db\ActiveRecord
     }
 
     /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getStations() {
+        return $this->hasOne(Stations::className(), [ 'id' => 'station_id' ] );
+    }
+    /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getStationshows(){
+        return $this->hasOne(StationShows::className(), ['id' => 'station_show_id']);
+    }
+    
+    /**
      * {@inheritdoc}
      */
     public function rules()
