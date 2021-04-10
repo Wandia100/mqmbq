@@ -88,6 +88,9 @@ class DisbursementsSearch extends Disbursements
                 $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
         }
         $query->orderBy('created_at DESC');
+        if(isset($_GET['t']) && $_GET['t'] == 'p'){
+            $query->andWhere('disbursement_type = "presenter_commission"');
+        }
         return $dataProvider;
     }
 }
