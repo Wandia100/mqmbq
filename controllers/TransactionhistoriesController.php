@@ -10,10 +10,14 @@ use app\models\WinningHistories;
 use app\models\MpesaPayments;
 use app\models\StationShowPrizes;
 use app\models\TransactionHistoriesSearch;
+use app\models\ProcessedMpesaPayments;
+use app\models\StationShows;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\Myhelper;
+use Webpatser\Uuid\Uuid;
+
 /**
  * TransactionhistoriesController implements the CRUD actions for TransactionHistories model.
  */
@@ -190,6 +194,26 @@ class TransactionhistoriesController extends Controller
     }
     public function actionProcessMpesa()
     {
-        $data=MpesaPayments::find()->where("state=0")->all();
+        $data=MpesaPayments::find()->all();
+        for($i=0;$i<count($data); $i++)
+        {
+            $row=$data[$i];
+            $station_show=StationShows::getStationShow($row->BillRefNumber);
+            if($station_show)
+            {
+                $model=new TransactionHistories();
+                $model->id=Uuid::generate()->string;
+                $model->mpesa_payment_id=$row->id;
+                $model->reference_name=$row->FirstName.$row->MiddleName.$row->LastName;
+                $model->reference_phone=$row->MSISDN;
+                $model->reference_code=$row->BillRefNumber;
+                $model->station_id=$station_show->station_id;
+                $model->station_show_id=$station_show->station_show_id;
+                $model->amount=$row->TransAmount;
+                $model->created_at=date("Y-m-d H:i:s");
+                $model->save(false);
+            }
+            
+        }
     }
 }
