@@ -53,4 +53,12 @@ class Outbox extends \yii\db\ActiveRecord
             'category' => 'Category',
         ];
     }
+    public static function saveOutbox($receiver,$message,$category)
+    {
+        $outbox=new Outbox();
+        $outbox->message=$message;
+        $outbox->receiver=$receiver;
+        $outbox->category=$category;
+        $outbox->save(false);
+    }
 }

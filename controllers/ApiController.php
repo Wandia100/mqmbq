@@ -3,6 +3,9 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 USE app\models\Disbursements;
+use app\models\MpesaPayments;
+use app\models\Outbox;
+use Webpatser\Uuid\Uuid;
 
 class ApiController extends Controller
 {
@@ -54,6 +57,40 @@ class ApiController extends Controller
     }
     public function actionDisbursementPaymentTimeoutResult()
     {}
+    public function actionConfirmation()
+    {
+        $jsondata = file_get_contents('php://input');
+        $data = json_decode($jsondata,true);
+        $trans_id=$data['TransID'];
+        $check=MpesaPayments::find()->where("TransID=$trans_id")->count();
+        if($check==0)
+        {
+            $model = new MpesaPayments();
+            $model->id=Uuid::generate()->string;
+            $model->TransID = $data['TransID'];
+            $model->FirstName = $data['FirstName'];
+            $model->MiddleName = $data['MiddleName'];
+            $model->LastName = $data['LastName'];
+            $model->MSISDN = $data['MSISDN'];
+            $model->InvoiceNumber = $data['InvoiceNumber'];
+            $model->BusinessShortCode = $data['BusinessShortCode'];
+            $model->ThirdPartyTransID = $data['ThirdPartyTransID'];
+            $model->TransactionType = $data['TransactionType'];
+            $model->OrgAccountBalance = $data['OrgAccountBalance'];
+            $model->BillRefNumber = strtoupper(str_replace(' ', '', $data['BillRefNumber']));
+            $model->TransAmount = $data['TransAmount'];
+            $model->created_at=date("Y-m-d H:i:s");
+            $model->updated_at=date("Y-m-d H:i:s");
+            if($model->save(false))
+            {
+                $first_name=$data['FirstName'];
+                $message = "$first_name, Umeingia Draw! Endelea Kushiriki, Wa weza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
+                Outbox::saveOutbox($data['MSISDN'],$message,2);
+            }    
+        }
+        
+        
+    }
     public function generateTokenB2C()
     {
 
