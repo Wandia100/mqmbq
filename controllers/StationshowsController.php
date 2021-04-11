@@ -30,7 +30,7 @@ class StationshowsController extends Controller
                 'only' => ['create', 'update','index'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','addpresenter'],
+                        'actions' => ['create', 'update','index','addpresenter','addprize'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if(!Yii::$app->user->isGuest){
@@ -99,7 +99,27 @@ class StationshowsController extends Controller
         $ShowPresenter->created_at = date('Y-m-d H:i:s');
         $ShowPresenter->save();
         return $this->redirect(['view', 'id' => $id]);
-        
+    }
+    /**
+     * 
+     */
+    public function actionAddprize($id){
+        $model = $this->findModel($id);
+        $ShowPrize = new StationShowPrizes();
+        $ShowPrize->id=Uuid::generate()->string;
+        $ShowPrize -> station_id = $model->stations->id;
+        $ShowPrize -> station_show_id = $id;
+        $ShowPrize->draw_count = $_POST['draw_count'];
+        $ShowPrize->monday = $_POST['monday'];
+        $ShowPrize->tuesday = $_POST['tuesday'];
+        $ShowPrize->wednesday = $_POST['wednesday'];
+        $ShowPrize->thursday = $_POST['thursday'];
+        $ShowPrize->friday = $_POST['friday'];
+        $ShowPrize->saturday = $_POST['saturday'];
+        $ShowPrize->sunday = $_POST['sunday'];
+        $ShowPrize->created_at = date('Y-m-d H:i:s');
+        $ShowPrize->save();
+        return $this->redirect(['view', 'id' => $id]);
     }
 
     /**

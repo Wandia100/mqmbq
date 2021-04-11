@@ -55,6 +55,15 @@ function runDraw() {
     $('#presentersModal .modal-dialog').addClass('modal-lg')
     $('#presentersModal .modal-dialog').addClass('largerwidth')
     $('.modal-backdrop').hide();
-   
-
   }
+  
+  function prizeModal() {
+    $('#prizeModal').modal({
+      //backdrop: 'static',
+      //keyboard: false
+    })
+
+    $('#prizeModal .modal-dialog').addClass('modal-lg')
+    $('#prizeModal .modal-dialog').addClass('largerwidth')
+    $('.modal-backdrop').hide();
+}

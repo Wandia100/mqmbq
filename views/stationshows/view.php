@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     </div>
     <div class="col-sm-5">
-        <b><button class="btn btn-primary"> Add Prizes</button></b>
+        <b><button class="btn btn-primary" onclick="prizeModal()"> Add Prizes</button></b>
         <?= GridView::widget([
         'dataProvider' => $prizeDataProvider,
        // 'filterModel' => $prizeSearchModel,
@@ -124,6 +124,73 @@ echo Html::beginForm(
         </div>
         <div class="modal-footer">
           <button type="submit"class="btn btn-primary btn-block" id="addpresenterbtn"><span style="font-weight: bold">Add presenter</span></button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <?php echo Html::endform(); ?>
+
+  
+  <!-- Modal -->
+  <?php
+
+echo Html::beginForm(
+	$action = yii\helpers\Url::base() . "/stationshows/addprize?id=$model->id",
+	$method = 'post',
+	$hmtmlOptions = array( 'id' => 'addprizeform' )
+);
+?>
+  <div class="modal fade" id="prizeModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Add Prize</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          
+        </div>
+        <div class="modal-body">
+            <div class="col-sm-12">
+                <b>Draw counts</b>
+                <?= Html::textInput('draw_count', '', ['class'    => 'form-control', 'id'=> 'draw_count'])?>
+            </div>
+            <div class="col-sm-12">
+                <b>Monday</b>
+                <?= Html::textInput('monday', '', ['class'    => 'form-control', 'id'=> 'monday'])?>
+            </div>
+            <div class="col-sm-12">
+                <b>Tuesday</b>
+                <?= Html::textInput('tuesday', '', ['class'    => 'form-control', 'id'=> 'tuesday'])?>
+            </div>
+            <div class="col-sm-12">
+                <b>Wednesday</b>
+                <?= Html::textInput('wednesday', '', ['class'    => 'form-control', 'id'=> 'wednesday'])?>
+            </div>
+            <div class="col-sm-12">
+                <b>Thursday</b>
+                <?= Html::textInput('thursday', '', ['class'    => 'form-control', 'id'=> 'thursday'])?>
+            </div>
+            <div class="col-sm-12">
+                <b>Friday</b>
+                <?= Html::textInput('friday', '', ['class'    => 'form-control', 'id'=> 'friday'])?>
+            </div>
+            <div class="col-sm-12">
+                <b>Saturday</b>
+                <?= Html::textInput('saturday', '', ['class'    => 'form-control', 'id'=> 'saturday'])?>
+            </div>
+            <div class="col-sm-12">
+                <b>Enabled</b>
+                <?= Html::dropDownList( 'enabled','', ['1'=>'Yes','0' => 'No'], [
+                            'prompt'   => '--Select--',
+                            'id'       => 'enabledid',
+                            'class'    => 'form-control',
+                        ] ) ?>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit"class="btn btn-primary btn-block" id="addprizebtn"><span style="font-weight: bold">Add prize</span></button>
         </div>
       </div>
       
