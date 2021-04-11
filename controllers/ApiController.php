@@ -57,7 +57,42 @@ class ApiController extends Controller
         $model->save(false);
     }
     public function actionDisbursementPaymentTimeoutResult()
-    {}
+    {
+        $jsondata = file_get_contents('php://input');
+        $data = json_decode($jsondata,true);
+        $conversation_id=$data['ConversationID'];
+        $disbursement=Disbursements::find()->where("conversation_id = $conversation_id")->one();
+        if($disbursement)
+        {
+            $disbursement->status=2;
+            $disbursement->updated_at= date('Y-m-d H:i:s');
+            $disbursement->save(false);
+        }
+    }
+    public function actionDisbursementPaymentResultConfirmation()
+    {
+        $jsondata = file_get_contents('php://input');
+        $data = json_decode($jsondata,true);
+        $conversation_id=$data['ConversationID'];
+        $transaction_reference=$data['TransactionID'];
+        $result_code=$data['ResultCode'];
+        $disbursement=Disbursements::find()->where("conversation_id = $conversation_id")->one();
+        if($disbursement)
+        {
+            if($result_code===0)
+            {
+                $disbursement->status=2;
+                $disbursement->updated_at= date('Y-m-d H:i:s');
+                $disbursement->save(false);
+            }
+            else{
+                $disbursement->status=0;
+                $disbursement->updated_at= date('Y-m-d H:i:s');
+                $disbursement->save(false);
+            }
+            
+        }
+    }
     public function actionConfirmation()
     {
         $jsondata = file_get_contents('php://input');
