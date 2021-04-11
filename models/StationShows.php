@@ -102,4 +102,14 @@ class StationShows extends \yii\db\ActiveRecord
             'deleted_at' => 'Deleted At',
         ];
     }
+    public static function getStationShow($station_name)
+    {
+        $sql="SELECT a.name,b.station_id,b.id AS show_id,b.start_time,b.end_time FROM stations a 
+        LEFT JOIN station_shows b ON a.id=b.station_id  WHERE b.enabled=1 AND b.deleted_at IS NULL AND 
+        a.deleted_at IS NULL AND a.name LIKE '%:station_name%' AND start_time <= CURRENT_TIME()  AND end_time >=CURRENT_TIME();";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':station_name',$station_name)
+        ->queryOne();
+
+    }
 }

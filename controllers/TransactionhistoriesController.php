@@ -7,6 +7,7 @@ use app\models\TransactionHistories;
 use app\models\StationShowPresenters;
 use app\models\Users;
 use app\models\WinningHistories;
+use app\models\MpesaPayments;
 use app\models\StationShowPrizes;
 use app\models\TransactionHistoriesSearch;
 use yii\web\Controller;
@@ -186,5 +187,9 @@ class TransactionhistoriesController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    public function actionProcessMpesa()
+    {
+        $data=MpesaPayments::find()->where("state=0")->all();
     }
 }
