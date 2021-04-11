@@ -5,6 +5,7 @@ use yii\web\Controller;
 USE app\models\Disbursements;
 use app\models\MpesaPayments;
 use app\models\Outbox;
+use app\models\SentSms;
 use Webpatser\Uuid\Uuid;
 
 class ApiController extends Controller
@@ -143,6 +144,23 @@ class ApiController extends Controller
 
         $response = curl_exec($curl);
         curl_close($curl);
+    }
+    public function actionProcessSms()
+    {
+        $outbox=Outbox::find()->all();
+        for($i=0;$i<count($outbox);$i++)
+        {
+            $row=$outbox[$i];
+            //$this->sendSms($row->$receiver,$row->message);
+            $sent_sms=new SentSms();
+            $sent_sms->receiver=$row->receiver;
+            $sent_sms->message=$row->message;
+            $sent_sms->category=$row->category;
+            $sent_sms->category=$row->category;
+            $sent_sms->created_date=$row->created_date;
+            $sent_sms->save(false);
+            $row->delete(false);
+        }
     }
     #end of sms code
    
