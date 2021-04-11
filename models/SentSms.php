@@ -5,24 +5,23 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "outbox".
+ * This is the model class for table "sent_sms".
  *
  * @property int $id
  * @property string|null $receiver
  * @property string|null $sender
  * @property string|null $message
  * @property string $created_date
- * @property int|null $status
  * @property int $category
  */
-class Outbox extends \yii\db\ActiveRecord
+class SentSms extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'outbox';
+        return 'sent_sms';
     }
 
     /**
@@ -33,7 +32,7 @@ class Outbox extends \yii\db\ActiveRecord
         return [
             [['message'], 'string'],
             [['created_date'], 'safe'],
-            [['status', 'category'], 'integer'],
+            [['category'], 'integer'],
             [['receiver', 'sender'], 'string', 'max' => 20],
         ];
     }
@@ -49,16 +48,7 @@ class Outbox extends \yii\db\ActiveRecord
             'sender' => 'Sender',
             'message' => 'Message',
             'created_date' => 'Created Date',
-            'status' => 'Status',
             'category' => 'Category',
         ];
-    }
-    public static function saveOutbox($receiver,$message,$category)
-    {
-        $outbox=new Outbox();
-        $outbox->message=$message;
-        $outbox->receiver=$receiver;
-        $outbox->category=$category;
-        $outbox->save(false);
     }
 }

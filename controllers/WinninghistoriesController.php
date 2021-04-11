@@ -130,19 +130,14 @@ class WinninghistoriesController extends Controller
                 $model->amount =$show_prize['amount'];
                 $model->created_at =date("Y-m-d H:i:s");
                 $model->status =0;
-                //print_r($model);die();
                 if($model->save(false))
                 {
                     $draw_count_balance=$show_prize['draw_count']-$show_prize['prizes_given']-1;
                     $transaction_history['draw_count_balance']=$draw_count_balance;
-                    $outbox=new Outbox();
-                    $outbox->receiver=$transaction_history['reference_phone'];
                     $station_name=$presenter_show['station_name'];
-                    $outbox->message="Hi ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. You shall be called shortly with more details";
-                    $outbox->category=1;
-                    $outbox->save(false);
+                    $message="Hi ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. You shall be called shortly with more details";
                     //send an sms
-                    //$sms_message = 
+                    Outbox::saveOutbox($transaction_history['reference_phone'],$message,1);
                     $response['status']="success";
                     $response['message']="no message";
                     $response['data']=$transaction_history;
