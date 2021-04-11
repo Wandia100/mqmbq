@@ -7,6 +7,8 @@ define( 'INITIATORNAME',"com21.api" );
 define( 'OCCASION',"Occasion");
 define( 'MPESAPAYMENTREQUESTURL',"https://api.safaricom.co.ke/mpesa/b2c/v1/paymentrequest");
 define( 'MPESATOKENURL',"https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials");
+define( 'NITEXTSMSURL',"https://nitext.co.ke/index.php/api/sendSmsMultiple");
+
 
 return [
     'adminEmail' => 'admin@example.com',

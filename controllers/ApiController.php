@@ -114,6 +114,37 @@ class ApiController extends Controller
         openssl_public_encrypt($plaintext, $encrypted, $publicKey, OPENSSL_PKCS1_PADDING);
         return base64_encode($encrypted);
     }
+    #start of sms code
+    public function sendSms($phone_number,$message)
+    {
+        $username=file_get_contents("/srv/credentials/nitextsms_username.txt");
+        $password=file_get_contents("/srv/credentials/nitextsms_password.txt");
+        $cookie=file_get_contents("/srv/credentials/nitextsms_cookie.txt");
+        $data = array('username' => $username,'password' => $password,'oa' => 'nitext','payload' => '[{"msisdn":"'.$phone_number.'","message":"'.$message.'","unique_id":1000}]');
+        $data = http_build_query($data);
+
+        $curl = curl_init();
+        $cookie=NITEXTSMSCOOKIE;
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => NITEXTSMSURL,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/x-www-form-urlencoded",
+                "Cookie: $cookie"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+    }
+    #end of sms code
    
 
 }
