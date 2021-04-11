@@ -10,32 +10,16 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * StationShowPrizesController implements the CRUD actions for StationShowPrizes model.
+ * StationshowprizesController implements the CRUD actions for StationShowPrizes model.
  */
-class StationShowPrizesController extends Controller
+class StationshowprizesController extends Controller
 {
     /**
      * {@inheritdoc}
      */
     public function behaviors()
     {
-        
         return [
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index'],
-                'rules' => [
-                    [
-                        'actions' => ['create', 'update','index'],
-                        'allow' => true,
-                        'matchCallback' => function ($rule, $action) {
-                            if(!Yii::$app->user->isGuest){
-                                return TRUE;
-                            }
-                        }
-                    ],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

@@ -35,6 +35,16 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'deleted_at') ?>
 
+    <?php // echo $form->field($model, 'monday') ?>
+
+    <?php // echo $form->field($model, 'tuesday') ?>
+
+    <?php // echo $form->field($model, 'wednesday') ?>
+
+    <?php // echo $form->field($model, 'thursday') ?>
+
+    <?php // echo $form->field($model, 'friday') ?>
+
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>

@@ -45,3 +45,16 @@ function runDraw() {
     })
     //console.log("You clicked "+presenter_id)
   }
+  
+  function presenterModal() {
+    $('#presentersModal').modal({
+      //backdrop: 'static',
+      //keyboard: false
+    })
+  
+    $('#presentersModal .modal-dialog').addClass('modal-lg')
+    $('#presentersModal .modal-dialog').addClass('largerwidth')
+    $('.modal-backdrop').hide();
+   
+
+  }

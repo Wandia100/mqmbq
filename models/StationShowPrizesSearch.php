@@ -17,7 +17,7 @@ class StationShowPrizesSearch extends StationShowPrizes
     public function rules()
     {
         return [
-            [['id', 'station_id', 'station_show_id', 'prize_id', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['id', 'station_id', 'station_show_id', 'prize_id', 'created_at', 'updated_at', 'deleted_at', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'], 'safe'],
             [['draw_count', 'enabled'], 'integer'],
             [['amount'], 'number'],
         ];
@@ -39,7 +39,7 @@ class StationShowPrizesSearch extends StationShowPrizes
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$showid='')
     {
         $query = StationShowPrizes::find();
 
@@ -70,7 +70,17 @@ class StationShowPrizesSearch extends StationShowPrizes
         $query->andFilterWhere(['like', 'id', $this->id])
             ->andFilterWhere(['like', 'station_id', $this->station_id])
             ->andFilterWhere(['like', 'station_show_id', $this->station_show_id])
-            ->andFilterWhere(['like', 'prize_id', $this->prize_id]);
+            ->andFilterWhere(['like', 'prize_id', $this->prize_id])
+            ->andFilterWhere(['like', 'monday', $this->monday])
+            ->andFilterWhere(['like', 'tuesday', $this->tuesday])
+            ->andFilterWhere(['like', 'wednesday', $this->wednesday])
+            ->andFilterWhere(['like', 'thursday', $this->thursday])
+            ->andFilterWhere(['like', 'friday', $this->friday]);
+        
+        if($showid != ''){
+            $query->andWhere("station_show_id = '$showid'");
+        }
+        $query->orderBy('id DESC');
 
         return $dataProvider;
     }

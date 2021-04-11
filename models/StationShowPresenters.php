@@ -25,7 +25,24 @@ class StationShowPresenters extends \yii\db\ActiveRecord
     {
         return 'station_show_presenters';
     }
-
+    /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getUser() {
+        return $this->hasOne(Users::className(), [ 'id' => 'presenter_id' ] );
+    }
+    
+    
+    /**
+     * Getter for users full name
+     * @return string
+     */
+    public function getFullname() {
+        if ( isset( $this->user->first_name ) ) {
+                return $this->user->first_name.' '.$this->user->last_name;
+        }
+    }
     /**
      * {@inheritdoc}
      */

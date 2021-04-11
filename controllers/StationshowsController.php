@@ -5,6 +5,10 @@ namespace app\controllers;
 use Yii;
 use app\models\StationShows;
 use app\models\StationShowsSearch;
+use app\models\StationShowPresenters;
+use app\models\StationShowPresentersSearch;
+use app\models\StationShowPrizes;
+use app\models\StationShowPrizesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -26,7 +30,7 @@ class StationshowsController extends Controller
                 'only' => ['create', 'update','index'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index'],
+                        'actions' => ['create', 'update','index','addpresenter'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if(!Yii::$app->user->isGuest){
@@ -68,9 +72,34 @@ class StationshowsController extends Controller
      */
     public function actionView($id)
     {
+        $searchModel = new StationShowPresentersSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$id);
+        
+        $prizeSearchModel = new StationShowPrizesSearch();
+        $prizeDataProvider = $prizeSearchModel->search(Yii::$app->request->queryParams,$id);
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'prizeSearchModel'=>$prizeSearchModel,
+            'prizeDataProvider'=>$prizeDataProvider
         ]);
+    }
+    /**
+     * 
+     */
+    public function actionAddpresenter($id){
+        $model = $this->findModel($id);
+        $ShowPresenter = new StationShowPresenters();
+        $ShowPresenter->id=Uuid::generate()->string;
+        $ShowPresenter -> station_id = $model->stations->id;
+        $ShowPresenter -> station_show_id = $id;
+        $ShowPresenter->presenter_id = $_POST['presenter_id'];
+        $ShowPresenter->created_at = date('Y-m-d H:i:s');
+        $ShowPresenter->save();
+        return $this->redirect(['view', 'id' => $id]);
+        
     }
 
     /**

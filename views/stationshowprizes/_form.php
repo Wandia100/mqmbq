@@ -32,6 +32,16 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'deleted_at')->textInput() ?>
 
+    <?= $form->field($model, 'monday')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'tuesday')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'wednesday')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'thursday')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'friday')->textInput(['maxlength' => true]) ?>
+
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

@@ -103,4 +103,17 @@ class Users extends \yii\db\ActiveRecord
            ->queryOne();
         return  $shows['total']; 
     }
+    
+    /**
+     * Method to getPermission group list
+     * @return type
+     */
+    public static function getUsersList($permgroup = ''){
+        $list = [];
+        $records = Users::findAll(['perm_group'=>$permgroup]);
+        foreach ($records as $record) {
+            $list[$record -> id] = $record->first_name.' '.$record->last_name;
+        }
+        return $list;
+    }
 }

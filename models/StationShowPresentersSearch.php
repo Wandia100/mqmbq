@@ -38,7 +38,7 @@ class StationShowPresentersSearch extends StationShowPresenters
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$showid='')
     {
         $query = StationShowPresenters::find();
 
@@ -68,6 +68,11 @@ class StationShowPresentersSearch extends StationShowPresenters
             ->andFilterWhere(['like', 'station_id', $this->station_id])
             ->andFilterWhere(['like', 'station_show_id', $this->station_show_id])
             ->andFilterWhere(['like', 'presenter_id', $this->presenter_id]);
+        if($showid != ''){
+            $query->andWhere("station_show_id = '$showid'");
+        }
+        
+        $query->orderBy('id DESC');
 
         return $dataProvider;
     }
