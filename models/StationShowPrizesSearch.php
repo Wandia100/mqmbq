@@ -17,7 +17,7 @@ class StationShowPrizesSearch extends StationShowPrizes
     public function rules()
     {
         return [
-            [['id', 'station_id', 'station_show_id', 'prize_id', 'created_at', 'updated_at', 'deleted_at', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'], 'safe'],
+            [['id', 'station_id', 'station_show_id', 'prize_id', 'created_at', 'updated_at', 'deleted_at', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday','sunday','saturday'], 'safe'],
             [['draw_count', 'enabled'], 'integer'],
             [['amount'], 'number'],
         ];

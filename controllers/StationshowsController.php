@@ -105,8 +105,13 @@ class StationshowsController extends Controller
      */
     public function actionAddprize($id){
         $model = $this->findModel($id);
-        $ShowPrize = new StationShowPrizes();
-        $ShowPrize->id=Uuid::generate()->string;
+        if($_POST['showprizeid'] == ""):
+            $ShowPrize = new StationShowPrizes();
+            $ShowPrize->id=Uuid::generate()->string;
+        else :
+            $ShowPrize = StationShowPrizes::findOne($_POST['showprizeid']);
+        endif;
+        
         $ShowPrize -> station_id = $model->stations->id;
         $ShowPrize -> station_show_id = $id;
         $ShowPrize->draw_count = $_POST['draw_count'];
@@ -117,6 +122,7 @@ class StationshowsController extends Controller
         $ShowPrize->friday = $_POST['friday'];
         $ShowPrize->saturday = $_POST['saturday'];
         $ShowPrize->sunday = $_POST['sunday'];
+        $ShowPrize->enabled = $_POST['enabled'];
         $ShowPrize->created_at = date('Y-m-d H:i:s');
         $ShowPrize->save();
         return $this->redirect(['view', 'id' => $id]);

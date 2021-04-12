@@ -38,7 +38,7 @@ class StationshowpresentersController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    #'delete' => ['POST'],
                 ],
             ],
         ];
@@ -119,9 +119,11 @@ class StationshowpresentersController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $stationshowid = $model->station_show_id;
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['stationshows/view','id'=>$stationshowid]);
     }
 
     /**

@@ -105,7 +105,7 @@ class Users extends \yii\db\ActiveRecord
     }
     
     /**
-     * Method to getPermission group list
+     * Method to users list
      * @return type
      */
     public static function getUsersList($permgroup = ''){

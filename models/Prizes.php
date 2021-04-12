@@ -40,7 +40,7 @@ class Prizes extends \yii\db\ActiveRecord
             [['id'], 'unique'],
         ];
     }
-
+    
     /**
      * {@inheritdoc}
      */
@@ -56,5 +56,18 @@ class Prizes extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
         ];
+    }
+    
+    /**
+     * Method to prizes  list
+     * @return type
+     */
+    public static function getPrizesList($permgroup = ''){
+        $list = [];
+        $records = Prizes::findAll(['enabled'=>1]);
+        foreach ($records as $record) {
+            $list[$record -> id] = $record->name;
+        }
+        return $list;
     }
 }

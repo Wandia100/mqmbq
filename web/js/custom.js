@@ -57,7 +57,29 @@ function runDraw() {
     $('.modal-backdrop').hide();
   }
   
-  function prizeModal() {
+function prizeModal() {
+    $('#prizeModal').modal({
+      //backdrop: 'static',
+      //keyboard: false
+    })
+
+    $('#prizeModal .modal-dialog').addClass('modal-lg')
+    $('#prizeModal .modal-dialog').addClass('largerwidth')
+    $('.modal-backdrop').hide();
+}
+
+function editPrizeModal(showprizeid,draw_count,monday,tuesday,wednesday,thursday,friday,saturday,sunday,enabled) {
+    $('#showprizeid').val(showprizeid)
+    $('#draw_count').val(draw_count)
+    $('#monday').val(monday)
+    $('#tuesday').val(tuesday)
+    $('#wednesday').val(wednesday)
+    $('#thursday').val(thursday)
+    $('#friday').val(friday)
+    $('#saturday').val(saturday)
+    $('#sunday').val(sunday)
+    $('#enabled').val(enabled)
+    
     $('#prizeModal').modal({
       //backdrop: 'static',
       //keyboard: false

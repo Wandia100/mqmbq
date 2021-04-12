@@ -29,6 +29,56 @@ class StationShowPrizes extends \yii\db\ActiveRecord
     }
 
     /**
+        *   prize relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getMondayprize() {
+        return $this->hasOne(Prizes::className(), [ 'id' => 'monday' ] );
+    }
+    /**
+        *   prize relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getTuesdayprize() {
+        return $this->hasOne(Prizes::className(), [ 'id' => 'tuesday' ] );
+    }
+    /**
+        *   prize relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getWednesdayprize() {
+        return $this->hasOne(Prizes::className(), [ 'id' => 'wednesday' ] );
+    }
+    /**
+        *   prize relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getThursdayprize() {
+        return $this->hasOne(Prizes::className(), [ 'id' => 'thursday' ] );
+    }
+    /**
+        *   prize relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getFridayprize() {
+        return $this->hasOne(Prizes::className(), [ 'id' => 'friday' ] );
+    }
+    /**
+        *   prize relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getSaturdayprize() {
+        return $this->hasOne(Prizes::className(), [ 'id' => 'saturday' ] );
+    }
+    /**
+        *   prize relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getSundayprize() {
+        return $this->hasOne(Prizes::className(), [ 'id' => 'sunday' ] );
+    }
+    
+    /**
      * {@inheritdoc}
      */
     public function rules()
@@ -40,7 +90,7 @@ class StationShowPrizes extends \yii\db\ActiveRecord
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
             [['station_id', 'station_show_id', 'prize_id'], 'string', 'max' => 255],
-            [['monday', 'tuesday', 'wednesday','thursday','friday'], 'string', 'max' => 255],
+            [['monday', 'tuesday', 'wednesday','thursday','friday','sunday','saturday'], 'string', 'max' => 255],
             [['id'], 'unique'],
         ];
     }

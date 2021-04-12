@@ -13,10 +13,10 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="station-shows-view">
-    
+    <div class="row">
     <div class="col-sm-3">
         <p>
-            <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Update station show', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         </p>
         <?= DetailView::widget([
             'model' => $model,
@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <b><button class="btn btn-success" onclick="presenterModal()"> Add Presenters</button></b>
          <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -61,37 +61,68 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             'fullname',
             'is_admin',
-            //'created_at',
-            //'updated_at',
-            //'deleted_at',
+            ['class' => 'yii\grid\ActionColumn',
+                'template' => '{delete}',
+                'buttons' => [
+                    'delete' => function ($url, $data) {
+                        return Html::a('<span class="glyphicon glyphicon-trash" title="Delete"></span>', ['stationshowpresenters/delete', 'id' => $data->id], [ 'onClick' => 'return confirm("Are you sure you want to delete this item?")','method' => 'post']);
+                    },
+                ],
+            ],
 
-            ['class' => 'yii\grid\ActionColumn', 'template' => '{delete}'],
         ],
     ]); ?>
     </div>
-    <div class="col-sm-5">
+    <div class="col-sm-6">
         <b><button class="btn btn-primary" onclick="prizeModal()"> Add Prizes</button></b>
         <?= GridView::widget([
         'dataProvider' => $prizeDataProvider,
        // 'filterModel' => $prizeSearchModel,
         'columns' => [
-
             'draw_count',
-            //'amount',
-            //'enabled',
-            //'created_at',
-            //'updated_at',
-            //'deleted_at',
-            'monday',
-            'tuesday',
-            'wednesday',
-            'thursday',
-            'friday',
-
-            ['class' => 'yii\grid\ActionColumn', 'template' => '{delete}'],
+            [
+                'attribute' => 'monday',
+                'value'     => 'mondayprize.name'
+            ],
+            [
+                'attribute' => 'tuesday',
+                'value'     => 'tuesdayprize.name'
+            ],
+            [
+                'attribute' => 'wednesday',
+                'value'     => 'wednesdayprize.name'
+            ],
+            [
+                'attribute' => 'thursday',
+                'value'     => 'thursdayprize.name'
+            ],
+            [
+                'attribute' => 'friday',
+                'value'     => 'fridayprize.name'
+            ],
+            [
+                'attribute' => 'saturday',
+                'value'     => 'saturdayprize.name'
+            ],
+            [
+                'attribute' => 'sunday',
+                'value'     => 'sundayprize.name'
+            ],
+            ['class' => 'yii\grid\ActionColumn',
+                'template' => '{delete}{update}',
+                'buttons' => [
+                    'delete' => function ($url, $data) {
+                        return Html::a('<span class="glyphicon glyphicon-trash" title="Delete"></span>', ['stationshowprizes/delete', 'id' => $data->id], [ 'onClick' => 'return confirm("Are you sure you want to delete this item?")','method' => 'post']);
+                    },
+                    'update' => function ($url, $data) {
+                        return "<span class='glyphicon glyphicon-pencil' title='edit' onclick='editPrizeModal(\"$data->id\",\"$data->draw_count\",\"$data->monday\",\"$data->tuesday\",\"$data->wednesday\",\"$data->thursday\",\"$data->friday\",\"$data->saturday\",\"$data->sunday\",\"$data->enabled\")'></span>";
+                    },
+                ],
+            ],
         ],
     ]); ?>
     </div>
+    </div>    
 </div>
 
   <!-- Modal -->
@@ -154,39 +185,40 @@ echo Html::beginForm(
         <div class="modal-body">
             <div class="col-sm-12">
                 <b>Draw counts</b>
+                <?= Html::hiddenInput('showprizeid', '', ['id'=> 'showprizeid'])?>
                 <?= Html::textInput('draw_count', '', ['class'    => 'form-control', 'id'=> 'draw_count'])?>
             </div>
             <div class="col-sm-12">
                 <b>Monday</b>
-                <?= Html::textInput('monday', '', ['class'    => 'form-control', 'id'=> 'monday'])?>
+                <?= Html::dropDownList('monday', '', \app\models\Prizes::getPrizesList(),['prompt'=>'--Select--','class'=> 'form-control', 'id'=> 'monday'])?>
             </div>
             <div class="col-sm-12">
                 <b>Tuesday</b>
-                <?= Html::textInput('tuesday', '', ['class'    => 'form-control', 'id'=> 'tuesday'])?>
+                <?= Html::dropDownList('tuesday', '', \app\models\Prizes::getPrizesList(),['prompt'=>'--Select--','class'=> 'form-control', 'id'=> 'tuesday'])?>
             </div>
             <div class="col-sm-12">
                 <b>Wednesday</b>
-                <?= Html::textInput('wednesday', '', ['class'    => 'form-control', 'id'=> 'wednesday'])?>
+                <?= Html::dropDownList('wednesday', '', \app\models\Prizes::getPrizesList(),['prompt'=>'--Select--','class'=>'form-control', 'id'=> 'wednesday'])?>
             </div>
             <div class="col-sm-12">
                 <b>Thursday</b>
-                <?= Html::textInput('thursday', '', ['class'    => 'form-control', 'id'=> 'thursday'])?>
+                <?= Html::dropDownList('thursday', '', \app\models\Prizes::getPrizesList(),['prompt'=>'--Select--','class'=>'form-control', 'id'=> 'thursday'])?>
             </div>
             <div class="col-sm-12">
                 <b>Friday</b>
-                <?= Html::textInput('friday', '', ['class'    => 'form-control', 'id'=> 'friday'])?>
+                <?= Html::dropDownList('friday', '', \app\models\Prizes::getPrizesList(),['prompt'=>'--Select--','class'=> 'form-control', 'id'=> 'friday'])?>
             </div>
             <div class="col-sm-12">
                 <b>Saturday</b>
-                <?= Html::textInput('saturday', '', ['class'    => 'form-control', 'id'=> 'saturday'])?>
+                <?= Html::dropDownList('saturday', '', \app\models\Prizes::getPrizesList(),['prompt'=> '--Select--','class' => 'form-control', 'id'=> 'saturday'])?>
+            </div>
+            <div class="col-sm-12">
+                <b>Sunday</b>
+                <?= Html::dropDownList('sunday', '', \app\models\Prizes::getPrizesList(),['prompt'=> '--Select--','class'=> 'form-control', 'id'=> 'sunday'])?>
             </div>
             <div class="col-sm-12">
                 <b>Enabled</b>
-                <?= Html::dropDownList( 'enabled','', ['1'=>'Yes','0' => 'No'], [
-                            'prompt'   => '--Select--',
-                            'id'       => 'enabledid',
-                            'class'    => 'form-control',
-                        ] ) ?>
+                <?= Html::dropDownList( 'enabled','', ['1'=>'Yes','0' => 'No'], ['prompt'=> '--Select--','id'=> 'enabled','class'=>'form-control'])?>
             </div>
         </div>
         <div class="modal-footer">

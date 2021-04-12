@@ -62,7 +62,7 @@ class StationShows extends \yii\db\ActiveRecord
     }
 
     /**
-        * Customer - Stations relationship
+        *   Stations relationship
         * @return \yii\db\ActiveQuery
     */
     public function getStations() {
