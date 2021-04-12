@@ -178,7 +178,7 @@ echo Html::beginForm(
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title">Add Prize</h4>
+            <h4 class="modal-title"><span class="addprizespn" style="font-weight: bold">Add prize</span></h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           
         </div>
@@ -222,7 +222,7 @@ echo Html::beginForm(
             </div>
         </div>
         <div class="modal-footer">
-          <button type="submit"class="btn btn-primary btn-block" id="addprizebtn"><span style="font-weight: bold">Add prize</span></button>
+          <button type="submit"class="btn btn-primary btn-block" id="addprizebtn"><span class="addprizespn" style="font-weight: bold">Add prize</span></button>
         </div>
       </div>
       

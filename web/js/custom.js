@@ -80,6 +80,9 @@ function editPrizeModal(showprizeid,draw_count,monday,tuesday,wednesday,thursday
     $('#sunday').val(sunday)
     $('#enabled').val(enabled)
     
+    $('.addprizespn').text('')
+    $('.addprizespn').text('Edit prize')
+    
     $('#prizeModal').modal({
       //backdrop: 'static',
       //keyboard: false
