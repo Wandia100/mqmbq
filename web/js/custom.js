@@ -56,7 +56,16 @@ function runDraw() {
     $('#presentersModal .modal-dialog').addClass('largerwidth')
     $('.modal-backdrop').hide();
   }
+   function commissionsModal() {
+    $('#commissionsModal').modal({
+      //backdrop: 'static',
+      //keyboard: false
+    })
   
+    $('#commissionsModal .modal-dialog').addClass('modal-lg')
+    $('#commissionsModal .modal-dialog').addClass('largerwidth')
+    $('.modal-backdrop').hide();
+  }
 function prizeModal() {
     $('#prizeModal').modal({
       //backdrop: 'static',

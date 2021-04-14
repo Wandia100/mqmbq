@@ -1,6 +1,8 @@
 <?php
 
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
+use yii\helpers\Html;
 
 $icon = ArrayHelper::getValue($this->params, 'view-icon', 'pe-7s-folder');
 ?>
@@ -39,6 +41,17 @@ $icon = ArrayHelper::getValue($this->params, 'view-icon', 'pe-7s-folder');
                             <?= ArrayHelper::getValue($item, 'content', '') ?>
                             </li>
                         <?php endforeach; ?>
+                        <?php  if(Yii::$app->controller->id == 'stationshows' && Yii::$app->controller->action->id == 'view'){ ?> 
+                            <li class="nav-item"> 
+                                <a href="<?= Url::to(['/stationshows/view','id'=>$_GET['id'],'rs'=>'1'])?>"> Show Presenters</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= Url::to(['/stationshows/view','id'=>$_GET['id'],'rs'=>'2'])?>">Show Prizes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= Url::to(['/stationshows/view','id'=>$_GET['id'],'rs'=>'3'])?>">Show Commissions</a>
+                            </li>
+                        <?php } ?>     
                     </ul>
                 </div>
             </div>
