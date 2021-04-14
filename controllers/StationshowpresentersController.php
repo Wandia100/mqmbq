@@ -117,13 +117,13 @@ class StationshowpresentersController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($id,$rs)
     {
         $model = $this->findModel($id);
         $stationshowid = $model->station_show_id;
         $model->delete();
 
-        return $this->redirect(['stationshows/view','id'=>$stationshowid]);
+        return $this->redirect(['stationshows/view','id'=>$stationshowid,$rs]);
     }
 
     /**

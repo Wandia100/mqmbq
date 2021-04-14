@@ -9,6 +9,8 @@ use app\models\StationShowPresenters;
 use app\models\StationShowPresentersSearch;
 use app\models\StationShowPrizes;
 use app\models\StationShowPrizesSearch;
+use app\models\StationShowCommissions;
+use app\models\StationShowCommissionsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -30,7 +32,7 @@ class StationshowsController extends Controller
                 'only' => ['create', 'update','index'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','addpresenter','addprize'],
+                        'actions' => ['create', 'update','index','addpresenter','addprize','addcommissions'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if(!Yii::$app->user->isGuest){
@@ -78,18 +80,23 @@ class StationshowsController extends Controller
         $prizeSearchModel = new StationShowPrizesSearch();
         $prizeDataProvider = $prizeSearchModel->search(Yii::$app->request->queryParams,$id);
         
+        $commissionsSearchModel = new \app\models\StationShowCommissionsSearch();
+        $commissionsDataProvider = $commissionsSearchModel->search(Yii::$app->request->queryParams,$id);
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'prizeSearchModel'=>$prizeSearchModel,
-            'prizeDataProvider'=>$prizeDataProvider
+            'prizeDataProvider'=>$prizeDataProvider,
+            'commissionsSearchModel' => $commissionsSearchModel,
+            'commissionsDataProvider'=>$commissionsDataProvider
         ]);
     }
     /**
      * 
      */
-    public function actionAddpresenter($id){
+    public function actionAddpresenter($id,$rs=1){
         $model = $this->findModel($id);
         $ShowPresenter = new StationShowPresenters();
         $ShowPresenter->id=Uuid::generate()->string;
@@ -98,12 +105,12 @@ class StationshowsController extends Controller
         $ShowPresenter->presenter_id = $_POST['presenter_id'];
         $ShowPresenter->created_at = date('Y-m-d H:i:s');
         $ShowPresenter->save();
-        return $this->redirect(['view', 'id' => $id]);
+        return $this->redirect(['view', 'id' => $id,'rs' => $rs]);
     }
     /**
      * 
      */
-    public function actionAddprize($id){
+    public function actionAddprize($id,$rs){
         $model = $this->findModel($id);
         if($_POST['showprizeid'] == ""):
             $ShowPrize = new StationShowPrizes();
@@ -125,9 +132,24 @@ class StationshowsController extends Controller
         $ShowPrize->enabled = $_POST['enabled'];
         $ShowPrize->created_at = date('Y-m-d H:i:s');
         $ShowPrize->save();
-        return $this->redirect(['view', 'id' => $id]);
+        return $this->redirect(['view', 'id' => $id,'rs' => $rs]);
     }
 
+    /**
+     * addcommissions
+     */
+    public function actionAddcommissions($id,$rs=1){
+        $model = $this->findModel($id);
+        $ShowCommissions = new StationShowCommissions();
+        $ShowCommissions->id=Uuid::generate()->string;
+        $ShowCommissions -> station_id = $model->stations->id;
+        $ShowCommissions -> station_show_id = $id;
+        $ShowCommissions->perm_group = $_POST['perm_group'];
+        $ShowCommissions->commission = $_POST['commission'];
+        $ShowCommissions->created_at = date('Y-m-d H:i:s');
+        $ShowCommissions->save();
+        return $this->redirect(['view', 'id' => $id,'rs' => $rs]);
+    }
     /**
      * Creates a new StationShows model.
      * If creation is successful, the browser will be redirected to the 'view' page.

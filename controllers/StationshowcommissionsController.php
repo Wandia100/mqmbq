@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\StationShowPrizes;
-use app\models\StationShowPrizesSearch;
+use app\models\StationShowCommissions;
+use app\models\StationShowCommissionsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * StationshowprizesController implements the CRUD actions for StationShowPrizes model.
+ * StationshowcommissionsController implements the CRUD actions for StationShowCommissions model.
  */
-class StationshowprizesController extends Controller
+class StationshowcommissionsController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -38,19 +38,19 @@ class StationshowprizesController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    //'delete' => ['POST'],
+                    #'delete' => ['POST'],
                 ],
             ],
         ];
     }
 
     /**
-     * Lists all StationShowPrizes models.
+     * Lists all StationShowCommissions models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new StationShowPrizesSearch();
+        $searchModel = new StationShowCommissionsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -60,8 +60,8 @@ class StationshowprizesController extends Controller
     }
 
     /**
-     * Displays a single StationShowPrizes model.
-     * @param string $id
+     * Displays a single StationShowCommissions model.
+     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -73,13 +73,13 @@ class StationshowprizesController extends Controller
     }
 
     /**
-     * Creates a new StationShowPrizes model.
+     * Creates a new StationShowCommissions model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new StationShowPrizes();
+        $model = new StationShowCommissions();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -91,9 +91,9 @@ class StationshowprizesController extends Controller
     }
 
     /**
-     * Updates an existing StationShowPrizes model.
+     * Updates an existing StationShowCommissions model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -111,9 +111,9 @@ class StationshowprizesController extends Controller
     }
 
     /**
-     * Deletes an existing StationShowPrizes model.
+     * Deletes an existing StationShowCommissions model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -127,15 +127,15 @@ class StationshowprizesController extends Controller
     }
 
     /**
-     * Finds the StationShowPrizes model based on its primary key value.
+     * Finds the StationShowCommissions model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return StationShowPrizes the loaded model
+     * @param integer $id
+     * @return StationShowCommissions the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = StationShowPrizes::findOne($id)) !== null) {
+        if (($model = StationShowCommissions::findOne($id)) !== null) {
             return $model;
         }
 
