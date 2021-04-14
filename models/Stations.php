@@ -74,4 +74,29 @@ class Stations extends \yii\db\ActiveRecord
         }
         return $list;
     }
+    public static function getStationResult($from_time)
+    {
+        $sql="select a.id,a.id as station_id,a.name as station_name,a.station_code,COALESCE((select sum(b.amount) from transaction_histories b where b.created_at LIKE '%:from_time%'),0) as amount from stations a where a.deleted_at IS NULL order by a.name asc";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':from_time',$from_time)
+        ->queryAll();
+    }
+    public static function getStationTotalResult($start_period,$end_period)
+    {
+        $sql="select a.id,a.id as station_id,a.name as station_name,a.station_code,
+        COALESCE((select sum(b.amount) from transaction_histories b where b.created_at >= :start_period and
+        b.created_at <= :end_period),0) as amount from stations a where a.deleted_at IS NULL order by a.name asc";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':start_period',$start_period)
+        ->bindValue(':end_period',$end_period)
+        ->queryAll();
+    }
+    public static function getDayStationTotalResult($the_day)
+    {
+        $sql="select a.id,a.id as station_id,a.name as station_name,a.station_code,
+        COALESCE((select sum(b.amount) from transaction_histories b where b.created_at LIKE '%:the_day%'),0) as amount from stations a where a.deleted_at IS NULL order by a.name asc";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':the_day',$the_day)
+        ->queryAll();
+    }
 }
