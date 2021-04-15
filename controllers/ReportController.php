@@ -38,6 +38,7 @@ class ReportController extends Controller{
     }
     public function actionHourlyperformance()
     {
+        $stations=Stations::getActiveStations();
         $today=date("Y-m-d");
         $current_time = date("H");
         $transaction_history_result = array();
@@ -56,9 +57,10 @@ class ReportController extends Controller{
             $end=24;
         }
         for($i = $start; $i< $end; $i++){
+            $i=$this->formatHour($i);
             $total_amount = 0;
             $total_invalid_codes = 0;
-            $from_time=$today.$i;
+            $from_time=$today." ".$i;
             $mpesa_payments = MpesaPayments::getTotalMpesa($from_time);
             $mpesa_payments=$mpesa_payments['total_mpesa'];
             $transaction_histories = TransactionHistories::getTotalTransactions($from_time);
@@ -94,8 +96,18 @@ class ReportController extends Controller{
             'station_totals' => $station_total_result,
         );
 
-        $response = $json_array;
-        return json_encode($response);
+        $hourly = $json_array;
+        return $this->render('hourly_performance', [
+            'hourly' => $hourly,
+            'stations' => $stations
+            ]);
+    }
+    private function formatHour($hr)
+    {
+        if($hr < 10)
+        {
+            return '0'.$hr;
+        }
     }
 
 }

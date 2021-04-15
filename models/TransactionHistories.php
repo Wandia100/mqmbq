@@ -118,9 +118,9 @@ class TransactionHistories extends \yii\db\ActiveRecord
     public static function getTotalTransactions($from_time)
     {
         $sql="select COALESCE(sum(amount),0) as total_history from 
-        transaction_histories where created_at LIKE '%:from_time%'";
+        transaction_histories where created_at LIKE :from_time";
         return Yii::$app->db->createCommand($sql)
-        ->bindValue(':from_time',$from_time)
+        ->bindValue(':from_time',"%$from_time%")
         ->queryOne();
 
     }
