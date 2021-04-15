@@ -8,41 +8,29 @@ $this->params['breadcrumbs'][] = $this->title;
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th>HOUR</th>
             <?php
-            $station_count=count($stations);
-            for($i=0;$i<$station_count; $i++)
+            $stations=$response[0];
+            for($i=0;$i<count($stations); $i++)
             {
-                ?><th><?=strtoupper($stations[$i]->name); ?></th><?php
+                ?><th><?=strtoupper($stations[$i]); ?></th><?php
             }
             ?>
-            <th>TOTAL</th>
         </tr>
     </thead>
     <tbody>
     <?php
     $k=0;
-    for($i=0;$i< count($hourly['transaction_histories']); $i++)
+    for($i=1;$i< count($response); $i++)
     {
-        $row=$hourly['transaction_histories'][$i];
-        ?>
-        <tr>
-        <td><?=$row['hour'];?></td>
-        <?php
-        $hr_res=$row['hour_results'];
-        $hour_total=0;
-        for($j=0;$j<count($hr_res); $j++)
+        ?><tr><?php
+        for($j=0;$j<count($response[$i]); $j++)
         {
             ?>
-            <td><?=$hr_res[$j]['amount'];?></td>
             
+            <td><?=$response[$i][$j];?></td>
             <?php
-            $total_amount+=$hr_res[$j]['amount'];    
         }
-        ?>
-        <td><?=$hour_total; ?></td>
-        </tr>
-        <?php
+        ?></tr><?php
     }
 
         ?>
