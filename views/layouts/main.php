@@ -34,6 +34,9 @@ AdminAsset::register($this);
 
 
         <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header closed-sidebar">
+            <?php $serverName = $_SERVER['SERVER_NAME']; ?>
+    <input type="hidden" name="host" id="host" value="<?= $serverName ?>">
+    <input type="hidden" name="port" id="port" value="<?= $_SERVER['SERVER_PORT'] ?>">
             <?= $this->render('partials/top-header', []); ?>
             <?php
             // echo $this->render('partials/theme-setting', []); 

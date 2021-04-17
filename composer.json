@@ -22,8 +22,9 @@
         "kartik-v/yii2-ipinfo": "^2.0",
         "webpatser/laravel-uuid": "^3.0",
         "kartik-v/yii2-widget-datepicker": "^1.4",
-        "kartik-v/yii2-grid": "^3.3",
-        "kartik-v/yii2-widget-datetimepicker": "*"
+        "kartik-v/yii2-grid": "dev-master",
+        "kartik-v/yii2-editable": "@dev",
+        "kartik-v/yii2-widgets": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

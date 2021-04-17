@@ -70,7 +70,7 @@ class Commissions extends \yii\db\ActiveRecord
         return [
             [['id'], 'required'],
             [['amount', 'transaction_cost'], 'number'],
-            [['status'], 'integer'],
+            [['status','c_type'], 'integer'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
             [['user_id'], 'string', 'max' => 100],

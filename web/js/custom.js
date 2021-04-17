@@ -101,3 +101,17 @@ function editPrizeModal(showprizeid,draw_count,monday,tuesday,wednesday,thursday
     $('#prizeModal .modal-dialog').addClass('largerwidth')
     $('.modal-backdrop').hide();
 }
+
+
+/**
+ *
+ * @param {type} instance
+ * @param {type} field
+ * @param {type} id
+ * @returns {undefined}
+ */
+function saveRecord (instance, field, id) {
+    $.post(host + '/stationshowpresenters/saverecord', {value: instance.val(), field: field, id: id}, function (data) {
+
+    })
+}

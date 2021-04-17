@@ -54,6 +54,12 @@ $config = [
             ],
 		],
     ],
+    'modules' => [
+        'gridviewKrajee' =>  [
+             'class' => '\kartik\grid\Module',
+             // your other grid module settings
+         ]
+    ],
     'params' => $params,
 ];
 
