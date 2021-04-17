@@ -2,6 +2,15 @@
 $this->title = 'Hourly Performance';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div class="row">
+<div class="col-md-12">
+                        <?=$this->renderFile('@app/views/layouts/partials/day_filter.php', [
+                                'data' => [],
+                                'url'  => '/report/hourlyperformance',
+                                'from' => date( 'Y-m-d')
+                        ])?>
+                </div>
+</div>
 <div class=row>
 <div class="col-md-12">
 
