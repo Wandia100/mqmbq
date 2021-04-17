@@ -192,14 +192,15 @@ class TransactionhistoriesController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-    public function actionProcessMpesa()
+    public function actionAssignshows()
     {
-        $data=MpesaPayments::find()->all();
+        $data=MpesaPayments::find()->where("created_at > 2021-04-17")->all();
         for($i=0;$i<count($data); $i++)
         {
             $row=$data[$i];
             $station_show=StationShows::getStationShow($row->BillRefNumber);
-            if($station_show)
+            print_r($station_show); exit();
+            if($station_show!=NULL)
             {
                 $model=new TransactionHistories();
                 $model->id=Uuid::generate()->string;
@@ -207,8 +208,8 @@ class TransactionhistoriesController extends Controller
                 $model->reference_name=$row->FirstName.$row->MiddleName.$row->LastName;
                 $model->reference_phone=$row->MSISDN;
                 $model->reference_code=$row->BillRefNumber;
-                $model->station_id=$station_show->station_id;
-                $model->station_show_id=$station_show->station_show_id;
+                $model->station_id=$station_show['station_id'];
+                $model->station_show_id=$station_show['show_id'];
                 $model->amount=$row->TransAmount;
                 $model->created_at=date("Y-m-d H:i:s");
                 $model->save(false);
