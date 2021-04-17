@@ -11,6 +11,7 @@ use app\models\ActivityLog;
  */
 class ActivityLogSearch extends ActivityLog
 {
+    public $user;
     /**
      * {@inheritdoc}
      */
@@ -18,7 +19,7 @@ class ActivityLogSearch extends ActivityLog
     {
         return [
             [['id', 'is_deleted'], 'integer'],
-            [['description', 'causer_id', 'properties', 'created_at', 'updated_at'], 'safe'],
+            [['description', 'causer_id', 'properties', 'created_at', 'updated_at','user'], 'safe'],
         ];
     }
 
@@ -47,6 +48,13 @@ class ActivityLogSearch extends ActivityLog
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        $query->joinWith(['user']);
+        
+        
+        $dataProvider->sort->attributes['user'] = [
+            'asc'  => [ 'users.first_name' => SORT_ASC ],
+            'desc' => [ 'users.first_name' => SORT_DESC ],
+        ];
 
         $this->load($params);
 
@@ -66,7 +74,11 @@ class ActivityLogSearch extends ActivityLog
 
         $query->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'causer_id', $this->causer_id])
-            ->andFilterWhere(['like', 'properties', $this->properties]);
+            ->andFilterWhere(['like', 'properties', $this->properties]); 
+        if(!empty( $this->user)){
+            $query->andWhere('users.first_name LIKE "%'.trim($this->user). '%" ' .
+            'OR users.last_name LIKE "%'.trim($this->user). '%"');
+        }
 
         return $dataProvider;
     }

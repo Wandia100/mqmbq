@@ -24,7 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'description',
-            'causer_id',
+            [
+                'attribute' => 'user',
+                'value'     => 'fullname'
+            ],
             //'properties',
             'created_at',
             //'updated_at',
