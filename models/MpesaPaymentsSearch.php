@@ -88,8 +88,10 @@ class MpesaPaymentsSearch extends MpesaPayments
                 $query->andWhere( "YEAR(created_at)= YEAR(CURDATE())" );
         }
         if ( $from != null && $to != null ) {
-                $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
-                $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
+               # $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
+               # $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
+               $query->andWhere( "created_at >= '$from'" );
+               $query->andWhere( "created_at <= '$to'" );
         }
         $query->orderBy('created_at DESC');
         return $dataProvider;

@@ -16,11 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12">
-                        <?=$this->renderFile('@app/views/layouts/partials/_date_filter.php', [
-                                'data' => [],
-                                'url'  => '/transactionhistories/index',
-                                'from' => date( 'Y-m-d', strtotime( '-42 days' ) )
-                        ])?>
+                    <?=$this->renderFile('@app/views/layouts/partials/_datetime_filter_.php', [
+                        'data' => [],
+                        'url'  => '/transactionhistories/index',
+                        'from' => date( 'Y-m-d H:i', strtotime( '-5 hours' ) )
+                    ])?>
                 </div>
             </div>
             <div class="row">

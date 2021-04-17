@@ -105,8 +105,10 @@ class TransactionHistoriesSearch extends TransactionHistories
                 $query->andWhere( "YEAR(transaction_histories.created_at)= YEAR(CURDATE())" );
         }
         if ( $from != null && $to != null ) {
-                $query->andWhere( "DATE(transaction_histories.created_at)>= DATE('" . $from . "')" );
-                $query->andWhere( "DATE(transaction_histories.created_at)<= DATE('" . $to . "')" );
+            #$query->andWhere( "DATE(transaction_histories.created_at)>= DATE('" . $from . "')" );
+            #$query->andWhere( "DATE(transaction_histories.created_at)<= DATE('" . $to . "')" );
+            $query->andWhere( "transaction_histories.created_at >= '$from'" );
+            $query->andWhere( "transaction_histories.created_at <= '$to'" );
         }
         $query->orderBy('transaction_histories.created_at DESC');
         return $dataProvider;

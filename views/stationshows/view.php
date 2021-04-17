@@ -152,8 +152,11 @@ $this->params['breadcrumbs'][] = $this->title;
          <?= GridView::widget([
         'dataProvider' => $commissionsDataProvider,
         'columns' => [
-            
-            'perm_group',
+            #'perm_group',
+            [
+                'attribute' => 'perm_group',
+                'value'     => 'permgroup.name'
+            ],
             'commission',
             'created_at',
             //'updated_at',
