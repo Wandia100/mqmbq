@@ -50,16 +50,16 @@ use app\modules\user\models\User;
             </div>
             <ul class="header-menu nav">
                 <li class="nav-item tour-step <?= $presentervisibility?> " data-content="Hourly Performance" title="Hourly Performance">
-                    <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Hourly Performance', Url::to('/report/hourlyperformance'), ['class' => 'text-light'])?>
+                    <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Hourly Performance', ['/report/hourlyperformance'], ['class' => 'text-light'])?>
                 </li>
                 <li class="btn-group nav-item tour-step <?=$managementvisibility?>" data-content="Commission Summary" title="Commission Summary">
-                    <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Commission Summary', Url::to('/report/commissionsummary'), ['class' => 'text-light'])?>
+                    <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Commission Summary', ['/report/commissionsummary'], ['class' => 'text-light'])?>
                 </li>
                 <li class="dropdown nav-item tour-step <?= $presentervisibility?>" data-content="Daily Awarding Report" title="Daily Awarding Report">
-                    <?= Html::a('<i class="nav-link-icon fa fa-address-book"></i> Daily Awarding Report', Url::to('/report/dailyawarding'), ['class' => 'text-light'])?>
+                    <?= Html::a('<i class="nav-link-icon fa fa-address-book"></i> Daily Awarding Report', ['/report/dailyawarding'], ['class' => 'text-light'])?>
                 </li>
                 <li class="dropdown nav-item tour-step <?= $presentervisibility?>" data-content="Revenue Report" title="Revenue Report">
-                    <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Revenue Report', Url::to('/report/revenue'), ['class' => 'text-light'])?>
+                    <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Revenue Report', ['/report/revenue'], ['class' => 'text-light'])?>
                  </li>   
                 
                 <?php if(Yii::$app->request->userIP !== '127.0.0.1'): ?>

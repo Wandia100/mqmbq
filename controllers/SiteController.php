@@ -66,41 +66,28 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group==3){
+            return $this->redirect( [ '/transactionhistories/presenter' ] );
+        }else{
+            return $this->render('index');
+        }
     }
 
     /**
-     * Login action.
-     *
-     * @return Response|string
-     */
+        * Login action.
+        * @return Response|string
+    */
     public function actionLogin()
     {
         $this->layout = 'login';
         if (!Yii::$app->user->isGuest) {
-            if(Yii::$app->user->identity->perm_group==4)
-            {
-                //return Yii::$app->getResponse()->redirect(Url::to('/transactionhistories/presenter'));
-                return $this->redirect( [ '/transactionhistories/presenter' ] );
-            }
-            else
-            {
-                return $this->goHome();
-            }
+            return $this->goHome();
         }            
 
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            if(Yii::$app->user->identity->perm_group==4)
-            {
-                return $this->redirect( [ '/transactionhistories/presenter' ] );
-            }
-            else
-            {
-                return $this->goBack();
-            }
-            
+            return $this->goBack();
         }
 
         $model->password = '';
