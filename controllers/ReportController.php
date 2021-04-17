@@ -112,6 +112,24 @@ class ReportController extends Controller{
             'response' => $response
             ]);
     }
+    public function actionCommissionsummary()
+    {
+        
+    }
+    public function actionDailyawarding()
+    {
+
+    }
+    public function actionRevenue()
+    {
+
+    }
+    public function actionCommission()
+    {
+
+    }
+    public function actionDashboard()
+    {}
     private function formatHour($hr)
     {
         if($hr < 10)

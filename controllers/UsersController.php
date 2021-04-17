@@ -74,6 +74,7 @@ class UsersController extends Controller
      */
     public function actionView($id)
     {
+        $perm=[];
         $model     = $this->findModel($id);
         $groupPerm = PermissionGroup::findOne( $model->perm_group );
         if ( $groupPerm ) {
