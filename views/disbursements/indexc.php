@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'=>'raw',
                 'value' => function($model) use ($route){
                     if($route == 'p'):
-                        return $model->status == 2 ? Html::a('<span class="glyphicon glyphicon-wrench">PENDING(Change Status)</span>', ['indexc','id'=>$model->id]): 'Processed';
+                        return $model->status == 2 ? Html::a('<span class="glyphicon glyphicon-wrench">PENDING(Change Status)</span>', ['indexc','id'=>$model->id,'t'=>'p']): 'Processed';
                     else:
                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ['view','id'=>$model->id]);
                     endif;
