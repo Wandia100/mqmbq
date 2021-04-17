@@ -15,5 +15,5 @@ return [
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
     
-    'reportscontrollers'=>['mpesapayments','transactionhistories','winninghistories','financialsummaries','commissions','disbursements']
+    'reportscontrollers'=>['mpesapayments','transactionhistories','winninghistories','financialsummaries','commissions','disbursements','site']
 ];
