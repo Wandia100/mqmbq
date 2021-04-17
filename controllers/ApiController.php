@@ -81,7 +81,7 @@ class ApiController extends Controller
         {
             if($result_code===0)
             {
-                $disbursement->status=2;
+                $disbursement->status=1;
                 $disbursement->updated_at= date('Y-m-d H:i:s');
                 $disbursement->save(false);
             }
@@ -136,7 +136,7 @@ class ApiController extends Controller
             $row=$data[$i];
             $command_id=Disbursements::getCommandId($row->disbursement_type);    
             //$this->processDisbursementPayment($row->id,$row->phone_number,$row->amount,$command_id);
-            $row->status=1;
+            $row->status=3;
             $row->save(false);
         }
     }
