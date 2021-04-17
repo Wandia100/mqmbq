@@ -95,4 +95,54 @@ class Disbursements extends \yii\db\ActiveRecord
         $model->created_at=date("Y-m-d H:i:s");
         $model->save(false);
     }
+    public static function getPendingDisbursement()
+    {
+        return Disbursements::find()->where("status=0")->all();
+    }
+    public static  function generateTokenB2C()
+    {
+
+        $url = MPESATOKENURL;
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        $app_consumer_key = file_get_contents("/srv/credentials/mpesaapp_consumer_key.txt");
+        $app_consumer_secret = file_get_contents("/srv/credentials/mpesaapp_consumer_secret.txt");
+        $credentials = base64_encode($app_consumer_key.':'.$app_consumer_secret);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic '.$credentials));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $curl_response = curl_exec($curl);
+        $token_info=json_decode($curl_response,true);
+        return $token_info['access_token'];
+
+    }
+    public static function setSecurityCredentials ()
+    {
+        $publicKey =file_get_contents("/srv/credentials/mpesa_public_key.txt");
+        $plaintext =file_get_contents("/srv/credentials/mpesaplaintext.txt");
+        openssl_public_encrypt($plaintext, $encrypted, $publicKey, OPENSSL_PKCS1_PADDING);
+        return base64_encode($encrypted);
+    }
+    /*command id comission - SalaryPayment
+    *expenses - BusinessPayment
+    *winner payments - PromotionPayment
+    */ 
+    public static function getCommandId($disbursement_type)
+    {
+        switch($disbursement_type)
+        {
+            case "winning":
+                $command_id="PromotionPayment";
+                break;
+            case "commission":
+                $command_id="SalaryPayment";
+                break;
+            case "expenses":
+                $command_id="BusinessPayment";
+                break;
+            default:
+                $command_id="PromotionPayment";
+                break;
+        }
+        return $command_id;
+    }
 }

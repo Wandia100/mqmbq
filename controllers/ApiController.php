@@ -16,7 +16,7 @@ class ApiController extends Controller
     */
     public function processDisbursementPayment($disbursement_id, $phone_number, $amount, $command_id)
     {
-        $access_token = $this->generateTokenB2C();
+        $access_token = Disbursements::generateTokenB2C();
         $CommandID = $command_id;
         $PartyA = PARTYA;
         $Remarks = REMARKS;
@@ -32,7 +32,7 @@ class ApiController extends Controller
         $curl_post_data = array(
             //Fill in the request parameters with valid values
             'InitiatorName' => $InitiatorName,
-            'SecurityCredential' => $this->setSecurityCredentials(),
+            'SecurityCredential' => Disbursements::setSecurityCredentials(),
             'CommandID' => $CommandID,
             'Amount' => $amount,
             'PartyA' => $PartyA,
@@ -127,28 +127,18 @@ class ApiController extends Controller
         
         
     }
-    public function generateTokenB2C()
+    #code to disburse payments
+    public function actionPayout()
     {
-
-        $url = MPESATOKENURL;
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        $app_consumer_key = file_get_contents("/srv/credentials/mpesaapp_consumer_key.txt");
-        $app_consumer_secret = file_get_contents("/srv/credentials/mpesaapp_consumer_secret.txt");
-        $credentials = base64_encode($app_consumer_key.':'.$app_consumer_secret);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic '.$credentials));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        $curl_response = curl_exec($curl);
-        $token_info=json_decode($curl_response,true);
-        return $token_info['access_token'];
-
-    }
-    public function setSecurityCredentials ()
-    {
-        $publicKey =file_get_contents("/srv/credentials/mpesa_public_key.txt");
-        $plaintext =file_get_contents("/srv/credentials/mpesaplaintext.txt");
-        openssl_public_encrypt($plaintext, $encrypted, $publicKey, OPENSSL_PKCS1_PADDING);
-        return base64_encode($encrypted);
+        $data=Disbursements::getPendingDisbursement();
+        for($i=0;$i<count($data); $i++)
+        {
+            $row=$data[$i];
+            $command_id=Disbursements::getCommandId($row->disbursement_type);    
+            //$this->processDisbursementPayment($row->id,$row->phone_number,$row->amount,$command_id);
+            $row->status=1;
+            $row->save(false);
+        }
     }
     #start of sms code
     public function sendSms($phone_number,$message)
