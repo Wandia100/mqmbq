@@ -119,6 +119,20 @@ class MpesapaymentsController extends Controller
         $response['data'] = [];
         \Yii::$app->response->data = json_encode($response);
     }
+    public function actionInsertpayment()
+    {
+        $data=MpesaPayments::find()->limit(1000)->all();
+        foreach($data as $row)
+        {
+            $model=new MpesaPayments();
+            $model=$row;
+            $model->id=Uuid::generate()->string;
+            $model->BillRefNumber="RAMOGI";
+            $model->created_at=date("Y-m-d H:i:s");
+            $model->updated_at=date("Y-m-d H:i:s");
+            $model->save(false);
+        }
+    }
 
     /**
      * Updates an existing MpesaPayments model.
