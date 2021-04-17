@@ -67,6 +67,13 @@ class DisbursementsController extends Controller
     {
         $searchModel = new DisbursementsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        if(isset($_GET['id'])){
+            $model = $this->findModel($_GET['id']);
+            $model->status = 0;
+            $model->save(FALSE);
+        }
+        
 
         return $this->render('indexc', [
             'searchModel' => $searchModel,
