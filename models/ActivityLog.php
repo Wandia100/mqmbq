@@ -24,7 +24,24 @@ class ActivityLog extends \yii\db\ActiveRecord
     {
         return 'activity_log';
     }
-
+    /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getUser() {
+        return $this->hasOne(Users::className(), [ 'id' => 'causer_id' ] );
+    }
+    
+    
+    /**
+     * Getter for users full name
+     * @return string
+     */
+    public function getFullname() {
+        if (isset( $this->user->first_name ) ) {
+                return $this->user->first_name;
+        }
+    }
     /**
      * {@inheritdoc}
      */
@@ -51,6 +68,7 @@ class ActivityLog extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'is_deleted' => 'Is Deleted',
+            'user' => 'Causer'
         ];
     }
 }
