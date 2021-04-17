@@ -39,6 +39,15 @@ class TransactionHistories extends \yii\db\ActiveRecord
     public function getStations() {
         return $this->hasOne(Stations::className(), [ 'id' => 'station_id' ] );
     }
+    
+    /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getMpesapayment() {
+        return $this->hasOne(MpesaPayments::className(), ['id' => 'mpesa_payment_id']);
+    }
+    
     /**
         * Customer - Stations relationship
         * @return \yii\db\ActiveQuery
@@ -46,7 +55,15 @@ class TransactionHistories extends \yii\db\ActiveRecord
     public function getStationshows(){
         return $this->hasOne(StationShows::className(), ['id' => 'station_show_id']);
     }
-    
+    /**
+     * Getter for users full name
+     * @return string
+     */
+    public function getMpesadetails() {
+        if (isset($this->mpesapayment->TransID)){
+            return $this->mpesapayment->TransID.' '.$this->mpesapayment->BillRefNumber;
+        }
+    }
     /**
      * {@inheritdoc}
      */

@@ -36,8 +36,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-           // 'id',
-            'mpesa_payment_id',
+           // 'id',Mpesadetails
+           # 'mpesa_payment_id',
+            'mpesadetails',
             'reference_name',
             'reference_phone',
             'reference_code',
