@@ -84,4 +84,15 @@ class Disbursements extends \yii\db\ActiveRecord
             'deleted_at' => 'Deleted At',
         ];
     }
+    public static function saveDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type)
+    {
+        $model=new Disbursements();
+        $model->reference_id=$reference_id;
+        $model->reference_name=$reference_name;
+        $model->phone_number=$phone_number;
+        $model->amount=$amount;
+        $model->disbursement_type=$disbursement_type;
+        $model->created_at=date("Y-m-d H:i:s");
+        $model->save(false);
+    }
 }
