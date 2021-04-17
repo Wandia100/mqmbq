@@ -22,7 +22,7 @@ class CommissionsSearch extends Commissions
         return [
             [['id', 'user_id', 'station_id', 'station_show_id', 'transaction_reference', 'created_at', 'updated_at', 'deleted_at','stationname','stationshowname','user'], 'safe'],
             [['amount', 'transaction_cost'], 'number'],
-            [['status'], 'integer'],
+            [['status','c_type'], 'integer'],
         ];
     }
 
@@ -42,8 +42,9 @@ class CommissionsSearch extends Commissions
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $daily = false, $monthly = false, $from = null, $to = null,$t = 'p')
+    public function search($params, $daily = false, $monthly = false, $from = null, $to = null)
     {
+        $t = isset($_GET['t']) && $_GET['t'] == 'p'?3:4;
         $query = Commissions::find();
 
         // add conditions that should always apply here
@@ -114,6 +115,7 @@ class CommissionsSearch extends Commissions
                 $query->andWhere( "DATE(commissions.created_at)>= DATE('" . $from . "')" );
                 $query->andWhere( "DATE(commissions.created_at)<= DATE('" . $to . "')" );
         }
+        $query ->where("c_type = '$t'");
         $query->orderBy('commissions.created_at DESC');
         return $dataProvider;
     }

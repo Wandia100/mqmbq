@@ -25,7 +25,7 @@ class StationshowpresentersController extends Controller
                 'only' => ['create', 'update','index'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index'],
+                        'actions' => ['create', 'update','index','saverecord'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if(!Yii::$app->user->isGuest){
@@ -43,7 +43,15 @@ class StationshowpresentersController extends Controller
             ],
         ];
     }
-
+        /**
+	 * Method to save record and populate grid values  on AJax
+	 */
+	public function actionSaverecord() {
+            $field         = $_POST['field'];
+            $mod           = StationShowPresenters::findOne( $_POST['id'] );
+            $mod->$field   = $_POST['value'];
+            $mod->save( false );
+	}
     /**
      * Lists all StationShowPresenters models.
      * @return mixed

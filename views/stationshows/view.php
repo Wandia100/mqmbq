@@ -60,12 +60,26 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     <div class="col-sm-7">
         <b><button class="btn btn-success" onclick="presenterModal()"> Add Presenters</button></b>
-         <?= GridView::widget([
+         <?=kartik\grid\GridView::widget([
+         'moduleId' => 'gridviewKrajee',     
         'dataProvider' => $dataProvider,
        // 'filterModel' => $searchModel,
         'columns' => [
             'fullname',
-            'is_admin',
+            #'is_admin',
+            [
+                'attribute' => 'is_admin',
+                'format'    => 'raw',
+                'value'     => function ( $model ) {
+                    return Html::dropDownList( 'is_admin' . str_replace('-', '_', $model->id), $model->is_admin, ['0'=>'No','1'=>'Yes'], [
+                        'prompt'   => '',
+                        "class"    => "form-control ",
+                        'id'       => 'is_admin' .str_replace('-', '_', $model->id),
+                        "onchange" => "saveRecord($(this),'is_admin','$model->id')"
+                    ]);
+                },
+            ],
+            
             ['class' => 'yii\grid\ActionColumn',
                 'template' => '{delete}',
                 'buttons' => [
