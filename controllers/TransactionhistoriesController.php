@@ -199,7 +199,6 @@ class TransactionhistoriesController extends Controller
         {
             $row=$data[$i];
             $station_show=StationShows::getStationShow($row->BillRefNumber);
-            print_r($station_show); exit();
             if($station_show!=NULL)
             {
                 $model=new TransactionHistories();
