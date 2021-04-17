@@ -194,7 +194,7 @@ class TransactionhistoriesController extends Controller
     }
     public function actionAssignshows()
     {
-        $data=MpesaPayments::find()->where("created_at > 2021-04-17")->all();
+        $data=MpesaPayments::find()->where("state=0")->all();
         for($i=0;$i<count($data); $i++)
         {
             $row=$data[$i];
@@ -212,6 +212,8 @@ class TransactionhistoriesController extends Controller
                 $model->amount=$row->TransAmount;
                 $model->created_at=date("Y-m-d H:i:s");
                 $model->save(false);
+                $row->state=1;
+                $row->save(false);
             }
             
         }
