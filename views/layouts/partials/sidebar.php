@@ -39,88 +39,88 @@ use luc\tourist\Tourist;
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                <li class="app-sidebar__heading">Dashboards</li>
-                <li>
+                <li class="app-sidebar__heading <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">Dashboards</li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-home"></i> Home', Url::home(), ['class' => ''])?>
                 </li>
-                <li class="app-sidebar__heading tour-step" title="User Administration"
+                <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>" title="User Administration"
                     data-content="User Management Module. Menu options to manage, edit, view, create users.">
                     USER MANAGEMENT
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-users"></i> List All Users', Url::to(['/users/index']), ['class' => '', 'id' => 'users'])?>
                 </li>
-                <li class="app-sidebar__heading tour-step" title="User Administration"
+                <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> " title="User Administration"
                     data-content="User Management Module. Menu options to manage, edit, view, create users.">
                     STATION MANAGEMENT
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> ">
                     <?= Html::a('<i class="metismenu-icon fa fa-signal"></i> Stations', Url::to(['/stations/index']), ['class' => '', 'id'=>'manage_categories'])?>
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> ">
                     <?= Html::a('<i class="metismenu-icon fa fa-microphone"></i> Station Shows', Url::to(['/stationshows/index']), ['class' => '', 'id'=>'manage_categories'])?>
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-gift"></i> Prizes', Url::to(['/prizes/index']), ['class' => '', 'id' => 'newapp'])?>
                 </li>
-                <li class="app-sidebar__heading tour-step" data-content="Application Management Options. Add/Edit/View Application(s) options"
+                <li class="app-sidebar__heading tour-step <?=$managementvisibility?> " data-content="Application Management Options. Add/Edit/View Application(s) options"
                     title="Application Management">
                     REPORTS
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> ">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Mpesa Report', Url::to(['/mpesapayments/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Transactions Report', Url::to(['/transactionhistories/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> ">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Winners Report',  Url::to(['/winninghistories/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> ">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Financial Summary', Url::to(['/financialsummaries/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
-                <li>
+                <li class="<?=$managementvisibility?> <?=$stationmanagementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Commission', Url::to(['/commissions/index','t'=>'p']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Management Commission', Url::to(['/commissions/index','t'=>'m']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursement Report', Url::to(['/disbursements/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 
-                <li class="app-sidebar__heading tour-step" data-content="Application Management Options. Add/Edit/View Application(s) options"
+                <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> " data-content="Application Management Options. Add/Edit/View Application(s) options"
                     title="Application Management">
                     FINANCE
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> ">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursement', Url::to(['/disbursements/indexc']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Disbursement', Url::to(['/disbursements/indexc','t'=>'p']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 
-                <li class="app-sidebar__heading tour-step" title=" Module"
+                <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>" title=" Module"
                     data-content="Role Based Access Control Management for the applications. Set up Roles and Rules for the different managed Applications"
                 >
                     RBAC
                 </li>
-                <li>                    
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">                    
                         <?= Html::a('<i class="metismenu-icon fa fa-chalkboard-teacher"></i> Permission Group', Url::to(['/permissiongroup/index', 'type' => \yii\rbac\Item::TYPE_ROLE]), ['class' => ''])?>
                     
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-clipboard-list"></i> Permissions', Url::to(['/permission/index', 'type' => yii\rbac\Item::TYPE_PERMISSION]))?>
                     
                 </li>
                 
-                <li class="app-sidebar__heading tour-step" title="API Menu" data-content="API Documentation for the system. List and usage of different endpoints.">
+                <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>" title="API Menu" data-content="API Documentation for the system. List and usage of different endpoints.">
                     API
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fas fa-print"></i> API Documentation', Url::to(['/api-docs']), ['target' => '_blank'])?>
                 </li>
-                <li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-user-secret"></i> API Users/Applications', Url::to(['/user/api-users']))?>
                 </li>
                 <li class="app-sidebar__heading tour-step" title="User Guides/Documentation and FAQs"
