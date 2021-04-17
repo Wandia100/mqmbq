@@ -58,6 +58,16 @@ class CommissionsController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    public function actionPresenter()
+    {
+        $searchModel = new CommissionsSearch();
+        $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     /**
      * Displays a single Commissions model.
