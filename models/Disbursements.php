@@ -29,7 +29,24 @@ class Disbursements extends \yii\db\ActiveRecord
     {
         return 'disbursements';
     }
-
+    
+    /**
+     * Getter for users full name
+     * @return string
+     */
+    public function getFullname() {
+        if ( isset( $this->user->first_name ) ) {
+                return $this->user->first_name;
+        }
+    }
+    
+    /**
+        * Customer - Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getUser() {
+        return $this->hasOne(Users::className(), [ 'id' => '' ] );
+    }
     /**
      * {@inheritdoc}
      */
