@@ -84,4 +84,14 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':from_time',"%$from_time%")
         ->queryOne();
     }
+    public static function getTotalMpesaInRange($from_time,$to_time)
+    {
+        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from 
+        mpesa_payments where created_at >= :from_time and
+        created_at <= :to_time";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':from_time',$from_time)
+        ->bindValue(':to_time',$to_time)
+        ->queryOne();
+    }
 }

@@ -83,7 +83,7 @@ class ReportController extends Controller{
             }
             $mpesa_payments = MpesaPayments::getTotalMpesa($from_time);
             $mpesa_payments=$mpesa_payments['total_mpesa'];
-            $transaction_histories = TransactionHistories::getTotalTransactions($today);
+            $transaction_histories = TransactionHistories::getTotalTransactions($from_time);
             $transaction_histories = $transaction_histories['total_history'];
             $invalid_codes = $mpesa_payments - $transaction_histories;
             array_push($hour_record,$invalid_codes);
@@ -99,6 +99,11 @@ class ReportController extends Controller{
         {
             array_push($arr,$range_result[$i]['amount']);
         }
+        $mpesaRange=MpesaPayments::getTotalMpesaInRange($start_period,$end_period);
+        $invalidRange=TransactionHistories::getTotalTransactionsInRange($start_period,$end_period);
+        $invalidRange=$mpesaRange['total_mpesa']-$invalidRange['total_history'];
+        array_push($arr,$invalidRange);
+        array_push($arr,$mpesaRange['total_mpesa']);
         array_push($response,$arr);
         $day_result = Stations::getDayStationTotalResult($today);
         $arr=array();
@@ -107,6 +112,13 @@ class ReportController extends Controller{
         {
             array_push($arr,$day_result[$i]['amount']);
         }
+        $mpesa_payments = MpesaPayments::getTotalMpesa($today);
+        $mpesa_payments=$mpesa_payments['total_mpesa'];
+        $transaction_histories = TransactionHistories::getTotalTransactions($today);
+        $transaction_histories = $transaction_histories['total_history'];
+        $invalid_codes = $mpesa_payments - $transaction_histories;
+        array_push($arr,$invalid_codes);
+        array_push($arr,$mpesa_payments);
         array_push($response,$arr);
         return $this->render('hourly_performance', [
             'response' => $response
