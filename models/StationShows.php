@@ -113,4 +113,18 @@ class StationShows extends \yii\db\ActiveRecord
         ->queryOne();
 
     }
+    public static function getShowForCommission($current_day)
+    {
+        $sql="SELECT * FROM station_shows WHERE ".$current_day."=1 AND enabled=1 AND deleted_at IS NULL AND end_time < CURRENT_TIME()";
+        return Yii::$app->db->createCommand($sql)
+        ->queryAll();
+
+    }
+    public static function getMidnightShow($current_day)
+    {
+        $sql="SELECT * FROM station_shows WHERE ".$current_day."=1 AND enabled=1 AND deleted_at IS NULL AND end_time > '23:30'  AND end_time <= '23:59'";
+        return Yii::$app->db->createCommand($sql)
+        ->queryAll();
+
+    }
 }

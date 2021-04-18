@@ -139,6 +139,5 @@ class TransactionHistories extends \yii\db\ActiveRecord
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':from_time',"%$from_time%")
         ->queryOne();
-
     }
 }

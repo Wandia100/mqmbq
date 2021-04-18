@@ -64,4 +64,8 @@ class StationShowCommissions extends \yii\db\ActiveRecord
             'deleted_at' => 'Deleted At',
         ];
     }
+    public static function getShowCommission($station_show_id)
+    {
+        return StationShowCommissions::find()->where("station_show_id='$station_show_id'")->all();
+    }
 }

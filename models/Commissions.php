@@ -98,4 +98,11 @@ class Commissions extends \yii\db\ActiveRecord
             'deleted_at' => 'Deleted At',
         ];
     }
+    public static function processedCommission($current_date)
+    {
+        $sql="SELECT DISTINCT(station_show_id) as station_show_id FROM commissions WHERE created_at LIKE :current_date";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':current_date',"%$current_date%")
+        ->queryAll();
+    }
 }
