@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-
+use Webpatser\Uuid\Uuid;
 /**
  * This is the model class for table "disbursements".
  *
@@ -87,6 +87,7 @@ class Disbursements extends \yii\db\ActiveRecord
     public static function saveDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type)
     {
         $model=new Disbursements();
+        $model->id=Uuid::generate()->string;
         $model->reference_id=$reference_id;
         $model->reference_name=$reference_name;
         $model->phone_number=$phone_number;
