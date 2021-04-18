@@ -17,10 +17,10 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index'],
+                'only' => ['create', 'update','index','presentercommission'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index'],
+                        'actions' => ['create', 'update','index','presentercommission'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if(!Yii::$app->user->isGuest){
