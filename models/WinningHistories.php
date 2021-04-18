@@ -153,6 +153,14 @@ class WinningHistories extends \yii\db\ActiveRecord
         ->bindValue(':the_day',"%$the_day%")
         ->queryOne();
     }
+    public static function getPayout($the_day)
+    {
+        $sql="SELECT COALESCE(SUM(amount),0) AS total FROM winning_histories WHERE 
+         created_at LIKE :the_day";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':the_day',"%$the_day%")
+        ->queryOne();
+    }
     public static function dailyAwarding($start_date,$end_date)
     {
         $sql='SELECT b.name AS station_name,c.name AS show_name,d.name AS prize_name,CONCAT(c.start_time,"-",c.end_time) AS show_timing,

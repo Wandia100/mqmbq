@@ -134,9 +134,15 @@ class ReportController extends Controller{
             $start_date=date("Y-m-01");    
             $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));    
         }
+        else if(isset($_GET['criterion']) && $_GET['criterion']=="daily")
+        {
+            $start_date=date("Y-m-01");    
+            $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));    
+        }
         else{
             $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
-            $end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d"));
+            //$end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d",strtotime("+1 day",time())));
+            $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));
         }
         $data=Commissions::commissionSummary($start_date,$end_date);
         return $this->render('commission_summary', [
@@ -152,7 +158,7 @@ class ReportController extends Controller{
         }
         else{
             $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
-            $end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d"));
+            $end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d",strtotime("+1 day",time())));
         }
         $data=WinningHistories::dailyAwarding($start_date,$end_date);
         return $this->render('daily_awarding', [
@@ -161,7 +167,27 @@ class ReportController extends Controller{
     }
     public function actionRevenue()
     {
-
+        if(isset($_GET['criterion']) && $_GET['criterion']=="monthly")
+        {
+            $start_date=date("Y-m-01");    
+            $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));    
+        }
+        else{
+            $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
+            $end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d",strtotime("+1 day",time())));
+        }
+        $data=MpesaPayments::revenueReport($start_date,$end_date);
+        $resp=[];
+        for($i=0;$i<count($data);$i++)
+        {
+            $row=$data[$i];
+            $row['payout']=WinningHistories::getPayout($row['the_day'])['total'];
+            $row['total_revenue']=MpesaPayments::getTotalMpesa($row['the_day'])['total_mpesa'];
+            array_push($resp,$row);
+        }
+        return $this->render('revenue', [
+            'data' => $resp
+        ]);
     }
     public function actionCommission()
     {

@@ -99,6 +99,15 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':to_time',$to_time)
         ->queryOne();
     }
+    public static function revenueReport($start_date,$end_date)
+    {
+        $sql='SELECT DATE_FORMAT(a.created_at, "%Y-%m-%d") AS the_day FROM mpesa_payments a
+        WHERE a.created_at BETWEEN :start_date AND :end_date group by the_day ORDER BY the_day DESC;';
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':start_date',$start_date)
+        ->bindValue(':end_date',$end_date)
+        ->queryAll();
+    }
     /**
      * Method to get mpesa counts
      * @param type $type

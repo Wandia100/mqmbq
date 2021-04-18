@@ -1,5 +1,5 @@
 <?php
-$this->title = 'Daily Awarding';
+$this->title = 'Revenue';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div class="panel panel-info">
@@ -9,7 +9,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="col-md-12">
                         <?=$this->renderFile('@app/views/layouts/partials/_date_filter.php', [
                                 'data' => [],
-                                'url'  => '/report/dailyawarding',
+                                'url'  => '/report/revenue',
                                 'from' => date( 'Y-m-d' )
                         ])?>
                 </div>
@@ -25,11 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-        <th>Station</th>
-        <th>Show</th>
-        <th>Prize</th>
-        <th>Timing</th>
-        <th>Awarded</th>
+        <th>Day</th>
+        <th>Total Revenue</th>
+        <th>Total Awarded</th>
+        <th>Net Revenue</th>
         </tr>
     </thead>
     <tbody>
@@ -39,11 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
         $row=$data[$i];
         ?>
             <tr>
-            <td><?=$row['station_name'];?></td>
-            <td><?=$row['show_name'];?></td>
-            <td><?=$row['prize_name'];?></td>
-            <td><?=$row['show_timing'];?></td>
-            <td><?=$row['awarded'];?></td>
+            <td><?=$row['the_day'];?></td>
+            <td><?=$row['total_revenue'];?></td>
+            <td><?=$row['payout'];?></td>
+            <td><?=round(($row['total_revenue']-$row['payout']));?></td>
             </tr>
             <?php
         

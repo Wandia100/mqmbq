@@ -37,8 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </thead>
     <tbody>
     <?php
-    $k=0;
-    for($i=1;$i< count($data); $i++)
+    for($i=0;$i< count($data); $i++)
     {
         $row=$data[$i];
         ?>
