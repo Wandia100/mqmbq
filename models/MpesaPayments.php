@@ -134,11 +134,6 @@ class MpesaPayments extends \yii\db\ActiveRecord
             $lCeil = date('Y-m-d 23:59:59', strtotime('last day of previous month'));
             $sum = MpesaPayments::getTotalMpesaInRange($lFloor, $lCeil)['total_mpesa'];
             break;
-        case 'lastmonth':
-            $lFloor = date( 'Y-m-1 00:00:00',strtotime('-1 month', time()));
-            $lCeil = date('Y-m-d 23:59:59', strtotime('last day of previous month'));
-            $sum = MpesaPayments::getTotalMpesaInRange($lFloor, $lCeil)['total_mpesa'];
-            break;
         default :   
             $sum = MpesaPayments::getTotalRevenue()['total_mpesa'];
         endswitch;
