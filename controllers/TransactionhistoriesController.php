@@ -208,7 +208,7 @@ class TransactionhistoriesController extends Controller
                     $model=new TransactionHistories();
                     $model->id=Uuid::generate()->string;
                     $model->mpesa_payment_id=$row->id;
-                    $model->reference_name=$row->FirstName.$row->MiddleName.$row->LastName;
+                    $model->reference_name=$row->FirstName." ".$row->MiddleName." ".$row->LastName;
                     $model->reference_phone=$row->MSISDN;
                     $model->reference_code=$row->BillRefNumber;
                     $model->station_id=$station_show['station_id'];
