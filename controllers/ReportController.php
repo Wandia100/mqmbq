@@ -5,6 +5,7 @@ use app\models\MpesaPayments;
 use app\models\TransactionHistories;
 use app\models\Stations;
 use app\models\Commissions;
+use app\models\WinningHistories;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 class ReportController extends Controller{
@@ -137,7 +138,6 @@ class ReportController extends Controller{
             $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
             $end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d"));
         }
-
         $data=Commissions::commissionSummary($start_date,$end_date);
         return $this->render('commission_summary', [
             'data' => $data
@@ -145,7 +145,19 @@ class ReportController extends Controller{
     }
     public function actionDailyawarding()
     {
-
+        if(isset($_GET['criterion']) && $_GET['criterion']=="monthly")
+        {
+            $start_date=date("Y-m-01");    
+            $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));    
+        }
+        else{
+            $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
+            $end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d"));
+        }
+        $data=WinningHistories::dailyAwarding($start_date,$end_date);
+        return $this->render('daily_awarding', [
+            'data' => $data
+        ]);
     }
     public function actionRevenue()
     {

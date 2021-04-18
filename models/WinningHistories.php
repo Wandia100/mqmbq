@@ -153,4 +153,15 @@ class WinningHistories extends \yii\db\ActiveRecord
         ->bindValue(':the_day',"%$the_day%")
         ->queryOne();
     }
+    public static function dailyAwarding($start_date,$end_date)
+    {
+        $sql='SELECT b.name AS station_name,c.name AS show_name,d.name AS prize_name,CONCAT(c.start_time,"-",c.end_time) AS show_timing,
+        (SELECT COALESCE(SUM(amount),0)  FROM winning_histories WHERE station_show_id=a.station_show_id AND prize_id=a.prize_id AND created_at BETWEEN :start_date AND :end_date) AS awarded
+        FROM winning_histories a LEFT JOIN stations b ON a.station_id=b.id LEFT JOIN station_shows c ON a.station_show_id=c.id LEFT JOIN prizes d 
+        ON a.prize_id=d.id WHERE a.created_at BETWEEN :start_date AND :end_date GROUP BY a.station_id,a.station_show_id,a.prize_id';
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':start_date',$start_date)
+        ->bindValue(':end_date',$end_date)
+        ->queryAll();
+    }
 }
