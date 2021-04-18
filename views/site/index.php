@@ -54,6 +54,7 @@ $this->title = 'Com 21';
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
                            // 'filterModel' => $searchModel,
+                            'layout' => "{items}",
                             'columns' => [
                                 [
                                     'attribute' => 'prizename',
