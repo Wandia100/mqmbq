@@ -92,11 +92,11 @@ use luc\tourist\Tourist;
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursement Report', Url::to(['/disbursements/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 
-                <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> " data-content="Application Management Options. Add/Edit/View Application(s) options"
+                <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> " data-content="Application Management Options. Add/Edit/View Application(s) options"
                     title="Application Management">
                     FINANCE
                 </li>
-                <li class="<?= $presentervisibility?> <?=$managementvisibility?> ">
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> ">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursement', Url::to(['/disbursements/indexc']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
