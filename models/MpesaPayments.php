@@ -84,6 +84,11 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':from_time',"%$from_time%")
         ->queryOne();
     }
+    public static function getTotalRevenue()
+    {
+        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments";
+        return Yii::$app->db->createCommand($sql)->queryOne();
+    }
     public static function getTotalMpesaInRange($from_time,$to_time)
     {
         $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from 
@@ -104,11 +109,38 @@ class MpesaPayments extends \yii\db\ActiveRecord
         switch ($type):
         case 'today':
             $midnight = date('Y-m-d 00:00:00');
-            $sum = MpesaPayments::getTotalMpesaInRange($today, $midnight)['total_mpesa'];
+            $sum = MpesaPayments::getTotalMpesaInRange($midnight,$today)['total_mpesa'];
+            break;
         case 'yesterday':
-            
+            $yestFloor = date( 'Y-m-d 00:00:00',strtotime('-1 day', time()));
+            $yestCeil = date( 'Y-m-d 23:59:59',strtotime('-1 day', time()));
+            $sum = MpesaPayments::getTotalMpesaInRange($yestFloor, $yestCeil)['total_mpesa'];
+            break;
+        case 'last_7_days':
+            $_7daysFloor = date( 'Y-m-d 00:00:00',strtotime('-7 day', time()));
+            $sum = MpesaPayments::getTotalMpesaInRange($_7daysFloor, $today)['total_mpesa'];
+            break;
+        case 'currentmonth':
+            $cFloor = date( 'Y-m-1 00:00:00');
+            $sum = MpesaPayments::getTotalMpesaInRange($cFloor, $today)['total_mpesa'];
+            break;
+        case 'lastweek':
+            $floorDate = date("Y-m-d 00:00:00", strtotime(date("w") ? "2 sundays ago" : "last sunday"));
+            $ceilDate = date("Y-m-d 23:59:59", strtotime("last saturday"));
+            $sum = MpesaPayments::getTotalMpesaInRange($floorDate, $ceilDate)['total_mpesa'];
+            break;
+        case 'lastmonth':
+            $lFloor = date( 'Y-m-1 00:00:00',strtotime('-1 month', time()));
+            $lCeil = date('Y-m-d 23:59:59', strtotime('last day of previous month'));
+            $sum = MpesaPayments::getTotalMpesaInRange($lFloor, $lCeil)['total_mpesa'];
+            break;
+        case 'lastmonth':
+            $lFloor = date( 'Y-m-1 00:00:00',strtotime('-1 month', time()));
+            $lCeil = date('Y-m-d 23:59:59', strtotime('last day of previous month'));
+            $sum = MpesaPayments::getTotalMpesaInRange($lFloor, $lCeil)['total_mpesa'];
+            break;
         default :   
-            
+            $sum = MpesaPayments::getTotalRevenue()['total_mpesa'];
         endswitch;
         return $sum;    
     }
