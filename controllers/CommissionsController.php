@@ -182,7 +182,7 @@ class CommissionsController extends Controller
                         $model->station_show_id=$show['id'];
                         $model->c_type=$comm->perm_group;
                         $model->amount=round(($net_revenue*($comm->commission/100)));
-                        $model->created_at=$current_date;
+                        $model->created_at=$current_date." ".date("H:i:s");
                         $model->save(false);
                     }
                 }
