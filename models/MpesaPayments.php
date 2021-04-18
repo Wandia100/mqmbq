@@ -84,22 +84,32 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':from_time',"%$from_time%")
         ->queryOne();
     }
+    public static function getTotalMpesaInRange($from_time,$to_time)
+    {
+        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from 
+        mpesa_payments where created_at >= :from_time and
+        created_at <= :to_time";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':from_time',$from_time)
+        ->bindValue(':to_time',$to_time)
+        ->queryOne();
+    }
     /**
      * Method to get mpesa counts
      * @param type $type
      */
     public static function getMpesaCounts($type){
         $today = date('Y-m-d H:i:s');
-        $count = 0;
+        $sum = 0;
         switch ($type):
         case 'today':
             $midnight = date('Y-m-d 00:00:00');
-            $count = MpesaPayments::find()->where("created_at Between '$midnight' AND '$today'")->count();
+            $sum = MpesaPayments::getTotalMpesaInRange($today, $midnight)['total_mpesa'];
         case 'yesterday':
             
         default :   
             
         endswitch;
-        return $count;    
+        return $sum;    
     }
 }

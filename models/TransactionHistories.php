@@ -140,4 +140,14 @@ class TransactionHistories extends \yii\db\ActiveRecord
         ->bindValue(':from_time',"%$from_time%")
         ->queryOne();
     }
+    public static function getTotalTransactionsInRange($from_time,$to_time)
+    {
+        $sql="select COALESCE(sum(amount),0) as total_history from 
+        transaction_histories where created_at >= :from_time and
+        created_at <= :to_time";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':from_time',$from_time)
+        ->bindValue(':to_time',$to_time)
+        ->queryOne();
+    }
 }
