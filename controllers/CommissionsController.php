@@ -12,6 +12,7 @@ use app\models\CommissionsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Webpatser\Uuid\Uuid;
 
 /**
  * CommissionsController implements the CRUD actions for Commissions model.
@@ -162,21 +163,25 @@ class CommissionsController extends Controller
             $show=$pending_show[$i];
             if(!in_array($show['id'],$processed_shows))
             {
+                
                 $target=$show['target'];//target
-                $total_show_transactions=TransactionHistories::getTransactionTotal($show['id'],$show['start_time'],$show['end_time']);
+                
+                $total_show_transactions=TransactionHistories::getTransactionTotal($show['id'],$current_date." ".$show['start_time'],$current_date." ".$show['end_time']);
                 if($total_show_transactions['total'] >= $target)
                 {
+                    
                     $commissions=StationShowCommissions::getShowCommission($show['id']);
                     $total_payout=WinningHistories::getDayPayout($show['id'],$current_date);
-                    $net_revenue=$total_show_transactions['total']-$total_payout;
+                    $net_revenue=$total_show_transactions['total']-$total_payout['total'];
                     for($j=0;$j<count($commissions); $j++)
                     {
                         $comm=$commissions[$j];
                         $model=new Commissions();
+                        $model->id=Uuid::generate()->string;
                         $model->station_id=$show['station_id'];
                         $model->station_show_id=$show['id'];
                         $model->c_type=$comm->perm_group;
-                        $model->amount=round(($net_revenue*$comm->commission));
+                        $model->amount=round(($net_revenue*($comm->commission/100)));
                         $model->created_at=$current_date;
                         $model->save(false);
                     }
