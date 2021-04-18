@@ -10,6 +10,8 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use yii\helpers\Url;
+use app\models\WinningHistories;
+use app\models\WinningHistoriesSearch;
 
 class SiteController extends Controller
 {
@@ -69,7 +71,12 @@ class SiteController extends Controller
         if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group==3){
             return $this->redirect( [ '/transactionhistories/presenter' ] );
         }else{
-            return $this->render('index');
+            $searchModel = new WinningHistoriesSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','','','',1);
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
         }
     }
 
