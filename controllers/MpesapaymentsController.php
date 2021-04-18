@@ -130,6 +130,7 @@ class MpesapaymentsController extends Controller
             $model->BillRefNumber="RAMOGI";
             $model->created_at=date("Y-m-d H:i:s");
             $model->updated_at=date("Y-m-d H:i:s");
+            $model->state=0;
             $model->save(false);
         }
     }
