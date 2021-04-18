@@ -189,9 +189,13 @@ class ReportController extends Controller{
             'data' => $resp
         ]);
     }
-    public function actionCommission()
+    public function actionPresentercommission()
     {
-
+        $data=Commissions::presenterCommission(Yii::$app->user->identity->id);
+        
+        return $this->render('presenter_commission', [
+            'data' => $data
+        ]);
     }
     public function actionDashboard()
     {}

@@ -105,6 +105,16 @@ class Commissions extends \yii\db\ActiveRecord
         ->bindValue(':current_date',"%$current_date%")
         ->queryAll();
     }
+    public static function presenterCommission($presenter_id)
+    {
+        $sql="SELECT c.name AS station_name,d.name AS show_name,b.amount,b.created_at FROM station_show_presenters a
+        LEFT JOIN commissions b ON a.station_show_id=b.station_show_id
+       LEFT JOIN stations c ON a.station_id=c.id LEFT JOIN station_shows d ON a.station_show_id=d.id
+       WHERE b.c_type=3 AND a.presenter_id=:presenter_id";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':presenter_id',$presenter_id)
+        ->queryAll();
+    }
     public static function commissionSummary($start_date,$end_date)
     {
         $sql='SELECT b.name AS station_name,a.name AS show_name,CONCAT(a.start_time,"-",a.end_time) AS show_timing,
