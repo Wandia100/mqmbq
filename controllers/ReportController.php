@@ -127,10 +127,21 @@ class ReportController extends Controller{
     }
     public function actionCommissionsummary()
     {
-        $start_date="2021-01-01";
-        $end_date="2021-05-01";
+        
+        if(isset($_GET['criterion']) && $_GET['criterion']=="monthly")
+        {
+            $start_date=date("Y-m-01");    
+            $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));    
+        }
+        else{
+            $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
+            $end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d"));
+        }
+
         $data=Commissions::commissionSummary($start_date,$end_date);
-        print_r($data); exit();
+        return $this->render('commission_summary', [
+            'data' => $data
+        ]);
     }
     public function actionDailyawarding()
     {
