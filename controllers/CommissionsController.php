@@ -145,7 +145,7 @@ class CommissionsController extends Controller
         $pending_show=StationShows::getShowForCommission($current_day);
         $processed_shows=Commissions::processedCommission($current_date);
         $this->setCommission($current_day,$current_date,$pending_show,$processed_shows);
-        if($date("H")=="00" && date("i") < 15)
+        if(date("H")=="00" && date("i") < 15)
         {
             $current_day=strtolower(date("l",strtotime('-1 day',time())));
             $current_date=date("Y-m-d",strtotime('-1 day',time()));

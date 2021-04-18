@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="card text-dark bg-light mb-3">
     <div class="card-body">
     <?php
-    if ($presenter_station_show['is_admin'])
+    if (!empty($presenter_station_show) && $presenter_station_show['is_admin'])
     {
         ?>
         <button class="btn btn-primary" onclick="runDraw()" type="button">DRAW WINNER</button>
