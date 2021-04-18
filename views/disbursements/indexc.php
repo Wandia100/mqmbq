@@ -33,7 +33,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'phone_number',
             'amount',
             //'conversation_id',
-            'status',
+           # 'status',
+            [
+                'attribute' => 'status',
+                'format'    => 'raw',
+                'value'     => function ( $model ) {
+                    if ( $model->status == 1 ) {
+                        return "Processed";
+                    }else if ( $model->status == 2 ) {
+                        return "Failed";
+                    } else {
+                        return "Pending";
+                    }
+                },
+                'filter'    => array( '0' => 'Pending', '1' => 'Processed','2' =>'Failed' ),
+            ],
             'disbursement_type',
             //'transaction_reference',
             'created_at',
@@ -44,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'=>'raw',
                 'value' => function($model) use ($route){
                     if($route == 'p'):
-                        return $model->status == 1 ? 'Processed': Html::a('<span class="glyphicon glyphicon-wrench">PENDING(Change Status)</span>', ['#','id'=>$model->id]);;
+                        return $model->status == 2 ? Html::a('<span class="glyphicon glyphicon-wrench">PENDING(Change Status)</span>', ['indexc','id'=>$model->id,'t'=>'p']): 'Processed';
                     else:
                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ['view','id'=>$model->id]);
                     endif;
