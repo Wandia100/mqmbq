@@ -46,16 +46,24 @@ class WinningHistoriesSearch extends WinningHistories
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $daily = false, $monthly = false, $from = null, $to = null)
+    public function search($params, $daily = false, $monthly = false, $from = null, $to = null,$src = '')
     {
         $query = WinningHistories::find();
 
         // add conditions that should always apply here
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-        
+        if($src == 1){
+             $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => [
+                    'pageSize' => 5, 
+                ],
+            ]);
+            $dataProvider->setTotalCount(5);
+        }else{
+             $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+            ]);
+        }
         $query->joinWith(['stations']);
         $query->joinWith(['stationshows']);
         $query->joinWith(['prizes']);
@@ -138,6 +146,7 @@ class WinningHistoriesSearch extends WinningHistories
                 $query->andWhere( "DATE(winning_histories.created_at)<= DATE('" . $to . "')" );
         }
         $query->orderBy('winning_histories.created_at DESC');
+        
         return $dataProvider;
     }
 }

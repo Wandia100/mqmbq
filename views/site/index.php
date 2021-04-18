@@ -2,6 +2,7 @@
 
 /* @var $this yii\web\View */
 
+use yii\grid\GridView;
 $this->title = 'Com 21';
 ?>
 <div class="site-index">
@@ -49,7 +50,29 @@ $this->title = 'Com 21';
             <div class="col-5">
                 <div class="well well-lg" style="background-color: #FFFFFF">
                     <kbd>Recent winners</kbd><br/>
-                    <span></span>
+                    <span>
+                        <?= GridView::widget([
+                            'dataProvider' => $dataProvider,
+                           // 'filterModel' => $searchModel,
+                            'columns' => [
+                                [
+                                    'attribute' => 'prizename',
+                                    'value'     => 'prizes.name'
+                                ],
+                                'reference_name',
+                                [
+                                    'attribute' => 'stationname',
+                                    'value'     => 'stations.name'
+                                ],
+                                [
+                                    'attribute' => 'stationshowname',
+                                    'value'     => 'stationshows.name'
+                                ],
+                                'amount',
+
+                            ],
+                        ]); ?>
+                    </span>
                 </div>
                 
             </div>
