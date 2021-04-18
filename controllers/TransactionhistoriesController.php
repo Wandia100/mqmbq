@@ -8,6 +8,7 @@ use app\models\StationShowPresenters;
 use app\models\Users;
 use app\models\WinningHistories;
 use app\models\MpesaPayments;
+use app\models\Disbursements;
 use app\models\StationShowPrizes;
 use app\models\TransactionHistoriesSearch;
 use app\models\ProcessedMpesaPayments;
@@ -198,6 +199,13 @@ class TransactionhistoriesController extends Controller
         for($i=0;$i<count($data); $i++)
         {
             $row=$data[$i];
+            //check if amount > 300 and refund after deducting 100
+            if($row->TransAmount > 300)
+            {
+                $refund=$row->TransAmount-100;
+                Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"winning");
+                return;
+            }
             $station_show=StationShows::getStationShow($row->BillRefNumber);
             if($station_show!=NULL)
             {
