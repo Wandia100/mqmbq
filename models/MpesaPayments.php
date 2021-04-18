@@ -94,4 +94,22 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':to_time',$to_time)
         ->queryOne();
     }
+    /**
+     * Method to get mpesa counts
+     * @param type $type
+     */
+    public static function getMpesaCounts($type){
+        $today = date('Y-m-d H:i:s');
+        $sum = 0;
+        switch ($type):
+        case 'today':
+            $midnight = date('Y-m-d 00:00:00');
+            $sum = MpesaPayments::getTotalMpesaInRange($today, $midnight)['total_mpesa'];
+        case 'yesterday':
+            
+        default :   
+            
+        endswitch;
+        return $sum;    
+    }
 }
