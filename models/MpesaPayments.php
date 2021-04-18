@@ -84,4 +84,22 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':from_time',"%$from_time%")
         ->queryOne();
     }
+    /**
+     * Method to get mpesa counts
+     * @param type $type
+     */
+    public static function getMpesaCounts($type){
+        $today = date('Y-m-d H:i:s');
+        $count = 0;
+        switch ($type):
+        case 'today':
+            $midnight = date('Y-m-d 00:00:00');
+            $count = MpesaPayments::find()->where("created_at Between '$midnight' AND '$today'")->count();
+        case 'yesterday':
+            
+        default :   
+            
+        endswitch;
+        return $count;    
+    }
 }
