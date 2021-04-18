@@ -4,6 +4,7 @@ use Yii;
 use app\models\MpesaPayments;
 use app\models\TransactionHistories;
 use app\models\Stations;
+use app\models\Commissions;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 class ReportController extends Controller{
@@ -126,7 +127,10 @@ class ReportController extends Controller{
     }
     public function actionCommissionsummary()
     {
-        
+        $start_date="2021-01-01";
+        $end_date="2021-05-01";
+        $data=Commissions::commissionSummary($start_date,$end_date);
+        print_r($data); exit();
     }
     public function actionDailyawarding()
     {
