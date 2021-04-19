@@ -13,7 +13,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Webpatser\Uuid\Uuid;
-
+use app\components\Myhelper;
 /**
  * CommissionsController implements the CRUD actions for Commissions model.
  */
@@ -151,6 +151,7 @@ class CommissionsController extends Controller
     }
     public function actionProcess()
     {
+        Myhelper::checkRemoteAddress();
         //today processing
         $current_day=strtolower(date("l"));
         $current_date=date("Y-m-d");

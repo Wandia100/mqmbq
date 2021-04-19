@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Webpatser\Uuid\Uuid;
+use app\components\Myhelper;
 
 
 /**
@@ -122,6 +123,7 @@ class MpesapaymentsController extends Controller
     }
     public function actionInsertpayment()
     {
+        Myhelper::checkRemoteAddress();
         $data=MpesaPayments::find()->limit(1000)->all();
         foreach($data as $row)
         {

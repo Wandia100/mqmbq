@@ -7,7 +7,7 @@ use app\models\MpesaPayments;
 use app\models\Outbox;
 use app\models\SentSms;
 use Webpatser\Uuid\Uuid;
-
+use app\components\Myhelper;
 class ApiController extends Controller
 {
     /*command id comission - SalaryPayment
@@ -130,6 +130,7 @@ class ApiController extends Controller
     #code to disburse payments
     public function actionPayout()
     {
+        Myhelper::checkRemoteAddress();
         $data=Disbursements::getPendingDisbursement();
         for($i=0;$i<count($data); $i++)
         {
@@ -172,6 +173,7 @@ class ApiController extends Controller
     }
     public function actionProcessSms()
     {
+        Myhelper::checkRemoteAddress();
         $outbox=Outbox::find()->all();
         for($i=0;$i<count($outbox);$i++)
         {

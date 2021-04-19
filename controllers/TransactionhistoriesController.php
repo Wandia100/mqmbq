@@ -18,7 +18,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\Myhelper;
 use Webpatser\Uuid\Uuid;
-
+use app\components\Myhelper;
 /**
  * TransactionhistoriesController implements the CRUD actions for TransactionHistories model.
  */
@@ -206,6 +206,7 @@ class TransactionhistoriesController extends Controller
     }
     public function actionAssignshows()
     {
+        Myhelper::checkRemoteAddress();
         $data=MpesaPayments::find()->where("state=0")->all();
         for($i=0;$i<count($data); $i++)
         {
