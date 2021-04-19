@@ -33,7 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
             //'phone_number',
             'email:email',
             //'profile_image',
-            'perm_group',
+            #'perm_group',
+            [
+                'attribute' => 'permgroupname',
+                'value'     => 'permgroup.name'
+            ],
             //'defaultpermissiondenied',
             //'extpermission',
             //'password',

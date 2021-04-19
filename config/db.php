@@ -2,9 +2,9 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=3.141.4.51;dbname=comp21',
-    'username' => 'comp2120',
-    'password' => 'Zpa@!%vfrG34f',
+    'dsn' => 'mysql:host=127.0.0.1;dbname=com21',
+    'username' => 'root',
+    'password' => 'Edithm05',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)

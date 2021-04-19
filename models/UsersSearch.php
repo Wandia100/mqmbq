@@ -11,13 +11,14 @@ use app\models\Users;
  */
 class UsersSearch extends Users
 {
+    public $permgroupname;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'first_name', 'last_name', 'national_id', 'date_of_birth', 'phone_number', 'email', 'profile_image', 'defaultpermissiondenied', 'extpermission', 'password', 'created_at', 'updated_at', 'created_by','deleted_at'], 'safe'],
+            [['id', 'first_name', 'last_name', 'national_id', 'date_of_birth', 'phone_number', 'email', 'profile_image', 'defaultpermissiondenied', 'extpermission', 'password', 'created_at', 'updated_at', 'created_by','deleted_at','permgroupname'], 'safe'],
             [['perm_group', 'enabled'], 'integer'],
         ];
     }
@@ -47,6 +48,13 @@ class UsersSearch extends Users
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        
+        $query->joinWith(['permgroup']);
+        
+        $dataProvider->sort->attributes['permgroupname'] = [
+            'asc'  => [ 'permission_group.name' => SORT_ASC ],
+            'desc' => [ 'permission_group.name' => SORT_DESC ],
+        ];
 
         $this->load($params);
 
@@ -75,7 +83,8 @@ class UsersSearch extends Users
             ->andFilterWhere(['like', 'defaultpermissiondenied', $this->defaultpermissiondenied])
             ->andFilterWhere(['like', 'extpermission', $this->extpermission])
             ->andFilterWhere(['like', 'password', $this->password])
-            ->andFilterWhere(['like', 'created_by', $this->created_by]);
+            ->andFilterWhere(['like', 'created_by', $this->created_by])
+            ->andFilterWhere(['like', 'permission_group.name', $this->permgroupname]);
         $query->orderBy('created_at DESC');
         return $dataProvider;
     }
