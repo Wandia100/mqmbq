@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-6">
     <div class="card text-white bg-dark mb-3">
     <div class="card-body">
-    <h5 class="card-text font-weight-bold"><?=$transaction_count;?></h5>
+    <h5 class="card-text font-weight-bold"><?=number_format($transaction_count);?></h5>
     <p class="card-text">Total Transactions</p>
   </div>
 </div>

@@ -146,6 +146,6 @@ class MpesaPayments extends \yii\db\ActiveRecord
         default :   
             $sum = MpesaPayments::getTotalRevenue()['total_mpesa'];
         endswitch;
-        return $sum;    
+        return number_format($sum);    
     }
 }
