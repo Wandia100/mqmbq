@@ -82,6 +82,7 @@ class Users extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
+            'permgroupname' => 'User group'
         ];
     }
     
