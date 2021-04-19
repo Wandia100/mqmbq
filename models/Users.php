@@ -35,6 +35,13 @@ class Users extends \yii\db\ActiveRecord
     }
 
     /**
+        *   Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getPermgroup() {
+        return $this->hasOne(PermissionGroup::className(), [ 'id' => 'perm_group' ] );
+    }
+    /**
      * {@inheritdoc}
      */
     public function rules()
@@ -75,6 +82,7 @@ class Users extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
+            'permgroupname' => 'User group'
         ];
     }
     

@@ -12,7 +12,7 @@
 		$db_name = "comp21";
     }
 	 else {
-		$db_host      = "localhost";
+		$db_host      = "127.0.0.1";
 		$db_username = "com2120";
 		$db_password = "Zpa@!%vfrG34f";
 		$db_name = "com21";
