@@ -109,7 +109,7 @@ class Commissions extends \yii\db\ActiveRecord
     {
         $sql="SELECT c.name AS station_name,d.name AS show_name,b.amount,b.created_at FROM station_show_presenters a
         LEFT JOIN commissions b ON a.station_show_id=b.station_show_id
-       LEFT JOIN stations c ON a.station_id=c.id LEFT JOIN station_shows d ON a.station_show_id=d.id
+       LEFT JOIN stations c ON b.station_id=c.id LEFT JOIN station_shows d ON a.station_show_id=d.id
        WHERE b.c_type=3 AND a.presenter_id=:presenter_id";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':presenter_id',$presenter_id)

@@ -147,7 +147,7 @@ class TransactionhistoriesController extends Controller
     public function actionPresenter()
     {
         $presenter=Yii::$app->user->identity;
-        $presenter_station_show=StationShowPresenters::presenterStationShow($presenter->id,date("H"),strtolower(date("l")));
+        $presenter_station_show=StationShowPresenters::presenterStationShow($presenter->id,date("H:00"),strtolower(date("l")));
         if($presenter_station_show)
         {
             $station_show_id=$presenter_station_show['station_show_id'];
@@ -211,31 +211,35 @@ class TransactionhistoriesController extends Controller
         {
             $row=$data[$i];
             //check if amount > 300 and refund after deducting 100
-            if($row->TransAmount > 300)
+            if($row->TransAmount <= 300)
             {
+                $station_show=StationShows::getStationShow($row->BillRefNumber);
+                if($station_show!=NULL)
+                {
+                    $model=new TransactionHistories();
+                    $model->id=Uuid::generate()->string;
+                    $model->mpesa_payment_id=$row->id;
+                    $model->reference_name=$row->FirstName." ".$row->MiddleName." ".$row->LastName;
+                    $model->reference_phone=$row->MSISDN;
+                    $model->reference_code=$row->BillRefNumber;
+                    $model->station_id=$station_show['station_id'];
+                    $model->station_show_id=$station_show['show_id'];
+                    $model->amount=$row->TransAmount;
+                    $model->created_at=date("Y-m-d H:i:s");
+                    $model->save(false);
+                    $row->state=1;
+                    $row->save(false);
+                }
+               
+            }
+            else{
                 $refund=$row->TransAmount-100;
                 Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"winning");
                 $row->deleted_at=date("Y-m-d H:i:s");
-                $row->save(false);
-                return;
+                $row->save(false); 
+               
             }
-            $station_show=StationShows::getStationShow($row->BillRefNumber);
-            if($station_show!=NULL)
-            {
-                $model=new TransactionHistories();
-                $model->id=Uuid::generate()->string;
-                $model->mpesa_payment_id=$row->id;
-                $model->reference_name=$row->FirstName.$row->MiddleName.$row->LastName;
-                $model->reference_phone=$row->MSISDN;
-                $model->reference_code=$row->BillRefNumber;
-                $model->station_id=$station_show['station_id'];
-                $model->station_show_id=$station_show['show_id'];
-                $model->amount=$row->TransAmount;
-                $model->created_at=date("Y-m-d H:i:s");
-                $model->save(false);
-                $row->state=1;
-                $row->save(false);
-            }
+
             
         }
     }

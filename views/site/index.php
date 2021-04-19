@@ -37,7 +37,7 @@ $this->title = 'Com 21';
             </div>
         </div>
          <div class="row">
-            <div class="col-4">
+            <div class="col-3">
                 <div class="well well-lg" style="background-color: #C9F7F5">
                     <kbd>Payouts today</kbd> <br/>
                     <span></span>
@@ -47,7 +47,7 @@ $this->title = 'Com 21';
                     <span></span>
                 </div>
             </div>
-            <div class="col-5">
+            <div class="col-6">
                 <div class="well well-lg" style="background-color: #FFFFFF">
                     <kbd>Recent winners</kbd><br/>
                     <span>
