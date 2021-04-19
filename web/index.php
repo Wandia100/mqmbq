@@ -1,6 +1,6 @@
 <?php
 $server_name=$_SERVER['SERVER_NAME'];
-$test_server=array('localhost','127.0.0.1');
+$test_server=array('localhost','127.0.0.1','com21.jks.com');
 if((in_array($server_name,$test_server)))
 {
     // comment out the following two lines when deployed to production
