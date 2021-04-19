@@ -76,8 +76,8 @@ class TransactionHistoriesSearch extends TransactionHistories
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'amount' => $this->amount,
-            'commission' => $this->commission,
+            'transaction_histories.amount' => $this->amount,
+            'transaction_histories.commission' => $this->commission,
             'status' => $this->status,
             'is_archived' => $this->is_archived,
             'transaction_histories.created_at' => $this->created_at,

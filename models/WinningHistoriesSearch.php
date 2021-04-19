@@ -71,8 +71,8 @@ class WinningHistoriesSearch extends WinningHistories
         $query->joinWith(['presenter']);
         
         $dataProvider->sort->attributes['stationname'] = [
-            'asc'  => [ 'station.name' => SORT_ASC ],
-            'desc' => [ 'station.name' => SORT_DESC ],
+            'asc'  => [ 'stations.name' => SORT_ASC ],
+            'desc' => [ 'stations.name' => SORT_DESC ],
         ];
 
          $dataProvider->sort->attributes['stationshowname'] = [
@@ -102,12 +102,12 @@ class WinningHistoriesSearch extends WinningHistories
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'amount' => $this->amount,
+            'winning_histories.amount' => $this->amount,
             'transaction_cost' => $this->transaction_cost,
             'status' => $this->status,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'deleted_at' => $this->deleted_at,
+            'winning_histories.created_at' => $this->created_at,
+            'winning_histories.updated_at' => $this->updated_at,
+            'winning_histories.deleted_at' => $this->deleted_at,
         ]);
 
         $query->andFilterWhere(['like', 'winning_histories.id', $this->id])

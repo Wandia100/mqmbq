@@ -54,8 +54,8 @@ class StationShowsSearch extends StationShows
         $query->joinWith(['stations']);
         
         $dataProvider->sort->attributes['stationname'] = [
-            'asc'  => [ 'station.name' => SORT_ASC ],
-            'desc' => [ 'station.name' => SORT_DESC ],
+            'asc'  => [ 'stations.name' => SORT_ASC ],
+            'desc' => [ 'stations.name' => SORT_DESC ],
         ];
         
         $this->load($params);
@@ -90,7 +90,7 @@ class StationShowsSearch extends StationShows
 
         $query->andFilterWhere(['like', 'id', $this->id])
             ->andFilterWhere(['like', 'station_id', $this->station_id])
-            ->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'station_shows.name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'show_code', $this->show_code])
             ->andFilterWhere(['like', 'start_time', $this->start_time])
