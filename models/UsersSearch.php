@@ -69,7 +69,7 @@ class UsersSearch extends Users
             'date_of_birth' => $this->date_of_birth,
             'perm_group' => $this->perm_group,
             'enabled' => $this->enabled,
-            'created_at' => $this->created_at,
+            'users.created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
