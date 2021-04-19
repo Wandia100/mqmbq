@@ -137,8 +137,9 @@ class WinningHistories extends \yii\db\ActiveRecord
     }
     public static function getRecentWinners($station_show_id,$today)
     {
-        $sql="SELECT reference_name,reference_code,amount,created_at FROM winning_histories WHERE 
-        station_show_id=:station_show_id AND created_at >:today";
+        $sql="SELECT a.reference_name,a.reference_code,b.name,a.created_at FROM winning_histories a
+         LEFT JOIN prizes b ON a.prize_id=b.id WHERE 
+        station_show_id=:station_show_id AND a.created_at >:today";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':station_show_id',$station_show_id)
         ->bindValue(':today',$today)

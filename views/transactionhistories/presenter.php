@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <tr>
             <th>NAME</th>
             <th>REFERENCE</th>
-            <th>AMOUNT</th>
+            <th>PRIZE</th>
             <th>DATE</th>
         </tr>
     </thead>
@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <tr>
             <td><?=$row['reference_name'];?></td>
             <td><?=$row['reference_code'];?></td>
-            <td><?=$row['amount'];?></td>
+            <td><?=$row['name'];?></td>
             <td><?=$row['created_at'];?></td>
             </tr>
                 <?php

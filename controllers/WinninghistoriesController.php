@@ -143,7 +143,10 @@ class WinninghistoriesController extends Controller
                     {
                         $to_pay=$show_prize['amount'];
                     }
-                    Disbursements::saveDisbursement($win_key,$transaction_history['reference_name'],$transaction_history['reference_phone'],$to_pay,"winning");
+                    if($show_prize['mpesa_disbursement'])
+                    {
+                        Disbursements::saveDisbursement($win_key,$transaction_history['reference_name'],$transaction_history['reference_phone'],$to_pay,"winning",0);
+                    }
                     $draw_count_balance=$show_prize['draw_count']-$show_prize['prizes_given']-1;
                     $transaction_history['draw_count_balance']=$draw_count_balance;
                     $station_name=$presenter_show['station_name'];
