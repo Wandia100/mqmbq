@@ -23,14 +23,45 @@ class PrizesController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index'],
+                'only' => ['create', 'update','index','delete'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index'],
+                        'actions' => ['create'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
-                            if(!Yii::$app->user->isGuest){
-                                return TRUE;
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(18) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['update'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(19) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['delete'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(20) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(21) );
+                                return in_array( Yii::$app->user->identity->email, $users );
                             }
                         }
                     ],

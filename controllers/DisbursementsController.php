@@ -29,8 +29,29 @@ class DisbursementsController extends Controller
                         'actions' => ['create', 'update','index','indexc'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
-                            if(!Yii::$app->user->isGuest){
-                                return TRUE;
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(29) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(28) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['indexc'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(30) );
+                                return in_array( Yii::$app->user->identity->email, $users );
                             }
                         }
                     ],

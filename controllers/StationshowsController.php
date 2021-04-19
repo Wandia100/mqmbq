@@ -29,14 +29,75 @@ class StationshowsController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index'],
+                'only' => ['create', 'update','index','delete','addpresenter','addprize','addcommissions'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','addpresenter','addprize','addcommissions'],
+                        'actions' => ['create'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
-                            if(!Yii::$app->user->isGuest){
-                                return TRUE;
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(8) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['update'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(9) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(11) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['delete'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(10) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['addpresenter'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(12) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['addprize'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(14) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['addcommissions'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(16) );
+                                return in_array( Yii::$app->user->identity->email, $users );
                             }
                         }
                     ],

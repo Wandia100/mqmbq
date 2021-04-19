@@ -6,8 +6,17 @@ use yii\helpers\Html;
 
 $icon = ArrayHelper::getValue($this->params, 'view-icon', 'pe-7s-folder');
 ?>
+
 <div class="app-page-title">
+        <div class="row"> 
+                            <div class="col-12" style="text-align: center;font-weight: bold">
+                                <?= $this->render('//_notification'); ?>  
+                            </div>
+                                    
+                        </div>
+   
     <div class="page-title-wrapper">
+              
         <div class="page-title-heading">
             <div class="page-title-icon tour-step" title="<?= $this->title ?>"
                  data-content="<?= ArrayHelper::getValue($this->params, 'view-description', '') ?>" >

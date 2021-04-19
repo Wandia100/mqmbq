@@ -17,14 +17,55 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index'],
+                'only' => ['hourlyperformance', 'presentercommission','dailyawarding','revenue','commissionsummary'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index'],
+                        'actions' => ['hourlyperformance'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
-                            if(!Yii::$app->user->isGuest){
-                                return TRUE;
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(34) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['presentercommission'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(35) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['dailyawarding'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(36) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['revenue'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(37) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['commissionsummary'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(38) );
+                                return in_array( Yii::$app->user->identity->email, $users );
                             }
                         }
                     ],

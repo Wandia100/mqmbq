@@ -29,7 +29,7 @@ class PermissionGroup extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['status','has_permission'], 'integer'],
+            [['status','has_commission'], 'integer'],
             [['name'], 'string', 'max' => 30],
             [['defaultPermissions'], 'string', 'max' => 600],
             [['name'], 'unique'],

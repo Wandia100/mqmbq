@@ -32,14 +32,25 @@ class TransactionhistoriesController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index'],
+                'only' => ['create', 'update','index','presenter'],
                 'rules' => [
                     [
                         'actions' => ['create', 'update','index'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
-                            if(!Yii::$app->user->isGuest){
-                                return TRUE;
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(23) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['presenter'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(39) );
+                                return in_array( Yii::$app->user->identity->email, $users );
                             }
                         }
                     ],
