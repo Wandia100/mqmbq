@@ -18,7 +18,6 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\Myhelper;
 use Webpatser\Uuid\Uuid;
-use app\components\Myhelper;
 /**
  * TransactionhistoriesController implements the CRUD actions for TransactionHistories model.
  */
