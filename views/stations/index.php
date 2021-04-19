@@ -25,9 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //'id',
             'name',
+            'station_code',
             'address',
             //'enabled',
-           // 'station_code',
             //'invalid_percentage',
             'created_at',
             //'updated_at',
