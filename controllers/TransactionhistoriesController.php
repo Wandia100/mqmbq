@@ -233,10 +233,21 @@ class TransactionhistoriesController extends Controller
                
             }
             else{
-                $refund=$row->TransAmount-100;
-                Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"winning");
-                $row->deleted_at=date("Y-m-d H:i:s");
-                $row->save(false); 
+                if($row->TransAmount < 10000)
+                {
+                    $refund=$row->TransAmount-100;
+                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",0);
+                    $row->deleted_at=date("Y-m-d H:i:s");
+                    $row->save(false);
+                } 
+                else
+                {
+                    $refund=$row->TransAmount-100;
+                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",3);
+                    $row->deleted_at=date("Y-m-d H:i:s");
+                    $row->save(false);
+
+                }
                
             }
 
