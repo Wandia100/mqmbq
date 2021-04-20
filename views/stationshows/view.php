@@ -197,7 +197,7 @@ echo Html::beginForm(
         </div>
         <div class="modal-body">
             <div class="col-sm-12">
-                <?= Html::dropDownList( 'presenter_id','', \app\models\Users::getUsersList(4), [
+                <?= Html::dropDownList( 'presenter_id','', \app\models\Users::getUsersList(3), [
                             'prompt'   => '--Select--',
                             'id'       => 'presenterid',
                             'class'    => 'form-control',
