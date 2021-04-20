@@ -100,10 +100,16 @@ class Commissions extends \yii\db\ActiveRecord
     }
     public static function processedCommission($current_date)
     {
-        $sql="SELECT DISTINCT(station_show_id) as station_show_id FROM commissions WHERE created_at LIKE :current_date";
-        return Yii::$app->db->createCommand($sql)
-        ->bindValue(':current_date',"%$current_date%")
+        $resp=array();
+        $sql="SELECT DISTINCT(station_show_id) as station_show_id FROM commissions WHERE created_at > :current_date";
+        $data=Yii::$app->db->createCommand($sql)
+        ->bindValue(':current_date',$current_date)
         ->queryAll();
+        for($i=0;$i<count($data);$i++)
+        {
+            array_push($resp,$data[$i]['station_show_id']);
+        }
+        return $resp;
     }
     public static function presenterCommission($presenter_id)
     {
