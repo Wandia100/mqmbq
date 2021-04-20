@@ -146,7 +146,7 @@ class TransactionhistoriesController extends Controller
     public function actionPresenter()
     {
         $presenter=Yii::$app->user->identity;
-        $presenter_station_show=StationShowPresenters::presenterStationShow($presenter->id,date("H:00"),strtolower(date("l")));
+        $presenter_station_show=StationShowPresenters::presenterStationShow($presenter->id,strtolower(date("l")));
         if($presenter_station_show)
         {
             $station_show_id=$presenter_station_show['station_show_id'];

@@ -106,7 +106,7 @@ class WinninghistoriesController extends Controller
         $presenter_id=$value['presenter_id'];
         $prize_id=$value['prize_id'];
         //if presenter is not admin drop him
-        $presenter_show=StationShowPresenters::presenterStationShow($presenter_id,date("H:00"),strtolower(date("l")));
+        $presenter_show=StationShowPresenters::presenterStationShow($presenter_id,strtolower(date("l")));
         if(!$presenter_show['is_admin'])
         {
             $response['status']="fail";
