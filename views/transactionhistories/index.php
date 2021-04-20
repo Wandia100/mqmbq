@@ -53,7 +53,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'     => 'stationshows.name'
             ],
             'amount',
-            'commission',
             //'status',
             //'is_archived',
             'created_at',

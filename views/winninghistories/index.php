@@ -42,10 +42,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'     => 'prizes.name'
             ],
             #'station_show_prize_id',
-            [
-                'attribute' => 'stationshowprizeamount',
-                'value'     => 'stationshowprize.amount'
-            ],
             'reference_name',
             'reference_phone',
             //'reference_code',

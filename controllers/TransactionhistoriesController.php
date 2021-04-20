@@ -250,7 +250,7 @@ class TransactionhistoriesController extends Controller
                 else
                 {
                     $refund=$row->TransAmount-100;
-                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",3);
+                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",4);
                     $row->deleted_at=date("Y-m-d H:i:s");
                     $row->state=1;
                     $row->save(false);
