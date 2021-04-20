@@ -105,7 +105,7 @@ class WinningHistoriesSearch extends WinningHistories
             'winning_histories.amount' => $this->amount,
             'transaction_cost' => $this->transaction_cost,
             'status' => $this->status,
-            'winning_histories.created_at' => $this->created_at,
+            //'winning_histories.created_at' => $this->created_at,
             'winning_histories.updated_at' => $this->updated_at,
             'winning_histories.deleted_at' => $this->deleted_at,
         ]);
@@ -125,6 +125,7 @@ class WinningHistoriesSearch extends WinningHistories
             ->andFilterWhere(['like', 'stations.name', $this->stationname])
             ->andFilterWhere(['like', 'station_shows.name', $this->stationshowname])
             ->andFilterWhere(['like', 'prizes.name', $this->prizename])
+            ->andFilterWhere(['like', 'winning_histories.created_at', $this->created_at])
             ->andFilterWhere(['like', 'station_show_prizes.amount', $this->stationshowprizeamount]);
             if(!empty( $this->presenter)){
                 $query->andWhere('users.first_name LIKE "%'.trim($this->presenter). '%" ' .

@@ -61,7 +61,7 @@ class StationsSearch extends Stations
         $query->andFilterWhere([
             'enabled' => $this->enabled,
             'invalid_percentage' => $this->invalid_percentage,
-            'created_at' => $this->created_at,
+            //'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at,
         ]);
@@ -69,6 +69,7 @@ class StationsSearch extends Stations
         $query->andFilterWhere(['like', 'id', $this->id])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'address', $this->address])
+            ->andFilterWhere(['like', 'created_at', $this->created_at])
             ->andFilterWhere(['like', 'station_code', $this->station_code]);
 
         return $dataProvider;

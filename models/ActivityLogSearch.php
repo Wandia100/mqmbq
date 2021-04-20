@@ -67,13 +67,14 @@ class ActivityLogSearch extends ActivityLog
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'created_at' => $this->created_at,
+            //'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'is_deleted' => $this->is_deleted,
         ]);
 
         $query->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'causer_id', $this->causer_id])
+            ->andFilterWhere(['like', 'activity_log.created_at', $this->created_at])
             ->andFilterWhere(['like', 'properties', $this->properties]); 
         if(!empty( $this->user)){
             $query->andWhere('users.first_name LIKE "%'.trim($this->user). '%" ' .

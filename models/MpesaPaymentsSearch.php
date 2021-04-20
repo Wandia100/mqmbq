@@ -59,7 +59,7 @@ class MpesaPaymentsSearch extends MpesaPayments
         // grid filtering conditions
         $query->andFilterWhere([
             'is_archived' => $this->is_archived,
-            'created_at' => $this->created_at,
+            //'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
@@ -76,7 +76,8 @@ class MpesaPaymentsSearch extends MpesaPayments
             ->andFilterWhere(['like', 'OrgAccountBalance', $this->OrgAccountBalance])
             ->andFilterWhere(['like', 'BillRefNumber', $this->BillRefNumber])
             ->andFilterWhere(['like', 'TransAmount', $this->TransAmount])
-            ->andFilterWhere(['like', 'deleted_at', $this->deleted_at]);
+            ->andFilterWhere(['like', 'deleted_at', $this->deleted_at])
+            ->andFilterWhere(['like', 'created_at', $this->created_at]);
         $today     = date( 'Y-m-d' );
         $yesterday = date( 'Y-m-d', strtotime( '-1 day' ) );
         if ( $daily ) {

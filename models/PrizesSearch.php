@@ -60,13 +60,13 @@ class PrizesSearch extends Prizes
         $query->andFilterWhere([
             'mpesa_disbursement' => $this->mpesa_disbursement,
             'enabled' => $this->enabled,
-            'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at,
         ]);
 
         $query->andFilterWhere(['like', 'id', $this->id])
             ->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'created_at', $this->created_at])
             ->andFilterWhere(['like', 'description', $this->description]);
         $query->orderBy('created_at DESC');
         return $dataProvider;

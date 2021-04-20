@@ -80,7 +80,7 @@ class TransactionHistoriesSearch extends TransactionHistories
             'transaction_histories.commission' => $this->commission,
             'status' => $this->status,
             'is_archived' => $this->is_archived,
-            'transaction_histories.created_at' => $this->created_at,
+            //'transaction_histories.created_at' => $this->created_at,
             'transaction_histories.updated_at' => $this->updated_at,
             'transaction_histories.deleted_at' => $this->deleted_at,
         ]);
@@ -91,6 +91,7 @@ class TransactionHistoriesSearch extends TransactionHistories
             ->andFilterWhere(['like', 'reference_phone', $this->reference_phone])
             ->andFilterWhere(['like', 'reference_code', $this->reference_code])
             ->andFilterWhere(['like', 'station_id', $this->station_id])
+            ->andFilterWhere(['like', 'transaction_histories.created_at', $this->created_at])
             ->andFilterWhere(['like', 'station_show_id', $this->station_show_id])
             ->andFilterWhere(['like', 'stations.name', $this->stationname])
             ->andFilterWhere(['like', 'station_shows.name', $this->stationshowname]);

@@ -69,7 +69,7 @@ class UsersSearch extends Users
             'date_of_birth' => $this->date_of_birth,
             'perm_group' => $this->perm_group,
             'enabled' => $this->enabled,
-            'users.created_at' => $this->created_at,
+            //'users.created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
@@ -79,6 +79,7 @@ class UsersSearch extends Users
             ->andFilterWhere(['like', 'national_id', $this->national_id])
             ->andFilterWhere(['like', 'phone_number', $this->phone_number])
             ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'users.created_at', $this->created_at])
             ->andFilterWhere(['like', 'profile_image', $this->profile_image])
             ->andFilterWhere(['like', 'defaultpermissiondenied', $this->defaultpermissiondenied])
             ->andFilterWhere(['like', 'extpermission', $this->extpermission])
