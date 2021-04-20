@@ -214,6 +214,8 @@ class TransactionhistoriesController extends Controller
             if($row->TransAmount <100)
             {
                 //do nothing
+                $row->state=1;
+                $row->save(false);
             }
             else if($row->TransAmount >= 100 && $row->TransAmount < 300)
             {
@@ -242,6 +244,7 @@ class TransactionhistoriesController extends Controller
                     $refund=$row->TransAmount-100;
                     Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",0);
                     $row->deleted_at=date("Y-m-d H:i:s");
+                    $row->state=1;
                     $row->save(false);
                 } 
                 else
@@ -249,6 +252,7 @@ class TransactionhistoriesController extends Controller
                     $refund=$row->TransAmount-100;
                     Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",3);
                     $row->deleted_at=date("Y-m-d H:i:s");
+                    $row->state=1;
                     $row->save(false);
 
                 }

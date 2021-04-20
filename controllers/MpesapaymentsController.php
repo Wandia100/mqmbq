@@ -124,14 +124,14 @@ class MpesapaymentsController extends Controller
     public function actionInsertpayment()
     {
         Myhelper::checkRemoteAddress();
-        $data=MpesaPayments::find()->limit(10)->all();
+        $data=MpesaPayments::find()->limit(5)->all();
         foreach($data as $row)
         {
             $model=new MpesaPayments();
             $model=$row;
             $model->id=Uuid::generate()->string;
-            $model->BillRefNumber="RAMOGI";
-            $model->TransAmount=400;
+            $model->BillRefNumber="RAMOG";
+            $model->TransAmount=600;
             $model->created_at=date("Y-m-d H:i:s");
             $model->updated_at=date("Y-m-d H:i:s");
             $model->state=0;
