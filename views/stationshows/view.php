@@ -33,11 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'description:ntext',
                 'show_code',
                 'amount',
-                'commission',
-                'management_commission',
-                'price_amount',
                 'target',
-                'draw_count',
                 'invalid_percentage',
                 'monday',
                 'tuesday',
@@ -130,6 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'sunday',
                 'value'     => 'sundayprize.name'
             ],
+            'enabled',
             ['class' => 'yii\grid\ActionColumn',
                 'template' => '{delete}{update}',
                 'buttons' => [
