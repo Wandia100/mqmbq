@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'description',
+            'amount',
             'mpesa_disbursement',
             'enabled',
             'created_at',

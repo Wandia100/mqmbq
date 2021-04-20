@@ -23,14 +23,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'amount')->textInput() ?>
 
-    <?= $form->field($model, 'commission')->textInput() ?>
-
-    <?= $form->field($model, 'management_commission')->textInput() ?>
-
-    <?= $form->field($model, 'price_amount')->textInput() ?>
-
     <?= $form->field($model, 'target')->textInput() ?>
-
 
     <?= $form->field($model, 'monday')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--']) ?>
 

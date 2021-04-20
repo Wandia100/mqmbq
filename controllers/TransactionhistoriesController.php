@@ -211,7 +211,11 @@ class TransactionhistoriesController extends Controller
         {
             $row=$data[$i];
             //check if amount > 300 and refund after deducting 100
-            if($row->TransAmount <= 300)
+            if($row->TransAmount <100)
+            {
+                //do nothing
+            }
+            else if($row->TransAmount >= 100 && $row->TransAmount <= 300)
             {
                 $station_show=StationShows::getStationShow($row->BillRefNumber);
                 if($station_show!=NULL)
