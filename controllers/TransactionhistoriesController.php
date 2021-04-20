@@ -215,7 +215,7 @@ class TransactionhistoriesController extends Controller
             {
                 //do nothing
             }
-            else if($row->TransAmount >= 100 && $row->TransAmount <= 300)
+            else if($row->TransAmount >= 100 && $row->TransAmount < 300)
             {
                 $station_show=StationShows::getStationShow($row->BillRefNumber);
                 if($station_show!=NULL)

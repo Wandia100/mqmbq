@@ -130,8 +130,8 @@ class MpesapaymentsController extends Controller
             $model=new MpesaPayments();
             $model=$row;
             $model->id=Uuid::generate()->string;
-            $model->BillRefNumber="thisINOORO";
-            $model->TransAmount=80;
+            $model->BillRefNumber="RAMOGI";
+            $model->TransAmount=400;
             $model->created_at=date("Y-m-d H:i:s");
             $model->updated_at=date("Y-m-d H:i:s");
             $model->state=0;
