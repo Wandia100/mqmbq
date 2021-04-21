@@ -71,8 +71,8 @@ class TransactionHistories extends \yii\db\ActiveRecord
     {
         return [
             [['id', 'mpesa_payment_id', 'reference_name', 'reference_phone', 'reference_code'], 'required'],
-            [['amount', 'commission'], 'number'],
-            [['status', 'is_archived'], 'integer'],
+            [['amount'], 'number'],
+            [['status'], 'integer'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
             [['mpesa_payment_id', 'reference_name', 'reference_phone', 'reference_code', 'station_show_id'], 'string', 'max' => 255],
@@ -95,9 +95,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
             'station_id' => 'Station ID',
             'station_show_id' => 'Station Show ID',
             'amount' => 'Amount',
-            'commission' => 'Commission',
             'status' => 'Status',
-            'is_archived' => 'Is Archived',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
@@ -105,7 +103,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
     }
     public static function getShowTransactions($station_show_id,$start_time,$end_time)
     {
-        $sql="SELECT reference_name,reference_phone,amount,commission,created_at FROM transaction_histories 
+        $sql="SELECT reference_name,reference_phone,amount,created_at FROM transaction_histories 
         WHERE station_show_id=:station_show_id
         AND deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time";
         return Yii::$app->db->createCommand($sql)

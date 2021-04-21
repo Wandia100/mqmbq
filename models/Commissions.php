@@ -8,7 +8,6 @@ use Yii;
  * This is the model class for table "commissions".
  *
  * @property string $id
- * @property string|null $user_id
  * @property string|null $station_id
  * @property string|null $station_show_id
  * @property float $amount
@@ -73,7 +72,6 @@ class Commissions extends \yii\db\ActiveRecord
             [['status','c_type'], 'integer'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
-            [['user_id'], 'string', 'max' => 100],
             [['station_id', 'station_show_id', 'transaction_reference'], 'string', 'max' => 255],
             [['id'], 'unique'],
         ];
@@ -86,7 +84,6 @@ class Commissions extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'User ID',
             'station_id' => 'Station ID',
             'station_show_id' => 'Station Show ID',
             'amount' => 'Amount',
