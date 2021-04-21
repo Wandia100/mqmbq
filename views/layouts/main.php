@@ -43,17 +43,17 @@ AdminAsset::register($this);
                 $presentervisibility ='';
                 $managementvisibility = '';
                 $stationmanagementvisibility = '';
-                if(Yii::$app->user->identity->perm_group == 1){
+                if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group == 1){
                     $superadminvisibility = 'hidden';
                 }
-                else if(Yii::$app->user->identity->perm_group == 2){
+                else if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group == 2){
                     $adminvisibility = 'hidden';
                 }
-                else if(Yii::$app->user->identity->perm_group == 3){
+                else if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group == 3){
                      $presentervisibility = 'hidden';
-                }else if(Yii::$app->user->identity->perm_group == 4){
+                }else if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group == 4){
                      $managementvisibility = 'hidden';
-                }else if(Yii::$app->user->identity->perm_group == 5){
+                }else if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group == 5){
                      $stationmanagementvisibility = 'hidden';
                 }
                 echo $this->render('partials/top-header', ['superadminvisibility'=>$superadminvisibility,'adminvisibility'=>$adminvisibility,'presentervisibility'=>$presentervisibility,'managementvisibility'=>$managementvisibility,'stationmanagementvisibility'=>$stationmanagementvisibility]); ?>
