@@ -44,10 +44,10 @@ AdminAsset::register($this);
                 $managementvisibility = '';
                 $stationmanagementvisibility = '';
                 if(Yii::$app->user->identity->perm_group == 1){
-                    $adminvisibility = 'hidden';
+                    $superadminvisibility = 'hidden';
                 }
                 else if(Yii::$app->user->identity->perm_group == 2){
-                    $superadminvisibility = 'hidden';
+                    $adminvisibility = 'hidden';
                 }
                 else if(Yii::$app->user->identity->perm_group == 3){
                      $presentervisibility = 'hidden';

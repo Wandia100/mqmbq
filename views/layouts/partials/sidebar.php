@@ -79,7 +79,7 @@ use luc\tourist\Tourist;
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> ">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Financial Summary', Url::to(['/financialsummaries/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
-                <li class=" <?=$adminvisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
+                <li class="<?=$superadminvisibility?> <?=$adminvisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Live Transactions', Url::to(['/transactionhistories/presenter']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li class="<?=$adminvisibility?>  <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
@@ -87,6 +87,9 @@ use luc\tourist\Tourist;
                 </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Management Commission', Url::to(['/commissions/index','t'=>'m']), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$adminvisibility?>">
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursements', Url::to(['/disbursements/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> " data-content="Application Management Options. Add/Edit/View Application(s) options"
                     title="Application Management">

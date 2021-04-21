@@ -55,7 +55,7 @@ use app\modules\user\models\User;
                 <li class="btn-group nav-item tour-step <?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?=$superadminvisibility?>" data-content="Live" title="Live Transaction">
                     <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Live', ['/transactionhistories/presenter'], ['class' => 'text-light'])?>
                 </li>
-                <li class="btn-group nav-item tour-step <?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?>" data-content="Commissions" title="Commission">
+                <li class="btn-group nav-item tour-step <?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?=$superadminvisibility?>" data-content="Commissions" title="Commission">
                     <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Commission Report', ['/report/presentercommission'], ['class' => 'text-light'])?>
                 </li>
                 <li class="btn-group nav-item tour-step <?=$presentervisibility?> <?=$managementvisibility?>" data-content="Commission Summary" title="Commission Summary">
