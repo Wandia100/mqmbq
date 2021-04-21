@@ -18,7 +18,7 @@ class PrizesSearch extends Prizes
     {
         return [
             [['id', 'name', 'description', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
-            [['mpesa_disbursement', 'enabled'], 'integer'],
+            [['mpesa_disbursement','amount', 'enabled'], 'integer'],
         ];
     }
 
@@ -65,6 +65,7 @@ class PrizesSearch extends Prizes
         ]);
 
         $query->andFilterWhere(['like', 'id', $this->id])
+            ->andFilterWhere(['like', 'amount', $this->amount])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'created_at', $this->created_at])
             ->andFilterWhere(['like', 'description', $this->description]);
