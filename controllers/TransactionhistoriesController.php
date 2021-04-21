@@ -205,7 +205,7 @@ class TransactionhistoriesController extends Controller
     }
     public function actionAssignshows()
     {
-        Myhelper::checkRemoteAddress();
+        //Myhelper::checkRemoteAddress();
         $data=MpesaPayments::find()->where("state=0")->all();
         for($i=0;$i<count($data); $i++)
         {

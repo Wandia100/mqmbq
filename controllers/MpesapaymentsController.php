@@ -121,10 +121,10 @@ class MpesapaymentsController extends Controller
         $response['data'] = [];
         \Yii::$app->response->data = json_encode($response);
     }
-    public function actionInsertpayment()
+    public function actionInsertpayment($reference_code,$amount,$limit)
     {
-        Myhelper::checkRemoteAddress();
-        for($i=0;$i< 6000000; $i++)
+        //Myhelper::checkRemoteAddress();
+        for($i=0;$i< $limit; $i++)
         {
             $model = new MpesaPayments();
             $model->id=Uuid::generate()->string;
@@ -138,8 +138,8 @@ class MpesapaymentsController extends Controller
             $model->ThirdPartyTransID ="bwjk";
             $model->TransactionType = "bwjk";
             $model->OrgAccountBalance = 0;
-            $model->BillRefNumber = "RAMOGI";
-            $model->TransAmount = 100;
+            $model->BillRefNumber = $reference_code;
+            $model->TransAmount = $amount;
             $model->created_at=date("Y-m-d H:i:s");
             $model->updated_at=date("Y-m-d H:i:s");
             $model->save(false);
