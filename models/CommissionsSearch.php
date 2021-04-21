@@ -104,7 +104,7 @@ class CommissionsSearch extends Commissions
                 $query->andWhere( "DATE(commissions.created_at)>= DATE('" . $from . "')" );
                 $query->andWhere( "DATE(commissions.created_at)<= DATE('" . $to . "')" );
         }
-        //$query ->where("c_type = '$t'");
+        $query ->where("c_type = '$t'");
         $query->orderBy('commissions.created_at DESC');
         return $dataProvider;
     }

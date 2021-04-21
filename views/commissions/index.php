@@ -12,6 +12,12 @@ $this->title = 'Commissions';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="commissions-index">
+      <div class="row"> 
+                            <div class="col-12" style="text-align: center;font-weight: bold">
+                                <?= $this->render('//_notification'); ?>  
+                            </div>
+                                    
+                        </div>
     <div class="panel panel-info">
         <div class="panel-heading"> Filters</div>
         <div class="panel-body">
@@ -23,9 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'from' => date( 'Y-m-d', strtotime( '-42 days' ) )
                         ])?>
                 </div>
-            </div>
-            <div class="row">
-                <?= $this->render('//_notification'); ?>  
             </div>
         </div>
     </div>
@@ -62,8 +65,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'header'=>'action',
                 'format'=>'raw',
-                'value' => function($model) use ($route){
-                    return Html::a('<span class="">Disburse</span>', ['index','id'=>$model->id,'t'=>'p']);
+                'value' => function($model){
+                    if($model->status == 0 && $model->c_type == 3)
+                        return Html::a('<span class="">Disburse</span>', ['index','id'=>$model->id,'t'=>'p']);
                 }
             ],
         ],
