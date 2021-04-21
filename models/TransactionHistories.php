@@ -15,9 +15,7 @@ use Yii;
  * @property string|null $station_id
  * @property string|null $station_show_id
  * @property float $amount
- * @property float $commission
  * @property int $status
- * @property int $is_archived
  * @property string|null $created_at
  * @property string|null $updated_at
  * @property string|null $deleted_at
