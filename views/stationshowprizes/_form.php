@@ -18,11 +18,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'station_show_id')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'prize_id')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'draw_count')->textInput() ?>
-
-    <?= $form->field($model, 'amount')->textInput() ?>
 
     <?= $form->field($model, 'enabled')->textInput() ?>
 

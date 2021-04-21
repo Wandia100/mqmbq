@@ -21,7 +21,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'station_show_id') ?>
 
-    <?= $form->field($model, 'prize_id') ?>
 
     <?= $form->field($model, 'draw_count') ?>
 

@@ -29,7 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'station_id',
             'station_show_id',
-            'prize_id',
             'draw_count',
             //'amount',
             //'enabled',

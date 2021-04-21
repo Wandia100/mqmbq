@@ -32,7 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'name',
                 'description:ntext',
                 'show_code',
-                'amount',
                 'target',
                 'invalid_percentage',
                 'monday',

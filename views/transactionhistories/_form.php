@@ -28,11 +28,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'amount')->textInput() ?>
 
-    <?= $form->field($model, 'commission')->textInput() ?>
-
     <?= $form->field($model, 'status')->textInput() ?>
-
-    <?= $form->field($model, 'is_archived')->textInput() ?>
 
     <?= $form->field($model, 'created_at')->textInput() ?>
 

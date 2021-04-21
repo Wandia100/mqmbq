@@ -20,9 +20,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'show_code')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'amount')->textInput() ?>
-
     <?= $form->field($model, 'target')->textInput() ?>
 
     <?= $form->field($model, 'monday')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--']) ?>
