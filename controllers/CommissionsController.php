@@ -70,9 +70,17 @@ class CommissionsController extends Controller
         $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
         
         if(isset($_POST['presenter'])){
-            //print_r($_POST['presenter']);exit;
-            
-            //save disbursents 
+            $model = $this->findModel($_POST['commmission_id']);
+            $presenters = $_POST['presenter'];
+            $presenterscount = count($presenters);
+            if($presenterscount > 0){
+                $indivudualamount = $model->amount/$presenterscount;
+                //save disbursents
+                for($i = 0; $i < $presenterscount; $i ++){
+                    $pres = \app\models\Users::findOne($presenters[$i]);
+                    \app\models\Disbursements::saveDisbursement($model->id, $pres->first_name.' '.$pres->last_name, $pres->phone_number, $indivudualamount, 'presenter_commission',0);   
+                }
+            }
         }
 
         return $this->render('index', [
