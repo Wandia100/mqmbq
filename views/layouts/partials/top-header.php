@@ -88,7 +88,7 @@ use app\modules\user\models\User;
                         <div class="widget-content-left tour-step" data-content="Click here to access Account Settings, Logout etc. menu" title="Account Actions">
                             <div class="btn-group">
                             <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                <?= Yii::$app->user->identity->email?>
+                                <?= isset(Yii::$app->user->identity->email)?Yii::$app->user->identity->email:''?>
                                 
                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
                             </a>

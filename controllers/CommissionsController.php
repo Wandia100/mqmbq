@@ -73,14 +73,18 @@ class CommissionsController extends Controller
             $model = $this->findModel($_POST['commmission_id']);
             $presenters = $_POST['presenter'];
             $presenterscount = count($presenters);
-            if($presenterscount > 0){
-                $indivudualamount = $model->amount/$presenterscount;
-                //save disbursents
-                for($i = 0; $i < $presenterscount; $i ++){
-                    $pres = \app\models\Users::findOne($presenters[$i]);
-                    \app\models\Disbursements::saveDisbursement($model->id, $pres->first_name.' '.$pres->last_name, $pres->phone_number, $indivudualamount, 'presenter_commission',0);   
-                }
+            
+            $indivudualamount = $model->amount/$presenterscount;
+            //save disbursents
+            for($i = 0; $i < $presenterscount; $i ++){
+                $pres = \app\models\Users::findOne($presenters[$i]);
+                \app\models\Disbursements::saveDisbursement($model->id, $pres->first_name.' '.$pres->last_name, $pres->phone_number, $indivudualamount, 'presenter_commission',0);   
             }
+            Yii::$app->session->setFlash('success', 'Success:  Commission split successfully');
+            $model->status = 1;
+            $model->save(FALSE);
+            
+            return $this->redirect(['index','t'=>'p']);
         }
 
         return $this->render('index', [
