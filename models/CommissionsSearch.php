@@ -91,7 +91,6 @@ class CommissionsSearch extends Commissions
         ]);
 
         $query->andFilterWhere(['like', 'commissions.id', $this->id])
-            ->andFilterWhere(['like', 'user_id', $this->user_id])
             ->andFilterWhere(['like', 'station_id', $this->station_id])
             ->andFilterWhere(['like', 'station_show_id', $this->station_show_id])
             ->andFilterWhere(['like', 'transaction_reference', $this->transaction_reference])

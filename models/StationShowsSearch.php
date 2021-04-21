@@ -68,12 +68,7 @@ class StationShowsSearch extends StationShows
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'amount' => $this->amount,
-            'commission' => $this->commission,
-            'management_commission' => $this->management_commission,
-            'price_amount' => $this->price_amount,
             'target' => $this->target,
-            'draw_count' => $this->draw_count,
             'invalid_percentage' => $this->invalid_percentage,
             'monday' => $this->monday,
             'tuesday' => $this->tuesday,

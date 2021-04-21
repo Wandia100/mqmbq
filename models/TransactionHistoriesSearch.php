@@ -21,8 +21,8 @@ class TransactionHistoriesSearch extends TransactionHistories
     {
         return [
             [['id', 'mpesa_payment_id', 'reference_name', 'reference_phone', 'reference_code', 'station_id', 'station_show_id', 'created_at', 'updated_at', 'deleted_at','stationname','stationshowname'], 'safe'],
-            [['amount', 'commission'], 'number'],
-            [['status', 'is_archived'], 'integer'],
+            [['amount'], 'number'],
+            [['status'], 'integer'],
         ];
     }
 
