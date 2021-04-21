@@ -20,7 +20,7 @@ class CommissionsSearch extends Commissions
     public function rules()
     {
         return [
-            [['id', 'user_id', 'station_id', 'station_show_id', 'transaction_reference', 'created_at', 'updated_at', 'deleted_at','stationname','stationshowname','user'], 'safe'],
+            [['id', 'station_id', 'station_show_id', 'transaction_reference', 'created_at', 'updated_at', 'deleted_at','stationname','stationshowname','user'], 'safe'],
             [['amount', 'transaction_cost'], 'number'],
             [['status','c_type'], 'integer'],
         ];
@@ -55,7 +55,6 @@ class CommissionsSearch extends Commissions
         
         $query->joinWith(['stations']);
         $query->joinWith(['stationshows']);
-        $query->joinWith(['user']);
         
         $dataProvider->sort->attributes['stationname'] = [
             'asc'  => [ 'station.name' => SORT_ASC ],
@@ -67,11 +66,6 @@ class CommissionsSearch extends Commissions
             'desc' => [ 'station_shows.name' => SORT_DESC ],
         ];
         
-        $dataProvider->sort->attributes['user'] = [
-            'asc'  => [ 'users.first_name' => SORT_ASC ],
-            'desc' => [ 'users.first_name' => SORT_DESC ],
-        ];
-
         $this->load($params);
 
         if (!$this->validate()) {
@@ -96,10 +90,6 @@ class CommissionsSearch extends Commissions
             ->andFilterWhere(['like', 'transaction_reference', $this->transaction_reference])
             ->andFilterWhere(['like', 'stations.name', $this->stationname])
             ->andFilterWhere(['like', 'station_shows.name', $this->stationshowname]);
-        if(!empty( $this->user)){
-            $query->andWhere('users.first_name LIKE "%'.trim($this->user). '%" ' .
-            'OR users.last_name LIKE "%'.trim($this->user). '%"');
-        }
         $today     = date( 'Y-m-d' );
         $yesterday = date( 'Y-m-d', strtotime( '-1 day' ) );
         if ( $daily ) {

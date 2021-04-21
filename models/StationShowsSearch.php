@@ -20,8 +20,8 @@ class StationShowsSearch extends StationShows
     {
         return [
             [['id', 'station_id', 'name', 'description', 'show_code', 'start_time', 'end_time', 'created_at', 'updated_at', 'deleted_at', 'stationname'], 'safe'],
-            [['amount', 'commission', 'management_commission', 'price_amount', 'target', 'invalid_percentage'], 'number'],
-            [['draw_count', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'enabled'], 'integer'],
+            [['target', 'invalid_percentage'], 'number'],
+            [['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'enabled'], 'integer'],
         ];
     }
 
