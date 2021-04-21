@@ -38,25 +38,30 @@ AdminAsset::register($this);
     <input type="hidden" name="host" id="host" value="<?= $serverName ?>">
     <input type="hidden" name="port" id="port" value="<?= $_SERVER['SERVER_PORT'] ?>">
             <?php
+                $superadminvisibility = '';
                 $adminvisibility = '';
                 $presentervisibility ='';
                 $managementvisibility = '';
                 $stationmanagementvisibility = '';
-                if(Yii::$app->user->identity->perm_group == 2){
+                if(Yii::$app->user->identity->perm_group == 1){
                     $adminvisibility = 'hidden';
-                }else if(Yii::$app->user->identity->perm_group == 3){
+                }
+                else if(Yii::$app->user->identity->perm_group == 2){
+                    $superadminvisibility = 'hidden';
+                }
+                else if(Yii::$app->user->identity->perm_group == 3){
                      $presentervisibility = 'hidden';
                 }else if(Yii::$app->user->identity->perm_group == 4){
                      $managementvisibility = 'hidden';
                 }else if(Yii::$app->user->identity->perm_group == 5){
                      $stationmanagementvisibility = 'hidden';
                 }
-                echo $this->render('partials/top-header', ['adminvisibility'=>$adminvisibility,'presentervisibility'=>$presentervisibility,'managementvisibility'=>$managementvisibility,'stationmanagementvisibility'=>$stationmanagementvisibility]); ?>
+                echo $this->render('partials/top-header', ['superadminvisibility'=>$superadminvisibility,'adminvisibility'=>$adminvisibility,'presentervisibility'=>$presentervisibility,'managementvisibility'=>$managementvisibility,'stationmanagementvisibility'=>$stationmanagementvisibility]); ?>
             <?php
             // echo $this->render('partials/theme-setting', []); 
             ?>
             <div class="app-main">
-                <?= $this->render('partials/sidebar', ['adminvisibility'=>$adminvisibility,'presentervisibility'=>$presentervisibility,'managementvisibility'=>$managementvisibility,'stationmanagementvisibility'=>$stationmanagementvisibility]); ?>
+                <?= $this->render('partials/sidebar', ['superadminvisibility'=>$superadminvisibility,'adminvisibility'=>$adminvisibility,'presentervisibility'=>$presentervisibility,'managementvisibility'=>$managementvisibility,'stationmanagementvisibility'=>$stationmanagementvisibility]); ?>
                 <div class="app-main__outer">
                     <div class="app-main__inner">
                         
