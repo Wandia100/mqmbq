@@ -159,7 +159,6 @@ class ApiController extends Controller
         $data = http_build_query($data);
 
         $curl = curl_init();
-        $cookie=NITEXTSMSCOOKIE;
         curl_setopt_array($curl, array(
             CURLOPT_URL => NITEXTSMSURL,
             CURLOPT_RETURNTRANSFER => true,
@@ -181,12 +180,12 @@ class ApiController extends Controller
     }
     public function actionProcessSms()
     {
-        Myhelper::checkRemoteAddress();
+        //Myhelper::checkRemoteAddress();
         $outbox=Outbox::find()->all();
         for($i=0;$i<count($outbox);$i++)
         {
             $row=$outbox[$i];
-            //$this->sendSms($row->$receiver,$row->message);
+            $this->sendSms($row->receiver,$row->message);
             $sent_sms=new SentSms();
             $sent_sms->receiver=$row->receiver;
             $sent_sms->message=$row->message;
