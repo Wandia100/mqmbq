@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\CommissionsSearch */
@@ -58,9 +59,77 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at',
             //'updated_at',
             //'deleted_at',
-
+            [
+                'header'=>'action',
+                'format'=>'raw',
+                'value' => function($model) use ($route){
+                    return Html::a('<span class="">Disburse</span>', ['index','id'=>$model->id,'t'=>'p']);
+                }
+            ],
         ],
     ]); ?>
 
 
 </div>
+
+
+  <!-- Modal -->
+<?php
+if(isset($_GET['id'])){
+    echo Html::beginForm(
+            $action = Url::to(['/commissions/index','t'=>$_GET['t'],'criterion'=>$_GET['criterion']]),
+            $method = 'post',
+            $hmtmlOptions = array('id' => 'commissiondisbursementform' )
+    );
+?>
+  <div class="modal fade" id="commissiondisbursementModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Split Presenter commission</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          
+        </div>
+        <div class="modal-body">
+            <div class="col-sm-12">
+                <input type="hidden" name="commmission_id" value="<?=$_GET['id']?>" />
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>first_name</th>
+                            <th>last_name</th>
+                            <th>phone_number</th>
+                            <th>email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            foreach ($presenters as $value){
+                        ?>
+                            <tr>
+                                <th><input type="checkbox" name="presenter[]" value="<?=$value->id?>"></th>
+                                <th><?=$value->first_name?></th>
+                                <th><?=$value->last_name?></th>
+                                <th><?=$value->phone_number?></th>
+                                <th><?=$value->email?></th>
+                            </tr>
+                        
+                        
+                        <?php
+                            }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit"class="btn btn-primary btn-block" id="commissiondisbursementbtn"><span style="font-weight: bold">Split commission</span></button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+<?php echo Html::endform(); } ?>

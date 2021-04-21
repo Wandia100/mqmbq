@@ -68,10 +68,17 @@ class CommissionsController extends Controller
     {
         $searchModel = new CommissionsSearch();
         $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
+        
+        if(isset($_POST['presenter'])){
+            //print_r($_POST['presenter']);exit;
+            
+            //save disbursents 
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'presenters' => \app\models\Users::findAll(['perm_group'=>3])
         ]);
     }
     public function actionPresenter()

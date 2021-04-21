@@ -4,6 +4,10 @@ if ($('#host').val() == 'localhost' && $('#port').val() == 80) {
 } else {
   var host = ''
 }
+
+$(document).ready(function(){
+    commissiondisbursementModal();
+});
 function runDraw() {
     // alert(saleid);
     $('#draw_winner_modal').modal({
@@ -56,7 +60,8 @@ function runDraw() {
     $('#presentersModal .modal-dialog').addClass('largerwidth')
     $('.modal-backdrop').hide();
   }
-   function commissionsModal() {
+  
+ function commissionsModal() {
     $('#commissionsModal').modal({
       //backdrop: 'static',
       //keyboard: false
@@ -76,6 +81,18 @@ function prizeModal() {
     $('#prizeModal .modal-dialog').addClass('largerwidth')
     $('.modal-backdrop').hide();
 }
+
+function commissiondisbursementModal() {
+    $('#commissiondisbursementModal').modal({
+      //backdrop: 'static',
+      //keyboard: false
+    })
+
+    $('#commissiondisbursementModal .modal-dialog').addClass('modal-lg')
+    $('#commissiondisbursementModal .modal-dialog').addClass('largerwidth')
+    $('.modal-backdrop').hide();
+}
+
 
 function editPrizeModal(showprizeid,draw_count,monday,tuesday,wednesday,thursday,friday,saturday,sunday,enabled) {
     $('#showprizeid').val(showprizeid)

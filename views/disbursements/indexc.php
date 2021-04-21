@@ -62,7 +62,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     else:
                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ['view','id'=>$model->id]);
                     endif;
-                    
                 }
             ],
             

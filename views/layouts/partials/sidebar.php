@@ -83,7 +83,7 @@ use luc\tourist\Tourist;
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Live Transactions', Url::to(['/transactionhistories/presenter']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li class="<?=$adminvisibility?>  <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
-                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Commission', Url::to(['/report/presentercommission']), ['class' => '', 'id' => 'appmenu'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Commission', Url::to(['/commissions/index','t'=>'p']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Management Commission', Url::to(['/commissions/index','t'=>'m']), ['class' => '', 'id' => 'appmenu'])?>

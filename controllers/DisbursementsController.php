@@ -89,7 +89,7 @@ class DisbursementsController extends Controller
         $searchModel = new DisbursementsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
-        if(isset($_GET['id'])){
+        if(isset($_GET['id']) && isset($_GET['srr']) && $_GET['srr'] == 'failed'){
             $model = $this->findModel($_GET['id']);
             $model->status = 0;
             $model->save(FALSE);

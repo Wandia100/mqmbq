@@ -35,7 +35,7 @@ class AdminAsset extends AssetBundle
         'js/dashboard.js',
         'js/globalFunctions.js',
         'js/admin/admin.js',
-        'js/appTour.js',
+        //'js/appTour.js',
         'js/highcharts.js',
         'js/custom.js',
         'js/charts.js'
