@@ -24,8 +24,8 @@ class AdminAsset extends AssetBundle
     public $css = [
         'css/admin/admin.css',
         'css/admin/custom.css',
-        'css/bootstrap-tour.css',
-        'css/bootstrap-tour.min.css',
+        //'css/bootstrap-tour.css',
+        //'css/bootstrap-tour.min.css',
     ];
     public $js = [
         'js/bootstrap-tour-standalone.js',

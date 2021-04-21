@@ -19,9 +19,9 @@ class BowerAssets extends AssetBundle
 {
     public $sourcePath = '@bower';
     public $js = [
-        'toastr/toastr.js',
+        //'toastr/toastr.js',
     ];
     public $css = [
-        'toastr/toastr.css',
+        //'toastr/toastr.css',
     ];
 }
