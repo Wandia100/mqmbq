@@ -139,6 +139,12 @@ class Disbursements extends \yii\db\ActiveRecord
             case "commission":
                 $command_id="SalaryPayment";
                 break;
+            case "presenter_commission":
+                $command_id="SalaryPayment";
+                break;
+            case "management_commission":
+                $command_id="SalaryPayment";
+                break;
             case "expenses":
                 $command_id="BusinessPayment";
                 break;
