@@ -140,7 +140,7 @@ class MpesapaymentsController extends Controller
     }
     public function actionInsertpayment($reference_code,$amount,$limit)
     {
-        //Myhelper::checkRemoteAddress();
+        Myhelper::checkRemoteAddress();
         for($i=0;$i< $limit; $i++)
         {
             $model = new MpesaPayments();

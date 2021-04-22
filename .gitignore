@@ -11,7 +11,7 @@ nbproject
 
 # windows thumbnail cache
 Thumbs.db
-
+/components/Keys.php
 # composer vendor dir
 /vendor
 

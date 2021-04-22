@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use Webpatser\Uuid\Uuid;
+use app\components\Keys;
 /**
  * This is the model class for table "disbursements".
  *
@@ -107,8 +108,8 @@ class Disbursements extends \yii\db\ActiveRecord
         $url = MPESATOKENURL;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
-        $app_consumer_key = file_get_contents("/srv/credentials/mpesaapp_consumer_key.txt");
-        $app_consumer_secret = file_get_contents("/srv/credentials/mpesaapp_consumer_secret.txt");
+        $app_consumer_key = Keys::getMpesaConsumerKey();
+        $app_consumer_secret = Keys::getMpesaConsumerSecret();
         $credentials = base64_encode($app_consumer_key.':'.$app_consumer_secret);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic '.$credentials));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -119,8 +120,8 @@ class Disbursements extends \yii\db\ActiveRecord
     }
     public static function setSecurityCredentials ()
     {
-        $publicKey =file_get_contents("/srv/credentials/mpesa_public_key.txt");
-        $plaintext =file_get_contents("/srv/credentials/mpesaplaintext.txt");
+        $publicKey =Keys::getMpesaPublicKey();
+        $plaintext =Keys::getMpesaPlainText();
         openssl_public_encrypt($plaintext, $encrypted, $publicKey, OPENSSL_PKCS1_PADDING);
         return base64_encode($encrypted);
     }
@@ -138,6 +139,12 @@ class Disbursements extends \yii\db\ActiveRecord
             case "commission":
                 $command_id="SalaryPayment";
                 break;
+            case "presenter_commission":
+                $command_id="SalaryPayment";
+                break;
+            case "management_commission":
+                $command_id="SalaryPayment";
+                break;
             case "expenses":
                 $command_id="BusinessPayment";
                 break;
@@ -146,5 +153,26 @@ class Disbursements extends \yii\db\ActiveRecord
                 break;
         }
         return $command_id;
+    }
+    public static function checkDuplicate($reference_id,$phone_number,$amount)
+    {
+        return Disbursements::find()->where("reference_id='$reference_id'")
+        ->andWhere("phone_number=$phone_number")
+        ->andWhere("amount=$amount")->count();
+    }
+    public static function getDuplicates()
+    {
+        $sql='SELECT COUNT(reference_id) AS tot,reference_id  FROM disbursements
+        WHERE created_at > "2021-04-22 06:00" GROUP BY reference_id HAVING(tot > 1) ORDER BY tot DESC';
+        return Yii::$app->db->createCommand($sql)
+        ->queryAll();
+    }
+    public static function removeDups($reference_id,$limits)
+    {
+        $sql='DELETE FROM disbursements WHERE reference_id=:reference_id LIMIT :limits';
+        Yii::$app->db->createCommand($sql)
+        ->bindValue(':reference_id',$reference_id)
+        ->bindValue(':limits',$limits)
+        ->execute();
     }
 }

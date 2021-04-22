@@ -57,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <thead>
         <tr>
             <th>NAME</th>
+            <th>PHONE</th>
             <th>REFERENCE</th>
             <th>PRIZE</th>
             <th>DATE</th>
@@ -71,6 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
                 <tr>
             <td><?=$row['reference_name'];?></td>
+            <td><?=$row['reference_phone'];?></td>
             <td><?=$row['reference_code'];?></td>
             <td><?=$row['name'];?></td>
             <td><?=$row['created_at'];?></td>

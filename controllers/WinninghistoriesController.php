@@ -135,6 +135,7 @@ class WinninghistoriesController extends Controller
                 $model->status =0;
                 if($model->save(false))
                 {
+                    
                     if($show_prize['enable_tax'])
                     {
                         $to_pay=round(($show_prize['amount']*.8));
@@ -143,16 +144,26 @@ class WinninghistoriesController extends Controller
                     {
                         $to_pay=$show_prize['amount'];
                     }
-                    if($show_prize['mpesa_disbursement'])
+                    $dup_check=Disbursements::checkDuplicate($win_key,$transaction_history['reference_phone'],$to_pay);
+                    if($dup_check==0)
                     {
-                        Disbursements::saveDisbursement($win_key,$transaction_history['reference_name'],$transaction_history['reference_phone'],$to_pay,"winning",0);
+                        if($show_prize['mpesa_disbursement'])
+                        {
+                            Disbursements::saveDisbursement($win_key,$transaction_history['reference_name'],$transaction_history['reference_phone'],$to_pay,"winning",0);
+                        }
+                        $draw_count_balance=$show_prize['draw_count']-$show_prize['prizes_given']-1;
+                        $transaction_history['draw_count_balance']=$draw_count_balance;
+                        $station_name=$presenter_show['station_name'];
+                        $message="Hi ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. You shall be called shortly with more details";
+                        //send an sms
+                        Outbox::saveOutbox($transaction_history['reference_phone'],$message,1);
                     }
-                    $draw_count_balance=$show_prize['draw_count']-$show_prize['prizes_given']-1;
-                    $transaction_history['draw_count_balance']=$draw_count_balance;
-                    $station_name=$presenter_show['station_name'];
-                    $message="Hi ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. You shall be called shortly with more details";
-                    //send an sms
-                    Outbox::saveOutbox($transaction_history['reference_phone'],$message,1);
+                    else
+                    {
+                        $draw_count_balance=$show_prize['draw_count']-$show_prize['prizes_given'];
+                        $transaction_history['draw_count_balance']=$draw_count_balance;
+                    }
+
                     $response['status']="success";
                     $response['message']="no message";
                     $response['data']=$transaction_history;

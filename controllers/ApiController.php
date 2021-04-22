@@ -8,6 +8,7 @@ use app\models\Outbox;
 use app\models\SentSms;
 use Webpatser\Uuid\Uuid;
 use app\components\Myhelper;
+use app\components\Keys;
 class ApiController extends Controller
 {
     /*command id comission - SalaryPayment
@@ -48,13 +49,16 @@ class ApiController extends Controller
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
         $curl_response = curl_exec($curl);
-
-        $content = json_decode($curl_response);
-        $conversation_id = $content->ConversationID;
-        $model=Disbursements::findOne($conversation_id);
-        $model->conversation_id=$conversation_id;
-        $model->updated_at=date("Y-m-d H:i:s");
-        $model->save(false);
+        $content = json_decode($curl_response,true);
+        $conversation_id = $content['ConversationID'];
+        $model=Disbursements::findOne($disbursement_id);
+        if($model)
+        {
+            $model->conversation_id=$conversation_id;
+            $model->updated_at=date("Y-m-d H:i:s");
+            $model->save(false);
+        }
+        
     }
     public function actionDisbursementPaymentTimeoutResult()
     {
@@ -73,20 +77,23 @@ class ApiController extends Controller
     {
         $jsondata = file_get_contents('php://input');
         $data = json_decode($jsondata,true);
+        $data=$data['Result'];
         $conversation_id=$data['ConversationID'];
         $transaction_reference=$data['TransactionID'];
         $result_code=$data['ResultCode'];
-        $disbursement=Disbursements::find()->where("conversation_id = $conversation_id")->one();
+        $disbursement=Disbursements::find()->where("conversation_id = '$conversation_id'")->one();
         if($disbursement)
         {
             if($result_code===0)
             {
                 $disbursement->status=1;
+                $disbursement->transaction_reference=$transaction_reference;
                 $disbursement->updated_at= date('Y-m-d H:i:s');
                 $disbursement->save(false);
             }
             else{
                 $disbursement->status=0;
+                $disbursement->transaction_reference=$transaction_reference;
                 $disbursement->updated_at= date('Y-m-d H:i:s');
                 $disbursement->save(false);
             }
@@ -98,7 +105,7 @@ class ApiController extends Controller
         $jsondata = file_get_contents('php://input');
         $data = json_decode($jsondata,true);
         $trans_id=$data['TransID'];
-        $check=MpesaPayments::find()->where("TransID=$trans_id")->count();
+        $check=MpesaPayments::find()->where("TransID='$trans_id'")->count();
         if($check==0)
         {
             $model = new MpesaPayments();
@@ -144,7 +151,7 @@ class ApiController extends Controller
         {
             $row=$data[$i];
             $command_id=Disbursements::getCommandId($row->disbursement_type);    
-            //$this->processDisbursementPayment($row->id,$row->phone_number,$row->amount,$command_id);
+            $this->processDisbursementPayment($row->id,$row->phone_number,$row->amount,$command_id);
             $row->status=3;
             $row->save(false);
         }
@@ -152,14 +159,13 @@ class ApiController extends Controller
     #start of sms code
     public function sendSms($phone_number,$message)
     {
-        $username=file_get_contents("/srv/credentials/nitextsms_username.txt");
-        $password=file_get_contents("/srv/credentials/nitextsms_password.txt");
-        $cookie=file_get_contents("/srv/credentials/nitextsms_cookie.txt");
+        $username=Keys::getSmsUsername();
+        $password=Keys::getSmsPassword();
+        $cookie=Keys::getSmsCookie();
         $data = array('username' => $username,'password' => $password,'oa' => 'nitext','payload' => '[{"msisdn":"'.$phone_number.'","message":"'.$message.'","unique_id":1000}]');
         $data = http_build_query($data);
 
         $curl = curl_init();
-        $cookie=NITEXTSMSCOOKIE;
         curl_setopt_array($curl, array(
             CURLOPT_URL => NITEXTSMSURL,
             CURLOPT_RETURNTRANSFER => true,
@@ -182,11 +188,11 @@ class ApiController extends Controller
     public function actionProcessSms()
     {
         Myhelper::checkRemoteAddress();
-        $outbox=Outbox::find()->all();
+        $outbox=Outbox::find()->limit(1500)->all();
         for($i=0;$i<count($outbox);$i++)
         {
             $row=$outbox[$i];
-            //$this->sendSms($row->$receiver,$row->message);
+            $this->sendSms($row->receiver,$row->message);
             $sent_sms=new SentSms();
             $sent_sms->receiver=$row->receiver;
             $sent_sms->message=$row->message;
@@ -197,8 +203,21 @@ class ApiController extends Controller
             $row->delete(false);
         }
     }
+    public function actionSms()
+    {
+        //$data = file_get_contents('php://input');
+        //$filename="/srv/apps/comp21/web/sms.txt";
+        //file_put_contents( $filename, $data, FILE_APPEND );
+    }
     #end of sms code
-   
+    public function beforeAction($action)
+    {            
+        if (in_array($action->id,array('sms','disbursement-payment-result-confirmation','confirmation','disbursement-payment-timeout-result','payout'))) {
+            $this->enableCsrfValidation = false;
+        }
+    
+        return parent::beforeAction($action);
+    }
 
 }
 ?>
