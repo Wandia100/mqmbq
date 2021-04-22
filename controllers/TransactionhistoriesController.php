@@ -205,7 +205,7 @@ class TransactionhistoriesController extends Controller
     }
     public function actionAssignshows()
     {
-        //Myhelper::checkRemoteAddress();
+        Myhelper::checkRemoteAddress();
         $data=MpesaPayments::find()->where("state=0")->all();
         for($i=0;$i<count($data); $i++)
         {
@@ -242,7 +242,10 @@ class TransactionhistoriesController extends Controller
                 if($row->TransAmount < 10000)
                 {
                     $refund=$row->TransAmount-100;
-                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",0);
+                    if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
+                    {
+                        Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",0);
+                    }
                     $row->deleted_at=date("Y-m-d H:i:s");
                     $row->state=1;
                     $row->save(false);
@@ -250,7 +253,10 @@ class TransactionhistoriesController extends Controller
                 else
                 {
                     $refund=$row->TransAmount-100;
-                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",4);
+                    if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
+                    {
+                        Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",4);
+                    }
                     $row->deleted_at=date("Y-m-d H:i:s");
                     $row->state=1;
                     $row->save(false);
