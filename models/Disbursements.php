@@ -148,4 +148,10 @@ class Disbursements extends \yii\db\ActiveRecord
         }
         return $command_id;
     }
+    public static function checkDuplicate($reference_id,$phone_number,$amount)
+    {
+        return Disbursements::find()->where("reference_id='$reference_id'")
+        ->andWhere("phone_number=$phone_number")
+        ->andWhere("amount=$amount")->count();
+    }
 }
