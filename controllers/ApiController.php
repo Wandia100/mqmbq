@@ -51,11 +51,15 @@ class ApiController extends Controller
         $curl_response = curl_exec($curl);
 
         $content = json_decode($curl_response,true);
-        $conversation_id = $content->ConversationID;
+        $conversation_id = $content['ConversationID'];
         $model=Disbursements::findOne($conversation_id);
-        $model->conversation_id=$conversation_id;
-        $model->updated_at=date("Y-m-d H:i:s");
-        $model->save(false);
+        if($model)
+        {
+            $model->conversation_id=$conversation_id;
+            $model->updated_at=date("Y-m-d H:i:s");
+            $model->save(false);
+        }
+        
     }
     public function actionDisbursementPaymentTimeoutResult()
     {
@@ -139,7 +143,7 @@ class ApiController extends Controller
     #code to disburse payments
     public function actionPayout()
     {
-        //Myhelper::checkRemoteAddress();
+        Myhelper::checkRemoteAddress();
         $data=Disbursements::getPendingDisbursement();
         for($i=0;$i<count($data); $i++)
         {
@@ -206,7 +210,7 @@ class ApiController extends Controller
     #end of sms code
     public function beforeAction($action)
     {            
-        if (in_array($action->id,array('sms','disbursement-payment-result-confirmation','confirmation','disbursement-payment-timeout-result'))) {
+        if (in_array($action->id,array('sms','disbursement-payment-result-confirmation','confirmation','disbursement-payment-timeout-result','payout'))) {
             $this->enableCsrfValidation = false;
         }
     
