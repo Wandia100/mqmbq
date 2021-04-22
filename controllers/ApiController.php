@@ -81,7 +81,7 @@ class ApiController extends Controller
         $conversation_id=$data['ConversationID'];
         $transaction_reference=$data['TransactionID'];
         $result_code=$data['ResultCode'];
-        $disbursement=Disbursements::find()->where("conversation_id = $conversation_id")->one();
+        $disbursement=Disbursements::find()->where("conversation_id = '$conversation_id'")->one();
         if($disbursement)
         {
             if($result_code===0)
