@@ -8,6 +8,7 @@ use app\models\Outbox;
 use app\models\SentSms;
 use Webpatser\Uuid\Uuid;
 use app\components\Myhelper;
+use app\components\Keys;
 class ApiController extends Controller
 {
     /*command id comission - SalaryPayment
@@ -152,9 +153,9 @@ class ApiController extends Controller
     #start of sms code
     public function sendSms($phone_number,$message)
     {
-        $username=file_get_contents("/srv/credentials/nitextsms_username.txt");
-        $password=file_get_contents("/srv/credentials/nitextsms_password.txt");
-        $cookie=file_get_contents("/srv/credentials/nitextsms_cookie.txt");
+        $username=Keys::getSmsUsername();
+        $password=Keys::getSmsPassword();
+        $cookie=Keys::getSmsCookie();
         $data = array('username' => $username,'password' => $password,'oa' => 'nitext','payload' => '[{"msisdn":"'.$phone_number.'","message":"'.$message.'","unique_id":1000}]');
         $data = http_build_query($data);
 
@@ -193,7 +194,7 @@ class ApiController extends Controller
             $sent_sms->category=$row->category;
             $sent_sms->created_date=$row->created_date;
             $sent_sms->save(false);
-            $row->delete(false);
+            //$row->delete(false);
         }
     }
     #end of sms code

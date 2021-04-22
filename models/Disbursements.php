@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use Webpatser\Uuid\Uuid;
+use app\components\Keys;
 /**
  * This is the model class for table "disbursements".
  *
@@ -107,8 +108,8 @@ class Disbursements extends \yii\db\ActiveRecord
         $url = MPESATOKENURL;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
-        $app_consumer_key = file_get_contents("/srv/credentials/mpesaapp_consumer_key.txt");
-        $app_consumer_secret = file_get_contents("/srv/credentials/mpesaapp_consumer_secret.txt");
+        $app_consumer_key = Keys::getMpesaConsumerKey();
+        $app_consumer_secret = Keys::getMpesaConsumerSecret();
         $credentials = base64_encode($app_consumer_key.':'.$app_consumer_secret);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic '.$credentials));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -119,8 +120,8 @@ class Disbursements extends \yii\db\ActiveRecord
     }
     public static function setSecurityCredentials ()
     {
-        $publicKey =file_get_contents("/srv/credentials/mpesa_public_key.txt");
-        $plaintext =file_get_contents("/srv/credentials/mpesaplaintext.txt");
+        $publicKey =Keys::getMpesaPublicKey();
+        $plaintext =Keys::getMpesaPlainText();
         openssl_public_encrypt($plaintext, $encrypted, $publicKey, OPENSSL_PKCS1_PADDING);
         return base64_encode($encrypted);
     }
