@@ -139,13 +139,13 @@ class ApiController extends Controller
     #code to disburse payments
     public function actionPayout()
     {
-        Myhelper::checkRemoteAddress();
+        //Myhelper::checkRemoteAddress();
         $data=Disbursements::getPendingDisbursement();
         for($i=0;$i<count($data); $i++)
         {
             $row=$data[$i];
             $command_id=Disbursements::getCommandId($row->disbursement_type);    
-            //$this->processDisbursementPayment($row->id,$row->phone_number,$row->amount,$command_id);
+            $this->processDisbursementPayment($row->id,$row->phone_number,$row->amount,$command_id);
             $row->status=3;
             $row->save(false);
         }
