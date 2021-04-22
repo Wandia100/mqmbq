@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use Webpatser\Uuid\Uuid;
 
 /**
  * This is the model class for table "mpesa_payments".
@@ -27,6 +28,8 @@ use Yii;
  */
 class MpesaPayments extends \yii\db\ActiveRecord
 {
+    
+    public  $excelfile;
     /**
      * {@inheritdoc}
      */
@@ -45,6 +48,8 @@ class MpesaPayments extends \yii\db\ActiveRecord
             [['is_archived'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
+            [['excelfile'], 'required'],
+            [['excelfile'], 'file', 'skipOnEmpty' => TRUE, 'extensions' => 'csv'],
             [['TransID', 'deleted_at'], 'string', 'max' => 100],
             [['FirstName', 'MiddleName', 'LastName', 'MSISDN', 'InvoiceNumber', 'BusinessShortCode', 'ThirdPartyTransID', 'TransactionType', 'OrgAccountBalance', 'BillRefNumber', 'TransAmount'], 'string', 'max' => 255],
             [['id'], 'unique'],
@@ -147,5 +152,42 @@ class MpesaPayments extends \yii\db\ActiveRecord
             $sum = MpesaPayments::getTotalRevenue()['total_mpesa'];
         endswitch;
         return number_format($sum);    
+    }
+    
+    /**
+     * Method to upload excel
+     *
+     * @return boolean
+     */
+    public function upload(){
+        #echo 'am here'; exit;
+        $basePath = 'uploads/' . $this->excelfile->baseName . '.' . $this->excelfile->extension;//readable
+        $this->excelfile->saveAs( $basePath );
+        
+       // ini_set('auto_detect_line_endings', TRUE);
+        $handle = fopen($basePath, "r");
+        $row =0;
+        while (($fileop = fgetcsv($handle, 1000, ",")) !== false) 
+        {
+            if($row >= 6){
+                $col1 = trim($fileop[0]);
+                $namespn = explode('-', trim($fileop[10]));
+                $names = isset($namespn[1])?explode(' ', trim($namespn[1])):[];
+                $mod = MpesaPayments::find()->where("TransID = '$col1'")->one();
+                if(!$mod){
+                    $mod              = new MpesaPayments();
+                    $mod->id=Uuid::generate()->string;
+                    $mod ->TransID = $col1;
+                    $mod -> TransAmount = $fileop[5];
+                    $mod -> FirstName = isset($names[0])?$names[0]:NULL; 
+                    $mod -> MiddleName = isset($names[1])?$names[1]:NULL; 
+                    $mod -> LastName = isset($names[2])?$names[2]:NULL; 
+                    $mod -> created_at = $fileop[2];
+                    $mod -> updated_at = date('Y-m-d H:i:s');
+                    $mod ->save(FALSE);
+                }
+            }
+            $row++;
+        }
     }
 }

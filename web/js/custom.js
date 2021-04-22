@@ -6,8 +6,23 @@ if ($('#host').val() == 'localhost' && $('#port').val() == 80) {
 }
 
 $(document).ready(function(){
+    
+    //Auto hide flash
+     $("#processbtn, .showprogressbar").on('click', function(e){
+        showprogress();
+    });
     commissiondisbursementModal();
 });
+
+/**
+ * function to show progress bar
+ * @returns {undefined}
+ */
+function showprogress(){
+    $('#progressModal').modal('show');
+    $('#cover').css('display','block');
+}
+
 function runDraw() {
     // alert(saleid);
     $('#draw_winner_modal').modal({

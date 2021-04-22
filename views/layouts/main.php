@@ -80,7 +80,27 @@ AdminAsset::register($this);
                 </div>
             </div>
         </div>
+<div id="cover"></div>
+<div id="progressModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <img src="<?php
+                                echo \yii\helpers\Url::base(); ?>/images/ajax-loader.gif">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+            </div>
+        </div>
+    </div>
+</div>
 <?php $this->endBody() ?>
 </body>
 </html>

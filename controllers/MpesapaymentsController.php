@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Webpatser\Uuid\Uuid;
 use app\components\Myhelper;
+use yii\web\UploadedFile;
 
 
 /**
@@ -54,13 +55,29 @@ class MpesapaymentsController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new MpesaPaymentsSearch();
-        $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
-       
+       try {
+            $searchModel  = new MpesaPaymentsSearch();
+            $model        = new MpesaPayments();
+            $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
+            if ($model->load(Yii::$app->request->post()) && isset($_POST['MpesaPayments']['excelfile'])) {
+               
+                $model->excelfile = UploadedFile::getInstance($model, 'excelfile');
+             
+                if ($model->upload()) {
+                    #$model->logFileUpload();
+                    Yii::$app->session->setFlash('success','file specimenuploaded');
+                }
+            }
+        } catch (\Exception $exc) {
+            Yii::$app->session->setFlash('error', $exc->getMessage());
+            Yii::error($exc->getMessage());
+            Yii::error($exc->getTraceAsString());
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $model
         ]);
     }
 
