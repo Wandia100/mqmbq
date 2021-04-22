@@ -200,7 +200,7 @@ class ApiController extends Controller
     public function actionSms()
     {
         $data = file_get_contents('php://input');
-        $filename="/srv/apps/comp21/web/assets/sms.txt";
+        $filename="/srv/apps/comp21/web/sms.txt";
         file_put_contents( $filename, $data, FILE_APPEND );
     }
     #end of sms code
