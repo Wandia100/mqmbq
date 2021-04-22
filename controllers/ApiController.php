@@ -78,6 +78,7 @@ class ApiController extends Controller
     {
         $jsondata = file_get_contents('php://input');
         $data = json_decode($jsondata,true);
+        $data=$data['Result'];
         $conversation_id=$data['ConversationID'];
         $transaction_reference=$data['TransactionID'];
         $result_code=$data['ResultCode'];
@@ -87,11 +88,13 @@ class ApiController extends Controller
             if($result_code===0)
             {
                 $disbursement->status=1;
+                $disbursement->transaction_reference=$transaction_reference;
                 $disbursement->updated_at= date('Y-m-d H:i:s');
                 $disbursement->save(false);
             }
             else{
                 $disbursement->status=0;
+                $disbursement->transaction_reference=$transaction_reference;
                 $disbursement->updated_at= date('Y-m-d H:i:s');
                 $disbursement->save(false);
             }
