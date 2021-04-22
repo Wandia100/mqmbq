@@ -206,7 +206,7 @@ class ApiController extends Controller
     #end of sms code
     public function beforeAction($action)
     {            
-        if (in_array($action->id,array('disbursement-payment-result-confirmation','confirmation','disbursement-payment-timeout-result'))) {
+        if (in_array($action->id,array('sms','disbursement-payment-result-confirmation','confirmation','disbursement-payment-timeout-result'))) {
             $this->enableCsrfValidation = false;
         }
     
