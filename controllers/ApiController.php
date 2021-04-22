@@ -181,7 +181,7 @@ class ApiController extends Controller
     }
     public function actionProcessSms()
     {
-        //Myhelper::checkRemoteAddress();
+        Myhelper::checkRemoteAddress();
         $outbox=Outbox::find()->limit(1500)->all();
         for($i=0;$i<count($outbox);$i++)
         {
