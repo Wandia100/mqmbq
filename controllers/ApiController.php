@@ -194,7 +194,7 @@ class ApiController extends Controller
             $sent_sms->category=$row->category;
             $sent_sms->created_date=$row->created_date;
             $sent_sms->save(false);
-            //$row->delete(false);
+            $row->delete(false);
         }
     }
     #end of sms code
