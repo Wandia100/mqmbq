@@ -45,13 +45,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <div class="col-sm-12">
                                     <?php
                                     $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-                                    <div class="form-group">
-                                        <label for="exampleInputFile">CSV File</label>
-                                        <?= $form->field($model, 'excelfile')->fileInput(['class' => '', 'onchange' => ''])->label('') ?>
-                                        
-                                    </div>
+                                    
                                     <div class="row">
-                                        <div class="col-sm-12">
+                                        <div class="form-group col-sm-6">
+                                            <b>CSV</b>  <?= $form->field($model, 'excelfile')->fileInput(['class' => '', 'onchange' => ''])->label('') ?>
+
+                                        </div>
+                                        <div class="col-sm-6">
                                             <?php
                                             echo Html::submitButton('Upload Mpesa', ['class' => 'btn btn-primary btn-lg showprogressbar', 'name' => 'submitbtn', 'value' => 'set']); ?>
                                         </div>
