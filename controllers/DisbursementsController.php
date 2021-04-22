@@ -9,7 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Webpatser\Uuid\Uuid;
-
+use app\components\Myhelper;
 /**
  * DisbursementsController implements the CRUD actions for Disbursements model.
  */
@@ -184,6 +184,16 @@ class DisbursementsController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    public static function actionRemovedups()
+    {
+        Myhelper::checkRemoteAddress();
+        $dups=Disbursements::getDuplicates();
+        for($i=0;$i < count($dups); $i++)
+        {
+            $row=$dups[$i];
+            Disbursements::removeDups($row['reference_id'],$row['tot']-1);
+        }
     }
 
 }

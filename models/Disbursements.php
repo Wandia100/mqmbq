@@ -154,4 +154,19 @@ class Disbursements extends \yii\db\ActiveRecord
         ->andWhere("phone_number=$phone_number")
         ->andWhere("amount=$amount")->count();
     }
+    public static function getDuplicates()
+    {
+        $sql='SELECT COUNT(reference_id) AS tot,reference_id  FROM disbursements
+        WHERE created_at > "2021-04-22 06:00" GROUP BY reference_id HAVING(tot > 1) ORDER BY tot DESC';
+        return Yii::$app->db->createCommand($sql)
+        ->queryAll();
+    }
+    public static function removeDups($reference_id,$limits)
+    {
+        $sql='DELETE FROM disbursements WHERE reference_id=:reference_id LIMIT :limits';
+        Yii::$app->db->createCommand($sql)
+        ->bindValue(':reference_id',$reference_id)
+        ->bindValue(':limits',$limits)
+        ->execute();
+    }
 }
