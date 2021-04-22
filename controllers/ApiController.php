@@ -99,7 +99,7 @@ class ApiController extends Controller
         $jsondata = file_get_contents('php://input');
         $data = json_decode($jsondata,true);
         $trans_id=$data['TransID'];
-        $check=MpesaPayments::find()->where("TransID=$trans_id")->count();
+        $check=MpesaPayments::find()->where("TransID='$trans_id'")->count();
         if($check==0)
         {
             $model = new MpesaPayments();
