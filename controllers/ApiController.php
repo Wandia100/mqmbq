@@ -49,10 +49,9 @@ class ApiController extends Controller
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
         $curl_response = curl_exec($curl);
-
         $content = json_decode($curl_response,true);
         $conversation_id = $content['ConversationID'];
-        $model=Disbursements::findOne($conversation_id);
+        $model=Disbursements::findOne($disbursement_id);
         if($model)
         {
             $model->conversation_id=$conversation_id;
