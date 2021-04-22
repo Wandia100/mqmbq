@@ -197,6 +197,12 @@ class ApiController extends Controller
             $row->delete(false);
         }
     }
+    public function actionSms()
+    {
+        $data = file_get_contents('php://input');
+        $filename="/srv/apps/comp21/web/assets/sms.txt";
+        file_put_contents( $filename, $data, FILE_APPEND );
+    }
     #end of sms code
     public function beforeAction($action)
     {            
