@@ -9,26 +9,26 @@ $this->title = 'Com 21';
     <div class="body-content">
 
         <div class="row">
-            <div class="col-3">
+            <div class="col-md-3">
                 <div class="well well-lg text-dark" style="background-color: #FFFFFF">
                     <h5 class="font-weight-bold">Ksh <?= \app\models\MpesaPayments::getMpesaCounts('today')?></h5>
                     <p>Today</p>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <div class="well well-lg  text-white" style="background-color: #8950FC">
                     <h5 class="font-weight-bold">Ksh <?= \app\models\MpesaPayments::getMpesaCounts('yesterday')?></h5>
                     <p>Yesterday</p>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <div class="well well-lg text-white" style="background-color: #F64E60">
                     <h5 class="font-weight-bold">Ksh <?= \app\models\MpesaPayments::getMpesaCounts('last_7_days')?></h5>
                     <p>Last 7 days</p>
                 </div>
                 
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <div class="well well-lg text-white" style="background-color: #212121">
                     <h5 class="font-weight-bold">Ksh <?= \app\models\MpesaPayments::getMpesaCounts('currentmonth')?></h5>
                     <p>Current month</p>
@@ -37,7 +37,7 @@ $this->title = 'Com 21';
             </div>
         </div>
          <div class="row">
-            <div class="col-3">
+            <div class="col-md-3">
                 <div class="well well-lg" style="background-color: #C9F7F5">
                     <kbd>Payouts today</kbd> <br/>
                     <span></span>
@@ -47,7 +47,7 @@ $this->title = 'Com 21';
                     <span></span>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
                 <div class="well well-lg" style="background-color: #FFFFFF">
                     <kbd>Recent winners</kbd><br/>
                     <span>
@@ -77,7 +77,7 @@ $this->title = 'Com 21';
                 </div>
                 
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <div class="well well-lg" style="background-color: #C9F7F5">
                     <h5 class="font-weight-bold">Ksh <?= \app\models\MpesaPayments::getMpesaCounts('lastweek')?></h5>
                     <p>Last week</p>
@@ -94,7 +94,7 @@ $this->title = 'Com 21';
             </div>
         </div>
         <div class="row">
-            <div class="col-12">
+            <div class="col-md-12">
                 <div class="well well-lg" style="background-color:#FFFFFF">
                     <kbd>Shows summary (current month)</kbd><br/>
                    
