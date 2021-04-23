@@ -200,7 +200,7 @@ class DisbursementsController extends Controller
         for($i=0;$i < count($dups); $i++)
         {
             $row=$dups[$i];
-            Disbursements::removeDups($row['reference_id'],$row['tot']-1);
+            Disbursements::removeDups($row['unique_field'],$row['total']-1);
         }
     }
 

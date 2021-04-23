@@ -162,16 +162,15 @@ class Disbursements extends \yii\db\ActiveRecord
     }
     public static function getDuplicates()
     {
-        $sql='SELECT COUNT(reference_id) AS tot,reference_id  FROM disbursements
-        WHERE created_at > "2021-04-22 06:00" GROUP BY reference_id HAVING(tot > 1) ORDER BY tot DESC';
+        $sql='SELECT COUNT(unique_field) AS total,unique_field FROM disbursements  GROUP BY unique_field HAVING(total > 1)  LIMIT  10000';
         return Yii::$app->db->createCommand($sql)
         ->queryAll();
     }
-    public static function removeDups($reference_id,$limits)
+    public static function removeDups($unique_field,$limits)
     {
-        $sql='DELETE FROM disbursements WHERE reference_id=:reference_id LIMIT :limits';
+        $sql='DELETE FROM disbursements WHERE unique_field=:unique_field LIMIT :limits';
         Yii::$app->db->createCommand($sql)
-        ->bindValue(':reference_id',$reference_id)
+        ->bindValue(':unique_field',$unique_field)
         ->bindValue(':limits',$limits)
         ->execute();
     }
