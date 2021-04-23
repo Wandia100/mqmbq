@@ -50,14 +50,24 @@ class ApiController extends Controller
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
         $curl_response = curl_exec($curl);
         $content = json_decode($curl_response,true);
-        $conversation_id = $content['ConversationID'];
-        $model=Disbursements::findOne($disbursement_id);
-        if($model)
+        if(isset($content['ConversationID']))
         {
-            $model->conversation_id=$conversation_id;
-            $model->updated_at=date("Y-m-d H:i:s");
-            $model->save(false);
+            $conversation_id = $content['ConversationID'];
+            $model=Disbursements::findOne($disbursement_id);
+            if($model)
+            {
+                $model->conversation_id=$conversation_id;
+                $model->updated_at=date("Y-m-d H:i:s");
+                $model->save(false);
+            }
         }
+        else
+        {
+            $filename="/srv/apps/comp21/web/mpesa.txt";
+            $data=$curl_response;
+            file_put_contents( $filename, $data,FILE_APPEND);
+        }
+
         
     }
     public function actionDisbursementPaymentTimeoutResult()
