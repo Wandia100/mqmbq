@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Webpatser\Uuid\Uuid;
 use app\components\Myhelper;
+use yii\db\IntegrityException;
 /**
  * DisbursementsController implements the CRUD actions for Disbursements model.
  */
@@ -125,18 +126,26 @@ class DisbursementsController extends Controller
         $model = new Disbursements();
 
         if ($model->load(Yii::$app->request->post()) ) {
-            $model->id=Uuid::generate()->string;
-            if(trim($model->phone_number)[0]=="0")
+
+            try
             {
-                $model->phone_number="254".substr(trim($model->phone_number),1);
+                    $model->id=Uuid::generate()->string;
+                if(trim($model->phone_number)[0]=="0")
+                {
+                    $model->phone_number="254".substr(trim($model->phone_number),1);
+                }
+                else
+                {
+                    $model->phone_number=trim($model->phone_number);
+                }
+                $model->unique_field=$model->phone_number.$model->amount.date('YmdHi');
+                $model->created_at = date('Y-m-d H:i:s');
+                $model->save();
             }
-            else
-            {
-                $model->phone_number=trim($model->phone_number);
+            catch (IntegrityException $e) {
+                //allowing execution
             }
-            $model->unique_field=$model->phone_number.$model->amount.date('YmdHi');
-            $model->created_at = date('Y-m-d H:i:s');
-            $model->save();
+            
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

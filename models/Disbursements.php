@@ -5,6 +5,8 @@ namespace app\models;
 use Yii;
 use Webpatser\Uuid\Uuid;
 use app\components\Keys;
+use yii\db\IntegrityException;
+
 /**
  * This is the model class for table "disbursements".
  *
@@ -88,17 +90,23 @@ class Disbursements extends \yii\db\ActiveRecord
     }
     public static function saveDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type,$status)
     {
-        $model=new Disbursements();
-        $model->id=Uuid::generate()->string;
-        $model->reference_id=$reference_id;
-        $model->reference_name=$reference_name;
-        $model->phone_number=$phone_number;
-        $model->amount=$amount;
-        $model->status=$status;
-        $model->unique_field=$phone_number.$amount.date('YmdHi');
-        $model->disbursement_type=$disbursement_type;
-        $model->created_at=date("Y-m-d H:i:s");
-        $model->save(false);
+        
+        try {
+            $model=new Disbursements();
+            $model->id=Uuid::generate()->string;
+            $model->reference_id=$reference_id;
+            $model->reference_name=$reference_name;
+            $model->phone_number=$phone_number;
+            $model->amount=$amount;
+            $model->status=$status;
+            $model->unique_field=$phone_number.$amount.date('YmdHi');
+            $model->disbursement_type=$disbursement_type;
+            $model->created_at=date("Y-m-d H:i:s");
+            $model->save(false);
+        } catch (IntegrityException $e) {
+            //allow execution
+        }
+        
     }
     public static function getPendingDisbursement()
     {
