@@ -102,7 +102,7 @@ class Disbursements extends \yii\db\ActiveRecord
     }
     public static function getPendingDisbursement()
     {
-        return Disbursements::find()->where("status=0")->andWhere("disbursement_type!='refund'")->all();
+        return Disbursements::find()->where("status=0")->all();
     }
     public static  function generateTokenB2C()
     {
