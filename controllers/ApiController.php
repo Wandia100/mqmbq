@@ -192,7 +192,7 @@ class ApiController extends Controller
         for($i=0;$i<count($outbox);$i++)
         {
             $row=$outbox[$i];
-            //$this->sendSms($row->receiver,$row->message);
+            $this->sendSms($row->receiver,$row->message);
             $sent_sms=new SentSms();
             $sent_sms->receiver=$row->receiver;
             $sent_sms->message=$row->message;
