@@ -102,7 +102,7 @@ class Disbursements extends \yii\db\ActiveRecord
     }
     public static function getPendingDisbursement()
     {
-        return Disbursements::find()->where("status=0")->all();
+        return Disbursements::find()->where("status=0")->orderBy("created_at ASC")->all();
     }
     public static  function generateTokenB2C()
     {
