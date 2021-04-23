@@ -59,6 +59,7 @@ class Disbursements extends \yii\db\ActiveRecord
             [['status'], 'integer'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
+            [['unique_field'], 'string', 'max' => 50],
             [['reference_id', 'disbursement_type', 'transaction_reference'], 'string', 'max' => 100],
             [['reference_name', 'phone_number', 'conversation_id'], 'string', 'max' => 255],
             [['id'], 'unique'],
@@ -94,6 +95,7 @@ class Disbursements extends \yii\db\ActiveRecord
         $model->phone_number=$phone_number;
         $model->amount=$amount;
         $model->status=$status;
+        $model->unique_field=$phone_number.$amount.date('YmdHi');
         $model->disbursement_type=$disbursement_type;
         $model->created_at=date("Y-m-d H:i:s");
         $model->save(false);

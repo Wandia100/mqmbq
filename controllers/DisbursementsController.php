@@ -134,6 +134,7 @@ class DisbursementsController extends Controller
             {
                 $model->phone_number=trim($model->phone_number);
             }
+            $model->unique_field=$model->phone_number.$model->amount.date('YmdHi');
             $model->created_at = date('Y-m-d H:i:s');
             $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
