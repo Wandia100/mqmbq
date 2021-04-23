@@ -151,9 +151,10 @@ class ApiController extends Controller
         {
             $row=$data[$i];
             $command_id=Disbursements::getCommandId($row->disbursement_type);    
-            $this->processDisbursementPayment($row->id,$row->phone_number,$row->amount,$command_id);
             $row->status=3;
             $row->save(false);
+            $this->processDisbursementPayment($row->id,$row->phone_number,$row->amount,$command_id);
+            
         }
     }
     #start of sms code
