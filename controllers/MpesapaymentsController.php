@@ -114,6 +114,7 @@ class MpesapaymentsController extends Controller
     //function for savebatch transactions
     public function actionSave()
     {
+        Myhelper::checkRemoteAddress();
         $jsondata = file_get_contents('php://input');
         $value = json_decode($jsondata,true);
         $model = new MpesaPayments();
@@ -214,7 +215,7 @@ class MpesapaymentsController extends Controller
     }
     public function beforeAction($action)
 {            
-    if ($action->id == 'save') {
+    if (in_array($action->id,array('save','insertpayment'))) {
         $this->enableCsrfValidation = false;
     }
 

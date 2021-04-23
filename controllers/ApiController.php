@@ -192,7 +192,7 @@ class ApiController extends Controller
         for($i=0;$i<count($outbox);$i++)
         {
             $row=$outbox[$i];
-            $this->sendSms($row->receiver,$row->message);
+            //$this->sendSms($row->receiver,$row->message);
             $sent_sms=new SentSms();
             $sent_sms->receiver=$row->receiver;
             $sent_sms->message=$row->message;
@@ -212,7 +212,7 @@ class ApiController extends Controller
     #end of sms code
     public function beforeAction($action)
     {            
-        if (in_array($action->id,array('sms','disbursement-payment-result-confirmation','confirmation','disbursement-payment-timeout-result','payout'))) {
+        if (in_array($action->id,array('process-sms','sms','disbursement-payment-result-confirmation','confirmation','disbursement-payment-timeout-result','payout'))) {
             $this->enableCsrfValidation = false;
         }
     
