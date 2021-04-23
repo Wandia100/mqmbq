@@ -146,4 +146,18 @@ class TransactionHistories extends \yii\db\ActiveRecord
         ->bindValue(':to_time',$to_time)
         ->queryOne();
     }
+    public static function getDuplicates()
+    {
+        $sql='SELECT COUNT(mpesa_payment_id) AS total,mpesa_payment_id FROM transaction_histories  GROUP BY mpesa_payment_id HAVING(total > 1)';
+        return Yii::$app->db->createCommand($sql)
+        ->queryAll();
+    }
+    public static function removeDups($unique_field,$limits)
+    {
+        $sql='DELETE FROM transaction_histories WHERE mpesa_payment_id=:mpesa_payment_id LIMIT :limits';
+        Yii::$app->db->createCommand($sql)
+        ->bindValue(':mpesa_payment_id',$unique_field)
+        ->bindValue(':limits',$limits)
+        ->execute();
+    }
 }

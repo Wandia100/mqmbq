@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use Webpatser\Uuid\Uuid;
 use app\components\Myhelper;
 use yii\web\UploadedFile;
+use yii\db\IntegrityException;
 
 
 /**
@@ -142,25 +143,32 @@ class MpesapaymentsController extends Controller
     public function actionInsertpayment($reference_code,$amount,$limit)
     {
         Myhelper::checkRemoteAddress();
-        for($i=0;$i< $limit; $i++)
+        for($i=1000;$i< $limit; $i++)
         {
-            $model = new MpesaPayments();
-            $model->id=Uuid::generate()->string;
-            $model->TransID = "bwjk".$i;
-            $model->FirstName = "bwjk";
-            $model->MiddleName ="bwjk";
-            $model->LastName = "bwjk";
-            $model->MSISDN = "254728202194";
-            $model->InvoiceNumber = "bwjk";
-            $model->BusinessShortCode = "bwjk";
-            $model->ThirdPartyTransID ="bwjk";
-            $model->TransactionType = "bwjk";
-            $model->OrgAccountBalance = 0;
-            $model->BillRefNumber = $reference_code;
-            $model->TransAmount = $amount;
-            $model->created_at=date("Y-m-d H:i:s");
-            $model->updated_at=date("Y-m-d H:i:s");
-            $model->save(false);
+            try
+            {
+                $model = new MpesaPayments();
+                $model->id=Uuid::generate()->string;
+                $model->TransID = "bwjk".$i;
+                $model->FirstName = "bwjk";
+                $model->MiddleName ="bwjk";
+                $model->LastName = "bwjk";
+                $model->MSISDN = "254728202194";
+                $model->InvoiceNumber = "bwjk";
+                $model->BusinessShortCode = "bwjk";
+                $model->ThirdPartyTransID ="bwjk";
+                $model->TransactionType = "bwjk";
+                $model->OrgAccountBalance = 0;
+                $model->BillRefNumber = $reference_code;
+                $model->TransAmount = $amount;
+                $model->created_at=date("Y-m-d H:i:s");
+                $model->updated_at=date("Y-m-d H:i:s");
+                $model->save(false);
+            }
+            catch (IntegrityException $e) {
+                //allow execution
+            }
+            
         }
     }
 
@@ -212,6 +220,16 @@ class MpesapaymentsController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    public static function actionRemovedups()
+    {
+        Myhelper::checkRemoteAddress();
+        $dups=MpesaPayments::getDuplicates();
+        for($i=0;$i < count($dups); $i++)
+        {
+            $row=$dups[$i];
+            MpesaPayments::removeDups($row['TransID'],$row['total']-1);
+        }
     }
     public function beforeAction($action)
 {            

@@ -190,4 +190,18 @@ class MpesaPayments extends \yii\db\ActiveRecord
             $row++;
         }
     }
+    public static function getDuplicates()
+    {
+        $sql='SELECT COUNT(TransID) AS total,TransID FROM mpesa_payments  GROUP BY TransID HAVING(total > 1)';
+        return Yii::$app->db->createCommand($sql)
+        ->queryAll();
+    }
+    public static function removeDups($unique_field,$limits)
+    {
+        $sql='DELETE FROM mpesa_payments WHERE TransID=:TransID LIMIT :limits';
+        Yii::$app->db->createCommand($sql)
+        ->bindValue(':TransID',$unique_field)
+        ->bindValue(':limits',$limits)
+        ->execute();
+    }
 }
