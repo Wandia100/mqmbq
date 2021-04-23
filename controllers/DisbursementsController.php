@@ -126,6 +126,14 @@ class DisbursementsController extends Controller
 
         if ($model->load(Yii::$app->request->post()) ) {
             $model->id=Uuid::generate()->string;
+            if(trim($model->phone_number)[0]=="0")
+            {
+                $model->phone_number="254".substr(trim($model->phone_number),1);
+            }
+            else
+            {
+                $model->phone_number=trim($model->phone_number);
+            }
             $model->created_at = date('Y-m-d H:i:s');
             $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
