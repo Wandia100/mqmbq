@@ -54,6 +54,33 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at',
             //'updated_at',
             //'deleted_at',
+            [
+                'attribute' => 'status',
+                'format'    => 'raw',
+                'value'     => function ( $model ) {
+                    if ( $model->status == 1 ) {
+                        return "Processed";
+                    }else if ( $model->status == 2 ) {
+                        return "Failed";
+                    } else if ( $model->status == 3 ) {
+                        return "Return";
+                    } else {
+                        return "Pending";
+                    }
+                },
+                'filter'    => array( '0' => 'Pending', '1' => 'Processed','2' =>'Failed','3' =>'return-overpaid' ),
+            ],
+            [
+                'header'=>'action',
+                'format'=>'raw',
+                'value' => function($model) use ($route){
+                    if(Yii::$app->user->identity->perm_group == 1):
+                        return in_array($model->status, [2,3]) ? Html::a('<span class="glyphicon glyphicon-wrench">PENDING(Change Status)</span>', ['index','id'=>$model->id,'srr'=>'failed']): 'ok';
+                    else:
+                       return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ['view','id'=>$model->id]);
+                    endif;
+                }
+            ],
 
             
         ],

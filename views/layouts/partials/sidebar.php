@@ -99,7 +99,7 @@ use luc\tourist\Tourist;
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursement', Url::to(['/disbursements/create']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
-                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Disbursement', Url::to(['/disbursements/indexc','t'=>'p']), ['class' => '', 'id' => 'appmenu'])?>
+                    <?php // Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Disbursement', Url::to(['/disbursements/indexc','t'=>'p']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 
                 <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>" title=" Module"

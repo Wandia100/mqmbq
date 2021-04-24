@@ -60,7 +60,6 @@ class MpesapaymentsController extends Controller
             $model        = new MpesaPayments();
             $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
             if ($model->load(Yii::$app->request->post()) && isset($_POST['MpesaPayments']['excelfile'])) {
-               
                 $model->excelfile = UploadedFile::getInstance($model, 'excelfile');
              
                 if ($model->upload()) {

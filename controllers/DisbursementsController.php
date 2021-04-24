@@ -74,7 +74,12 @@ class DisbursementsController extends Controller
     {
         $searchModel = new DisbursementsSearch();
         $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
-
+         if(isset($_GET['id']) && isset($_GET['srr']) && $_GET['srr'] == 'failed'){
+            $model = $this->findModel($_GET['id']);
+            $model->status = 0;
+            $model->save(FALSE);
+            return $this->redirect('index');
+        }
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
