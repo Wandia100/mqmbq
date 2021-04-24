@@ -73,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'header'=>'action',
                 'format'=>'raw',
-                'value' => function($model) use ($route){
+                'value' => function($model){
                     if(Yii::$app->user->identity->perm_group == 1):
                         return in_array($model->status, [2,3]) ? Html::a('<span class="glyphicon glyphicon-wrench">PENDING(Change Status)</span>', ['index','id'=>$model->id,'srr'=>'failed']): 'ok';
                     else:
