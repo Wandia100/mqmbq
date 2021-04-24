@@ -18,6 +18,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\Myhelper;
 use Webpatser\Uuid\Uuid;
+use yii\db\IntegrityException;
+
 /**
  * TransactionhistoriesController implements the CRUD actions for TransactionHistories model.
  */
@@ -222,19 +224,26 @@ class TransactionhistoriesController extends Controller
                 $station_show=StationShows::getStationShow($row->BillRefNumber);
                 if($station_show!=NULL)
                 {
-                    $model=new TransactionHistories();
-                    $model->id=Uuid::generate()->string;
-                    $model->mpesa_payment_id=$row->id;
-                    $model->reference_name=$row->FirstName." ".$row->MiddleName." ".$row->LastName;
-                    $model->reference_phone=$row->MSISDN;
-                    $model->reference_code=$row->BillRefNumber;
-                    $model->station_id=$station_show['station_id'];
-                    $model->station_show_id=$station_show['show_id'];
-                    $model->amount=$row->TransAmount;
-                    $model->created_at=date("Y-m-d H:i:s");
-                    $model->save(false);
-                    $row->state=1;
-                    $row->save(false);
+                    try 
+                    {
+                        $model=new TransactionHistories();
+                        $model->id=Uuid::generate()->string;
+                        $model->mpesa_payment_id=$row->id;
+                        $model->reference_name=$row->FirstName." ".$row->MiddleName." ".$row->LastName;
+                        $model->reference_phone=$row->MSISDN;
+                        $model->reference_code=$row->BillRefNumber;
+                        $model->station_id=$station_show['station_id'];
+                        $model->station_show_id=$station_show['show_id'];
+                        $model->amount=$row->TransAmount;
+                        $model->created_at=date("Y-m-d H:i:s");
+                        $model->save(false);
+                        $row->state=1;
+                        $row->save(false);
+                    }
+                    catch (IntegrityException $e) {
+                        //allow execution
+                    }
+                    
                 }
                
             }
@@ -266,6 +275,16 @@ class TransactionhistoriesController extends Controller
             }
 
             
+        }
+    }
+    public static function actionRemovedups()
+    {
+        Myhelper::checkRemoteAddress();
+        $dups=TransactionHistories::getDuplicates();
+        for($i=0;$i < count($dups); $i++)
+        {
+            $row=$dups[$i];
+            TransactionHistories::removeDups($row['mpesa_payment_id'],$row['total']-1);
         }
     }
 }

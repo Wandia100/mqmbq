@@ -238,4 +238,12 @@ class CommissionsController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+    public function beforeAction($action)
+    {            
+        if (in_array($action->id,array('process'))) {
+            $this->enableCsrfValidation = false;
+        }
+    
+        return parent::beforeAction($action);
+    }
 }

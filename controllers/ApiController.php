@@ -9,6 +9,8 @@ use app\models\SentSms;
 use Webpatser\Uuid\Uuid;
 use app\components\Myhelper;
 use app\components\Keys;
+use yii\db\IntegrityException;
+
 class ApiController extends Controller
 {
     /*command id comission - SalaryPayment
@@ -50,14 +52,24 @@ class ApiController extends Controller
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
         $curl_response = curl_exec($curl);
         $content = json_decode($curl_response,true);
-        $conversation_id = $content['ConversationID'];
-        $model=Disbursements::findOne($disbursement_id);
-        if($model)
+        if(isset($content['ConversationID']))
         {
-            $model->conversation_id=$conversation_id;
-            $model->updated_at=date("Y-m-d H:i:s");
-            $model->save(false);
+            $conversation_id = $content['ConversationID'];
+            $model=Disbursements::findOne($disbursement_id);
+            if($model)
+            {
+                $model->conversation_id=$conversation_id;
+                $model->updated_at=date("Y-m-d H:i:s");
+                $model->save(false);
+            }
         }
+        else
+        {
+            $filename="/srv/apps/comp21/web/mpesa.txt";
+            $data=$curl_response;
+            file_put_contents( $filename, $data,FILE_APPEND);
+        }
+
         
     }
     public function actionDisbursementPaymentTimeoutResult()
@@ -108,36 +120,43 @@ class ApiController extends Controller
         $check=MpesaPayments::find()->where("TransID='$trans_id'")->count();
         if($check==0)
         {
-            $model = new MpesaPayments();
-            $model->id=Uuid::generate()->string;
-            $model->TransID = $data['TransID'];
-            $model->FirstName = $data['FirstName'];
-            $model->MiddleName = $data['MiddleName'];
-            $model->LastName = $data['LastName'];
-            $model->MSISDN = $data['MSISDN'];
-            $model->InvoiceNumber = $data['InvoiceNumber'];
-            $model->BusinessShortCode = $data['BusinessShortCode'];
-            $model->ThirdPartyTransID = $data['ThirdPartyTransID'];
-            $model->TransactionType = $data['TransactionType'];
-            $model->OrgAccountBalance = $data['OrgAccountBalance'];
-            $model->BillRefNumber = strtoupper(str_replace(' ', '', $data['BillRefNumber']));
-            $model->TransAmount = $data['TransAmount'];
-            $model->created_at=date("Y-m-d H:i:s");
-            $model->updated_at=date("Y-m-d H:i:s");
-            if($model->save(false))
+            try
             {
-                $first_name=$data['FirstName'];
-                if($data['TransAmount'] >=100 && $data['TransAmount'] < 300)
+                $model = new MpesaPayments();
+                $model->id=Uuid::generate()->string;
+                $model->TransID = $data['TransID'];
+                $model->FirstName = $data['FirstName'];
+                $model->MiddleName = $data['MiddleName'];
+                $model->LastName = $data['LastName'];
+                $model->MSISDN = $data['MSISDN'];
+                $model->InvoiceNumber = $data['InvoiceNumber'];
+                $model->BusinessShortCode = $data['BusinessShortCode'];
+                $model->ThirdPartyTransID = $data['ThirdPartyTransID'];
+                $model->TransactionType = $data['TransactionType'];
+                $model->OrgAccountBalance = $data['OrgAccountBalance'];
+                $model->BillRefNumber = strtoupper(str_replace(' ', '', $data['BillRefNumber']));
+                $model->TransAmount = $data['TransAmount'];
+                $model->created_at=date("Y-m-d H:i:s");
+                $model->updated_at=date("Y-m-d H:i:s");
+                if($model->save(false))
                 {
-                    $message = "$first_name, Umeingia Draw! Endelea Kushiriki, Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
-                }
-                else
-                {
-                    $message = "$first_name, Kushiriki kwenye draw ni shilingi mia moja tu,Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
-
-                }
-                Outbox::saveOutbox($data['MSISDN'],$message,2);
-            }    
+                    $first_name=$data['FirstName'];
+                    if($data['TransAmount'] >=100 && $data['TransAmount'] < 300)
+                    {
+                        $message = "$first_name, Umeingia Draw! Endelea Kushiriki, Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
+                    }
+                    else
+                    {
+                        $message = "$first_name, Kushiriki kwenye draw ni shilingi mia moja tu,Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
+    
+                    }
+                    Outbox::saveOutbox($data['MSISDN'],$message,2);
+                } 
+            }
+            catch (IntegrityException $e) {
+                //allow execution
+            }
+   
         }
         
         
@@ -151,9 +170,10 @@ class ApiController extends Controller
         {
             $row=$data[$i];
             $command_id=Disbursements::getCommandId($row->disbursement_type);    
-            $this->processDisbursementPayment($row->id,$row->phone_number,$row->amount,$command_id);
             $row->status=3;
             $row->save(false);
+            $this->processDisbursementPayment($row->id,$row->phone_number,$row->amount,$command_id);
+            
         }
     }
     #start of sms code
@@ -212,7 +232,7 @@ class ApiController extends Controller
     #end of sms code
     public function beforeAction($action)
     {            
-        if (in_array($action->id,array('sms','disbursement-payment-result-confirmation','confirmation','disbursement-payment-timeout-result','payout'))) {
+        if (in_array($action->id,array('process-sms','sms','disbursement-payment-result-confirmation','confirmation','disbursement-payment-timeout-result','payout'))) {
             $this->enableCsrfValidation = false;
         }
     

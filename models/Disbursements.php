@@ -5,6 +5,8 @@ namespace app\models;
 use Yii;
 use Webpatser\Uuid\Uuid;
 use app\components\Keys;
+use yii\db\IntegrityException;
+
 /**
  * This is the model class for table "disbursements".
  *
@@ -59,6 +61,7 @@ class Disbursements extends \yii\db\ActiveRecord
             [['status'], 'integer'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
+            [['unique_field'], 'string', 'max' => 50],
             [['reference_id', 'disbursement_type', 'transaction_reference'], 'string', 'max' => 100],
             [['reference_name', 'phone_number', 'conversation_id'], 'string', 'max' => 255],
             [['id'], 'unique'],
@@ -87,20 +90,27 @@ class Disbursements extends \yii\db\ActiveRecord
     }
     public static function saveDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type,$status)
     {
-        $model=new Disbursements();
-        $model->id=Uuid::generate()->string;
-        $model->reference_id=$reference_id;
-        $model->reference_name=$reference_name;
-        $model->phone_number=$phone_number;
-        $model->amount=$amount;
-        $model->status=$status;
-        $model->disbursement_type=$disbursement_type;
-        $model->created_at=date("Y-m-d H:i:s");
-        $model->save(false);
+        
+        try {
+            $model=new Disbursements();
+            $model->id=Uuid::generate()->string;
+            $model->reference_id=$reference_id;
+            $model->reference_name=$reference_name;
+            $model->phone_number=$phone_number;
+            $model->amount=$amount;
+            $model->status=$status;
+            $model->unique_field=$phone_number.$amount.date('YmdHi');
+            $model->disbursement_type=$disbursement_type;
+            $model->created_at=date("Y-m-d H:i:s");
+            $model->save(false);
+        } catch (IntegrityException $e) {
+            //allow execution
+        }
+        
     }
     public static function getPendingDisbursement()
     {
-        return Disbursements::find()->where("status=0")->all();
+        return Disbursements::find()->where("status=0")->orderBy("created_at ASC")->all();
     }
     public static  function generateTokenB2C()
     {
@@ -162,16 +172,15 @@ class Disbursements extends \yii\db\ActiveRecord
     }
     public static function getDuplicates()
     {
-        $sql='SELECT COUNT(reference_id) AS tot,reference_id  FROM disbursements
-        WHERE created_at > "2021-04-22 06:00" GROUP BY reference_id HAVING(tot > 1) ORDER BY tot DESC';
+        $sql='SELECT COUNT(unique_field) AS total,unique_field FROM disbursements  GROUP BY unique_field HAVING(total > 1)  LIMIT  10000';
         return Yii::$app->db->createCommand($sql)
         ->queryAll();
     }
-    public static function removeDups($reference_id,$limits)
+    public static function removeDups($unique_field,$limits)
     {
-        $sql='DELETE FROM disbursements WHERE reference_id=:reference_id LIMIT :limits';
+        $sql='DELETE FROM disbursements WHERE unique_field=:unique_field LIMIT :limits';
         Yii::$app->db->createCommand($sql)
-        ->bindValue(':reference_id',$reference_id)
+        ->bindValue(':unique_field',$unique_field)
         ->bindValue(':limits',$limits)
         ->execute();
     }

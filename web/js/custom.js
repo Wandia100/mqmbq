@@ -41,6 +41,8 @@ function runDraw() {
   }
   function drawPrize(station_show_id,presenter_id,prize_id)
   {
+    var r = confirm("Are you sure you want to draw");
+  if (r == true) {
     $.post(host + '/winninghistories/draw', {station_show_id: station_show_id, presenter_id: presenter_id,prize_id:prize_id}, function (data) {
       //$('#actionsviewgrid').text('')
       //$('#actionsviewgrid').append(data).trigger('create')
@@ -63,6 +65,12 @@ function runDraw() {
       console.log(data)
     })
     //console.log("You clicked "+presenter_id)
+  }
+  else
+  {
+    //do nothing
+  }
+
   }
   
   function presenterModal() {
