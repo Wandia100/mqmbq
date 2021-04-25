@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'sender',
             'message:ntext',
             'created_date',
-            //'category',
+            'category',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
