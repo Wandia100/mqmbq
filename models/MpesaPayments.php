@@ -175,16 +175,34 @@ class MpesaPayments extends \yii\db\ActiveRecord
                 $names = isset($namespn[1])?explode(' ', trim($namespn[1])):[];
                 $mod = MpesaPayments::find()->where("TransID = '$col1'")->one();
                 if(!$mod){
-                    $mod              = new MpesaPayments();
+                    if (isset($fileop[0]) && isset($fileop[2]) && isset($fileop[5])  && isset($fileop[10]) )
+                    {
+                    $msisdn=explode("-",$fileop[10]);
+                    $msisdn=trim($msisdn[0]);
+                    if($msisdn[0]=="0")
+                    {
+                        $msisdn='254'.substr($msisdn,1);
+                    }
+                    else
+                    {
+                        $msisdn=trim($msisdn);
+                    }
+                    $mod= new MpesaPayments();
                     $mod->id=Uuid::generate()->string;
                     $mod ->TransID = $col1;
                     $mod -> TransAmount = $fileop[5];
                     $mod -> FirstName = isset($names[0])?$names[0]:NULL; 
                     $mod -> MiddleName = isset($names[1])?$names[1]:NULL; 
                     $mod -> LastName = isset($names[2])?$names[2]:NULL; 
-                    $mod -> created_at = $fileop[2];
+                    $mod -> MSISDN = $msisdn; 
+                    $mod -> BillRefNumber = $fileop[12]; 
+                    $mod -> OrgAccountBalance =$fileop[7]; 
+                    $mod -> TransactionType =$fileop[9]; 
+                    $mod -> created_at = date("Y-m-d H:i:s",strtotime($fileop[2]));
                     $mod -> updated_at = date('Y-m-d H:i:s');
                     $mod ->save(FALSE);
+
+                }
                 }
             }
             $row++;
