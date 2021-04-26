@@ -77,7 +77,7 @@ class Stations extends \yii\db\ActiveRecord
     public static function getStationResult($from_time)
     {
         $sql="select a.id,a.id as station_id,a.name as station_name,a.station_code,
-        COALESCE((select sum(b.amount) from transaction_histories b where b.created_at LIKE :from_time AND b.reference_code LIKE CONCAT('%',a.station_code,'%')),0) as amount from stations a where a.deleted_at IS NULL order by a.name asc";
+        COALESCE((select sum(b.TransAmount) from mpesa_payments b where b.deleted_at IS NULL AND b.created_at LIKE :from_time AND b.BillRefNumber LIKE CONCAT('%',a.station_code,'%')),0) as amount from stations a where a.deleted_at IS NULL order by a.name asc";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':from_time',"%$from_time%")
         ->queryAll();
@@ -85,8 +85,8 @@ class Stations extends \yii\db\ActiveRecord
     public static function getStationTotalResult($start_period,$end_period)
     {
         $sql="select a.id,a.id as station_id,a.name as station_name,a.station_code,
-        COALESCE((select sum(b.amount) from transaction_histories b where b.created_at >= :start_period and
-        b.created_at <= :end_period AND b.reference_code=a.name),0) as amount from stations a where a.deleted_at IS NULL order by a.name asc";
+        COALESCE((select sum(b.TransAmount) from mpesa_payments b where b.deleted_at IS NULL AND b.created_at >= :start_period and
+        b.created_at <= :end_period AND b.BillRefNumber=a.name),0) as amount from stations a where a.deleted_at IS NULL order by a.name asc";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':start_period',$start_period)
         ->bindValue(':end_period',$end_period)
@@ -95,7 +95,7 @@ class Stations extends \yii\db\ActiveRecord
     public static function getDayStationTotalResult($the_day)
     {
         $sql="select a.id,a.id as station_id,a.name as station_name,a.station_code,
-        COALESCE((select sum(b.amount) from transaction_histories b where b.created_at LIKE :the_day  AND b.reference_code=a.name),0) as amount from stations a where a.deleted_at IS NULL order by a.name asc";
+        COALESCE((select sum(b.TransAmount) from mpesa_payments b where b.deleted_at IS NULL AND b.created_at LIKE :the_day  AND b.BillRefNumber=a.name),0) as amount from stations a where a.deleted_at IS NULL order by a.name asc";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':the_day',"%$the_day%")
         ->queryAll();

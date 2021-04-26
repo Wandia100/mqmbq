@@ -83,7 +83,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
     }
     public static function getTotalMpesa($from_time)
     {
-        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments where created_at 
+        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments where deleted_at IS NULL AND created_at 
         LIKE :from_time";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':from_time',"%$from_time%")
