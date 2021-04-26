@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at',
             //'updated_at',
             //'deleted_at',
-            [
+            /*[
                 'attribute' => 'status',
                 'format'    => 'raw',
                 'value'     => function ( $model ) {
@@ -70,16 +70,32 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter'    => array( '0' => 'Pending', '1' => 'Processed','2' =>'Failed','3' =>'return-overpaid' ),
             ],
+             * 
+             */
             [
-                'header'=>'action',
+                 'attribute' => 'status',
                 'format'=>'raw',
                 'value' => function($model){
-                    if(Yii::$app->user->identity->perm_group == 1):
-                        return in_array($model->status, [2,3]) ? Html::a('<span class="glyphicon glyphicon-wrench">PENDING(Change Status)</span>', ['index','id'=>$model->id,'srr'=>'failed']): 'ok';
+                    if(Yii::$app->user->identity->perm_group == 1 && in_array($model->status, [0,1,2,3])):
+                        return Html::dropDownList( 'status' . str_replace('-', '_', $model->id), $model->status, ['0' => 'Pending','2'=>'Failed','3'=>'Retunr','1'=>'Processed'], [
+                            'prompt'   => '',
+                            "class"    => "form-control ",
+                            'id'       => 'status' .str_replace('-', '_', $model->id),
+                            "onchange" => "toggleDisbursement($(this),'status','$model->id')"
+                        ]);
                     else:
-                       return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ['view','id'=>$model->id]);
+                        if ( $model->status == 1 ) {
+                            return "Processed";
+                        }else if ( $model->status == 2 ) {
+                            return "Failed";
+                        } else if ( $model->status == 3 ) {
+                            return "Return";
+                        } else {
+                            return "Pending";
+                        }
                     endif;
-                }
+                },
+                'filter'    => array( '0' => 'Pending', '1' => 'Processed','2' =>'Failed','3' =>'return-overpaid' ),        
             ],
 
             

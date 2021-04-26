@@ -155,3 +155,15 @@ function saveRecord (instance, field, id) {
 
     })
 }
+/**
+ *
+ * @param {type} instance
+ * @param {type} field
+ * @param {type} id
+ * @returns {undefined}
+ */
+function toggleDisbursement (instance, field, id) {
+    $.post(host + '/disbursements/toggledisbursement', {value: instance.val(), field: field, id: id}, function (data) {
+
+    })
+}

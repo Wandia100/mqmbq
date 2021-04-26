@@ -27,7 +27,7 @@ class DisbursementsController extends Controller
                 'only' => ['create', 'update','index'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','indexc'],
+                        'actions' => ['create', 'update','index','indexc','toggledisbursement'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -86,6 +86,16 @@ class DisbursementsController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     } 
+    /**
+     * Method to toggle disbursement
+     */
+    public function actionToggledisbursement(){
+        $field         = $_POST['field'];
+        $mod           = Disbursements::findOne( $_POST['id'] );
+        $mod->$field   = $_POST['value'];
+        $mod->save( false );
+    }
+
     /**
      * Lists all Disbursements models.
      * @return mixed
