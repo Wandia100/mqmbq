@@ -124,7 +124,7 @@ class WinningHistories extends \yii\db\ActiveRecord
             'amount' => 'Amount',
             'transaction_cost' => 'Transaction Cost',
             'conversation_id' => 'Conversation ID',
-            'transaction_reference' => 'Transaction Reference',
+            'transaction_reference' => 'Transaction Ref',
             'status' => 'Status',
             'remember_token' => 'Remember Token',
             'created_at' => 'Created At',

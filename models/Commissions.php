@@ -88,7 +88,7 @@ class Commissions extends \yii\db\ActiveRecord
             'station_show_id' => 'Station Show ID',
             'amount' => 'Amount',
             'transaction_cost' => 'Transaction Cost',
-            'transaction_reference' => 'Transaction Reference',
+            'transaction_reference' => 'Transaction Ref',
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
