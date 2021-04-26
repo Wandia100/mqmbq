@@ -235,7 +235,7 @@ class TransactionhistoriesController extends Controller
                         $model->station_id=$station_show['station_id'];
                         $model->station_show_id=$station_show['show_id'];
                         $model->amount=$row->TransAmount;
-                        $model->created_at=date("Y-m-d H:i:s");
+                        $model->created_at=$row->created_at;
                         $model->save(false);
                         $row->state=1;
                         $row->save(false);
