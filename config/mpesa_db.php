@@ -6,7 +6,7 @@
 	$server_name = $_SERVER['SERVER_NAME'];
 	$live_server = array( '18.222.117.89','www.comp21.co.ke', 'comp21.co.ke' );
 	if ( ( in_array($server_name, $live_server ))) {
-		$db_host      = "3.141.4.51";
+		$db_host      = "18.191.217.111";
 		$db_username = "comp2120";
 		$db_password = "Zpa@!%vfrG34f";
 		$db_name = "comp21_mpesa";
