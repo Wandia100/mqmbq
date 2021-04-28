@@ -19,7 +19,9 @@ class SmsCategory extends \yii\db\ActiveRecord
     {
         return 'sms_category';
     }
-
+    public static function getDb() {
+        return Yii::$app->sms_db;
+    }
     /**
      * {@inheritdoc}
      */

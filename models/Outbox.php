@@ -24,7 +24,9 @@ class Outbox extends \yii\db\ActiveRecord
     {
         return 'outbox';
     }
-
+    public static function getDb() {
+        return Yii::$app->sms_db;
+    }
     /**
      * {@inheritdoc}
      */
