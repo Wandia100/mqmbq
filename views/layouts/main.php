@@ -43,6 +43,7 @@ AdminAsset::register($this);
                 $presentervisibility ='';
                 $managementvisibility = '';
                 $stationmanagementvisibility = '';
+                $customercarevisibility = '';
                 if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group == 1){
                     $superadminvisibility = 'hidden';
                 }
@@ -55,13 +56,15 @@ AdminAsset::register($this);
                      $managementvisibility = 'hidden';
                 }else if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group == 5){
                      $stationmanagementvisibility = 'hidden';
+                }else if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group == 6){
+                     $customercarevisibility = 'hidden';
                 }
-                echo $this->render('partials/top-header', ['superadminvisibility'=>$superadminvisibility,'adminvisibility'=>$adminvisibility,'presentervisibility'=>$presentervisibility,'managementvisibility'=>$managementvisibility,'stationmanagementvisibility'=>$stationmanagementvisibility]); ?>
+                echo $this->render('partials/top-header', ['superadminvisibility'=>$superadminvisibility,'adminvisibility'=>$adminvisibility,'presentervisibility'=>$presentervisibility,'managementvisibility'=>$managementvisibility,'stationmanagementvisibility'=>$stationmanagementvisibility,'customercarevisibility'=>$customercarevisibility]); ?>
             <?php
             // echo $this->render('partials/theme-setting', []); 
             ?>
             <div class="app-main">
-                <?= $this->render('partials/sidebar', ['superadminvisibility'=>$superadminvisibility,'adminvisibility'=>$adminvisibility,'presentervisibility'=>$presentervisibility,'managementvisibility'=>$managementvisibility,'stationmanagementvisibility'=>$stationmanagementvisibility]); ?>
+                <?= $this->render('partials/sidebar', ['superadminvisibility'=>$superadminvisibility,'adminvisibility'=>$adminvisibility,'presentervisibility'=>$presentervisibility,'managementvisibility'=>$managementvisibility,'stationmanagementvisibility'=>$stationmanagementvisibility,'customercarevisibility'=>$customercarevisibility]); ?>
                 <div class="app-main__outer">
                     <div class="app-main__inner">
                         

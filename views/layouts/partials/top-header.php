@@ -49,22 +49,22 @@ use app\modules\user\models\User;
                 <button class="close"></button>
             </div>
             <ul class="header-menu nav">
-                <li class="nav-item tour-step <?= $presentervisibility?> " data-content="Hourly Performance" title="Hourly Performance">
+                <li class="nav-item tour-step <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Hourly Performance" title="Hourly Performance">
                     <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Hourly Performance', ['/report/hourlyperformance'], ['class' => 'text-light'])?>
                 </li>
-                <li class="btn-group nav-item tour-step <?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?=$superadminvisibility?>" data-content="Live" title="Live Transaction">
+                <li class="btn-group nav-item tour-step <?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?=$superadminvisibility?> <?=$customercarevisibility?>" data-content="Live" title="Live Transaction">
                     <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Live', ['/transactionhistories/presenter'], ['class' => 'text-light'])?>
                 </li>
-                <li class="btn-group nav-item tour-step <?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?=$superadminvisibility?>" data-content="Commissions" title="Commission">
+                <li class="btn-group nav-item tour-step <?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?=$superadminvisibility?> <?=$customercarevisibility?>" data-content="Commissions" title="Commission">
                     <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Commission Report', ['/report/presentercommission'], ['class' => 'text-light'])?>
                 </li>
-                <li class="btn-group nav-item tour-step <?=$presentervisibility?> <?=$managementvisibility?>" data-content="Commission Summary" title="Commission Summary">
+                <li class="btn-group nav-item tour-step <?=$presentervisibility?> <?=$managementvisibility?> <?=$customercarevisibility?>" data-content="Commission Summary" title="Commission Summary">
                     <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Commission Summary', ['/report/commissionsummary'], ['class' => 'text-light'])?>
                 </li>
-                <li class="dropdown nav-item tour-step <?= $presentervisibility?>" data-content="Daily Awarding Report" title="Daily Awarding Report">
+                <li class="dropdown nav-item tour-step <?= $presentervisibility?> <?=$customercarevisibility?>" data-content="Daily Awarding Report" title="Daily Awarding Report">
                     <?= Html::a('<i class="nav-link-icon fa fa-address-book"></i> Daily Awarding Report', ['/report/dailyawarding'], ['class' => 'text-light'])?>
                 </li>
-                <li class="dropdown nav-item tour-step <?= $presentervisibility?>" data-content="Revenue Report" title="Revenue Report">
+                <li class="dropdown nav-item tour-step <?= $presentervisibility?> <?=$customercarevisibility?>" data-content="Revenue Report" title="Revenue Report">
                     <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Revenue Report', ['/report/revenue'], ['class' => 'text-light'])?>
                  </li>   
                 

@@ -70,6 +70,8 @@ class SiteController extends Controller
     {
         if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group==3){
             return $this->redirect( [ '/transactionhistories/presenter' ] );
+        }else if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group==6){
+            return $this->redirect( [ '/winninghistories/index' ] );
         }else{
             $searchModel = new WinningHistoriesSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','','','',1);
