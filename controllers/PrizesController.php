@@ -86,7 +86,6 @@ class PrizesController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $act = new \app\models\ActivityLog();
         $act -> desc = "prizes grid";
-        $act -> propts = "'{id:$id }'";
         $act ->setLog();
         return $this->render('index', [
             'searchModel' => $searchModel,
