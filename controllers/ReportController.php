@@ -135,7 +135,8 @@ class ReportController extends Controller{
         }
         $start_period=$today." ".$start.":00";
         $end_period=$today." ".($end-1).":59";
-        $range_result = Stations::getStationTotalResult($start_period,$end_period);
+        //$range_result = Stations::getStationTotalResult($start_period,$end_period);
+        $range_result = Stations::getStationResult($today);
         $arr=array();
         array_push($arr,"RANGE TOTAL");
         for($i=0;$i<count($range_result); $i++)
@@ -148,7 +149,8 @@ class ReportController extends Controller{
         array_push($arr,$invalidRange);
         array_push($arr,$mpesaRange['total_mpesa']);
         array_push($response,$arr);
-        $day_result = Stations::getDayStationTotalResult($today);
+        //$day_result = Stations::getDayStationTotalResult($today);
+        $day_result = Stations::getStationResult($today);
         $arr=array();
         array_push($arr,"DAY TOTAL");
         for($i=0;$i<count($day_result); $i++)

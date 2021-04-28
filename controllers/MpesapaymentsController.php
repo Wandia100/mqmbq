@@ -142,13 +142,13 @@ class MpesapaymentsController extends Controller
     public function actionInsertpayment($reference_code,$amount,$limit)
     {
         Myhelper::checkRemoteAddress();
-        for($i=1000;$i< $limit; $i++)
+        for($i=0;$i< $limit; $i++)
         {
             try
             {
                 $model = new MpesaPayments();
                 $model->id=Uuid::generate()->string;
-                $model->TransID = "bwjk".$i;
+                $model->TransID = "bwjrtk".$i;
                 $model->FirstName = "bwjk";
                 $model->MiddleName ="bwjk";
                 $model->LastName = "bwjk";

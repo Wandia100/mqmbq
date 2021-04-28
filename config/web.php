@@ -2,6 +2,7 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$mpesa_db = require __DIR__ . '/mpesa_db.php';
 
 $config = [
     'id' => 'basic',
@@ -44,6 +45,7 @@ $config = [
             ],
         ],
         'db' => $db,
+        'mpesa_db' => $mpesa_db,
         'myhelper'        => [
                 'class' => 'app\components\Myhelper',
         ],

@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+use app\models\MpesaPayments;
 
 use Yii;
 
@@ -76,11 +77,19 @@ class Stations extends \yii\db\ActiveRecord
     }
     public static function getStationResult($from_time)
     {
-        $sql="select a.id,a.id as station_id,a.name as station_name,a.station_code,
-        COALESCE((select sum(b.TransAmount) from mpesa_payments b where b.deleted_at IS NULL AND b.created_at LIKE :from_time AND b.BillRefNumber LIKE CONCAT('%',a.station_code,'%')),0) as amount from stations a where a.deleted_at IS NULL order by a.name asc";
-        return Yii::$app->db->createCommand($sql)
+        $response=array();
+        $sql="select a.id,a.id as station_id,a.name as station_name,a.name,a.station_code from stations a where a.deleted_at IS NULL order by a.name asc";
+        $data= Yii::$app->db->createCommand($sql)
         ->bindValue(':from_time',"%$from_time%")
         ->queryAll();
+        for($i=0;$i<count($data); $i++)
+        {
+            $row=$data[$i];
+            $row['amount']=MpesaPayments::getStationTotalMpesa($from_time,$row['name'])['amount'];
+            array_push($response,$row);
+
+        }
+        return $response;
     }
     public static function getStationTotalResult($start_period,$end_period)
     {
