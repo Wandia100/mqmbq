@@ -73,7 +73,9 @@ class MpesapaymentsController extends Controller
             Yii::error($exc->getMessage());
             Yii::error($exc->getTraceAsString());
         }
-
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "mpesapayment report";
+        $act ->setLog();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

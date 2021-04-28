@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\widgets\ActiveForm;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Users */
@@ -69,6 +70,25 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php ActiveForm::end(); ?>
 
 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>Activities</h3>
+            <?= GridView::widget([
+                'dataProvider' => $dataProviderActivity,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
+
+                    'description',
+                    [
+                        'attribute' => 'user',
+                        'value'     => 'fullname'
+                    ],
+                    //'properties',
+                    'created_at',
+                ],
+            ]); ?>
         </div>
     </div>
 </div>

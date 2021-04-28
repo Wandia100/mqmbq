@@ -84,7 +84,9 @@ class StationsController extends Controller
     {
         $searchModel = new StationsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $act = new \app\models\ActivityLog();
+         $act -> desc = "stations grid";
+         $act ->setLog();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -99,6 +101,10 @@ class StationsController extends Controller
      */
     public function actionView($id)
     {
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "stations view";
+        $act -> propts = "'{id:$id }'";
+        $act ->setLog();
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -118,6 +124,10 @@ class StationsController extends Controller
             $model->id=Uuid::generate()->string;
             $model->created_at = date('Y-m-d H:i:s');
             $model->save();
+            $act = new \app\models\ActivityLog();
+            $act -> desc = "stations create";
+            $act -> propts = "'{id:$model->id }'";
+            $act ->setLog();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -138,6 +148,10 @@ class StationsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $act = new \app\models\ActivityLog();
+            $act -> desc = "stations update";
+            $act -> propts = "'{id:$id }'";
+            $act ->setLog();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

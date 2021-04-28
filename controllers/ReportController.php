@@ -165,6 +165,9 @@ class ReportController extends Controller{
         array_push($arr,$invalid_codes);
         array_push($arr,$mpesa_payments);
         array_push($response,$arr);
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "hourly_performance report";
+        $act ->setLog();
         return $this->render('hourly_performance', [
             'response' => $response
             ]);
@@ -188,6 +191,9 @@ class ReportController extends Controller{
             $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));
         }
         $data=Commissions::commissionSummary($start_date,$end_date);
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "commission_summary report";
+        $act ->setLog();
         return $this->render('commission_summary', [
             'data' => $data
         ]);
@@ -204,6 +210,9 @@ class ReportController extends Controller{
             $end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d",strtotime("+1 day",time())));
         }
         $data=WinningHistories::dailyAwarding($start_date,$end_date);
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "daily_awarding report";
+        $act ->setLog();
         return $this->render('daily_awarding', [
             'data' => $data
         ]);
@@ -228,6 +237,9 @@ class ReportController extends Controller{
             $row['total_revenue']=MpesaPayments::getTotalMpesa($row['the_day'])['total_mpesa'];
             array_push($resp,$row);
         }
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "revenue report";
+        $act ->setLog();
         return $this->render('revenue', [
             'data' => $resp
         ]);

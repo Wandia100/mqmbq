@@ -177,6 +177,10 @@ class TransactionhistoriesController extends Controller
         }
         //echo json_encode($show_prizes); exit();
         
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "Presenters page";
+        $act ->setLog();
+        
         return $this->render('presenter', [
             'show_name' => $show_name,
             'transaction_total' => $transaction_total,

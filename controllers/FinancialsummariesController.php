@@ -53,7 +53,9 @@ class FinancialsummariesController extends Controller
     {
         $searchModel = new FinancialSummariesSearch();
         $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
-
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "Finacesummary report";
+        $act ->setLog();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

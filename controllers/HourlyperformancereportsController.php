@@ -52,7 +52,9 @@ class HourlyperformancereportsController extends Controller
     {
         $searchModel = new HourlyPerformanceReportsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "hourlyperfomance report";
+        $act ->setLog();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

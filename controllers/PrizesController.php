@@ -84,7 +84,10 @@ class PrizesController extends Controller
     {
         $searchModel = new PrizesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "prizes grid";
+        $act -> propts = "'{id:$id }'";
+        $act ->setLog();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -99,6 +102,10 @@ class PrizesController extends Controller
      */
     public function actionView($id)
     {
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "prizes view";
+        $act -> propts = "'{id:$id }'";
+        $act ->setLog();
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -118,6 +125,10 @@ class PrizesController extends Controller
             $model->id=Uuid::generate()->string;
             $model->created_at = date('Y-m-d H:i:s');
             $model->save();
+            $act = new \app\models\ActivityLog();
+            $act -> desc = "prizes create";
+            $act -> propts = "'{id:$model->id }'";
+            $act ->setLog();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -138,6 +149,10 @@ class PrizesController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $act = new \app\models\ActivityLog();
+            $act -> desc = "prizes update";
+            $act -> propts = "'{id:$id }'";
+            $act ->setLog();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

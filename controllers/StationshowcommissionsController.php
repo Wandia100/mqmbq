@@ -122,7 +122,10 @@ class StationshowcommissionsController extends Controller
         $model = $this->findModel($id);
         $stationshowid = $model->station_show_id;
         $model->delete();
-
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "stationshow deleteCommision";
+        $act -> propts = "'{id:$model->id }'";
+        $act ->setLog();
         return $this->redirect(['stationshows/view','id'=>$stationshowid,'rs'=>$rs]);
     }
 

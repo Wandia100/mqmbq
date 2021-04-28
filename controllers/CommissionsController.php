@@ -84,9 +84,15 @@ class CommissionsController extends Controller
             $model->status = 1;
             $model->save(FALSE);
             
+            $act = new \app\models\ActivityLog();
+            $act -> desc = "split commission";
+            $act -> propts = "'{id:$model->id }'";
+            $act ->setLog();
             return $this->redirect(['index','t'=>'p']);
         }
-
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "commission report";
+        $act ->setLog();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

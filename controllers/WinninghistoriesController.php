@@ -59,7 +59,9 @@ class WinninghistoriesController extends Controller
     {
         $searchModel = new WinningHistoriesSearch();
         $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
-
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "winninghistories report";
+        $act ->setLog();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

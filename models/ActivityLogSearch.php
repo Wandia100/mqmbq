@@ -39,7 +39,7 @@ class ActivityLogSearch extends ActivityLog
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$causerid = '')
     {
         $query = ActivityLog::find();
 
@@ -80,7 +80,10 @@ class ActivityLogSearch extends ActivityLog
             $query->andWhere('users.first_name LIKE "%'.trim($this->user). '%" ' .
             'OR users.last_name LIKE "%'.trim($this->user). '%"');
         }
-
+        if($causerid !=""){
+            $query->andWhere("causer_id='$causerid'");
+        }
+        $query->orderBy('created_at DESC');
         return $dataProvider;
     }
 }

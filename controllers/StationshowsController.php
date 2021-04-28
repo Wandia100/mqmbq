@@ -144,6 +144,11 @@ class StationshowsController extends Controller
         $commissionsSearchModel = new \app\models\StationShowCommissionsSearch();
         $commissionsDataProvider = $commissionsSearchModel->search(Yii::$app->request->queryParams,$id);
         
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "stationshows view";
+        $act -> propts = "'{id:$id }'";
+        $act ->setLog();
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
@@ -166,6 +171,10 @@ class StationshowsController extends Controller
         $ShowPresenter->presenter_id = $_POST['presenter_id'];
         $ShowPresenter->created_at = date('Y-m-d H:i:s');
         $ShowPresenter->save();
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "stationshow addpresenter";
+        $act -> propts = "'{id:$ShowPresenter->id }'";
+        $act ->setLog();
         return $this->redirect(['view', 'id' => $id,'rs' => $rs]);
     }
     /**
@@ -193,11 +202,15 @@ class StationshowsController extends Controller
         $ShowPrize->enabled = $_POST['enabled'];
         $ShowPrize->created_at = date('Y-m-d H:i:s');
         $ShowPrize->save();
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "stationshow addprize";
+        $act -> propts = "'{id:$ShowPrize->id }'";
+        $act ->setLog();
         return $this->redirect(['view', 'id' => $id,'rs' => $rs]);
     }
 
     /**
-     * addcommissions
+     * add commissions
      */
     public function actionAddcommissions($id,$rs=1){
         $model = $this->findModel($id);
@@ -209,6 +222,10 @@ class StationshowsController extends Controller
         $ShowCommissions->commission = $_POST['commission'];
         $ShowCommissions->created_at = date('Y-m-d H:i:s');
         $ShowCommissions->save();
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "stationshow addcommission";
+        $act -> propts = "'{id:$ShowCommissions->id }'";
+        $act ->setLog();
         return $this->redirect(['view', 'id' => $id,'rs' => $rs]);
     }
     /**
@@ -225,6 +242,10 @@ class StationshowsController extends Controller
             $model->id=Uuid::generate()->string;
             $model->created_at = date('Y-m-d H:i:s');
             $model->save();
+            $act = new \app\models\ActivityLog();
+            $act -> desc = "stationshow create";
+            $act -> propts = "'{id:$model->id }'";
+            $act ->setLog();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -245,6 +266,10 @@ class StationshowsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $act = new \app\models\ActivityLog();
+            $act -> desc = "stationshow update";
+            $act -> propts = "'{id:$model->id }'";
+            $act ->setLog();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -263,7 +288,10 @@ class StationshowsController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        $act = new \app\models\ActivityLog();
+         $act -> desc = "stationshow delete";
+         $act -> propts = "'{id:$id }'";
+         $act ->setLog();
         return $this->redirect(['index']);
     }
 

@@ -17,6 +17,8 @@ use Yii;
  */
 class ActivityLog extends \yii\db\ActiveRecord
 {
+    public $desc;
+    public $propts;
     /**
      * {@inheritdoc}
      */
@@ -70,5 +72,17 @@ class ActivityLog extends \yii\db\ActiveRecord
             'is_deleted' => 'Is Deleted',
             'user' => 'Causer'
         ];
+    }
+    
+    public  function setLog(){
+        $mod = new ActivityLog();
+        $mod -> created_at = date('Y-m-d H:i:s');
+        $mod -> updated_at = date('Y-m-d H:i:s');
+        $mod -> is_deleted = 0;
+        $mod -> causer_id = Yii::$app->user->identity->id;
+        $mod -> description = $this->desc;
+        $mod -> properties = $this->propts;
+        $mod ->save(FALSE);
+        
     }
 }

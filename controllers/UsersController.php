@@ -127,16 +127,23 @@ class UsersController extends Controller
                 $model->defaultpermissiondenied = implode( ',', $unique );
                 $model->extpermission           = implode( ',', $newextrapermission );
                 $model->save(false);
+                $act = new \app\models\ActivityLog();
+                $act -> desc = "users Edit permission";
+                $act -> propts = "'{id:$id }'";
+                $act ->setLog();
+                        
                 Yii::$app->session->setFlash('success', 'Success:  Permissions saved successfully');
                 return $this->redirect(['view','id'=>$id]);
-                
             }
             $perm                 = array_merge( $defaultpermarray, $extrapermarray ); // all permissions
             $perm                 = array_diff( $perm, $denieddefaultPermissions ); // Substract denied permissions
             
         }
+        $searchModelActivity = new \app\models\ActivityLogSearch();
+        $dataProviderActivity = $searchModelActivity->search(Yii::$app->request->queryParams,$id);
         return $this->render('view', [
             'perm' => $perm,
+            'dataProviderActivity' =>$dataProviderActivity,
             'model' => $this->findModel($id),
         ]);
     }
@@ -157,6 +164,10 @@ class UsersController extends Controller
             $model->created_by = Yii::$app->user->identity->id;
             $model->password = password_hash($model->password, PASSWORD_BCRYPT, array('cost' => 5));
             if($model->save(FALSE)){
+                $act = new \app\models\ActivityLog();
+                $act -> desc = "users create";
+                $act -> propts = "'{id:$model->id }'";
+                $act ->setLog();
                 return $this->redirect(['view', 'id' => $model->id]);
             }else{ 
                 return $this->render('create', [
@@ -183,6 +194,10 @@ class UsersController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $act = new \app\models\ActivityLog();
+            $act -> desc = "users update";
+            $act -> propts = "'{id:$model->id }'";
+            $act ->setLog();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -201,7 +216,10 @@ class UsersController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        $act = new \app\models\ActivityLog();
+         $act -> desc = "users delete";
+         $act -> propts = "'{id:$id }'";
+         $act ->setLog();
         return $this->redirect(['index']);
     }
 

@@ -51,6 +51,10 @@ class StationshowpresentersController extends Controller
             $mod           = StationShowPresenters::findOne( $_POST['id'] );
             $mod->$field   = $_POST['value'];
             $mod->save( false );
+            $act = new \app\models\ActivityLog();
+            $act -> desc = "stationshow setpresenteradmin";
+            $act -> propts = "'{id:$mod->id }'";
+            $act ->setLog();
 	}
     /**
      * Lists all StationShowPresenters models.
@@ -130,7 +134,10 @@ class StationshowpresentersController extends Controller
         $model = $this->findModel($id);
         $stationshowid = $model->station_show_id;
         $model->delete();
-
+         $act = new \app\models\ActivityLog();
+         $act -> desc = "stationshow deletepresenter";
+         $act -> propts = "'{id:$model->id }'";
+         $act ->setLog();
         return $this->redirect(['stationshows/view','id'=>$stationshowid,$rs]);
     }
 

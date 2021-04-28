@@ -81,6 +81,9 @@ class DisbursementsController extends Controller
             $model->save(FALSE);
             return $this->redirect('index');
         }
+         $act = new \app\models\ActivityLog();
+        $act -> desc = "disbursement report";
+        $act ->setLog();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
