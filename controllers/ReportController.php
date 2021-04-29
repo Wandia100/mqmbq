@@ -103,7 +103,7 @@ class ReportController extends Controller{
             $end=24;
         }
         $start=0;
-        $end=date('H')+1;
+        $end=24;
         $stations=Stations::getActiveStations();
         
         $response=array();
@@ -148,21 +148,34 @@ class ReportController extends Controller{
             }
             else
             {
-                $station_result = Stations::getStationResult($from_time);
-                for($a=0;$a <count($station_result);$a++)
+                if($today==date("Y-m-d") && $i> date('H'))
                 {
-                    array_push($hour_record,$station_result[$a]['amount']);
+                    for($a=0;$a<count($stations);$a++)
+                    {
+                        array_push($hour_record,0);
+                    }
+                    array_push($hour_record,0);
+                    array_push($hour_record,0);
+                    
                 }
-                $mpesa_payments = MpesaPayments::getTotalMpesa($from_time);
-                $mpesa_payments=$mpesa_payments['total_mpesa'];
-                $transaction_histories = TransactionHistories::getTotalTransactions($from_time);
-                $transaction_histories = $transaction_histories['total_history'];
-                $invalid_codes = $mpesa_payments - $transaction_histories;
-                array_push($hour_record,$invalid_codes);
-                array_push($hour_record,$mpesa_payments);
-                array_push($response,$hour_record);
+                else
+                {
+                    $station_result = Stations::getStationResult($from_time);
+                    for($a=0;$a <count($station_result);$a++)
+                    {
+                        array_push($hour_record,$station_result[$a]['amount']);
+                    }
+                    $mpesa_payments = MpesaPayments::getTotalMpesa($from_time);
+                    $mpesa_payments=$mpesa_payments['total_mpesa'];
+                    $transaction_histories = TransactionHistories::getTotalTransactions($from_time);
+                    $transaction_histories = $transaction_histories['total_history'];
+                    $invalid_codes = $mpesa_payments - $transaction_histories;
+                    array_push($hour_record,$invalid_codes);
+                    array_push($hour_record,$mpesa_payments);
+                }
+
             }
-            
+            array_push($response,$hour_record);
             
         }
         $start_period=$today." ".$start.":00";
