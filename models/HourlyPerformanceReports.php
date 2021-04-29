@@ -33,12 +33,11 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id'], 'required'],
-            [['amount', 'invalid_codes', 'total_amount'], 'number'],
+            [['amount', 'invalid_codes', 'total_amount','day_total'], 'number'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
-            [['id'], 'string', 'max' => 36],
+            [['hour_date'], 'string', 'max' => 15],
+            [['unique_field'], 'string', 'max' => 20],
             [['station_id', 'hour'], 'string', 'max' => 255],
-            [['id'], 'unique'],
         ];
     }
 
@@ -58,5 +57,14 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
         ];
+    }
+    public static function checkDuplicate($the_day,$hr)
+    {
+        return HourlyPerformanceReports::find()->where("hour_date='$the_day'")->andWhere("hour='$hr'")->count();
+    }
+    public static function stationHourRecord($the_day,$hr,$station_id)
+    {
+        return HourlyPerformanceReports::find()->where("hour_date='$the_day'")
+        ->andWhere("hour='$hr'")->andWhere("station_id='$station_id'")->one();
     }
 }

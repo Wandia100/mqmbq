@@ -5,9 +5,12 @@ use app\models\MpesaPayments;
 use app\models\TransactionHistories;
 use app\models\Stations;
 use app\models\Commissions;
+use app\models\HourlyPerformanceReports;
 use app\models\WinningHistories;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\db\IntegrityException;
+
 class ReportController extends Controller{
         /**
      * {@inheritdoc}
@@ -119,19 +122,48 @@ class ReportController extends Controller{
             $hour_record=array();
             $from_time=$today." ".$this->formatHour($i);
             array_push($hour_record,$this->formatHour($i));
-            $station_result = Stations::getStationResult($from_time);
-            for($a=0;$a <count($station_result);$a++)
+            if($this->formatHour($i) < date('H'))
             {
-                array_push($hour_record,$station_result[$a]['amount']);
+                $invalid=0;
+                $totalAmount=0;
+                //set station amounts
+                for($a=0;$a<count($stations); $a++)
+                {
+                    $row=$stations[$a];
+                    $stationData=HourlyPerformanceReports::stationHourRecord($today,$this->formatHour($i),$row->id);
+                    if($stationData)
+                    {
+                        $invalid=$stationData->invalid_codes;
+                        $totalAmount=$stationData->total_amount;
+                        array_push($hour_record,$stationData->amount);
+                    }
+                    else
+                    {
+                        array_push($hour_record,0);
+                    }
+                    
+                }
+                array_push($hour_record,$invalid);
+                array_push($hour_record,$totalAmount);
             }
-            $mpesa_payments = MpesaPayments::getTotalMpesa($from_time);
-            $mpesa_payments=$mpesa_payments['total_mpesa'];
-            $transaction_histories = TransactionHistories::getTotalTransactions($from_time);
-            $transaction_histories = $transaction_histories['total_history'];
-            $invalid_codes = $mpesa_payments - $transaction_histories;
-            array_push($hour_record,$invalid_codes);
-            array_push($hour_record,$mpesa_payments);
-            array_push($response,$hour_record);
+            else
+            {
+                $station_result = Stations::getStationResult($from_time);
+                for($a=0;$a <count($station_result);$a++)
+                {
+                    array_push($hour_record,$station_result[$a]['amount']);
+                }
+                $mpesa_payments = MpesaPayments::getTotalMpesa($from_time);
+                $mpesa_payments=$mpesa_payments['total_mpesa'];
+                $transaction_histories = TransactionHistories::getTotalTransactions($from_time);
+                $transaction_histories = $transaction_histories['total_history'];
+                $invalid_codes = $mpesa_payments - $transaction_histories;
+                array_push($hour_record,$invalid_codes);
+                array_push($hour_record,$mpesa_payments);
+                array_push($response,$hour_record);
+            }
+            
+            
         }
         $start_period=$today." ".$start.":00";
         $end_period=$today." ".($end-1).":59";
@@ -171,6 +203,82 @@ class ReportController extends Controller{
         return $this->render('hourly_performance', [
             'response' => $response
             ]);
+    }
+    public function actionLasthour()
+    {
+        $the_day=date("Y-m-d");
+        $hr=$this->formatHour(date('H')-1);
+        $from_time=$the_day." ".$hr;
+        $count=HourlyPerformanceReports::checkDuplicate($the_day,$hr);
+        if($count==0)
+        {
+            $stations=Stations::getActiveStations();
+            for($i=0;$i<count($stations); $i++)
+            {
+                try
+                {
+                $station=$stations[$i];
+                $model=new HourlyPerformanceReports();
+                $model->hour=$hr;
+                $model->hour_date=$the_day;
+                $model->unique_field=date('Ymd').$hr.$station->id;
+                $model->station_id=$station->id;
+                $model->amount=MpesaPayments::getStationTotalMpesa($from_time,$station->name)['amount'];
+                $mpesa_payments = MpesaPayments::getTotalMpesa($from_time)['total_mpesa'];
+                $transaction_histories = TransactionHistories::getTotalTransactions($from_time)['total_history'];
+                $model->invalid_codes=$mpesa_payments - $transaction_histories;
+                $model->total_amount=$mpesa_payments;
+                $model->day_total=MpesaPayments::getStationTotalMpesa($the_day,$station->name)['amount'];
+                $model->created_at=date("Y-m-d H:i:s");
+                $model->save(false);
+                }
+                catch (IntegrityException $e) {
+                    //allow execution
+                }
+            }
+            
+        }
+    }
+    public function actionLogdata($the_day)
+    {
+        for($i=0;$i<24;$i++)
+        {
+            if($the_day==date("Y-m-d") && $this->formatHour($i) >=date('H') )
+            {
+                break;
+            }
+            $hr=$this->formatHour($i);
+            $from_time=$the_day." ".$hr;
+            $count=HourlyPerformanceReports::checkDuplicate($the_day,$hr);
+            if($count==0)
+            {
+                $stations=Stations::getActiveStations();
+                for($j=0;$j<count($stations); $j++)
+                {
+                    try
+                    {
+                    $station=$stations[$j];
+                    $model=new HourlyPerformanceReports();
+                    $model->hour=$hr;
+                    $model->hour_date=$the_day;
+                    $model->unique_field=$the_day.$hr.$station->id;
+                    $model->station_id=$station->id;
+                    $model->amount=MpesaPayments::getStationTotalMpesa($from_time,$station->name)['amount'];
+                    $mpesa_payments = MpesaPayments::getTotalMpesa($from_time)['total_mpesa'];
+                    $transaction_histories = TransactionHistories::getTotalTransactions($from_time)['total_history'];
+                    $model->invalid_codes=$mpesa_payments - $transaction_histories;
+                    $model->total_amount=$mpesa_payments;
+                    $model->day_total=MpesaPayments::getStationTotalMpesa($the_day,$station->name)['amount'];
+                    $model->created_at=date("Y-m-d H:i:s");
+                    $model->save(false);
+                    }
+                    catch (IntegrityException $e) {
+                        //allow execution
+                    }
+                }
+                
+            }
+        }
     }
     public function actionCommissionsummary()
     {
