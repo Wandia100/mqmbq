@@ -10,6 +10,7 @@ use app\models\WinningHistories;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
+use app\components\Myhelper;
 
 class ReportController extends Controller{
         /**
@@ -219,6 +220,7 @@ class ReportController extends Controller{
     }
     public function actionLasthour()
     {
+        Myhelper::checkRemoteAddress();
         $the_day=date("Y-m-d");
         $hr=$this->formatHour(date('H')-1);
         $from_time=$the_day." ".$hr;
