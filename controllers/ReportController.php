@@ -103,7 +103,7 @@ class ReportController extends Controller{
             $end=24;
         }
         $start=0;
-        $end=24;
+        $end=date('H')+1;
         $stations=Stations::getActiveStations();
         
         $response=array();
