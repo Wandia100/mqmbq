@@ -33,7 +33,7 @@ class Prizes extends \yii\db\ActiveRecord
     {
         return [
             [['id', 'name'], 'required'],
-            [['mpesa_disbursement', 'enabled','enable_tax','amount'], 'integer'],
+            [['mpesa_disbursement', 'enabled','enable_tax','amount','tax'], 'integer'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
             [['name', 'description'], 'string', 'max' => 255],
@@ -52,6 +52,7 @@ class Prizes extends \yii\db\ActiveRecord
             'description' => 'Description',
             'mpesa_disbursement' => 'Mpesa Disbursement',
             'enabled' => 'Enabled',
+            'tax' => 'Tax',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',

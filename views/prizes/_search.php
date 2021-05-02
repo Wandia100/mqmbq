@@ -24,6 +24,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'mpesa_disbursement') ?>
 
     <?= $form->field($model, 'enabled') ?>
+    <?= $form->field($model, 'tax') ?>
 
     <?php // echo $form->field($model, 'created_at') ?>
 

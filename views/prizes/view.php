@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'mpesa_disbursement',
             'enabled',
             'enable_tax',
+            'tax',
             'created_at',
             'updated_at',
             'deleted_at',
