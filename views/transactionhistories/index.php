@@ -77,6 +77,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => $gridColumns,
         'pjax'=>true,
     'showPageSummary'=>true,
+    'toolbar' => [
+        '{toggleData}',
+                '{export}',
+    ],
     'panel'=>[
         'type'=>'primary',
         'heading'=>'transactionhistories'
