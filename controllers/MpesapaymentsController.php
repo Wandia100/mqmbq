@@ -150,15 +150,15 @@ class MpesapaymentsController extends Controller
             {
                 $model = new MpesaPayments();
                 $model->id=Uuid::generate()->string;
-                $model->TransID = "bwjrtk".$i;
-                $model->FirstName = "bwjk";
-                $model->MiddleName ="bwjk";
-                $model->LastName = "bwjk";
+                $model->TransID = date('YmdHisu').$i;
+                $model->FirstName = "demo";
+                $model->MiddleName ="demo";
+                $model->LastName = "demo";
                 $model->MSISDN = "254728202194";
-                $model->InvoiceNumber = "bwjk";
-                $model->BusinessShortCode = "bwjk";
-                $model->ThirdPartyTransID ="bwjk";
-                $model->TransactionType = "bwjk";
+                $model->InvoiceNumber = "demo";
+                $model->BusinessShortCode = "demo";
+                $model->ThirdPartyTransID ="demo";
+                $model->TransactionType = "demo";
                 $model->OrgAccountBalance = 0;
                 $model->BillRefNumber = $reference_code;
                 $model->TransAmount = $amount;
