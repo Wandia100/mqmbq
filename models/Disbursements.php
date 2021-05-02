@@ -90,7 +90,38 @@ class Disbursements extends \yii\db\ActiveRecord
     }
     public static function saveDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type,$status)
     {
+
+        if($amount <= 150000)
+            {
+                $unique_field=$phone_number.$amount.date('YmdHi');
+               Disbursements::createDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type,$status,$unique_field); 
+            }
+            else
+            {
+                $count=0;
+                while($amount > 0)
+                {
+                    if($amount > 150000)
+                    {
+                        $to_pay=150000;
+                        $amount=$amount-150000;
+                    }
+                    else
+                    {
+                        $to_pay=$amount;
+                        $amount=0;
+                    }
+                    $count++;
+                    $unique_field=$phone_number.$amount.date('YmdHi')."-".$count;
+                    Disbursements::createDisbursement($reference_id,$reference_name,$phone_number,$to_pay,$disbursement_type,$status,$unique_field);
+                }
+            }
         
+        
+        
+    }
+    public static function createDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type,$status,$unique_field)
+    {
         try {
             $model=new Disbursements();
             $model->id=Uuid::generate()->string;
@@ -99,14 +130,13 @@ class Disbursements extends \yii\db\ActiveRecord
             $model->phone_number=$phone_number;
             $model->amount=$amount;
             $model->status=$status;
-            $model->unique_field=$phone_number.$amount.date('YmdHi');
+            $model->unique_field=$unique_field;
             $model->disbursement_type=$disbursement_type;
             $model->created_at=date("Y-m-d H:i:s");
             $model->save(false);
         } catch (IntegrityException $e) {
             //allow execution
         }
-        
     }
     public static function getPendingDisbursement()
     {

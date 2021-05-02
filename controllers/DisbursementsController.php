@@ -144,27 +144,17 @@ class DisbursementsController extends Controller
         $model = new Disbursements();
 
         if ($model->load(Yii::$app->request->post()) ) {
-
-            try
+            if(trim($model->phone_number)[0]=="0")
             {
-                    $model->id=Uuid::generate()->string;
-                if(trim($model->phone_number)[0]=="0")
-                {
-                    $model->phone_number="254".substr(trim($model->phone_number),1);
-                }
-                else
-                {
-                    $model->phone_number=trim($model->phone_number);
-                }
-                $model->unique_field=$model->phone_number.$model->amount.date('YmdHi');
-                $model->created_at = date('Y-m-d H:i:s');
-                $model->save();
+                $model->phone_number="254".substr(trim($model->phone_number),1);
             }
-            catch (IntegrityException $e) {
-                //allowing execution
+            else
+            {
+                $model->phone_number=trim($model->phone_number);
             }
-            
-            return $this->redirect(['view', 'id' => $model->id]);
+            //handle amount more than 150k
+            Disbursements::saveDisbursement("",$model->reference_name,$model->phone_number,$model->amount,$model->disbursement_type,0);
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
