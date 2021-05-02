@@ -30,11 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <?php
+    
+           $gridColumns = [['class' => 'yii\grid\SerialColumn'],
 
            // 'id',Mpesadetails
            # 'mpesa_payment_id',
@@ -58,8 +56,31 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at',
             //'updated_at',
             //'deleted_at',
-
+               ['class' => '\kartik\grid\ActionColumn', 'urlCreator'=>function(){return '#';}]
+        ];
+   echo \kartik\export\ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => $gridColumns,
+    'dropdownOptions' => [
+        'label' => 'Export All',
+        'class' => 'btn btn-outline-secondary'
+    ]
+]) . "<hr>\n". \kartik\grid\GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'autoXlFormat'=>true,
+        'toggleDataContainer' => ['class' => 'btn-group mr-2'],
+        'export'=>[
+            'showConfirmAlert'=>false,
+            'target'=> \kartik\grid\GridView::TARGET_BLANK
         ],
+        'columns' => $gridColumns,
+        'pjax'=>true,
+    'showPageSummary'=>true,
+    'panel'=>[
+        'type'=>'primary',
+        'heading'=>'transactionhistories'
+    ]
     ]); ?>
 
 
