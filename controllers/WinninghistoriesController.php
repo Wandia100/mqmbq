@@ -140,7 +140,8 @@ class WinninghistoriesController extends Controller
                     
                     if($show_prize['enable_tax'])
                     {
-                        $to_pay=round(($show_prize['amount']*.8));
+                        $pay_percent=(100-$show_prize['tax']);
+                        $to_pay=round(($show_prize['amount']*($pay_percent/100)));
                     }
                     else
                     {
