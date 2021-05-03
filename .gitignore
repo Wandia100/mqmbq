@@ -11,7 +11,6 @@ nbproject
 
 # windows thumbnail cache
 Thumbs.db
-/components/Keys.php
 # composer vendor dir
 /vendor
 
@@ -31,3 +30,9 @@ tests/_support/_generated
 
 #vagrant folder
 /.vagrant
+#configs
+config/api_credentials.php
+config/db.php
+config/mpesa_db.php
+config/sms_db.php
+components/Keys.php
