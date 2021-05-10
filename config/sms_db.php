@@ -1,21 +1,24 @@
 <?php
     $db_host="";
-    $db_username="";
-    $db_password="";
-    $db_name="";
+    $db_username = "comp2120";
+    $db_password = "Zpa@!%vfrG34f";
+    $db_name = "comp21_sms";
 	$server_name = $_SERVER['SERVER_NAME'];
-	$live_server = array( '18.222.117.89','www.comp21.co.ke', 'comp21.co.ke' );
-	if ( ( in_array($server_name, $live_server ))) {
+	$comp21coke = array( '18.222.117.89','www.comp21.co.ke', 'comp21.co.ke' );
+	$comp21net = array( '18.190.157.46','www.comp21.net', 'comp21.net' );
+	$comp21dev = array( '18.222.117.89','www.comp21.co.ke', 'comp21.co.ke' );
+	if ( ( in_array($server_name, $comp21coke ))) {
 		$db_host      = "18.188.98.88";
-		$db_username = "comp2120";
-		$db_password = "Zpa@!%vfrG34f";
-		$db_name = "comp21_sms";
+    }
+	else if ( ( in_array($server_name, $comp21net ))) {
+		$db_host      =  "3.142.221.86";
+    }
+	else if ( ( in_array($server_name, $comp21dev ))) {
+		$db_host      = "18.188.98.88";
     }
 	 else {
 		$db_host      = "127.0.0.1";
 		$db_username = "com2120";
-		$db_password = "Zpa@!%vfrG34f";
-		$db_name = "comp21_sms";
      }
        
 return [
