@@ -143,12 +143,11 @@ class ApiController extends Controller
                     $first_name=$data['FirstName'];
                     if($data['TransAmount'] >=100 && $data['TransAmount'] < 300)
                     {
-                        $message = "$first_name, Umeingia Draw! Endelea Kushiriki, Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
+                        $message=Myhelper::drawMessage($first_name);
                     }
                     else
                     {
-                        $message = "$first_name, Kushiriki kwenye draw ni shilingi mia moja tu,Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
-    
+                        $message=Myhelper::invalidAmountMessage($first_name);
                     }
                     Outbox::saveOutbox($data['MSISDN'],$message,2);
                 } 

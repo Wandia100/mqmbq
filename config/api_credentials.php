@@ -17,8 +17,8 @@ if ( ( in_array($server_name, $comp21coke))) {
 else if ( ( in_array($server_name,$comp21net))) {
     define( 'PARTYA', '3015585' );
     define( 'REMARKS', 'Remarks' );
-    +define( 'QUEUETIMEOUTURL',"https://comp21.net/api/disbursement-payment-timeout-result" );
-    +define( 'RESULTURL',"https://comp21.net/api/disbursement-payment-result-confirmation" );
+    define( 'QUEUETIMEOUTURL',"https://comp21.net/api/disbursement-payment-timeout-result" );
+    define( 'RESULTURL',"https://comp21.net/api/disbursement-payment-result-confirmation" );
     define( 'INITIATORNAME',"com21.api" );
     define( 'OCCASION',"Occasion");
     define( 'MPESAPAYMENTREQUESTURL',"https://api.safaricom.co.ke/mpesa/b2c/v1/paymentrequest");
@@ -26,13 +26,25 @@ else if ( ( in_array($server_name,$comp21net))) {
     define( 'NITEXTSMSURL',"https://nitext.co.ke/index.php/api/sendSmsMultiple");
 }
 else if ( ( in_array($server_name,$comp21dev))) {
-    $db_host      = "3.141.4.51";
+    define( 'PARTYA', '161744' );
+    define( 'REMARKS', 'Remarks' );
+    define( 'QUEUETIMEOUTURL',"https://comp21.dev/api/disbursement-payment-timeout-result" );
+    define( 'RESULTURL',"https://comp21.dev/api/disbursement-payment-result-confirmation" );
+    define( 'INITIATORNAME',"pigakazi.api" );
+    define( 'OCCASION',"Occasion");
+    define( 'MPESAPAYMENTREQUESTURL',"https://api.safaricom.co.ke/mpesa/b2c/v1/paymentrequest");
+    define( 'MPESATOKENURL',"https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials");
 }
  else {
-    $db_host      = "127.0.0.1";
-    $db_username = "com2120";
-    $db_password = "Zpa@!%vfrG34f";
-    $db_name = "com21";
+    define( 'PARTYA', '3015585' );
+    define( 'REMARKS', 'Remarks' );
+    define( 'QUEUETIMEOUTURL',"https://comp21.co.ke/api/disbursement-payment-timeout-result" );
+    define( 'RESULTURL',"https://comp21.co.ke/api/disbursement-payment-result-confirmation" );
+    define( 'INITIATORNAME',"com21.api" );
+    define( 'OCCASION',"Occasion");
+    define( 'MPESAPAYMENTREQUESTURL',"https://api.safaricom.co.ke/mpesa/b2c/v1/paymentrequest");
+    define( 'MPESATOKENURL',"https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials");
+    define( 'NITEXTSMSURL',"https://nitext.co.ke/index.php/api/sendSmsMultiple");
  }
 
 ?>
