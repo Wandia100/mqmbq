@@ -31,5 +31,4 @@ tests/_support/_generated
 #vagrant folder
 /.vagrant
 #configs
-config/api_credentials.php
 components/Keys.php
