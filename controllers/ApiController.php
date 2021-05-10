@@ -208,10 +208,11 @@ class ApiController extends Controller
     public function actionProcessSms()
     {
         Myhelper::checkRemoteAddress();
-        $outbox=Outbox::find()->limit(1500)->all();
+        $outbox=Outbox::find()->limit(500)->all();
         for($i=0;$i<count($outbox);$i++)
         {
             $row=$outbox[$i];
+            $row->delete(false);
             $this->sendSms($row->receiver,$row->message);
             $sent_sms=new SentSms();
             $sent_sms->receiver=$row->receiver;
@@ -220,7 +221,6 @@ class ApiController extends Controller
             $sent_sms->category=$row->category;
             $sent_sms->created_date=$row->created_date;
             $sent_sms->save(false);
-            $row->delete(false);
         }
     }
     public function actionSms()
