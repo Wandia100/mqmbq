@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\MpesaPayments;
+use app\models\Outbox;
 use app\models\MpesaPaymentsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -165,6 +166,16 @@ class MpesapaymentsController extends Controller
                 $model->created_at=date("Y-m-d H:i:s");
                 $model->updated_at=date("Y-m-d H:i:s");
                 $model->save(false);
+                $first_name="demo ";
+                    if($amount >=100 && $amount < 300)
+                    {
+                        $message=Myhelper::drawMessage($first_name);
+                    }
+                    else
+                    {
+                        $message=Myhelper::invalidAmountMessage($first_name);
+                    }
+                    Outbox::saveOutbox("254728202194",$message,2);
             }
             catch (IntegrityException $e) {
                 //allow execution
