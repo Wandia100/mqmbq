@@ -94,7 +94,7 @@ class Myhelper extends Component {
 		if (in_array($_SERVER['SERVER_NAME'],array('com21.jks.com')) ) {
 			//allow execution for localhost
 		}
-		if (in_array($_SERVER['REMOTE_ADDR'],array('18.222.117.89','172.31.14.172')) ) {
+		else if (in_array($_SERVER['REMOTE_ADDR'],array('18.222.117.89','172.31.14.172')) ) {
 			//allow execution for coke
 		}
 		else if (in_array($_SERVER['REMOTE_ADDR'],array('18.190.157.46','172.31.41.69')) ) {
