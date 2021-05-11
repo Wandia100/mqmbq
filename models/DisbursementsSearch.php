@@ -91,6 +91,7 @@ class DisbursementsSearch extends Disbursements
         if(isset($_GET['t']) && $_GET['t'] == 'p'){
             $query->andWhere('disbursement_type = "presenter_commission"');
         }
+        $query->orderBy('created_at DESC');
         return $dataProvider;
     }
 }

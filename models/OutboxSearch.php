@@ -67,7 +67,7 @@ class OutboxSearch extends Outbox
         $query->andFilterWhere(['like', 'receiver', $this->receiver])
             ->andFilterWhere(['like', 'sender', $this->sender])
             ->andFilterWhere(['like', 'message', $this->message]);
-
+            $query->orderBy('id DESC');
         return $dataProvider;
     }
 }
