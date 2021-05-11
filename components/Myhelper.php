@@ -780,7 +780,7 @@ class Myhelper extends Component {
 		else if ( ( in_array($server_name, $comp21dev))) {
 			$message = "$first_name, Kushiriki kwenye draw ni shilingi mia moja tu,Waweza tunukiwa, PB 321321 Ksh 100, T&C apply. Customer care  0719034037";		}
 		 else {
-			$message = "$first_name, Umeingia Draw! Endelea Kushiriki, Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
+			$message = "$first_name, Kushiriki kwenye draw ni shilingi mia moja tu,Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
 		 }
 		 return $message;
 	}
@@ -800,7 +800,7 @@ class Myhelper extends Component {
 		else if ( ( in_array($server_name, $comp21dev))) {
 			$message="CONGRATULATIONS ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. For more details C/Care 0719034037.T&C apply. 20% Tax Charged.";		}
 		 else {
-			$message = "$first_name, Umeingia Draw! Endelea Kushiriki, Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
+			$message="CONGRATULATIONS ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. For more details C/Care 0719034035.T&C apply. 20% Tax Charged.";
 		 }
 		 return $message;
 	}
