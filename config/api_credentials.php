@@ -2,7 +2,7 @@
 $server_name = $_SERVER['SERVER_NAME'];
 $comp21coke = array( '18.222.117.89','www.comp21.co.ke', 'comp21.co.ke');
 $comp21net = array( '18.190.157.46','www.comp21.net', 'comp21.net' );
-$comp21dev = array( '18.222.117.89','www.comp21.co.ke', 'comp21.co.ke');
+$comp21dev = array( '3.15.207.63','www.comp21.dev', 'comp21.dev');
 if ( ( in_array($server_name, $comp21coke))) {
     define( 'PARTYA', '3015585' );
     define( 'REMARKS', 'Remarks' );
