@@ -145,7 +145,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
             break;
         case 'last_7_days':
            // $_7daysFloor = date( 'Y-m-d 00:00:00',strtotime('-7 day', time())); //Change to check from monday to today
-            $_lastMonday = date( 'Y-m-d 00:00:00',strtotime('Monday this week'));
+            $_lastMonday = date('Y-m-d 00:00:00',strtotime('Monday this week'));
             $sum = MpesaPayments::getTotalMpesaInRange($_lastMonday, $today)['total_mpesa'];
             break;
         case 'currentmonth':

@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                  'attribute' => 'status',
                 'format'=>'raw',
                 'value' => function($model){
-                    if(Yii::$app->user->identity->perm_group == 1 && in_array($model->status, [0,1,2,3])):
+                    if(Yii::$app->user->identity->perm_group == 1 && in_array($model->status, [0,2,3])):
                         return Html::dropDownList( 'status' . str_replace('-', '_', $model->id), $model->status, ['0' => 'Pending','2'=>'Failed','3'=>'Retunr','1'=>'Processed'], [
                             'prompt'   => '',
                             "class"    => "form-control ",
