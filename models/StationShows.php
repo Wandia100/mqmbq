@@ -49,7 +49,7 @@ class StationShows extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'station_id', 'name', 'show_code'], 'required'],
+            [['id', 'station_id', 'name', 'show_code','monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'start_time', 'end_time', 'enabled'], 'required'],
             [['description'], 'string'],
             [['target', 'invalid_percentage'], 'number'],
             [['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'enabled'], 'integer'],
