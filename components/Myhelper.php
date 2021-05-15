@@ -749,16 +749,14 @@ class Myhelper extends Component {
 	{
 		$message="";
 		$server_name = $_SERVER['SERVER_NAME'];
-		$comp21coke = array( '18.222.117.89','www.comp21.co.ke', 'comp21.co.ke' );
-		$comp21net = array( '18.190.157.46','www.comp21.net', 'comp21.net' );
-		$comp21dev =  array('3.15.207.63','www.comp21.dev', 'comp21.dev');
-		if ( ( in_array($server_name, $comp21coke))) {
+		
+		if ( ( in_array($server_name,COMP21_COKE))) {
 			$message = "$first_name, Umeingia Draw! Endelea Kushiriki, Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
 		}
-		else if ( ( in_array($server_name, $comp21net))) {
+		else if ( ( in_array($server_name, COMP21_NET))) {
 			$message = "$first_name, Umeingia Draw! Endelea Kushiriki, Waweza tunukiwa, PB 4044043 Ksh 100, T&C apply. Customer care  0719034036";
 		}
-		else if ( ( in_array($server_name, $comp21dev))) {
+		else if ( ( in_array($server_name, COMP21_DEV))) {
 			$message = "$first_name, Umeingia Draw! Endelea Kushiriki, Waweza tunukiwa, PB 321321 Ksh 100, T&C apply. Customer care  0719034037";		}
 		 else {
 			$message = "$first_name, Umeingia Draw! Endelea Kushiriki, Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
@@ -769,15 +767,12 @@ class Myhelper extends Component {
 	{
 		$message="";
 		$server_name = $_SERVER['SERVER_NAME'];
-		$comp21coke = array( '18.222.117.89','www.comp21.co.ke', 'comp21.co.ke' );
-		$comp21net = array( '18.190.157.46','www.comp21.net', 'comp21.net' );
-		$comp21dev =  array('3.15.207.63','www.comp21.dev', 'comp21.dev');
-		if ( ( in_array($server_name, $comp21coke))) {
+		if ( ( in_array($server_name, COMP21_COKE))) {
 			$message = "$first_name, Kushiriki kwenye draw ni shilingi mia moja tu,Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
 		}
-		else if ( ( in_array($server_name, $comp21net))) {
+		else if ( ( in_array($server_name, COMP21_NET))) {
 			$message = "$first_name, Kushiriki kwenye draw ni shilingi mia moja tu,Waweza tunukiwa, PB 4044043 Ksh 100, T&C apply. Customer care  0719034036";		}
-		else if ( ( in_array($server_name, $comp21dev))) {
+		else if ( ( in_array($server_name, COMP21_DEV))) {
 			$message = "$first_name, Kushiriki kwenye draw ni shilingi mia moja tu,Waweza tunukiwa, PB 321321 Ksh 100, T&C apply. Customer care  0719034037";		}
 		 else {
 			$message = "$first_name, Kushiriki kwenye draw ni shilingi mia moja tu,Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
@@ -788,16 +783,13 @@ class Myhelper extends Component {
 	{
 		$message="";
 		$server_name = $_SERVER['SERVER_NAME'];
-		$comp21coke = array( '18.222.117.89','www.comp21.co.ke', 'comp21.co.ke' );
-		$comp21net = array( '18.190.157.46','www.comp21.net', 'comp21.net' );
-		$comp21dev =  array('3.15.207.63','www.comp21.dev', 'comp21.dev');
-		if ( ( in_array($server_name, $comp21coke))) {
+		if ( ( in_array($server_name, COMP21_COKE))) {
 			$message="CONGRATULATIONS ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. For more details C/Care 0719034035.T&C apply. 20% Tax Charged.";
 		}
-		else if ( ( in_array($server_name, $comp21net))) {
+		else if ( ( in_array($server_name, COMP21_NET))) {
 			$message="CONGRATULATIONS ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. For more details C/Care 0719034036.T&C apply. 20% Tax Charged.";
 			}
-		else if ( ( in_array($server_name, $comp21dev))) {
+		else if ( ( in_array($server_name, COMP21_DEV))) {
 			$message="CONGRATULATIONS ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. For more details C/Care 0719034037.T&C apply. 20% Tax Charged.";		}
 		 else {
 			$message="CONGRATULATIONS ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. For more details C/Care 0719034035.T&C apply. 20% Tax Charged.";

@@ -4,16 +4,13 @@
     $db_password = "Zpa@!%vfrG34f";
     $db_name = "comp21_sms";
 	$server_name = $_SERVER['SERVER_NAME'];
-	$comp21coke = array('18.222.117.89','www.comp21.co.ke','comp21.co.ke');
-	$comp21net = array('18.190.157.46','www.comp21.net','comp21.net');
-	$comp21dev =  array('3.15.207.63','www.comp21.dev','comp21.dev');
-	if ( ( in_array($server_name,$comp21coke ))) {
+	if ( ( in_array($server_name,COMP21_COKE ))) {
 		$db_host      = "18.188.98.88";
     }
-	else if ( ( in_array($server_name,$comp21net ))) {
+	else if ( ( in_array($server_name,COMP21_NET ))) {
 		$db_host      =  "3.142.221.86";
     }
-	else if ( ( in_array($server_name,$comp21dev ))) {
+	else if ( ( in_array($server_name,COMP21_DEV ))) {
 		$db_host      =  "18.217.3.231";
     }
 	 else {
