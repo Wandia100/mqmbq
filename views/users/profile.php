@@ -8,7 +8,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Users */
 
-$this->title = $model->id;
+$this->title = Yii::$app->user->identity->first_name.' '.Yii::$app->user->identity->last_name .' Profile';
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -26,11 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'date_of_birth',
                     'phone_number',
                     'email:email',
-                    'profile_image',
-                    'perm_group',
-                    'defaultpermissiondenied',
-                    'extpermission',
-                    //'password',
                     'enabled',
                     'created_at',
                     'updated_at',
@@ -47,14 +42,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <tbody>
                     <tr>
                         <?php 
-                        $count =1;
-                         foreach ($perm As $value){
-                             echo "<td> - $value->name</td>";
-                             if(($count % 3) == 0){
-                                 echo '</tr><tr>';
-                             }
-                             $count++; 
-                         }
+                            $count =1;
+                            foreach ($perm As $value){
+                                echo "<td> - $value->name</td>";
+                                if(($count % 3) == 0){
+                                    echo '</tr><tr>';
+                                }
+                                $count++; 
+                            }
                         ?>
                     </tr>    
                 </tbody>
