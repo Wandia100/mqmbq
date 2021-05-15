@@ -93,7 +93,6 @@ use app\modules\user\models\User;
                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
                             </a>
                             <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-md-right bg-heavy-rain">
-                                <button type="button" tabindex="0" class="dropdown-item">User Account</button>
                                 
                                 <button type="button" tabindex="0" class="dropdown-item">Settings</button>
                                 <div tabindex="-1" class="dropdown-divider"></div>
@@ -101,6 +100,7 @@ use app\modules\user\models\User;
                                     <?php // Html::a('Login', Url::to('site/login'), ['class' => 'dropdown-item', 'tabindex' => '0'])?>
                                     <?=  Html::a('Login',['/site/login'], ['class' => 'dropdown-item', 'tabindex' => '0'])?>
                                 <?php else:?>
+                                    <?=  Html::a('User Account',['/users/profile','id'=>Yii::$app->user->identity->id], ['class' => 'dropdown-item', 'tabindex' => '0'])?>
                                     <?= Html::a(
                                     'Sign out',
                                     ['/site/logout'],

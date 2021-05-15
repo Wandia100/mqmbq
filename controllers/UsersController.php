@@ -25,7 +25,7 @@ class UsersController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index','delete'],
+                'only' => ['create', 'update','index','delete','profile'],
                 'rules' => [
                     [
                         'actions' => ['create'],
@@ -64,6 +64,15 @@ class UsersController extends Controller
                             if ( ! Yii::$app->user->isGuest ) {
                                 $users = Yii::$app->myhelper->getMembers( array( '' ), array(33) );
                                 return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['profile'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                return True;
                             }
                         }
                     ],
@@ -148,6 +157,35 @@ class UsersController extends Controller
         ]);
     }
 
+     /**
+     * Displays a single Users model.
+     * @param string $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionProfile($id)
+    {
+        $perm=[];
+        $model     = $this->findModel($id);
+        $groupPerm = PermissionGroup::findOne( $model->perm_group );
+        if ( $groupPerm ) {
+            $defaultpermarray         = explode( ',', $groupPerm->defaultPermissions );
+            $extrapermarray           = explode( ',', $model->extpermission );
+            $denieddefaultPermissions = explode( ',', $model->defaultpermissiondenied );
+            $perm                 = array_merge( $defaultpermarray, $extrapermarray ); // all permissions
+            $perm                 = array_diff( $perm, $denieddefaultPermissions ); // Substract denied permissions
+            
+        }
+        $searchModelActivity = new \app\models\ActivityLogSearch();
+        $dataProviderActivity = $searchModelActivity->search(Yii::$app->request->queryParams,$id);
+        return $this->render('profile', [
+            'perm' => Permission::find()->select('name')->where(['IN','id',$perm])->all(),
+            'dataProviderActivity' =>$dataProviderActivity,
+            'model' => $this->findModel($id),
+        ]);
+    }
+    
+    
     /**
      * Creates a new Users model.
      * If creation is successful, the browser will be redirected to the 'view' page.
