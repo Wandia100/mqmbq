@@ -85,7 +85,7 @@ class Stations extends \yii\db\ActiveRecord
         for($i=0;$i<count($data); $i++)
         {
             $row=$data[$i];
-            $row['amount']=MpesaPayments::getStationTotalMpesa($from_time,$row['name'])['amount'];
+            $row['amount']=MpesaPayments::getStationTotalMpesa($from_time,$row['station_code'])['amount'];
             array_push($response,$row);
 
         }
@@ -95,7 +95,8 @@ class Stations extends \yii\db\ActiveRecord
     {
         $sql="select a.id,a.id as station_id,a.name as station_name,a.station_code,
         COALESCE((select sum(b.TransAmount) from mpesa_payments b where b.deleted_at IS NULL AND b.created_at >= :start_period and
-        b.created_at <= :end_period AND b.BillRefNumber=a.name),0) as amount from stations a where a.deleted_at IS NULL order by a.name asc";
+        b.created_at <= :end_period AND  (SUBSTRING(b.BillRefNumber,1,3)=SUBSTRING(a.station_code,1,3) || RIGHT(b.BillRefNumber,3)=RIGHT(a.station_code,3) || b.BillRefNumber LIKE concat('%',a.station_code,'%'))),0) 
+        as amount from stations a where a.deleted_at IS NULL order by a.name asc";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':start_period',$start_period)
         ->bindValue(':end_period',$end_period)
@@ -104,7 +105,7 @@ class Stations extends \yii\db\ActiveRecord
     public static function getDayStationTotalResult($the_day)
     {
         $sql="select a.id,a.id as station_id,a.name as station_name,a.station_code,
-        COALESCE((select sum(b.TransAmount) from mpesa_payments b where b.deleted_at IS NULL AND b.created_at LIKE :the_day  AND b.BillRefNumber=a.name),0) as amount from stations a where a.deleted_at IS NULL order by a.name asc";
+        COALESCE((select sum(b.TransAmount) from mpesa_payments b where b.deleted_at IS NULL AND b.created_at LIKE :the_day  AND  (SUBSTRING(b.BillRefNumber,1,3)=SUBSTRING(a.station_code,1,3) || RIGHT(b.BillRefNumber,3)=RIGHT(a.station_code,3) || b.BillRefNumber LIKE concat('%',a.station_code,'%'))),0) as amount from stations a where a.deleted_at IS NULL order by a.name asc";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':the_day',"%$the_day%")
         ->queryAll();
