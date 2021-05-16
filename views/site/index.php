@@ -24,7 +24,7 @@ $this->title = 'Com 21';
             <div class="col-md-3">
                 <div class="well well-lg text-white" style="background-color: #F64E60">
                     <h5 class="font-weight-bold">Ksh <?= \app\models\MpesaPayments::getMpesaCounts('last_7_days')?></h5>
-                    <p>Last 7 days</p>
+                    <p>Current Week</p>
                 </div>
                 
             </div>
