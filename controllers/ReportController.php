@@ -22,7 +22,7 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['hourlyperformance', 'presentercommission','dailyawarding','revenue','commissionsummary'],
+                'only' => ['hourlyperformance', 'presentercommission','dailyawarding','revenue','commissionsummary','showsummary'],
                 'rules' => [
                     [
                         'actions' => ['hourlyperformance'],
@@ -70,6 +70,16 @@ class ReportController extends Controller{
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
                                 $users = Yii::$app->myhelper->getMembers( array( '' ), array(38) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['showsummary'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(40) );
                                 return in_array( Yii::$app->user->identity->email, $users );
                             }
                         }

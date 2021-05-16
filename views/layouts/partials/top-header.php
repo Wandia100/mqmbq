@@ -52,6 +52,9 @@ use app\modules\user\models\User;
                 <li class="nav-item tour-step <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Hourly Performance" title="Hourly Performance">
                     <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Hourly Performance', ['/report/hourlyperformance'], ['class' => 'text-light'])?>
                 </li>
+                <li class="nav-item tour-step <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Show Summary" title="Show Summary">
+                    <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Show Summary', ['/report/showsummary'], ['class' => 'text-light'])?>
+                </li>
                 <li class="btn-group nav-item tour-step <?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?=$superadminvisibility?> <?=$customercarevisibility?>" data-content="Live" title="Live Transaction">
                     <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Live', ['/transactionhistories/presenter'], ['class' => 'text-light'])?>
                 </li>
