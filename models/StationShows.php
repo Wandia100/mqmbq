@@ -101,9 +101,9 @@ class StationShows extends \yii\db\ActiveRecord
     {
         $sname=$station_name;
         $current_day=strtolower(date("l"));
-        $sql="SELECT a.name,b.station_id,b.id AS show_id,b.start_time,b.end_time FROM stations a 
+        $sql="SELECT a.name,a.station_code,b.station_id,b.id AS show_id,b.start_time,b.end_time FROM stations a 
         LEFT JOIN station_shows b ON a.id=b.station_id  WHERE b.enabled=1 AND b.deleted_at IS NULL AND 
-        a.deleted_at IS NULL AND  (SUBSTRING(a.name,1,3)=SUBSTRING(:station_name,1,3) || RIGHT(a.name,3)=RIGHT(:station_name,3) || a.name LIKE :sname) 
+        a.deleted_at IS NULL AND  (SUBSTRING(a.station_code,1,3)=SUBSTRING(:station_name,1,3) || RIGHT(a.station_code,3)=RIGHT(:station_name,3) || a.station_code LIKE :sname) 
         AND b.".$current_day."=1  AND start_time <= CURRENT_TIME()  AND end_time >=CURRENT_TIME();";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':station_name',$station_name)
