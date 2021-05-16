@@ -7,6 +7,7 @@ use app\models\Stations;
 use app\models\Commissions;
 use app\models\HourlyPerformanceReports;
 use app\models\WinningHistories;
+use app\models\StationShows;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
@@ -215,6 +216,44 @@ class ReportController extends Controller{
         $act -> desc = "hourly_performance report";
         $act ->setLog();
         return $this->render('hourly_performance', [
+            'response' => $response
+            ]);
+    }
+    public function actionShowsummary()
+    {
+            $start_date= date('Y-m-d');
+            $end_date = date("Y-m-d 23:59:59");
+        if ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'daily' ) {
+            $start_date= date('Y-m-d');
+            $end_date = date("Y-m-d 23:59:59");
+            $response=StationShows::getStationShowSummary($start_date,$end_date);
+        } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'monthly' ) {
+            $start_date= date('Y-m-01');
+            $d=cal_days_in_month(CAL_GREGORIAN,date('m'),date('Y'));
+            $end_date = date("Y-m-$d 23:59:59");
+            $response=StationShows::getStationShowSummary($start_date,$end_date);
+        } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'range' ) {
+                if ( isset( $_GET['from'] ) && isset( $_GET['to'] ) ) {
+                        $end_date       = $_GET['to'];
+                        $start_date     = $_GET['from'];
+                        $date1    = strtotime( $end_date);
+                        $date2    = strtotime( $start_date);
+                        if ( $date1 < $date2 ) {
+                                Yii::$app->session->setFlash('error', 'Error: start date should be before the end date' );
+                        }
+                        $response=StationShows::getStationShowSummary($start_date,$end_date);
+                } else {
+                    $start_date= date('Y-m-01');
+                    $d=cal_days_in_month(CAL_GREGORIAN,date('m'),date('Y'));
+                    $end_date = date("Y-m-$d 23:59:59");
+                    $response=StationShows::getStationShowSummary($start_date,$end_date);
+                }
+        } else {
+            $response=StationShows::getStationShowSummary($start_date,$end_date);
+        }
+        return $this->render('show_summary', [
+            'start_date' => $start_date,
+            'end_date' => $end_date,
             'response' => $response
             ]);
     }
