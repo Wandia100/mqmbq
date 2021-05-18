@@ -75,9 +75,13 @@ class SiteController extends Controller
         }else{
             $searchModel = new WinningHistoriesSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','','','',1);
+            $today_payout=WinningHistories::getPayout(date("Y-m-d"))['total'];
+            $yesterday_payout=WinningHistories::getPayout(date("Y-m-d",strtotime("yesterday")))['total'];
             return $this->render('index', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'today_payout' => $today_payout,
+                'yesterday_payout' => $yesterday_payout,
             ]);
         }
     }

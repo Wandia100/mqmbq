@@ -39,12 +39,12 @@ $this->title = 'Com 21';
          <div class="row">
             <div class="col-md-3">
                 <div class="well well-lg" style="background-color: #C9F7F5">
-                    <kbd>Payouts today</kbd> <br/>
-                    <span></span>
+                <h5 class="font-weight-bold">Ksh <?=number_format($today_payout);?></h5>
+                    <p>Payouts today</p>
                 </div>
                 <div class="well well-lg" style="background-color: #FFE2E5">
-                    <kbd>Commissions</kbd><br/>
-                    <span></span>
+                <h5 class="font-weight-bold">Ksh <?=number_format($yesterday_payout);?></h5>
+                    <p>Payouts yesterday</p>
                 </div>
             </div>
             <div class="col-md-6">
