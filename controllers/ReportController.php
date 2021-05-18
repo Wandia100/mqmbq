@@ -232,11 +232,11 @@ class ReportController extends Controller{
     }
     public function actionShowsummary()
     {
-            $start_date= date('Y-m-d');
-            $end_date = date("Y-m-d");
+        $start_date= date('Y-m-d',strtotime('yesterday'));
+        $end_date = $start_date;
         if ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'daily' ) {
-            $start_date= date('Y-m-d');
-            $end_date = date("Y-m-d");
+            $start_date= date('Y-m-d',strtotime('yesterday'));
+            $end_date = $start_date;
             $response=ShowSummary::getShowSummary($start_date,$end_date);
         } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'monthly' ) {
             $start_date= date('Y-m-01');
