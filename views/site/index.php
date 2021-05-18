@@ -93,13 +93,6 @@ $this->title = 'Com 21';
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="well well-lg" style="background-color:#FFFFFF">
-                    <kbd>Shows summary (current month)</kbd><br/>
-                   
-                </div>
-            </div>
-        </div>
+
     </div>
 </div>
