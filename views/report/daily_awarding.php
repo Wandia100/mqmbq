@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><?=$row['show_name'];?></td>
             <td><?=$row['prize_name'];?></td>
             <td><?=$row['show_timing'];?></td>
-            <td><?=$row['awarded'];?></td>
+            <td><?=number_format($row['awarded']);?></td>
             </tr>
             <?php
         

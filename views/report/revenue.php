@@ -47,9 +47,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
             <tr>
             <td><?=$row['the_day'];?></td>
-            <td><?=$row['total_revenue'];?></td>
-            <td><?=$row['payout'];?></td>
-            <td><?=$net_revenue;?></td>
+            <td><?=number_format($row['total_revenue']);?></td>
+            <td><?=number_format($row['payout']);?></td>
+            <td><?=number_format($net_revenue);?></td>
             </tr>
             <?php
         
