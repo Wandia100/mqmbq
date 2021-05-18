@@ -59,9 +59,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
         <tr>
         <td class="font-weight-bold" >TOTAL</td>
-        <td class="font-weight-bold" ><?=$total_revenue;?></td>
-        <td class="font-weight-bold" ><?=$total_awarded;?></td>
-        <td class="font-weight-bold" ><?=$total_net_revenue;?></td>
+        <td class="font-weight-bold" ><?=number_format($total_revenue);?></td>
+        <td class="font-weight-bold" ><?=number_format($total_awarded);?></td>
+        <td class="font-weight-bold" ><?=number_format($total_net_revenue);?></td>
         </tr>
         <?php
     }

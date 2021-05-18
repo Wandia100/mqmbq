@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
             <tr>
             <td class="font-weight-bold" colspan="4">TOTAL</td>
-            <td class="font-weight-bold" ><?=$total;?></td>
+            <td class="font-weight-bold" ><?=number_format($total);?></td>
             </tr>
             <?php
         }
