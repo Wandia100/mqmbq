@@ -8,6 +8,7 @@ use app\models\Commissions;
 use app\models\HourlyPerformanceReports;
 use app\models\WinningHistories;
 use app\models\StationShows;
+use app\models\ShowSummary;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
@@ -232,16 +233,16 @@ class ReportController extends Controller{
     public function actionShowsummary()
     {
             $start_date= date('Y-m-d');
-            $end_date = date("Y-m-d 23:59:59");
+            $end_date = date("Y-m-d");
         if ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'daily' ) {
             $start_date= date('Y-m-d');
-            $end_date = date("Y-m-d 23:59:59");
-            $response=StationShows::getStationShowSummary($start_date,$end_date);
+            $end_date = date("Y-m-d");
+            $response=ShowSummary::getShowSummary($start_date,$end_date);
         } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'monthly' ) {
             $start_date= date('Y-m-01');
             $d=cal_days_in_month(CAL_GREGORIAN,date('m'),date('Y'));
-            $end_date = date("Y-m-$d 23:59:59");
-            $response=StationShows::getStationShowSummary($start_date,$end_date);
+            $end_date = date("Y-m-$d");
+            $response=ShowSummary::getShowSummary($start_date,$end_date);
         } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'range' ) {
                 if ( isset( $_GET['from'] ) && isset( $_GET['to'] ) ) {
                         $end_date       = $_GET['to'];
@@ -251,21 +252,45 @@ class ReportController extends Controller{
                         if ( $date1 < $date2 ) {
                                 Yii::$app->session->setFlash('error', 'Error: start date should be before the end date' );
                         }
-                        $response=StationShows::getStationShowSummary($start_date,$end_date);
+                        $response=ShowSummary::getShowSummary($start_date,$end_date);
                 } else {
                     $start_date= date('Y-m-01');
                     $d=cal_days_in_month(CAL_GREGORIAN,date('m'),date('Y'));
-                    $end_date = date("Y-m-$d 23:59:59");
-                    $response=StationShows::getStationShowSummary($start_date,$end_date);
+                    $end_date = date("Y-m-$d");
+                    $response=ShowSummary::getShowSummary($start_date,$end_date);
                 }
         } else {
-            $response=StationShows::getStationShowSummary($start_date,$end_date);
+            $response=ShowSummary::getShowSummary($start_date,$end_date);
         }
         return $this->render('show_summary', [
             'start_date' => $start_date,
             'end_date' => $end_date,
             'response' => $response
             ]);
+    }
+    public function actionLogshowsummary()
+    {
+        $start_date= date('Y-m-d',strtotime('yesterday'));
+        $end_date = date("$start_date 23:59:59");
+        if(ShowSummary::checkDuplicate($start_date)== 0)
+        {
+            
+            $data=StationShows::getStationShowSummary($start_date,$end_date);
+            for($i=0;$i<count($data); $i++)
+            {
+                $row=$data[$i];
+                $model=new ShowSummary();
+                $model->station_show_id=$row['id'];
+                $model->total_revenue=$row['total_revenue'];
+                $model->total_commission=$row['total_commission'];
+                $model->total_payouts=$row['total_payout'];
+                $model->report_date= $start_date;
+                $model->created_at=date("Y-m-d H:i:s");
+                $model->station_show_name=$row['station_show_name'];
+                $model->station_name=$row['station_name'];
+                $model->save();
+            }
+        }
     }
     public function actionLasthour()
     {

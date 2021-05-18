@@ -5,11 +5,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
 <div class="col-md-12">
-<?=$this->renderFile('@app/views/layouts/partials/_datetime_filter_.php', [
+<?=$this->renderFile('@app/views/layouts/partials/_date_filter.php', [
                         'data' => [],
                         'url'  => '/report/showsummary',
                         'from' => date( 'Y-m-01'),
-                        'to' => date("Y-m-$d 23:59:59")
+                        'to' => date("Y-m-$d")
                     ])?>
                 </div>
 </div>
@@ -34,9 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <tr>
         <td><?=$response[$i]['station_name'];?></td>
         <td><?=$response[$i]['station_show_name'];?></td>
-        <td><?=$response[$i]['total_revenue'];?></td>
-        <td><?=$response[$i]['total_commission'];?></td>
-        <td><?=$response[$i]['total_payout'];?></td>
+        <td><?=$response[$i]['revenue'];?></td>
+        <td><?=$response[$i]['commission'];?></td>
+        <td><?=$response[$i]['payout'];?></td>
         </tr>
         <?php
     }
