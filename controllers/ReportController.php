@@ -270,6 +270,7 @@ class ReportController extends Controller{
     }
     public function actionLogshowsummary()
     {
+        Myhelper::checkRemoteAddress();
         $start_date= date('Y-m-d',strtotime('yesterday'));
         $end_date = date("$start_date 23:59:59");
         if(ShowSummary::checkDuplicate($start_date)== 0)
