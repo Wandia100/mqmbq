@@ -34,9 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
     </thead>
     <tbody>
     <?php
-    for($i=0;$i< count($data); $i++)
+    $total=0;
+    $count=count($data);
+    for($i=0;$i<$count; $i++)
     {
         $row=$data[$i];
+        $total+=$row['awarded'];
         ?>
             <tr>
             <td><?=$row['station_name'];?></td>
@@ -48,8 +51,17 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php
         
     }
-
+        if($count > 0)
+        {
+            ?>
+            <tr>
+            <td class="font-weight-bold" colspan="4">TOTAL</td>
+            <td class="font-weight-bold" ><?=$total;?></td>
+            </tr>
+            <?php
+        }
         ?>
+        
     </tbody>
 </table>
 </div>

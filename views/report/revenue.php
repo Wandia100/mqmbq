@@ -33,20 +33,38 @@ $this->params['breadcrumbs'][] = $this->title;
     </thead>
     <tbody>
     <?php
-    for($i=0;$i< count($data); $i++)
+    $total_revenue=0;
+    $total_awarded=0;
+    $total_net_revenue=0;
+    $count=count($data);
+    for($i=0;$i<$count; $i++)
     {
         $row=$data[$i];
+        $net_revenue=round(($row['total_revenue']-$row['payout']));
+        $total_revenue+=$row['total_revenue'];
+        $total_awarded+=$row['payout'];
+        $total_net_revenue+=$net_revenue;
         ?>
             <tr>
             <td><?=$row['the_day'];?></td>
             <td><?=$row['total_revenue'];?></td>
             <td><?=$row['payout'];?></td>
-            <td><?=round(($row['total_revenue']-$row['payout']));?></td>
+            <td><?=$net_revenue;?></td>
             </tr>
             <?php
         
     }
-
+    if($count > 0)
+    {
+        ?>
+        <tr>
+        <td class="font-weight-bold" >TOTAL</td>
+        <td class="font-weight-bold" ><?=$total_revenue;?></td>
+        <td class="font-weight-bold" ><?=$total_awarded;?></td>
+        <td class="font-weight-bold" ><?=$total_net_revenue;?></td>
+        </tr>
+        <?php
+    }
         ?>
     </tbody>
 </table>

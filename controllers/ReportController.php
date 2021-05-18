@@ -379,7 +379,7 @@ class ReportController extends Controller{
         }
         else{
             $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
-            $end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d",strtotime("+1 day",time())));
+            $end_date=(isset($_GET['to'])?date('Y-m-d', strtotime($_GET['to']. ' + 1 day')):date("Y-m-d",strtotime("+1 day",time())));
         }
         $data=WinningHistories::dailyAwarding($start_date,$end_date);
         $act = new \app\models\ActivityLog();
@@ -398,7 +398,7 @@ class ReportController extends Controller{
         }
         else{
             $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
-            $end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d",strtotime("+1 day",time())));
+            $end_date=(isset($_GET['to'])?date('Y-m-d', strtotime($_GET['to']. ' + 1 day')):date("Y-m-d",strtotime("+1 day",time())));
         }
         $data=MpesaPayments::revenueReport($start_date,$end_date);
         $resp=[];
