@@ -71,9 +71,9 @@ class Outbox extends \yii\db\ActiveRecord
         {
             $sms=$smses[$i];
             $pen=[
-                "msisdn"=>$sms->receiver,
+                "msisdn"=>(int)$sms->receiver,
                 "message"=>$sms->message,
-                "unique_id"=>$sms->id
+                "unique_id"=>(int)$sms->id
             ];
             array_push($pending,$pen);
             $sms->delete(false);
