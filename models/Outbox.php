@@ -63,4 +63,28 @@ class Outbox extends \yii\db\ActiveRecord
         $outbox->category=$category;
         $outbox->save(false);
     }
+    public static function getOutbox()
+    {
+        $smses=Outbox::find()->limit(30)->all();
+        $pending=[];
+        for($i=0;$i <count($smses); $i++)
+        {
+            $sms=$smses[$i];
+            $pen=[
+                "msisdn"=>$sms->receiver,
+                "message"=>$sms->message,
+                "unique_id"=>$sms->id
+            ];
+            array_push($pending,$pen);
+            $sms->delete(false);
+            $sent_sms=new SentSms();
+            $sent_sms->receiver=$sms->receiver;
+            $sent_sms->message=$sms->message;
+            $sent_sms->category=$sms->category;
+            $sent_sms->category=$sms->category;
+            $sent_sms->created_date=$sms->created_date;
+            $sent_sms->save(false);
+        }
+        return $pending;
+    }
 }
