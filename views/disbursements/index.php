@@ -29,9 +29,25 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
-    <?= GridView::widget([
+    <?=  kartik\grid\GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'autoXlFormat'=>true,
+        'toggleDataContainer' => ['class' => 'btn-group mr-2'],
+        'export'=>[
+            'showConfirmAlert'=>false,
+            'target'=> \kartik\grid\GridView::TARGET_BLANK
+        ],
+        'pjax'=>true,
+    'showPageSummary'=>true,
+    'toolbar' => [
+        '{toggleData}',
+                '{export}',
+    ],
+    'panel'=>[
+        'type'=>'primary',
+        'heading'=>'transactionhistories'
+    ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
