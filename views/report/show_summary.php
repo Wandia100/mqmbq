@@ -34,9 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <tr>
         <td><?=$response[$i]['station_name'];?></td>
         <td><?=$response[$i]['station_show_name'];?></td>
-        <td><?=$response[$i]['revenue'];?></td>
-        <td><?=$response[$i]['commission'];?></td>
-        <td><?=$response[$i]['payout'];?></td>
+        <td><?=number_format($response[$i]['revenue']);?></td>
+        <td><?=number_format($response[$i]['commission']);?></td>
+        <td><?=number_format($response[$i]['payout']);?></td>
         </tr>
         <?php
     }
