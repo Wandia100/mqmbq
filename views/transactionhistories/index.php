@@ -58,14 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'deleted_at',
                ['class' => '\kartik\grid\ActionColumn', 'urlCreator'=>function(){return '#';}]
         ];
-   echo \kartik\export\ExportMenu::widget([
-    'dataProvider' => $dataProvider,
-    'columns' => $gridColumns,
-    'dropdownOptions' => [
-        'label' => 'Export All',
-        'class' => 'btn btn-outline-secondary'
-    ]
-]) . "<hr>\n". \kartik\grid\GridView::widget([
+   echo \kartik\grid\GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'autoXlFormat'=>true,

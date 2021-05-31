@@ -176,12 +176,12 @@ class ApiController extends Controller
         }
     }
     #start of sms code
-    public function sendSms($phone_number,$message)
+    public function sendSms($payload)
     {
         $username=Keys::getSmsUsername();
         $password=Keys::getSmsPassword();
         $cookie=Keys::getSmsCookie();
-        $data = array('username' => $username,'password' => $password,'oa' => 'nitext','payload' => '[{"msisdn":"'.$phone_number.'","message":"'.$message.'","unique_id":1000}]');
+        $data = array('username' => $username,'password' => $password,'oa' => 'nitext','payload' => json_encode($payload));
         $data = http_build_query($data);
 
         $curl = curl_init();
@@ -207,20 +207,13 @@ class ApiController extends Controller
     public function actionProcessSms()
     {
         Myhelper::checkRemoteAddress();
-        $outbox=Outbox::find()->limit(500)->all();
-        for($i=0;$i<count($outbox);$i++)
+        $count=Outbox::find()->count();
+        $batch_size=50;
+        $rounds=ceil($count/$batch_size);
+        for($i=0; $i<$rounds; $i++)
         {
-            $row=$outbox[$i];
-            $row->delete(false);
-            $this->sendSms($row->receiver,$row->message);
-            $sent_sms=new SentSms();
-            $sent_sms->receiver=$row->receiver;
-            $sent_sms->message=$row->message;
-            $sent_sms->category=$row->category;
-            $sent_sms->category=$row->category;
-            $sent_sms->created_date=$row->created_date;
-            $sent_sms->save(false);
-            
+            $payload=Outbox::getOutbox();
+            $this->sendSms($payload);
         }
     }
     public function actionSms()
