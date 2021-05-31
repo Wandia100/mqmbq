@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 if(isset($_GET['id'])){
     echo Html::beginForm(
-            $action = Url::to(['/commissions/index','t'=>$_GET['t'],'criterion'=>$_GET['criterion']]),
+            $action = Url::to(['/commissions/index','t'=>$_GET['t'],'criterion'=>(isset($_GET['criterion'])?$_GET['criterion']:"")]),
             $method = 'post',
             $hmtmlOptions = array('id' => 'commissiondisbursementform' )
     );
