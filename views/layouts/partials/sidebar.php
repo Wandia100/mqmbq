@@ -43,6 +43,27 @@ use luc\tourist\Tourist;
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-home"></i> Home', Url::home(), ['class' => ''])?>
                 </li>
+                <li class="<?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Hourly Performance" title="Hourly Performance">
+                    <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Hourly Performance', ['/report/hourlyperformance'], ['class' => ''])?>
+                </li>
+                <li class="<?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Show Summary" title="Show Summary">
+                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> Show Summary', ['/report/showsummary'], ['class' => ''])?>
+                </li>
+                <li class="<?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?=$superadminvisibility?> <?=$customercarevisibility?>" data-content="Live" title="Live Transaction">
+                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> Live', ['/transactionhistories/presenter'], ['class' => ''])?>
+                </li>
+                <li class="<?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?=$superadminvisibility?> <?=$customercarevisibility?>" data-content="Commissions" title="Commission">
+                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> Commission Report', ['/report/presentercommission'], ['class' => ''])?>
+                </li>
+                <li class="<?=$presentervisibility?> <?=$managementvisibility?> <?=$customercarevisibility?>" data-content="Commission Summary" title="Commission Summary">
+                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> Commission Summary', ['/report/commissionsummary'], ['class' => ''])?>
+                </li>
+                <li class="<?= $presentervisibility?> <?=$customercarevisibility?>" data-content="Daily Awarding Report" title="Daily Awarding Report">
+                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> Daily Awarding Report', ['/report/dailyawarding'], ['class' => ''])?>
+                </li>
+                <li class="<?= $presentervisibility?> <?=$customercarevisibility?>" data-content="Revenue Report" title="Revenue Report">
+                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> Revenue Report', ['/report/revenue'], ['class' => ''])?>
+                 </li>  
                 <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>" title="User Administration"
                     data-content="User Management Module. Menu options to manage, edit, view, create users.">
                     USER MANAGEMENT
