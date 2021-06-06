@@ -74,7 +74,7 @@ class CommissionsController extends Controller
             $presenters = $_POST['presenter'];
             $presenterscount = count($presenters);
             
-            $indivudualamount = $model->amount/$presenterscount;
+            $indivudualamount = round($model->amount/$presenterscount);
             //save disbursents
             for($i = 0; $i < $presenterscount; $i ++){
                 $pres = \app\models\Users::findOne($presenters[$i]);
