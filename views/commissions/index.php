@@ -66,8 +66,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header'=>'action',
                 'format'=>'raw',
                 'value' => function($model){
-                    if($model->status == 0 && $model->c_type == 3)
+                    if($model->status == 0 && in_array($model->c_type,[3,4]))
+                    {
                         return Html::a('<span class="">Disburse</span>', ['index','id'=>$model->id,'t'=>'p']);
+                    }
+                    else 
+                    {
+                        return "Disbursed";
+                    }
                 }
             ],
         ],
