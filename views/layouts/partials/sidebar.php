@@ -39,7 +39,10 @@ use luc\tourist\Tourist;
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                <li class="app-sidebar__heading <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">Dashboards</li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
+                <?= Html::a('<i class="metismenu-icon fa fa-home"></i> TOP REPORTS <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>', "#", ['class' => ''])?>               
+                
+                <ul>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-home"></i> Home', Url::home(), ['class' => ''])?>
                 </li>
@@ -64,18 +67,25 @@ use luc\tourist\Tourist;
                 <li class="<?= $presentervisibility?> <?=$customercarevisibility?>" data-content="Revenue Report" title="Revenue Report">
                     <?= Html::a('<i class="metismenu-icon fa fa-list"></i> Revenue Report', ['/report/revenue'], ['class' => ''])?>
                  </li>  
-                <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>" title="User Administration"
+                </ul>
+                </li>
+
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>" title="User Administration"
                     data-content="User Management Module. Menu options to manage, edit, view, create users.">
-                    USER MANAGEMENT
+                    <?= Html::a('<i class="metismenu-icon fa fa-users"></i> USER MANAGEMENT <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>', "#", ['class' => ''])?>               
+                    <ul>
+                    <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
+                    <?= Html::a(' List All Users', Url::to(['/users/index']), ['class' => '', 'id' => 'users'])?>
                 </li>
-                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
-                    <?= Html::a('<i class="metismenu-icon fa fa-users"></i> List All Users', Url::to(['/users/index']), ['class' => '', 'id' => 'users'])?>
+                </ul>
                 </li>
-                <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?>  <?=$customercarevisibility?>" title="User Administration"
+                
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?>  <?=$customercarevisibility?>" title="User Administration"
                     data-content="User Management Module. Menu options to manage, edit, view, create users.">
-                    STATION MANAGEMENT
-                </li>
-                <li class="<?= $presentervisibility?> <?=$managementvisibility?>  <?=$customercarevisibility?>">
+                    
+                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> STATION MANAGEMENT <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>', "#", ['class' => ''])?>               
+                    <ul>
+                    <li class="<?= $presentervisibility?> <?=$managementvisibility?>  <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-signal"></i> Stations', Url::to(['/stations/index']), ['class' => '', 'id'=>'manage_categories'])?>
                 </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?>  <?=$customercarevisibility?>">
@@ -84,11 +94,14 @@ use luc\tourist\Tourist;
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-gift"></i> Prizes', Url::to(['/prizes/index']), ['class' => '', 'id' => 'newapp'])?>
                 </li>
-                <li class="app-sidebar__heading tour-step <?=$managementvisibility?> " data-content="Application Management Options. Add/Edit/View Application(s) options"
-                    title="Application Management">
-                    REPORTS
+                    </ul>
                 </li>
-                <li class="<?= $presentervisibility?> <?=$managementvisibility?>  <?=$customercarevisibility?>">
+                
+                <li class="<?=$managementvisibility?> " data-content="Application Management Options. Add/Edit/View Application(s) options"
+                    title="Application Management">
+                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> REPORTS <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>', "#", ['class' => ''])?>               
+                    <ul>
+                    <li class="<?= $presentervisibility?> <?=$managementvisibility?>  <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Mpesa Report', Url::to(['/mpesapayments/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$customercarevisibility?>">
@@ -112,11 +125,14 @@ use luc\tourist\Tourist;
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$adminvisibility?> <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursements', Url::to(['/disbursements/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
-                <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>  <?=$customercarevisibility?>" data-content="Application Management Options. Add/Edit/View Application(s) options"
-                    title="Application Management">
-                    FINANCE
+                    </ul>
                 </li>
-                <li class="<?=$adminvisibility?> <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>  <?=$customercarevisibility?>">
+                
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>  <?=$customercarevisibility?>" data-content="Application Management Options. Add/Edit/View Application(s) options"
+                    title="Application Management">
+                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> FINANCE <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>', "#", ['class' => ''])?>               
+                    <ul>
+                    <li class="<?=$adminvisibility?> <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>  <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursement', Url::to(['/disbursements/create']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li class="<?=$adminvisibility?> <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>  <?=$customercarevisibility?>">
@@ -128,13 +144,16 @@ use luc\tourist\Tourist;
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
                     <?php // Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Disbursement', Url::to(['/disbursements/indexc','t'=>'p']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
+                    </ul>
+                </li>
+
                 
-                <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>" title=" Module"
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>" title=" Module"
                     data-content="Role Based Access Control Management for the applications. Set up Roles and Rules for the different managed Applications"
                 >
-                    RBAC
-                </li>
-                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">                    
+                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> RBAC <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>', "#", ['class' => ''])?>               
+                        <ul>
+                        <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">                    
                         <?= Html::a('<i class="metismenu-icon fa fa-chalkboard-teacher"></i> Permission Group', Url::to(['/permissiongroup/index', 'type' => \yii\rbac\Item::TYPE_ROLE]), ['class' => ''])?>
                     
                 </li>
@@ -142,22 +161,30 @@ use luc\tourist\Tourist;
                     <?= Html::a('<i class="metismenu-icon fa fa-clipboard-list"></i> Permissions', Url::to(['/permission/index', 'type' => yii\rbac\Item::TYPE_PERMISSION]))?>
                     
                 </li>
-                
-                <li class="app-sidebar__heading tour-step <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>" title="API Menu" data-content="API Documentation for the system. List and usage of different endpoints.">
-                    API
+                        </ul>
                 </li>
-                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
+                
+                
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>" title="API Menu" data-content="API Documentation for the system. List and usage of different endpoints.">
+                    
+                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> API <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>', "#", ['class' => ''])?>               
+                    <ul>
+                    <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fas fa-print"></i> API Documentation', Url::to(['/api-docs']), ['target' => '_blank'])?>
                 </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-user-secret"></i> API Users/Applications', Url::to(['/user/api-users']))?>
                 </li>
-                <li class="app-sidebar__heading tour-step" title="User Guides/Documentation and FAQs"
+                    </ul>
+                </li>
+                
+                <li class="" title="User Guides/Documentation and FAQs"
                     data-content="This is a link to documents that are associated with this system and frequently asked questions(FAQs)."
                 >
-                    Help
-                </li>
-                <li>
+                    
+                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> HELP <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>', "#", ['class' => ''])?>               
+                    <ul>
+                    <li>
                     <a target="_blank" >
                         <i class="metismenu-icon pe-7s-graph2">
                         </i>
@@ -169,6 +196,9 @@ use luc\tourist\Tourist;
                         FAQs
                     </a>
                 </li>
+                    </ul>
+                </li>
+               
             </ul>
         </div>
     </div>
