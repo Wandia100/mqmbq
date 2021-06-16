@@ -18,10 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12">
-                        <?=$this->renderFile('@app/views/layouts/partials/_datetime_filter_.php', [
+                        <?=$this->renderFile('@app/views/layouts/partials/_datetimesec_filter_.php', [
                             'data' => [],
                             'url'  => '/mpesapayments/index',
-                            'from' => date( 'Y-m-d H:i', strtotime( '-5 hours' ) )
+                            'from' => date( 'Y-m-d H:i:s', strtotime( '-5 hours' ) )
                         ])?>
                 </div>
                 
