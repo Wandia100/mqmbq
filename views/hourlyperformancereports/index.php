@@ -20,9 +20,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
+    <?= kartik\grid\GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'autoXlFormat'=>true,
+        'toggleDataContainer' => ['class' => 'btn-group mr-2'],
+        'export'=>[
+            'showConfirmAlert'=>false,
+            'target'=> \kartik\grid\GridView::TARGET_BLANK
+        ],
+        'pjax'=>true,
+        'showPageSummary'=>true,
+        'toolbar' => [
+            '{toggleData}',
+                    '{export}',
+        ],
+        'panel'=>[
+            'type'=>'primary',
+            'heading'=>'transactionhistories'
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -38,6 +54,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
+        'pjax'=>true,
+        'showPageSummary'=>true,
+        'toolbar' => [
+            '{toggleData}',
+                    '{export}',
+        ],
+        'panel'=>[
+            'type'=>'default',
+            'heading'=>'Hourly performance'
+        ]
     ]); ?>
 
 

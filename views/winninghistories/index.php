@@ -39,15 +39,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'target'=> \kartik\grid\GridView::TARGET_BLANK
         ],
         'pjax'=>true,
-    'showPageSummary'=>true,
-    'toolbar' => [
-        '{toggleData}',
-                '{export}',
-    ],
-    'panel'=>[
-        'type'=>'primary',
-        'heading'=>'transactionhistories'
-    ],
+        'showPageSummary'=>true,
+        'toolbar' => [
+            '{toggleData}',
+                    '{export}',
+        ],
+        'panel'=>[
+            'type'=>'primary',
+            'heading'=>'transactionhistories'
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -88,6 +88,16 @@ $this->params['breadcrumbs'][] = $this->title;
             //'deleted_at',
 
         ],
+        'pjax'=>true,
+        'showPageSummary'=>true,
+        'toolbar' => [
+            '{toggleData}',
+                    '{export}',
+        ],
+        'panel'=>[
+            'type'=>'default',
+            'heading'=>'winners histories'
+        ]
     ]); ?>
 
 

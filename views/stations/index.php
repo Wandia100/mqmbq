@@ -43,10 +43,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'pjax'=>true,
         'showPageSummary'=>true,
-    'toolbar' => [
-        '{toggleData}',
-                '{export}',
-    ],
+        'toolbar' => [
+            '{toggleData}',
+            '{export}',
+        ],
+        'toggleDataOptions' => ['minCount' => 10],
         'panel'=>[
             'type'=>'default',
            // 'heading'=>'Users'

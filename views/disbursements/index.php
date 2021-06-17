@@ -39,15 +39,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'target'=> \kartik\grid\GridView::TARGET_BLANK
         ],
         'pjax'=>true,
-    'showPageSummary'=>true,
-    'toolbar' => [
-        '{toggleData}',
-                '{export}',
-    ],
-    'panel'=>[
-        'type'=>'primary',
-        'heading'=>'transactionhistories'
-    ],
+        'showPageSummary'=>true,
+        'toolbar' => [
+            '{toggleData}',
+                    '{export}',
+        ],
+        'panel'=>[
+            'type'=>'primary',
+            'heading'=>'transactionhistories'
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -68,26 +68,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'disbursement_type',
             //'transaction_reference',
             'created_at',
-            //'updated_at',
-            //'deleted_at',
-            /*[
-                'attribute' => 'status',
-                'format'    => 'raw',
-                'value'     => function ( $model ) {
-                    if ( $model->status == 1 ) {
-                        return "Processed";
-                    }else if ( $model->status == 2 ) {
-                        return "Failed";
-                    } else if ( $model->status == 3 ) {
-                        return "Return";
-                    } else {
-                        return "Pending";
-                    }
-                },
-                'filter'    => array( '0' => 'Pending', '1' => 'Processed','2' =>'Failed','3' =>'return-overpaid' ),
-            ],
-             * 
-             */
             [
                  'attribute' => 'status',
                 'format'=>'raw',
@@ -113,9 +93,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter'    => array( '0' => 'Pending', '1' => 'Processed','2' =>'Failed','3' =>'return-overpaid' ),        
             ],
-
-            
         ],
+        'pjax'=>true,
+        'showPageSummary'=>true,
+        'toolbar' => [
+            '{toggleData}',
+                    '{export}',
+        ],
+        'panel'=>[
+            'type'=>'default',
+            'heading'=>'Disbursements'
+        ]
     ]); ?>
 
 

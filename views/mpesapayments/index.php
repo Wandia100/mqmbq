@@ -65,9 +65,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     
                 </div>
         </div>
-    <?= GridView::widget([
+    <?= \kartik\grid\GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'autoXlFormat'=>true,
+        'toggleDataContainer' => ['class' => 'btn-group mr-2'],
+        'export'=>[
+            'showConfirmAlert'=>false,
+            'target'=> \kartik\grid\GridView::TARGET_BLANK
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -90,6 +96,16 @@ $this->params['breadcrumbs'][] = $this->title;
             //'deleted_at',
 
         ],
+        'pjax'=>true,
+        'showPageSummary'=>true,
+        'toolbar' => [
+            '{toggleData}',
+                    '{export}',
+        ],
+        'panel'=>[
+            'type'=>'default',
+            'heading'=>'mpesa transactions'
+        ]
     ]); ?>
 
 

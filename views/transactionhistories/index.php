@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 '{export}',
     ],
     'panel'=>[
-        'type'=>'primary',
+        'type'=>'default',
         'heading'=>'transactionhistories'
     ]
     ]); ?>
