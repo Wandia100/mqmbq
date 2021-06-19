@@ -60,7 +60,12 @@ $icon = ArrayHelper::getValue($this->params, 'view-icon', 'pe-7s-folder');
                             <li class="nav-item">
                                 <a href="<?= Url::to(['/stationshows/view','id'=>$_GET['id'],'rs'=>'3'])?>">Show Commissions</a>
                             </li>
-                        <?php } ?>     
+                        <?php } ?>  
+                        <?php  if(Yii::$app->controller->id == 'report' && Yii::$app->controller->action->id == 'hourlyperformance'){ ?>
+                            <li class="nav-item"> 
+                                <a href="<?= Url::to(['/report/exporthourlyperformance','from'=> isset($_GET['from'])?$_GET['from']:date("Y-m-d")])?>"> Export</a>
+                            </li>
+                        <?php } ?>  
                     </ul>
                 </div>
             </div>

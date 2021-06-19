@@ -796,5 +796,16 @@ class Myhelper extends Component {
 		 }
 		 return $message;
 	}
+        
+        public static function formatHour($hr){
+            if($hr < 10)
+            {
+                return '0'.$hr;
+            }
+            else
+            {
+                return $hr;
+            }
+        }
 }
 
