@@ -23,10 +23,10 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['hourlyperformance', 'presentercommission','dailyawarding','revenue','commissionsummary','showsummary'],
+                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','revenue','exportcommissionsummary','commissionsummary','showsummary'],
                 'rules' => [
                     [
-                        'actions' => ['hourlyperformance'],
+                        'actions' => ['hourlyperformance','exporthourlyperformance'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -66,7 +66,7 @@ class ReportController extends Controller{
                         }
                     ],
                     [
-                        'actions' => ['commissionsummary'],
+                        'actions' => ['commissionsummary','exportcommissionsummary'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -293,6 +293,40 @@ class ReportController extends Controller{
         return $this->render('commission_summary', [
             'data' => $data
         ]);
+    }
+    /**
+     * Method to export commission
+     */
+    public function actionExportcommissionsummary()
+    {
+        header( 'Content-Type: text/csv; charset=utf-8' );
+        header( 'Content-Disposition: attachment; filename=commissionsummary.csv' );
+        $output = fopen( 'php://output', 'w' );
+        ob_start();
+        fputcsv($output, ['Station','Show','Timing','Target','Achieved','Net Revenue','Presenter Commission','Management Commission']);
+        if(isset($_GET['criterion']) && $_GET['criterion']=="monthly")
+        {
+            $start_date=date("Y-m-01");    
+            $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));    
+        }
+        else if(isset($_GET['criterion']) && $_GET['criterion']=="daily")
+        {
+            $start_date=date("Y-m-01");    
+            $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));    
+        }
+        else{
+            $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
+            //$end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d",strtotime("+1 day",time())));
+            $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));
+        }
+        $data=Commissions::commissionSummary($start_date,$end_date);
+        for($i=0;$i< count($data); $i++)
+        {
+            $row=$data[$i];
+            fputcsv($output, [$row['station_name'],$row['show_name'],$row['show_timing'],$row['target'],round($row['achieved']),round(($row['achieved']-$row['payout'])),round($row['presenter_commission']),round($row['station_commission'])]);
+        }
+        Yii::$app->end();
+        return ob_get_clean();
     }
     public function actionDailyawarding()
     {
