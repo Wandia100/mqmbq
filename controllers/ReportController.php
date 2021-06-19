@@ -23,7 +23,7 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary'],
+                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary'],
                 'rules' => [
                     [
                         'actions' => ['hourlyperformance','exporthourlyperformance'],
@@ -56,7 +56,7 @@ class ReportController extends Controller{
                         }
                     ],
                     [
-                        'actions' => ['revenue'],
+                        'actions' => ['revenue','exportrevenue'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -453,6 +453,48 @@ class ReportController extends Controller{
         return $this->render('revenue', [
             'data' => $resp
         ]);
+    }
+    public function actionExportrevenue()
+    {
+        header( 'Content-Type: text/csv; charset=utf-8' );
+        header( 'Content-Disposition: attachment; filename=Revenue.csv' );
+        $output = fopen( 'php://output', 'w' );
+        ob_start();
+        fputcsv($output, ['Day','Total Revenue','Total Awarded','Net Revenue']);
+        if(isset($_GET['criterion']) && $_GET['criterion']=="monthly")
+        {
+            $start_date=date("Y-m-01");    
+            $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));    
+        }
+        else{
+            $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
+            $end_date=(isset($_GET['to'])?date('Y-m-d', strtotime($_GET['to']. ' + 1 day')):date("Y-m-d",strtotime("+1 day",time())));
+        }
+        $data=MpesaPayments::revenueReport($start_date,$end_date);
+        $resp=[];
+        for($i=0;$i<count($data);$i++)
+        {
+            $row=$data[$i];
+            $row['payout']=WinningHistories::getPayout($row['the_day'])['total'];
+            $row['total_revenue']=MpesaPayments::getTotalMpesa($row['the_day'])['total_mpesa'];
+            array_push($resp,$row);
+        }
+        $total_revenue=0;
+        $total_awarded=0;
+        $total_net_revenue=0;
+        $count=count($resp);
+        for($i=0;$i<$count; $i++)
+        {
+            $row=$resp[$i];
+            $net_revenue=round(($row['total_revenue']-$row['payout']));
+            $total_revenue+=$row['total_revenue'];
+            $total_awarded+=$row['payout'];
+            $total_net_revenue+=$net_revenue;
+            fputcsv($output, [$row['the_day'],number_format($row['total_revenue']),number_format($row['payout']),number_format($net_revenue)]);
+        }
+        Yii::$app->end();
+        return ob_get_clean();
+        
     }
     public function actionPresentercommission()
     {
