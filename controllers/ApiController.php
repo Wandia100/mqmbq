@@ -160,6 +160,22 @@ class ApiController extends Controller
         
         
     }
+    public function actionValidation()
+    {
+        $jsondata = file_get_contents('php://input');
+        $data = json_decode($jsondata,true);
+        if($data['TransAmount']==100)
+        {
+            $response['ResultCode']=0;
+            $response['ResultDesc']="Accepted";
+        }
+        else
+        {
+            $response['ResultCode']=1;
+            $response['ResultDesc']="Rejected";
+        }
+        \Yii::$app->response->data = json_encode($response);
+    }
     #code to disburse payments
     public function actionPayout()
     {
@@ -225,7 +241,7 @@ class ApiController extends Controller
     #end of sms code
     public function beforeAction($action)
     {            
-        if (in_array($action->id,array('process-sms','sms','disbursement-payment-result-confirmation','confirmation','disbursement-payment-timeout-result','payout'))) {
+        if (in_array($action->id,array('process-sms','sms','disbursement-payment-result-confirmation','confirmation','validation','disbursement-payment-timeout-result','payout'))) {
             $this->enableCsrfValidation = false;
         }
     
