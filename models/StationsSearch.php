@@ -18,7 +18,7 @@ class StationsSearch extends Stations
     {
         return [
             [['id', 'name', 'address', 'station_code', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
-            [['enabled'], 'integer'],
+            [['enabled','frequency'], 'integer'],
             [['invalid_percentage'], 'number'],
         ];
     }

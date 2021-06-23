@@ -34,8 +34,8 @@ class Stations extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'name', 'station_code'], 'required'],
-            [['enabled'], 'integer'],
+            [['id', 'name', 'station_code','frequency'], 'required'],
+            [['enabled','frequency'], 'integer'],
             [['invalid_percentage'], 'number'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
@@ -61,6 +61,7 @@ class Stations extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
+            'frequency' => 'Frequency'
         ];
     }
     /**
