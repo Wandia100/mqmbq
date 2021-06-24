@@ -39,10 +39,10 @@ use luc\tourist\Tourist;
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
+                <li class="mm-active <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
                 <?= Html::a('<i class="metismenu-icon fa fa-home"></i> TOP REPORTS <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>', "#", ['class' => ''])?>               
                 
-                <ul>
+                <ul class="mm-collapse mm-show">
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-home"></i> Home', Url::home(), ['class' => ''])?>
                 </li>
