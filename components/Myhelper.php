@@ -91,7 +91,7 @@ class Myhelper extends Component {
 	}
 
 	public static function checkRemoteAddress() {
-		if (in_array($_SERVER['SERVER_NAME'],array('com21.jks.com')) ) {
+		if (in_array($_SERVER['SERVER_NAME'],array('comp21.com')) ) {
 			//allow execution for localhost
 		}
 		else if (in_array($_SERVER['REMOTE_ADDR'],array('18.222.117.89','172.31.14.172')) ) {

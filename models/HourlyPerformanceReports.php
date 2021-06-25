@@ -44,7 +44,13 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
             [['station_id', 'hour'], 'string', 'max' => 255],
         ];
     }
-
+    /**
+     * @return \yii\db\Connection the database connection used by this AR class.
+     */
+    public static function getDb()
+    {
+        return Yii::$app->get('analytics_db');
+    }
     /**
      * {@inheritdoc}
      */
