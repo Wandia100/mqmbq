@@ -11,6 +11,7 @@ use app\models\WinningHistories;
 use app\models\StationShows;
 use app\models\ShowSummary;
 use app\models\WinnerSummary;
+use app\models\RevenueReport;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
@@ -440,15 +441,7 @@ class ReportController extends Controller{
             $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
             $end_date=(isset($_GET['to'])?date('Y-m-d', strtotime($_GET['to']. ' + 1 day')):date("Y-m-d",strtotime("+1 day",time())));
         }
-        $data=MpesaPayments::revenueReport($start_date,$end_date);
-        $resp=[];
-        for($i=0;$i<count($data);$i++)
-        {
-            $row=$data[$i];
-            $row['payout']=WinningHistories::getPayout($row['the_day'])['total'];
-            $row['total_revenue']=MpesaPayments::getTotalMpesa($row['the_day'])['total_mpesa'];
-            array_push($resp,$row);
-        }
+        $resp=RevenueReport::getRevenueReport($start_date,$end_date);
         $act = new \app\models\ActivityLog();
         $act -> desc = "revenue report";
         $act ->setLog();
@@ -588,6 +581,10 @@ class ReportController extends Controller{
     public function actionLogawards()
     {
         WinningHistories::logDailyAwards($winning_date=date("Y-m-d"));
+    }
+    public function actionLogrevenue()
+    {
+        MpesaPayments::logRevenue($revenue_date=date("y-m-d"));
     }
 }
 ?>

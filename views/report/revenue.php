@@ -40,16 +40,15 @@ $this->params['breadcrumbs'][] = $this->title;
     for($i=0;$i<$count; $i++)
     {
         $row=$data[$i];
-        $net_revenue=round(($row['total_revenue']-$row['payout']));
         $total_revenue+=$row['total_revenue'];
-        $total_awarded+=$row['payout'];
-        $total_net_revenue+=$net_revenue;
+        $total_awarded+=$row['total_awarded'];
+        $total_net_revenue+=$row['net_revenue'];
         ?>
             <tr>
-            <td><?=$row['the_day'];?></td>
+            <td><?=$row['revenue_date'];?></td>
             <td><?=number_format($row['total_revenue']);?></td>
-            <td><?=number_format($row['payout']);?></td>
-            <td><?=number_format($net_revenue);?></td>
+            <td><?=number_format($row['total_awarded']);?></td>
+            <td><?=number_format($row['net_revenue']);?></td>
             </tr>
             <?php
         

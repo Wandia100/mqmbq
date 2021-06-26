@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use Webpatser\Uuid\Uuid;
+use app\models\RevenueReport;
+use yii\db\IntegrityException;
 
 /**
  * This is the model class for table "mpesa_payments".
@@ -235,5 +237,24 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':TransID',$unique_field)
         ->bindValue(':limits',$limits)
         ->execute();
+    }
+    public static function logRevenue($revenue_date)
+    {
+        $start_date=$revenue_date;
+        $end_date=$revenue_date." 23:59:59";
+            try
+            {
+                $model=new RevenueReport();
+                $model->revenue_date=$revenue_date;
+                $model->total_awarded=WinningHistories::getPayout($revenue_date)['total'];;
+                $model->total_revenue=MpesaPayments::getTotalMpesa($revenue_date)['total_mpesa'];
+                $model->net_revenue=round($model->total_revenue-$model->total_awarded);
+                $model->save(false);
+            }
+            catch(IntegrityException $e)
+            {
+                //allow execution
+            }
+           
     }
 }

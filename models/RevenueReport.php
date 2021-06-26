@@ -55,4 +55,8 @@ class RevenueReport extends \yii\db\ActiveRecord
             'net_revenue' => 'Net Revenue',
         ];
     }
+    public static function getRevenueReport($start_date,$end_date)
+    {
+        return RevenueReport::find()->where("revenue_date > '$start_date'")->andWhere("revenue_date <'$end_date'")->all();
+    }
 }
