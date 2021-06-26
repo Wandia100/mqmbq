@@ -67,7 +67,7 @@ class ShowSummary extends \yii\db\ActiveRecord
         $sql="SELECT station_name,station_show_name,COALESCE(SUM(total_revenue),0) AS revenue,COALESCE(SUM(total_commission),0) AS commission,
         COALESCE(SUM(total_payouts),0) AS payout FROM show_summary WHERE report_date BETWEEN  :start_date AND :end_date GROUP BY station_show_id,station_name,station_show_name ORDER BY 
         revenue DESC";
-        return Yii::$app->db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':start_date',$start_date)
         ->bindValue(':end_date',$end_date)
         ->queryAll();
