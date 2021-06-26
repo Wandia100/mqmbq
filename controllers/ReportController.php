@@ -584,5 +584,9 @@ class ReportController extends Controller{
     {
         Commissions::logCommission($commission_date=date("Y-m-d"));
     }
+    public function actionLogawards()
+    {
+        WinningHistories::logDailyAwards($winning_date=date("Y-m-d"));
+    }
 }
 ?>
