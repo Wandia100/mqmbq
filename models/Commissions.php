@@ -3,7 +3,8 @@
 namespace app\models;
 
 use Yii;
-
+use app\models\CommissionSummary;
+use yii\db\IntegrityException;
 /**
  * This is the model class for table "commissions".
  *
@@ -120,7 +121,7 @@ class Commissions extends \yii\db\ActiveRecord
     }
     public static function commissionSummary($start_date,$end_date)
     {
-        $sql='SELECT b.name AS station_name,a.name AS show_name,CONCAT(a.start_time,"-",a.end_time) AS show_timing,
+        $sql='SELECT a.id as station_show_id,a.station_id,b.name AS station_name,a.name AS show_name,CONCAT(a.start_time,"-",a.end_time) AS show_timing,
         a.target,(SELECT COALESCE(SUM(amount),0)  FROM transaction_histories WHERE station_show_id=a.id AND created_at BETWEEN :start_date AND :end_date) AS achieved,
         (SELECT COALESCE(SUM(amount),0) FROM winning_histories WHERE station_show_id=a.id AND created_at BETWEEN :start_date AND :end_date) AS payout,
         (SELECT COALESCE(SUM(amount),0) FROM commissions WHERE c_type=3 AND station_show_id=a.id AND created_at BETWEEN :start_date AND :end_date) AS presenter_commission,
@@ -130,5 +131,39 @@ class Commissions extends \yii\db\ActiveRecord
         ->bindValue(':start_date',$start_date)
         ->bindValue(':end_date',$end_date)
         ->queryAll();
+    }
+    public static function logCommission($commission_date)
+    {
+        $start_time=$commission_date." 00:00";
+        $end_time=$commission_date." 23:59";
+        $data=Commissions::commissionSummary($start_time,$end_time);
+        for($i=0;$i<count($data);$i++)
+        {
+            $commission=$data[$i];
+            try
+            {
+                $model=new CommissionSummary(); 
+                $model->station_name=$commission['station_name'];
+                $model->show_name=$commission['show_name'];
+                $model->show_timing=$commission['show_timing'];
+                $model->station_id=$commission['station_id'];
+                $model->station_show_id=$commission['station_show_id'];
+                $model->target=$commission['target'];
+                $model->achieved=$commission['achieved'];
+                $model->payout=$commission['payout'];
+                $model->net_revenue=round($commission['achieved']-$commission['payout']);
+                $model->presenter_commission=$commission['presenter_commission'];
+                $model->station_commission=$commission['station_commission'];
+                $model->commission_date=$commission_date;
+                $model->unique_field=$commission['station_show_id']."-".$commission_date;
+                $model->save(false);
+            }
+            catch(IntegrityException $e)
+            {
+                //allow execution
+            }
+            
+
+        }
     }
 }

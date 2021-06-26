@@ -579,5 +579,9 @@ class ReportController extends Controller{
         $hourly = $json_array;
         return $hourly;
     }
+    public function actionLogcommission()
+    {
+        Commissions::logCommission($commission_date=date("Y-m-d"));
+    }
 }
 ?>
