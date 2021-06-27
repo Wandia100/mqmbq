@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\models\StationShows;
 
 /**
  * This is the model class for table "show_summary".
@@ -71,5 +72,28 @@ class ShowSummary extends \yii\db\ActiveRecord
         ->bindValue(':start_date',$start_date)
         ->bindValue(':end_date',$end_date)
         ->queryAll();
+    }
+    public static function logShowSummary($start_date)
+    {
+        $end_date = date("$start_date 23:59:59");
+        if(ShowSummary::checkDuplicate($start_date)== 0)
+        {
+            
+            $data=StationShows::getStationShowSummary($start_date,$end_date);
+            for($i=0;$i<count($data); $i++)
+            {
+                $row=$data[$i];
+                $model=new ShowSummary();
+                $model->station_show_id=$row['id'];
+                $model->total_revenue=$row['total_revenue'];
+                $model->total_commission=$row['total_commission'];
+                $model->total_payouts=$row['total_payout'];
+                $model->report_date= $start_date;
+                $model->created_at=date("Y-m-d H:i:s");
+                $model->station_show_name=$row['station_show_name'];
+                $model->station_name=$row['station_name'];
+                $model->save();
+            }
+        }
     }
 }

@@ -216,32 +216,6 @@ class ReportController extends Controller{
         return ob_get_clean();
         
     }
-
-    public function actionLogshowsummary()
-    {
-        Myhelper::checkRemoteAddress();
-        $start_date= date('Y-m-d',strtotime('yesterday'));
-        $end_date = date("$start_date 23:59:59");
-        if(ShowSummary::checkDuplicate($start_date)== 0)
-        {
-            
-            $data=StationShows::getStationShowSummary($start_date,$end_date);
-            for($i=0;$i<count($data); $i++)
-            {
-                $row=$data[$i];
-                $model=new ShowSummary();
-                $model->station_show_id=$row['id'];
-                $model->total_revenue=$row['total_revenue'];
-                $model->total_commission=$row['total_commission'];
-                $model->total_payouts=$row['total_payout'];
-                $model->report_date= $start_date;
-                $model->created_at=date("Y-m-d H:i:s");
-                $model->station_show_name=$row['station_show_name'];
-                $model->station_name=$row['station_name'];
-                $model->save();
-            }
-        }
-    }
     public function actionLasthour()
     {
         Myhelper::checkRemoteAddress();
@@ -578,17 +552,57 @@ class ReportController extends Controller{
         $hourly = $json_array;
         return $hourly;
     }
+    public function actionLogshowsummary()
+    {
+        Myhelper::checkRemoteAddress();
+        if(date("H")=="00")
+        {
+            $start_date= date('Y-m-d',strtotime('yesterday'));
+        }
+        else
+        {
+            $start_date= date('Y-m-d');
+        }
+        ShowSummary::logShowSummary($start_date);
+    }
     public function actionLogcommission()
     {
-        Commissions::logCommission($commission_date=date("Y-m-d"));
+        Myhelper::checkRemoteAddress();
+        if(date("H")=="00")
+        {
+            $commission_date= date('Y-m-d',strtotime('yesterday'));
+        }
+        else
+        {
+            $commission_date= date('Y-m-d');
+        }
+        Commissions::logCommission($commission_date);
     }
     public function actionLogawards()
     {
-        WinningHistories::logDailyAwards($winning_date=date("Y-m-d"));
+        Myhelper::checkRemoteAddress();
+        if(date("H")=="00")
+        {
+            $winning_date= date('Y-m-d',strtotime('yesterday'));
+        }
+        else
+        {
+            $winning_date= date('Y-m-d');
+        }
+        WinningHistories::logDailyAwards($winning_date);
     }
     public function actionLogrevenue()
     {
-        MpesaPayments::logRevenue($revenue_date=date("y-m-d"));
+        Myhelper::checkRemoteAddress();
+        if(date("H")=="00")
+        {
+            $revenue_date= date('Y-m-d',strtotime('yesterday'));
+        }
+        else
+        {
+            $revenue_date= date('Y-m-d');
+        }
+        MpesaPayments::logRevenue($revenue_date);
     }
 }
 ?>
