@@ -329,13 +329,17 @@ class ReportController extends Controller{
         }
         else if(isset($_GET['criterion']) && $_GET['criterion']=="daily")
         {
-            $start_date=date("Y-m-01");    
-            $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));    
+            $start_date=date("Y-m-d");    
+            $end_date=date("Y-m-d");    
+        }
+        else if(isset($_GET['criterion']) && $_GET['criterion']=="range")
+        {
+            $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
+            $end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d"));
         }
         else{
-            $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
-            //$end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d",strtotime("+1 day",time())));
-            $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));
+            $start_date=date("Y-m-d");    
+            $end_date=date("Y-m-d");
         }
         $data=CommissionSummary::getCommissionReport($start_date,$end_date);
         $act = new \app\models\ActivityLog();

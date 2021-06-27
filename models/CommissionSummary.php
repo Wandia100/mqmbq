@@ -80,11 +80,15 @@ class CommissionSummary extends \yii\db\ActiveRecord
         $sql="select station_name,show_name,show_timing,sum(target) as target,sum(achieved) as achieved,
         sum(payout) as payout,sum(net_revenue) as net_revenue,sum(presenter_commission) as presenter_commission,
         sum(station_commission) as station_commission from commission_summary 
-        WHERE commission_date BETWEEN :start_date AND :end_date 
+        WHERE commission_date >= :start_date AND commission_date <=:end_date 
         GROUP BY station_name,show_name,show_timing";
         return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':start_date',$start_date)
         ->bindValue(':end_date',$end_date)
         ->queryAll();
+    }
+    public static function checkDuplicate($unique_field)
+    {
+        return CommissionSummary::find()->where("unique_field='$unique_field'")->one();
     }
 }
