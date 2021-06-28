@@ -177,7 +177,7 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
         $start_period=$today." ".$start.":00";
         $end_period=$today." ".($end-1).":59";
         //$range_result = Stations::getStationTotalResult($start_period,$end_period);
-        $range_result = Stations::getStationResult($today);
+        /*$range_result = Stations::getStationResult($today);
         $arr=array();
         array_push($arr,"RANGE TOTAL");
         for($i=0;$i<count($range_result); $i++)
@@ -189,7 +189,7 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
         $invalidRange=$mpesaRange['total_mpesa']-$invalidRange['total_history'];
         array_push($arr,$invalidRange);
         array_push($arr,$mpesaRange['total_mpesa']);
-        array_push($response,$arr);
+        array_push($response,$arr);*/
         //$day_result = Stations::getDayStationTotalResult($today);
         $day_result = Stations::getStationResult($today);
         $arr=array();
