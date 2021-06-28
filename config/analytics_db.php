@@ -5,10 +5,10 @@
 	$db_name = "comp21_analytics";
 	$server_name = $_SERVER['SERVER_NAME'];
 	if ( ( in_array($server_name, COMP21_COKE))) {
-		$db_host      = "3.141.4.51";
+		$db_host      = "3.137.150.45";
     }
 	else if ( ( in_array($server_name,COMP21_NET))) {
-		$db_host      ="18.222.4.78";
+		$db_host      ="18.118.148.138";
     }
 	else if ( ( in_array($server_name,COMP21_DEV))) {
 		$db_host      = "18.190.154.11";
