@@ -167,3 +167,15 @@ function toggleDisbursement (instance, field, id) {
 
     })
 }
+/**
+ *
+ * @param {type} instance
+ * @param {type} field
+ * @param {type} id
+ * @returns {undefined}
+ */
+function notified (instance, field, id) {
+    $.post(host + '/winninghistories/notified', {value: instance.val(), field: field, id: id}, function (data) {
+
+    })
+}

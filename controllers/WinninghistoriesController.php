@@ -32,7 +32,7 @@ class WinninghistoriesController extends Controller
                 'only' => ['create', 'update','index'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index'],
+                        'actions' => ['create', 'update','index','notified'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -58,6 +58,7 @@ class WinninghistoriesController extends Controller
      */
     public function actionIndex()
     {
+        $route = isset($_GET['route'])?$_GET['route']:null;
         $searchModel = new WinningHistoriesSearch();
         $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
         $act = new \app\models\ActivityLog();
@@ -66,7 +67,17 @@ class WinninghistoriesController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'route' => $route
         ]);
+    }
+    /**
+     * Method to toggle disbursement
+     */
+    public function actionNotified(){
+        $field         = $_POST['field'];
+        $mod           = WinningHistories::findOne( $_POST['id'] );
+        $mod->$field   = $_POST['value'];
+        $mod->save( false );
     }
 
     /**

@@ -97,7 +97,7 @@ class WinningHistories extends \yii\db\ActiveRecord
         return [
             [['id', 'reference_name', 'reference_phone', 'reference_code'], 'required'],
             [['amount', 'transaction_cost'], 'number'],
-            [['status'], 'integer'],
+            [['status','notified'], 'integer'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
             [['prize_id', 'station_show_prize_id', 'conversation_id', 'transaction_reference', 'remember_token'], 'string', 'max' => 100],
@@ -132,7 +132,8 @@ class WinningHistories extends \yii\db\ActiveRecord
             'deleted_at' => 'Deleted At',
             'stationshowprizeamount' => 'Prizeamount',
             'stationshowname' => 'Showname',
-            'stationname' => 'Station'
+            'stationname' => 'Station',
+            'notified' =>'Notified'
         ];
     }
     public static function getRecentWinners($station_show_id,$today)

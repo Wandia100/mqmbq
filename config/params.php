@@ -6,5 +6,6 @@ return [
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
     
-    'reportscontrollers'=>['mpesapayments','transactionhistories','winninghistories','financialsummaries','commissions','disbursements','site']
+    'reportscontrollers'=>['mpesapayments','transactionhistories','winninghistories','financialsummaries','commissions','disbursements','site'],
+    'noncashitems' => ['b0356880-7e3e-11eb-9c65-8d380353c292']
 ];

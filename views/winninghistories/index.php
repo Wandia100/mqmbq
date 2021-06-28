@@ -7,7 +7,8 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\WinningHistoriesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Winning Histories';
+
+$this->title = $route == 2? 'Winning Histories - Pending notifications':'Winning Histories';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="winning-histories-index">
@@ -17,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="row">
                 <div class="col-md-12">
                         <?=$this->renderFile('@app/views/layouts/partials/_date_filter.php', [
-                                'data' => [],
+                                'data' => ['route'=>$route],
                                 'url'  => '/winninghistories/index',
                                 'from' => date( 'Y-m-d', strtotime( '-42 days' ) )
                         ])?>
@@ -49,9 +50,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading'=>'transactionhistories'
         ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+           // ['class' => 'yii\grid\SerialColumn'],
 
-           // 'id',
+            'id',
            # 'prize_id',
             [
                 'attribute' => 'prizename',
@@ -82,6 +83,19 @@ $this->params['breadcrumbs'][] = $this->title;
             //'conversation_id',
             //'transaction_reference',
             'status',
+            [
+                 'attribute' => 'notified',
+                'format'=>'raw',
+                'value' => function($model){
+                    return Html::dropDownList( 'notified' . str_replace('-', '_', $model->id), $model->notified, \app\models\Valuelist::getValuelistByType('notified'), [
+                        'prompt'   => '',
+                        "class"    => "form-control ",
+                        'id'       => 'notified' .str_replace('-', '_', $model->id),
+                        "onchange" => "notified($(this),'notified','$model->id')"
+                    ]);
+                },
+                'filter'    => \app\models\Valuelist::getValuelistByType('notified'),        
+            ],
             //'remember_token',
             'created_at',
             //'updated_at',
@@ -96,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'panel'=>[
             'type'=>'default',
-            'heading'=>'winners histories'
+            'heading'=>$this->title
         ]
     ]); ?>
 

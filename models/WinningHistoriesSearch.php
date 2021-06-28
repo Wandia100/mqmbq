@@ -26,7 +26,7 @@ class WinningHistoriesSearch extends WinningHistories
         return [
             [['id', 'prize_id', 'station_show_prize_id', 'reference_name', 'reference_phone', 'reference_code', 'station_id', 'presenter_id', 'station_show_id', 'conversation_id', 'transaction_reference', 'remember_token', 'created_at', 'updated_at', 'deleted_at','stationname','stationshowname','stationshowprizeamount','prizename','presenter'], 'safe'],
             [['amount', 'transaction_cost'], 'number'],
-            [['status'], 'integer'],
+            [['status','notified'], 'integer'],
         ];
     }
 
@@ -48,6 +48,7 @@ class WinningHistoriesSearch extends WinningHistories
      */
     public function search($params, $daily = false, $monthly = false, $from = null, $to = null,$src = '')
     {
+        $route= isset($_GET['route'])?$_GET['route']:null;
         $query = WinningHistories::find();
 
         // add conditions that should always apply here
@@ -105,6 +106,7 @@ class WinningHistoriesSearch extends WinningHistories
             'winning_histories.amount' => $this->amount,
             'transaction_cost' => $this->transaction_cost,
             'status' => $this->status,
+            'notified' => $this->notified,
             //'winning_histories.created_at' => $this->created_at,
             'winning_histories.updated_at' => $this->updated_at,
             'winning_histories.deleted_at' => $this->deleted_at,
@@ -130,6 +132,11 @@ class WinningHistoriesSearch extends WinningHistories
             if(!empty( $this->presenter)){
                 $query->andWhere('users.first_name LIKE "%'.trim($this->presenter). '%" ' .
                 'OR users.last_name LIKE "%'.trim($this->presenter). '%"');
+            }
+            
+            if($route == 2){
+               # $query->andWhere(['IN','prizes.id', \Yii::$app->params['noncashitems']]);
+                 $query->andWhere("notified != 2");
             }
 
         $today     = date( 'Y-m-d' );
