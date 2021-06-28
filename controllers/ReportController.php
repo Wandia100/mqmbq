@@ -381,8 +381,9 @@ class ReportController extends Controller{
      */
     public function actionExportdailyawarding()
     {
+        $filename="dailyAwarding".date("Y-m-d-His").".csv";
         header( 'Content-Type: text/csv; charset=utf-8' );
-        header( 'Content-Disposition: attachment; filename=Dailyawarding.csv' );
+        header( 'Content-Disposition: attachment; filename='.$filename );
         $output = fopen( 'php://output', 'w' );
         ob_start();
         fputcsv($output, ['Station','Show','Prize','Timing','Awarded']);
@@ -395,7 +396,7 @@ class ReportController extends Controller{
             $start_date=(isset($_GET['from']) && $_GET['from'] !=''?$_GET['from']:date("Y-m-d"));
             $end_date=(isset($_GET['to']) && $_GET['to'] !=''?date('Y-m-d', strtotime($_GET['to']. ' + 1 day')):date("Y-m-d",strtotime("+1 day",time())));
         }
-        $data=WinningHistories::dailyAwarding($start_date,$end_date);
+        $data=WinnerSummary::getAwardedSummary($start_date,$end_date);
         $total=0;
         $count=count($data);
         for($i=0;$i<$count; $i++)
