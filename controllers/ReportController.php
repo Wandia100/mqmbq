@@ -429,8 +429,9 @@ class ReportController extends Controller{
     }
     public function actionExportrevenue()
     {
+        $filename="revenue".date("Y-m-d-His").".csv";
         header( 'Content-Type: text/csv; charset=utf-8' );
-        header( 'Content-Disposition: attachment; filename=Revenue.csv' );
+        header( 'Content-Disposition: attachment; filename='.$filename );
         $output = fopen( 'php://output', 'w' );
         ob_start();
         fputcsv($output, ['Day','Total Revenue','Total Awarded','Net Revenue']);
@@ -443,15 +444,7 @@ class ReportController extends Controller{
             $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
             $end_date=(isset($_GET['to'])?date('Y-m-d', strtotime($_GET['to']. ' + 1 day')):date("Y-m-d",strtotime("+1 day",time())));
         }
-        $data=MpesaPayments::revenueReport($start_date,$end_date);
-        $resp=[];
-        for($i=0;$i<count($data);$i++)
-        {
-            $row=$data[$i];
-            $row['payout']=WinningHistories::getPayout($row['the_day'])['total'];
-            $row['total_revenue']=MpesaPayments::getTotalMpesa($row['the_day'])['total_mpesa'];
-            array_push($resp,$row);
-        }
+        $resp=RevenueReport::getRevenueReport($start_date,$end_date);
         $total_revenue=0;
         $total_awarded=0;
         $total_net_revenue=0;
@@ -459,11 +452,10 @@ class ReportController extends Controller{
         for($i=0;$i<$count; $i++)
         {
             $row=$resp[$i];
-            $net_revenue=round(($row['total_revenue']-$row['payout']));
-            $total_revenue+=$row['total_revenue'];
-            $total_awarded+=$row['payout'];
-            $total_net_revenue+=$net_revenue;
-            fputcsv($output, [$row['the_day'],number_format($row['total_revenue']),number_format($row['payout']),number_format($net_revenue)]);
+            $total_revenue+=$row->total_revenue;
+            $total_awarded+=$row->total_awarded;
+            $total_net_revenue+=$row->net_revenue;
+            fputcsv($output, [$row->revenue_date,number_format($row->total_revenue),number_format($row->total_awarded),number_format($row->net_revenue)]);
         }
         Yii::$app->end();
         return ob_get_clean();
