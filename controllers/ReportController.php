@@ -328,8 +328,9 @@ class ReportController extends Controller{
      */
     public function actionExportcommissionsummary()
     {
+        $filename="commissionSummary".date("Y-M-d-His").".csv";
         header( 'Content-Type: text/csv; charset=utf-8' );
-        header( 'Content-Disposition: attachment; filename=commissionsummary.csv' );
+        header( 'Content-Disposition: attachment; filename='.$filename );
         $output = fopen( 'php://output', 'w' );
         ob_start();
         fputcsv($output, ['Station','Show','Timing','Target','Achieved','Net Revenue','Presenter Commission','Management Commission']);
@@ -348,7 +349,7 @@ class ReportController extends Controller{
             //$end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d",strtotime("+1 day",time())));
             $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));
         }
-        $data=Commissions::commissionSummary($start_date,$end_date);
+        $data=CommissionSummary::getCommissionReport($start_date,$end_date);
         for($i=0;$i< count($data); $i++)
         {
             $row=$data[$i];
