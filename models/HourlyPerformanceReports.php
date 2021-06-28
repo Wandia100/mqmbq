@@ -85,20 +85,6 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
         $current_time = date("H");
         $transaction_history_result = array();
         $start=0;
-        $end=0;
-        if($current_time >= 0 && $current_time < 8){
-            $start=0;
-            $end=8;
-        }
-        else if($current_time >= 8 && $current_time < 16){
-            $start=8;
-            $end=16;
-        }
-        else if($current_time >= 16 && $current_time < 24){
-            $start=16;
-            $end=24;
-        }
-        $start=0;
         $end=24;
         $stations=Stations::getActiveStations();
         
@@ -144,7 +130,7 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
             }
             else
             {
-                if($today==date("Y-m-d") && $i> date('H'))
+                if($today==date("Y-m-d") && $i>= date('H'))
                 {
                     for($a=0;$a<count($stations);$a++)
                     {
@@ -156,7 +142,7 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
                 }
                 else
                 {
-                    $station_result = Stations::getStationResult($from_time);
+                    /*$station_result = Stations::getStationResult($from_time);
                     for($a=0;$a <count($station_result);$a++)
                     {
                         array_push($hour_record,$station_result[$a]['amount']);
@@ -167,7 +153,7 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
                     $transaction_histories = $transaction_histories['total_history'];
                     $invalid_codes = $mpesa_payments - $transaction_histories;
                     array_push($hour_record,$invalid_codes);
-                    array_push($hour_record,$mpesa_payments);
+                    array_push($hour_record,$mpesa_payments);*/
                 }
 
             }
