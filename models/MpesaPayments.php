@@ -242,6 +242,9 @@ class MpesaPayments extends \yii\db\ActiveRecord
     {
         $start_date=$revenue_date;
         $end_date=$revenue_date." 23:59:59";
+        $report=RevenueReport::checkDuplicate($revenue_date);
+        if($report==NULL)
+        {
             try
             {
                 $model=new RevenueReport();
@@ -255,6 +258,16 @@ class MpesaPayments extends \yii\db\ActiveRecord
             {
                 //allow execution
             }
+        }
+        else
+        {
+            $total_revenue=MpesaPayments::getTotalMpesa($revenue_date)['total_mpesa'];
+            $total_awarded=WinningHistories::getPayout($revenue_date)['total'];
+            $report->total_awarded=$total_awarded;
+            $report->total_revenue=$total_revenue;
+            $report->net_revenue=round($total_revenue-$total_awarded);
+            $report->save(false);
+        }
            
     }
 }

@@ -140,28 +140,42 @@ class Commissions extends \yii\db\ActiveRecord
         for($i=0;$i<count($data);$i++)
         {
             $commission=$data[$i];
-            try
+            $comm=CommissionSummary::checkDuplicate($commission['station_show_id']."-".$commission_date);
+            if($comm==NULL)
             {
-                $model=new CommissionSummary(); 
-                $model->station_name=$commission['station_name'];
-                $model->show_name=$commission['show_name'];
-                $model->show_timing=$commission['show_timing'];
-                $model->station_id=$commission['station_id'];
-                $model->station_show_id=$commission['station_show_id'];
-                $model->target=$commission['target'];
-                $model->achieved=$commission['achieved'];
-                $model->payout=$commission['payout'];
-                $model->net_revenue=round($commission['achieved']-$commission['payout']);
-                $model->presenter_commission=$commission['presenter_commission'];
-                $model->station_commission=$commission['station_commission'];
-                $model->commission_date=$commission_date;
-                $model->unique_field=$commission['station_show_id']."-".$commission_date;
-                $model->save(false);
+                    try
+                {
+                    $model=new CommissionSummary(); 
+                    $model->station_name=$commission['station_name'];
+                    $model->show_name=$commission['show_name'];
+                    $model->show_timing=$commission['show_timing'];
+                    $model->station_id=$commission['station_id'];
+                    $model->station_show_id=$commission['station_show_id'];
+                    $model->target=$commission['target'];
+                    $model->achieved=$commission['achieved'];
+                    $model->payout=$commission['payout'];
+                    $model->net_revenue=round($commission['achieved']-$commission['payout']);
+                    $model->presenter_commission=$commission['presenter_commission'];
+                    $model->station_commission=$commission['station_commission'];
+                    $model->commission_date=$commission_date;
+                    $model->unique_field=$commission['station_show_id']."-".$commission_date;
+                    $model->save(false);
+                }
+                catch(IntegrityException $e)
+                {
+                    //allow execution
+                }
             }
-            catch(IntegrityException $e)
-            {
-                //allow execution
+            else{
+                $comm->target=$commission['target'];
+                $comm->achieved=$commission['achieved'];
+                $comm->payout=$commission['payout'];
+                $comm->net_revenue=round($commission['achieved']-$commission['payout']);
+                $comm->presenter_commission=$commission['presenter_commission'];
+                $comm->station_commission=$commission['station_commission'];
+                $comm->save(false);
             }
+            
             
 
         }

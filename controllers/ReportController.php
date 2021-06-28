@@ -133,10 +133,10 @@ class ReportController extends Controller{
 
     public function actionShowsummary()
     {
-        $start_date= date('Y-m-d',strtotime('yesterday'));
+        $start_date= date('Y-m-d');
         $end_date = $start_date;
         if ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'daily' ) {
-            $start_date= date('Y-m-d',strtotime('yesterday'));
+            $start_date= date('Y-m-d');
             $end_date = $start_date;
             $response=ShowSummary::getShowSummary($start_date,$end_date);
         } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'monthly' ) {
@@ -215,32 +215,6 @@ class ReportController extends Controller{
         Yii::$app->end();
         return ob_get_clean();
         
-    }
-
-    public function actionLogshowsummary()
-    {
-        Myhelper::checkRemoteAddress();
-        $start_date= date('Y-m-d',strtotime('yesterday'));
-        $end_date = date("$start_date 23:59:59");
-        if(ShowSummary::checkDuplicate($start_date)== 0)
-        {
-            
-            $data=StationShows::getStationShowSummary($start_date,$end_date);
-            for($i=0;$i<count($data); $i++)
-            {
-                $row=$data[$i];
-                $model=new ShowSummary();
-                $model->station_show_id=$row['id'];
-                $model->total_revenue=$row['total_revenue'];
-                $model->total_commission=$row['total_commission'];
-                $model->total_payouts=$row['total_payout'];
-                $model->report_date= $start_date;
-                $model->created_at=date("Y-m-d H:i:s");
-                $model->station_show_name=$row['station_show_name'];
-                $model->station_name=$row['station_name'];
-                $model->save();
-            }
-        }
     }
     public function actionLasthour()
     {
@@ -329,13 +303,17 @@ class ReportController extends Controller{
         }
         else if(isset($_GET['criterion']) && $_GET['criterion']=="daily")
         {
-            $start_date=date("Y-m-01");    
-            $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));    
+            $start_date=date("Y-m-d");    
+            $end_date=date("Y-m-d");    
+        }
+        else if(isset($_GET['criterion']) && $_GET['criterion']=="range")
+        {
+            $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
+            $end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d"));
         }
         else{
-            $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
-            //$end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d",strtotime("+1 day",time())));
-            $end_date=date("Y-m-".cal_days_in_month(CAL_GREGORIAN,date("m"),date("Y")));
+            $start_date=date("Y-m-d");    
+            $end_date=date("Y-m-d");
         }
         $data=CommissionSummary::getCommissionReport($start_date,$end_date);
         $act = new \app\models\ActivityLog();
@@ -439,7 +417,7 @@ class ReportController extends Controller{
         }
         else{
             $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
-            $end_date=(isset($_GET['to'])?date('Y-m-d', strtotime($_GET['to']. ' + 1 day')):date("Y-m-d",strtotime("+1 day",time())));
+            $end_date=(isset($_GET['to'])?$_GET['to']:date("Y-m-d"));
         }
         $resp=RevenueReport::getRevenueReport($start_date,$end_date);
         $act = new \app\models\ActivityLog();
@@ -574,17 +552,57 @@ class ReportController extends Controller{
         $hourly = $json_array;
         return $hourly;
     }
+    public function actionLogshowsummary()
+    {
+        Myhelper::checkRemoteAddress();
+        if(date("H")=="00")
+        {
+            $start_date= date('Y-m-d',strtotime('yesterday'));
+        }
+        else
+        {
+            $start_date= date('Y-m-d');
+        }
+        ShowSummary::logShowSummary($start_date);
+    }
     public function actionLogcommission()
     {
-        Commissions::logCommission($commission_date=date("Y-m-d"));
+        Myhelper::checkRemoteAddress();
+        if(date("H")=="00")
+        {
+            $commission_date= date('Y-m-d',strtotime('yesterday'));
+        }
+        else
+        {
+            $commission_date= date('Y-m-d');
+        }
+        Commissions::logCommission($commission_date);
     }
     public function actionLogawards()
     {
-        WinningHistories::logDailyAwards($winning_date=date("Y-m-d"));
+        Myhelper::checkRemoteAddress();
+        if(date("H")=="00")
+        {
+            $winning_date= date('Y-m-d',strtotime('yesterday'));
+        }
+        else
+        {
+            $winning_date= date('Y-m-d');
+        }
+        WinningHistories::logDailyAwards($winning_date);
     }
     public function actionLogrevenue()
     {
-        MpesaPayments::logRevenue($revenue_date=date("y-m-d"));
+        Myhelper::checkRemoteAddress();
+        if(date("H")=="00")
+        {
+            $revenue_date= date('Y-m-d',strtotime('yesterday'));
+        }
+        else
+        {
+            $revenue_date= date('Y-m-d');
+        }
+        MpesaPayments::logRevenue($revenue_date);
     }
 }
 ?>

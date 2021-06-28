@@ -57,6 +57,10 @@ class RevenueReport extends \yii\db\ActiveRecord
     }
     public static function getRevenueReport($start_date,$end_date)
     {
-        return RevenueReport::find()->where("revenue_date > '$start_date'")->andWhere("revenue_date <'$end_date'")->all();
+        return RevenueReport::find()->where("revenue_date >= '$start_date'")->andWhere("revenue_date <='$end_date'")->all();
+    }
+    public static function checkDuplicate($revenue_date)
+    {
+        return RevenueReport::find()->where("revenue_date='$revenue_date'")->one();
     }
 }

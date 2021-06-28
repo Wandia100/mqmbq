@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use app\models\WinnerSummary;
+use yii\db\IntegrityException;
+
 /**
  * This is the model class for table "winning_histories".
  *
@@ -165,7 +167,7 @@ class WinningHistories extends \yii\db\ActiveRecord
     }
     public static function dailyAwarding($start_date,$end_date)
     {
-        $sql='SELECT a.station_id,a.station_show_id,b.name AS station_name,c.name AS show_name,d.name AS prize_name,CONCAT(c.start_time,"-",c.end_time) AS show_timing,
+        $sql='SELECT a.prize_id,a.station_id,a.station_show_id,b.name AS station_name,c.name AS show_name,d.name AS prize_name,CONCAT(c.start_time,"-",c.end_time) AS show_timing,
         (SELECT COALESCE(SUM(amount),0)  FROM winning_histories WHERE station_show_id=a.station_show_id AND prize_id=a.prize_id AND created_at BETWEEN :start_date AND :end_date) AS awarded
         FROM winning_histories a LEFT JOIN stations b ON a.station_id=b.id LEFT JOIN station_shows c ON a.station_show_id=c.id LEFT JOIN prizes d 
         ON a.prize_id=d.id WHERE a.created_at BETWEEN :start_date AND :end_date GROUP BY a.station_id,a.station_show_id,a.prize_id ORDER BY TIME(c.start_time) ASC';
@@ -182,18 +184,36 @@ class WinningHistories extends \yii\db\ActiveRecord
         for($i=0;$i<count($data); $i++)
         {
             $winner=$data[$i];
-            $model=new WinnerSummary();
-            $model->station_id=$winner['station_id'];
-            $model->station_show_id=$winner['station_show_id'];
-            $model->station_name=$winner['station_name'];
-            $model->show_name=$winner['show_name'];
-            $model->prize_id=$winner['prize_id'];
-            $model->prize_name=$winner['prize_name'];
-            $model->show_timing=$winner['show_timing'];
-            $model->awarded=$winner['awarded'];
-            $model->winning_date=$winning_date;
-            $model->unique_field=$winner['station_show_id']-$winner['prize_id']-$winning_date;
-            $model->save(false);
+            $winnerLog=WinnerSummary::checkDuplicate($winner['station_show_id']."-".$winner['prize_id']."-".$winning_date);
+            if($winnerLog==NULL)
+            {
+                try
+                {
+                    $model=new WinnerSummary();
+                    $model->station_id=$winner['station_id'];
+                    $model->station_show_id=$winner['station_show_id'];
+                    $model->station_name=$winner['station_name'];
+                    $model->show_name=$winner['show_name'];
+                    $model->prize_id=$winner['prize_id'];
+                    $model->prize_name=$winner['prize_name'];
+                    $model->show_timing=$winner['show_timing'];
+                    $model->awarded=$winner['awarded'];
+                    $model->winning_date=$winning_date;
+                    $model->unique_field=$winner['station_show_id']."-".$winner['prize_id']."-".$winning_date;
+                    $model->save(false);
+                }
+                catch(IntegrityException $e)
+                {
+                    //allow execution
+                }
+            }
+            else
+            {
+                    $winnerLog->awarded=$winner['awarded'];
+                    $winnerLog->save(false);
+            }
+            
+            
 
         }
     }

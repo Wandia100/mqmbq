@@ -5,7 +5,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
 <div class="col-md-12">
-<?=$this->renderFile('@app/views/layouts/partials/show_summary_filter.php', [
+<?=$this->renderFile('@app/views/layouts/partials/_date_filter.php', [
                         'data' => [],
                         'url'  => '/report/showsummary',
                         'from' => date( 'Y-m-01'),

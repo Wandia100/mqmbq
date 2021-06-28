@@ -83,4 +83,8 @@ class WinnerSummary extends \yii\db\ActiveRecord
         ->bindValue(':end_date',$end_date)
         ->queryAll();
     }
+    public static function checkDuplicate($unique_field)
+    {
+        return WinnerSummary::find()->where("unique_field='$unique_field'")->one();
+    }
 }
