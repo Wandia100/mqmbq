@@ -114,8 +114,9 @@ class ReportController extends Controller{
      * Method to export hourly performance
      */
     public function actionExporthourlyperformance(){
+        $filename="Hourlypeformance".date("Y-m-d-His").".csv";
         header( 'Content-Type: text/csv; charset=utf-8' );
-        header( 'Content-Disposition: attachment; filename=Hourlypeformance.csv' );
+        header( 'Content-Disposition: attachment; filename='.$filename );
         $output = fopen( 'php://output', 'w' );
         ob_start();
         $model = new HourlyPerformanceReports();
