@@ -172,15 +172,16 @@ class ReportController extends Controller{
     
     public function actionExportshowsummary()
     {
+        $filename="showSummary".date("Y-m-d-His").".csv";
         header( 'Content-Type: text/csv; charset=utf-8' );
-        header( 'Content-Disposition: attachment; filename=showsummary.csv' );
+        header( 'Content-Disposition: attachment; filename='.$filename);
         $output = fopen( 'php://output', 'w' );
         ob_start();
         fputcsv($output, ['STATION NAME','STATION SHOW NAME','TOTAL REVENUE','TOTAL COMMISSION','TOTAL PAYOUTS']);
-        $start_date= date('Y-m-d',strtotime('yesterday'));
+        $start_date= date('Y-m-d');
         $end_date = $start_date;
         if ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'daily' ) {
-            $start_date= date('Y-m-d',strtotime('yesterday'));
+            $start_date= date('Y-m-d');
             $end_date = $start_date;
             $response=ShowSummary::getShowSummary($start_date,$end_date);
         } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'monthly' ) {
