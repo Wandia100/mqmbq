@@ -600,5 +600,39 @@ class ReportController extends Controller{
         }
         MpesaPayments::logRevenue($revenue_date);
     }
+    public function actionLogger($m)
+    {
+        if($m > date('m'))
+        {
+            return;
+        }
+        $days=cal_days_in_month(CAL_GREGORIAN,date($m),date('Y'));
+        for($i=1;$i<=$days; $i++)
+        {
+            if($m==date('m') )
+            {
+                if($i <= date('d'))
+                {
+                    #execution happens here
+                    $log_date=date("Y-$m-$i");
+                    $this->runLogs($log_date);
+                }
+            }
+            else
+            {
+                 $log_date=date("Y-$m-$i");
+                 $this->runLogs($log_date);
+            }
+            
+            
+        }
+
+    }
+    public function runLogs($log_date)
+    {
+        Commissions::logCommission($log_date);
+        WinningHistories::logDailyAwards($log_date);
+        MpesaPayments::logRevenue($log_date);
+    }
 }
 ?>
