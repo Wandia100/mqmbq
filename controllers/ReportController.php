@@ -602,6 +602,7 @@ class ReportController extends Controller{
     }
     public function actionLogger($m)
     {
+        Myhelper::checkRemoteAddress();
         if($m > date('m'))
         {
             return;
