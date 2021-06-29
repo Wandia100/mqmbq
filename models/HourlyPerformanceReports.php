@@ -89,6 +89,9 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
         $stations=Stations::getActiveStations();
         
         $response=array();
+        $day_total=[];
+        $day_invalid=0;
+        $day_total_amount=0;
         #station names
         $station_names=array();
         array_push($station_names,"HOUR");
@@ -118,15 +121,33 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
                         $invalid=$stationData->invalid_codes;
                         $totalAmount=$stationData->total_amount;
                         array_push($hour_record,$stationData->amount);
+                        if(isset($day_total[$a]))
+                        {
+                            $day_total[$a]+=$stationData->amount;
+                        }
+                        else
+                        {
+                            $day_total[$a]=$stationData->amount;
+                        }
                     }
                     else
                     {
                         array_push($hour_record,0);
+                        if(isset($day_total[$a]))
+                        {
+                            $day_total[$a]+=0;
+                        }
+                        else
+                        {
+                            $day_total[$a]=0;
+                        }
                     }
                     
                 }
                 array_push($hour_record,$invalid);
                 array_push($hour_record,$totalAmount);
+                $day_invalid+=$invalid;
+                $day_total_amount+=$totalAmount;
             }
             else
             {
@@ -135,6 +156,15 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
                     for($a=0;$a<count($stations);$a++)
                     {
                         array_push($hour_record,0);
+                        
+                        if(isset($day_total[$a]))
+                        {
+                            $day_total[$a]+=0;
+                        }
+                        else
+                        {
+                            $day_total[$a]=0;
+                        }
                     }
                     array_push($hour_record,0);
                     array_push($hour_record,0);
@@ -177,9 +207,18 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
         array_push($arr,$mpesaRange['total_mpesa']);
         array_push($response,$arr);*/
         //$day_result = Stations::getDayStationTotalResult($today);
-        $day_result = Stations::getStationResult($today);
+        
         $arr=array();
         array_push($arr,"DAY TOTAL");
+        //echo count($day_total); exit();
+        for($i=0;$i<count($day_total); $i++)
+        {
+            array_push($arr,$day_total[$i]);
+        }
+        array_push($arr,$day_invalid);
+        array_push($arr,$day_total_amount);
+        array_push($response,$arr);
+        /*$day_result = Stations::getStationResult($today);
         for($i=0;$i<count($day_result); $i++)
         {
             array_push($arr,$day_result[$i]['amount']);
@@ -191,7 +230,7 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
         $invalid_codes = $mpesa_payments - $transaction_histories;
         array_push($arr,$invalid_codes);
         array_push($arr,$mpesa_payments);
-        array_push($response,$arr);
+        array_push($response,$arr);*/
         
         return $response;
         
