@@ -176,6 +176,6 @@ function toggleDisbursement (instance, field, id) {
  */
 function notified (instance, field, id) {
     $.post(host + '/winninghistories/notified', {value: instance.val(), field: field, id: id}, function (data) {
-
+        location.reload();
     })
 }
