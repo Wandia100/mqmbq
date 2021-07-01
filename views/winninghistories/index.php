@@ -86,13 +86,17 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                  'attribute' => 'notified',
                 'format'=>'raw',
-                'value' => function($model){
-                    return Html::dropDownList( 'notified' . str_replace('-', '_', $model->id), $model->notified, \app\models\Valuelist::getValuelistByType('notified'), [
-                        'prompt'   => '',
-                        "class"    => "form-control ",
-                        'id'       => 'notified' .str_replace('-', '_', $model->id),
-                        "onchange" => "notified($(this),'notified','$model->id')"
-                    ]);
+                'value' => function($model) use($route){
+                    if($route != 2){
+                        return $model->notified;
+                    }else{
+                        return Html::dropDownList( 'notified' . str_replace('-', '_', $model->id), $model->notified, \app\models\Valuelist::getValuelistByType('notified'), [
+                            'prompt'   => '',
+                            "class"    => "form-control ",
+                            'id'       => 'notified' .str_replace('-', '_', $model->id),
+                            "onchange" => "notified($(this),'notified','$model->id')"
+                        ]);
+                    }
                 },
                 'filter'    => \app\models\Valuelist::getValuelistByType('notified'),        
             ],
