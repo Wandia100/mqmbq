@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'=>'raw',
                 'value' => function($model) use($route){
                     if($route != 2){
-                        return $model->notified;
+                        return \app\models\Valuelist::getValue($model->notified,'notified');
                     }else{
                         return Html::dropDownList( 'notified' . str_replace('-', '_', $model->id), $model->notified, \app\models\Valuelist::getValuelistByType('notified'), [
                             'prompt'   => '',

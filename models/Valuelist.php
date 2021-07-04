@@ -64,5 +64,19 @@ class Valuelist extends \yii\db\ActiveRecord
         }
         return $arr;
    }
+   
+    /**
+        * Method to get value by key
+        *
+        * @param integer $key value list key
+        * @param string $type valuelist type
+        * @return string valuelist val
+    */
+   public static function getValue( $key, $type) {
+        $model = ValueList::find()->where( [ 'type' => $type, 'index' => $key ] )->one();
+        if ( $model ) {
+            return $model->value;
+        }
+   }
     
 }
