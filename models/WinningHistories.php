@@ -217,4 +217,28 @@ class WinningHistories extends \yii\db\ActiveRecord
 
         }
     }
+    /**
+     * Method to get customer report
+     * @param type $start_date
+     * @param type $end_date
+     * @return type
+     */
+    public static function getCustomerreport($start_date,$end_date)
+    {
+        $sql = "SELECT  DISTINCT q1.reference_phone,q1.plays ,q2.reference_name,q2.station_id,q2.created_at,st.name
+        FROM com21.winning_histories q2 
+        JOIN 
+        (SELECT  reference_phone, COUNT(reference_phone) As plays
+        FROM com21.winning_histories
+        WHERE created_at BETWEEN  :start_date AND :end_date
+        GROUP BY reference_phone)  q1
+        ON q2.reference_phone = q1.reference_phone
+        JOIN com21.stations st ON q2.station_id = st.id
+        WHERE q2.created_at BETWEEN  :start_date AND :end_date
+        ORDER BY q1.plays DESC";
+        return Yii::$app->analytics_db->createCommand($sql)
+        ->bindValue(':start_date',$start_date)
+        ->bindValue(':end_date',$end_date)
+        ->queryAll();
+    }
 }

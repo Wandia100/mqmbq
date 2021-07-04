@@ -66,7 +66,10 @@ use luc\tourist\Tourist;
                 </li>
                 <li class="<?= $presentervisibility?> <?=$customercarevisibility?>" data-content="Revenue Report" title="Revenue Report">
                     <?= Html::a('<i class="metismenu-icon fa fa-list"></i> Revenue Report', ['/report/revenue'], ['class' => ''])?>
-                 </li>  
+                 </li> 
+                <li class="<?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Customer report" title="Customer report">
+                    <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Customer report', ['/report/customerreport'], ['class' => ''])?>
+                </li> 
                 </ul>
                 </li>
 
