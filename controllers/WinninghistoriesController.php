@@ -130,7 +130,8 @@ class WinninghistoriesController extends Controller
         if($show_prize)
         {
             //pick a random person
-            $transaction_history=TransactionHistories::pickRandom($station_show_id);
+            $past_winners=WinningHistories::distinctWinners($presenter_show['station_id'],$presenter_show['frequency'],date("Y-m-d H:i:s"));
+            $transaction_history=TransactionHistories::pickRandom($station_show_id,$past_winners);
             if($transaction_history)
             {
                 $win_key=Uuid::generate()->string;
@@ -220,7 +221,6 @@ class WinninghistoriesController extends Controller
             'model' => $model,
         ]);
     }
-
     /**
      * Deletes an existing WinningHistories model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

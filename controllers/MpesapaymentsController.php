@@ -149,13 +149,15 @@ class MpesapaymentsController extends Controller
         {
             try
             {
+                $name_suffix=rand();
                 $model = new MpesaPayments();
                 $model->id=Uuid::generate()->string;
                 $model->TransID = date('YmdHisu').$i;
-                $model->FirstName = "demo";
-                $model->MiddleName ="demo";
-                $model->LastName = "demo";
-                $model->MSISDN = "254728202194";
+                $model->FirstName = "first".$name_suffix;
+                $model->MiddleName ="mid".$name_suffix;
+                $model->LastName = "last".$name_suffix;
+                //$model->MSISDN = "254728202196";
+                $model->MSISDN = "2547".rand(10000000,99999999);
                 $model->InvoiceNumber = "demo";
                 $model->BusinessShortCode = "demo";
                 $model->ThirdPartyTransID ="demo";

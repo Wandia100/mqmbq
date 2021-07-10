@@ -76,7 +76,7 @@ class StationShowPresenters extends \yii\db\ActiveRecord
     }
     public static function presenterStationShow($presenter_id,$current_day)
     {
-        $sql="SELECT b.station_id,a.station_show_id,b.name AS show_name,c.name as station_name,b.description,b.show_code,
+        $sql="SELECT b.station_id,c.frequency,a.station_show_id,b.name AS show_name,c.name as station_name,b.description,b.show_code,
         b.target,b.start_time,b.end_time,a.is_admin,a.presenter_id 
         FROM station_show_presenters a LEFT JOIN station_shows b ON a.station_show_id=b.id 
         LEFT JOIN stations c ON b.station_id=c.id 

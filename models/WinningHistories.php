@@ -138,6 +138,22 @@ class WinningHistories extends \yii\db\ActiveRecord
             'notified' =>'Notified'
         ];
     }
+    public static function distinctWinners($stationId,$frequency,$startDate)
+    {
+        $sql="SELECT DISTINCT(reference_phone) AS phone FROM winning_histories WHERE station_id=:stationId AND created_at > DATE_SUB(:startDate, INTERVAL :frequency DAY)";
+        $data=Yii::$app->db->createCommand($sql)
+        ->bindValue(':stationId',$stationId)
+        ->bindValue(':frequency',$frequency)
+        ->bindValue(':startDate',$startDate)
+        ->queryAll();
+        $arr=[];
+        for($i=0;$i < count($data); $i++)
+        {
+            $arr[$i]=$data[$i]['phone'];
+
+        }
+        return $arr;
+    }
     public static function getRecentWinners($station_show_id,$today)
     {
         $sql="SELECT a.reference_name,a.reference_code,a.reference_phone,b.name,a.created_at FROM winning_histories a
