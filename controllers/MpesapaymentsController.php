@@ -169,13 +169,12 @@ class MpesapaymentsController extends Controller
                 $first_name="demo ";
                     if($amount >=100 && $amount < 300)
                     {
-                        $message=Myhelper::drawMessage($first_name);
+                        Myhelper::setSms('validDraw',$model->MSISDN,[$model->FirstName]);
                     }
                     else
                     {
-                        $message=Myhelper::invalidAmountMessage($first_name);
+                        Myhelper::setSms('invalidDrawAmount',$model->MSISDN,[$model->FirstName]);
                     }
-                    Outbox::saveOutbox("254728202194",$message,2);
             }
             catch (IntegrityException $e) {
                 //allow execution
