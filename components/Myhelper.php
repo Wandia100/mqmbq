@@ -4,6 +4,9 @@ namespace app\components;
 
 use app\models\PermissionGroup;
 use app\models\Users;
+use app\models\Outbox;
+use app\models\Template;
+
 use Yii;
 use yii\base\Component;
 use yii\helpers\Html;
@@ -807,5 +810,46 @@ class Myhelper extends Component {
                 return $hr;
             }
         }
+			/**
+	 * Method to send sms notification to the outbox
+	 *
+	 * @param string $name notification name
+	 * @param integer $receiver receiver mobile number
+	 * @param array $variables array maping the variable to replace in the sms templat
+	 */
+	public static function setSms( $name, $receiver, $variables = [], $sender = "NITEXT" ) {
+		$outbox = new Outbox();
+		if ( $receiver != "") {
+			$temp = Template::getTemplate($name);
+			$data = [
+				'sender'       => $sender,
+				'receiver'     => $receiver,
+				'created_date' => date( 'Y-m-d H:i:s' ),
+				'category'     =>$temp->id,
+				'status'       => 0
+			];
+			$temp=$temp->message;
+			switch ( $name ) {
+				case 'validDraw':
+					$toreplace       = [ "[customer_name]" ];
+					$data['message'] = str_replace( $toreplace, $variables, $temp );
+					break;
+
+				case 'invalidDrawAmount':
+					$toreplace       = [ "[customer_name]" ];
+					$data['message'] = str_replace( $toreplace, $variables, $temp );
+					break;
+				case 'winningMessage':
+					$toreplace       = [ "[customer_name]", "[prize_name]", "[amount]", "[station_name]" ];
+					$data['message'] = str_replace( $toreplace, $variables, $temp );
+					break;
+				default:
+					$data['message'] = isset( $variables['message'] ) ? $variables['message'] : '';
+					break;
+			}
+			$outbox->attributes = $data;
+			$outbox->save(false);
+		}
+	}
 }
 

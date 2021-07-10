@@ -143,13 +143,14 @@ class ApiController extends Controller
                     $first_name=$data['FirstName'];
                     if($data['TransAmount'] >=100 && $data['TransAmount'] < 300)
                     {
-                        $message=Myhelper::drawMessage($first_name);
+                        Myhelper::setSms('validDraw',$data['MSISDN'],[$first_name]);
+
                     }
                     else
                     {
-                        $message=Myhelper::invalidAmountMessage($first_name);
+                        Myhelper::setSms('invalidDrawAmount',$data['MSISDN'],[$first_name]);
+
                     }
-                    Outbox::saveOutbox($data['MSISDN'],$message,2);
                 } 
             }
             catch (IntegrityException $e) {
