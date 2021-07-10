@@ -148,7 +148,7 @@ use luc\tourist\Tourist;
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i>Station manager Disbursement', Url::to(['/commissions/index','t'=>'m']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
-                    <?php // Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Disbursement', Url::to(['/disbursements/indexc','t'=>'p']), ['class' => '', 'id' => 'appmenu'])?>
+                    <?=Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Admin Draws', Url::to(['/transactionhistories/admindraws']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                     </ul>
                 </li>

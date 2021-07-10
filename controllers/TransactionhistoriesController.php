@@ -33,7 +33,7 @@ class TransactionhistoriesController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index','presenter'],
+                'only' => ['create', 'update','index','presenter','admindraws'],
                 'rules' => [
                     [
                         'actions' => ['create', 'update','index'],
@@ -51,6 +51,16 @@ class TransactionhistoriesController extends Controller
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
                                 $users = Yii::$app->myhelper->getMembers( array( '' ), array(39) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['admindraws'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(30) );
                                 return in_array( Yii::$app->user->identity->email, $users );
                             }
                         }
@@ -182,6 +192,56 @@ class TransactionhistoriesController extends Controller
         $act ->setLog();
         
         return $this->render('presenter', [
+            'show_name' => $show_name,
+            'transaction_total' => $transaction_total,
+            'transaction_count' => $transaction_count,
+            'target_achievement' => $target_achievement,
+            'presenter_station_show' => $presenter_station_show,
+            'recent_winners' => $recent_winners,
+            'show_prizes' => $show_prizes,
+            'percent_raised' => $percent_raised,
+            'percent_pending' => $percent_pending
+        ]);
+    }
+    public function actionAdmindraws()
+    {
+        $presenter=Yii::$app->user->identity;
+        $shows=StationShows::getStationShows();
+        $presenter_station_show=StationShowPresenters::presenterStationShow($presenter->id,strtolower(date("l")));
+        if($presenter_station_show)
+        {
+            $station_show_id=$presenter_station_show['station_show_id'];
+            $start_time=date("Y-m-d")." ".$presenter_station_show['start_time'];
+            $end_time=date("Y-m-d")." ".$presenter_station_show['end_time'];
+            $show_transactions=TransactionHistories::getShowTransactions($station_show_id,$start_time,$end_time);
+            $transaction_total=TransactionHistories::getTransactionTotal($station_show_id,$start_time,$end_time)['total'];
+            $transaction_count=count($show_transactions);
+            $target_achievement=round(($transaction_total/$presenter_station_show['target'])*100,2);
+            $show_name=$presenter_station_show['show_name']." ".$presenter_station_show['start_time']." - ".$presenter_station_show['end_time'];
+            $recent_winners=WinningHistories::getRecentWinners($presenter_station_show['station_show_id'],date("Y-m-d"));
+            $show_prizes=StationShowPrizes::getShowPrizes(strtolower(date("l")),$presenter_station_show['station_show_id']);
+            $percent_raised=round(($transaction_total/$presenter_station_show['target'])*100,2);
+            $percent_pending=round((($presenter_station_show['target']-$transaction_total)/$presenter_station_show['target'])*100,2);
+        }
+        else
+        {
+            $transaction_total=0;
+            $transaction_count=0;
+            $target_achievement=0;
+            $show_name="No draw at this moment";
+            $recent_winners=array();
+            $show_prizes=array();
+            $percent_raised=0;
+            $percent_pending=0;
+        }
+        //echo json_encode($show_prizes); exit();
+        
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "Admin Draws";
+        $act ->setLog();
+        
+        return $this->render('admin_draws', [
+            'shows' => $shows,
             'show_name' => $show_name,
             'transaction_total' => $transaction_total,
             'transaction_count' => $transaction_count,

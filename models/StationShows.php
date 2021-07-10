@@ -68,7 +68,14 @@ class StationShows extends \yii\db\ActiveRecord
     public function getStations() {
         return $this->hasOne(Stations::className(), [ 'id' => 'station_id' ] );
     }
-        
+    public static function getStationShows() {
+        $arr   = [];
+        $model = StationShows::find()->all();
+        foreach ( $model as $value ) {
+            $arr[ $value->id ] = $value->name;
+        }
+        return $arr;
+   }
     /**
      * {@inheritdoc}
      */
