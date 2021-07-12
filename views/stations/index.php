@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'station_code',
             'address',
+            'frequency',
             //'enabled',
             //'invalid_percentage',
             'created_at',

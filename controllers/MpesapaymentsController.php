@@ -156,7 +156,7 @@ class MpesapaymentsController extends Controller
                 $model->FirstName = "first".$name_suffix;
                 $model->MiddleName ="mid".$name_suffix;
                 $model->LastName = "last".$name_suffix;
-                //$model->MSISDN = "254728202196";
+                //$model->MSISDN = "254728202197";
                 $model->MSISDN = "2547".rand(10000000,99999999);
                 $model->InvoiceNumber = "demo";
                 $model->BusinessShortCode = "demo";
