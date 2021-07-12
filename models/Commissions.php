@@ -180,4 +180,25 @@ class Commissions extends \yii\db\ActiveRecord
 
         }
     }
+    /**
+     * Method to get presenter commission report
+     * @param type $start_date
+     * @param type $end_date
+     * @return type
+     */
+    public static function getPresenterCommission($start_date,$end_date)
+    {
+        $sql = "SELECT s.name,concat(u.first_name,u.last_name) AS presentername,u.phone_number,sum(c.amount) AS totalamount
+        FROM com21.commissions c
+        LEFT JOIN com21.stations s ON c.station_id = s.id
+        LEFT JOIN com21.station_show_presenters sp ON sp.station_id = s.id
+        LEFT JOIN com21.users u ON sp.presenter_id = u.id
+        #WHERE u.perm_group = 3
+        WHERE c.created_at BETWEEN  :start_date AND :end_date
+        GROUP BY c.amount, s.name,u.first_name,u.last_name,u.phone_number";
+        return Yii::$app->analytics_db->createCommand($sql)
+        ->bindValue(':start_date',$start_date)
+        ->bindValue(':end_date',$end_date)
+        ->queryAll();
+    }
 }

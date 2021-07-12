@@ -12,6 +12,7 @@ use app\models\StationShows;
 use app\models\ShowSummary;
 use app\models\WinnerSummary;
 use app\models\RevenueReport;
+use app\models\Disbursements;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
@@ -29,7 +30,7 @@ class ReportController extends Controller{
                 'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport'],
                 'rules' => [
                     [
-                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport'],
+                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -173,7 +174,54 @@ class ReportController extends Controller{
         ]);
         
     }
-
+    /**
+     * Function to show Active Payouts report
+     * @return type
+    */
+    public function actionPayouts(){ 
+        $start_date= date('Y-m-d');
+        $end_date = $start_date;
+        if ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'daily' ) {
+            $start_date= date('Y-m-d');
+            $end_date = $start_date;
+            $response1 = Disbursements::getDisbursementByStation($start_date,$end_date);
+            $response2 = Commissions::getPresenterCommission($start_date,$end_date);
+        } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'monthly' ) {
+            $start_date= date('Y-m-01');
+            $d=cal_days_in_month(CAL_GREGORIAN,date('m'),date('Y'));
+            $end_date = date("Y-m-$d");
+            $response1 = Disbursements::getDisbursementByStation($start_date,$end_date);
+            $response2 = Commissions::getPresenterCommission($start_date,$end_date);
+        } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'range' ) {
+                if ( isset( $_GET['from'] ) && isset( $_GET['to'] ) ) {
+                        $end_date       = $_GET['to'];
+                        $start_date     = $_GET['from'];
+                        $date1    = strtotime( $end_date);
+                        $date2    = strtotime( $start_date);
+                        if ( $date1 < $date2 ) {
+                                Yii::$app->session->setFlash('error', 'Error: start date should be before the end date' );
+                        }
+                        $response1 = Disbursements::getDisbursementByStation($start_date,$end_date);
+                        $response2 = Commissions::getPresenterCommission($start_date,$end_date);
+                } else {
+                    $start_date= date('Y-m-01');
+                    $d=cal_days_in_month(CAL_GREGORIAN,date('m'),date('Y'));
+                    $end_date = date("Y-m-$d");
+                    $response1 = Disbursements::getDisbursementByStation($start_date,$end_date);
+                    $response2 = Commissions::getPresenterCommission($start_date,$end_date);
+                }
+        } else {
+            $response1 = Disbursements::getDisbursementByStation($start_date,$end_date);
+            $response2 = Commissions::getPresenterCommission($start_date,$end_date);
+        }
+        return $this->render('payouts', [
+        'start_date' => $start_date,
+        'end_date' => $end_date,
+        'response1' => $response1,
+        'response2' => $response1
+        ]);
+        
+    }
     public function actionShowsummary()
     {
         $start_date= date('Y-m-d');

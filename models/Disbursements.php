@@ -214,4 +214,25 @@ class Disbursements extends \yii\db\ActiveRecord
         ->bindValue(':limits',$limits)
         ->execute();
     }
+    
+     /**
+     * Method to get disbursement by station report
+     * @param type $start_date
+     * @param type $end_date
+     * @return type
+     */
+    public static function getDisbursementByStation($start_date,$end_date)
+    {
+        
+        $sql = "SELECT sum(d.amount) AS totalamount, s.name
+        FROM com21.disbursements d
+        LEFT JOIN com21.winning_histories w ON d.reference_id = w.id
+        LEFT JOIN com21.stations s ON w.station_id = s.id
+        WHERE disbursement_type = 'winning' AND d.created_at BETWEEN  :start_date AND :end_date
+        GROUP BY d.amount, s.name";
+        return Yii::$app->analytics_db->createCommand($sql)
+        ->bindValue(':start_date',$start_date)
+        ->bindValue(':end_date',$end_date)
+        ->queryAll();
+    }
 }
