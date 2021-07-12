@@ -311,8 +311,17 @@ class ReportController extends Controller{
     public function actionLasthour()
     {
         Myhelper::checkRemoteAddress();
-        $the_day=date("Y-m-d");
-        $hr=$this->formatHour(date('H')-1);
+        if(date("H")=="00")
+        {
+            $the_day=date('Y-m-d',strtotime("yesterday"));
+            $hr="23";
+        }
+        else
+        {
+            $the_day=date("Y-m-d");
+            $hr=$this->formatHour(date('H')-1);
+        }
+        
         $from_time=$the_day." ".$hr;
         $count=HourlyPerformanceReports::checkDuplicate($the_day,$hr);
         if($count==0)
