@@ -152,12 +152,11 @@ class WinninghistoriesController extends Controller
                     if($show_prize['prizes_given'] < $show_prize['draw_count'])
                     {
                         $draw_count=$show_prize['prizes_given']+1;
-                        $model->unique_field=$draw_count."#".$model->station_show_id."#".$prize_id;
-
+                        $model->unique_field=$draw_count."#".date("Ymd")."#".$model->station_show_id."#".$prize_id;
                     }
                     else
                     {
-                        $model->unique_field=$show_prize['prizes_given']."#".$model->station_show_id."#".$prize_id;
+                        $model->unique_field=$show_prize['prizes_given']."#".date("Ymd")."#".$model->station_show_id."#".$prize_id;
                     }
                     $model->created_at =date("Y-m-d H:i:s");
                     $model->status =0;
