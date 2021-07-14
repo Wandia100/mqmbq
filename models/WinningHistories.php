@@ -103,7 +103,7 @@ class WinningHistories extends \yii\db\ActiveRecord
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
             [['prize_id', 'station_show_prize_id', 'conversation_id', 'transaction_reference', 'remember_token'], 'string', 'max' => 100],
-            [['reference_name', 'reference_phone', 'reference_code', 'station_id', 'presenter_id', 'station_show_id'], 'string', 'max' => 255],
+            [['reference_name', 'reference_phone', 'reference_code', 'station_id', 'presenter_id', 'station_show_id','unique_field'], 'string', 'max' => 255],
             [['id'], 'unique'],
         ];
     }

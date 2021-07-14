@@ -15,6 +15,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Webpatser\Uuid\Uuid;
+use yii\db\IntegrityException;
 
 /**
  * WinninghistoriesController implements the CRUD actions for WinningHistories model.
@@ -134,57 +135,77 @@ class WinninghistoriesController extends Controller
             $transaction_history=TransactionHistories::pickRandom($station_show_id,$past_winners);
             if($transaction_history)
             {
-                $win_key=Uuid::generate()->string;
-                $model=new WinningHistories();
-                $model->id=$win_key;
-                $model->prize_id =$prize_id;
-                $model->station_show_prize_id =$prize_id;
-                $model->reference_name =$transaction_history['reference_name'];
-                $model->reference_phone =$transaction_history['reference_phone'];
-                $model->reference_code =$transaction_history['reference_code'];
-                $model->station_id =$transaction_history['station_id'];
-                $model->station_show_id =$transaction_history['station_show_id'];
-                $model->presenter_id =$presenter_id;
-                $model->amount =$show_prize['amount'];
-                $model->created_at =date("Y-m-d H:i:s");
-                $model->status =0;
-                if($model->save(false))
+                try
                 {
-                    
-                    if($show_prize['enable_tax'])
+                    $win_key=Uuid::generate()->string;
+                    $model=new WinningHistories();
+                    $model->id=$win_key;
+                    $model->prize_id =$prize_id;
+                    $model->station_show_prize_id =$prize_id;
+                    $model->reference_name =$transaction_history['reference_name'];
+                    $model->reference_phone =$transaction_history['reference_phone'];
+                    $model->reference_code =$transaction_history['reference_code'];
+                    $model->station_id =$transaction_history['station_id'];
+                    $model->station_show_id =$transaction_history['station_show_id'];
+                    $model->presenter_id =$presenter_id;
+                    $model->amount =$show_prize['amount'];
+                    if($show_prize['prizes_given'] < $show_prize['draw_count'])
                     {
-                        $pay_percent=(100-$show_prize['tax']);
-                        $to_pay=round(($show_prize['amount']*($pay_percent/100)));
-                    }
-                    else
-                    {
-                        $to_pay=$show_prize['amount'];
-                    }
-                    $dup_check=Disbursements::checkDuplicate($win_key,$transaction_history['reference_phone'],$to_pay);
-                    if($dup_check==0)
-                    {
-                        if($show_prize['mpesa_disbursement'])
-                        {
-                            Disbursements::saveDisbursement($win_key,$transaction_history['reference_name'],$transaction_history['reference_phone'],$to_pay,"winning",0);
-                        }
-                        $draw_count_balance=$show_prize['draw_count']-$show_prize['prizes_given']-1;
-                        $transaction_history['draw_count_balance']=$draw_count_balance;
-                        $station_name=$presenter_show['station_name'];
-                        $arr=[$transaction_history['reference_name'],$show_prize['name'],$show_prize['amount'],$station_name];
-                        //$message=Myhelper::winningMessage($transaction_history,$show_prize,$station_name);
-                        //send an sms
-                        Myhelper::setSms('winningMessage',$transaction_history['reference_phone'],$arr);
-                    }
-                    else
-                    {
-                        $draw_count_balance=$show_prize['draw_count']-$show_prize['prizes_given'];
-                        $transaction_history['draw_count_balance']=$draw_count_balance;
-                    }
+                        $draw_count=$show_prize['prizes_given']+1;
+                        $model->unique_field=$draw_count."#".$model->station_show_id."#".$prize_id;
 
-                    $response['status']="success";
-                    $response['message']="no message";
-                    $response['data']=$transaction_history;
+                    }
+                    else
+                    {
+                        $model->unique_field=$show_prize['prizes_given']."#".$model->station_show_id."#".$prize_id;
+                    }
+                    $model->created_at =date("Y-m-d H:i:s");
+                    $model->status =0;
+                    if($model->save(false))
+                    {
+                        
+                        if($show_prize['enable_tax'])
+                        {
+                            $pay_percent=(100-$show_prize['tax']);
+                            $to_pay=round(($show_prize['amount']*($pay_percent/100)));
+                        }
+                        else
+                        {
+                            $to_pay=$show_prize['amount'];
+                        }
+                        $dup_check=Disbursements::checkDuplicate($win_key,$transaction_history['reference_phone'],$to_pay);
+                        if($dup_check==0)
+                        {
+                            if($show_prize['mpesa_disbursement'])
+                            {
+                                Disbursements::saveDisbursement($win_key,$transaction_history['reference_name'],$transaction_history['reference_phone'],$to_pay,"winning",0);
+                            }
+                            $draw_count_balance=$show_prize['draw_count']-$show_prize['prizes_given']-1;
+                            $transaction_history['draw_count_balance']=$draw_count_balance;
+                            $station_name=$presenter_show['station_name'];
+                            $arr=[$transaction_history['reference_name'],$show_prize['name'],$show_prize['amount'],$station_name];
+                            //$message=Myhelper::winningMessage($transaction_history,$show_prize,$station_name);
+                            //send an sms
+                            Myhelper::setSms('winningMessage',$transaction_history['reference_phone'],$arr);
+                        }
+                        else
+                        {
+                            $draw_count_balance=$show_prize['draw_count']-$show_prize['prizes_given'];
+                            $transaction_history['draw_count_balance']=$draw_count_balance;
+                        }
+    
+                        $response['status']="success";
+                        $response['message']="no message";
+                        $response['data']=$transaction_history;
+                    }
                 }
+                catch(IntegrityException $e)
+                {
+                    $response['status']="fail";
+                    $response['message']="DRAW ALREADY DONE FOR THIS PRIZE!";
+                }
+
+               
             }
             else{
                 $response['status']="fail";
