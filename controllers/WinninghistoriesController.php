@@ -149,8 +149,8 @@ class WinninghistoriesController extends Controller
         if($show_prize)
         {
             //pick a random person
-            $past_winners=WinningHistories::distinctWinners($presenter_show['station_id'],$presenter_show['frequency'],date($from." H:i:s"));
-            $transaction_history=TransactionHistories::pickRandom($station_show_id,$past_winners);
+            $past_winners=WinningHistories::distinctWinners($presenter_show['station_id'],$presenter_show['frequency'],date("Y-m-d H:i:s"));
+            $transaction_history=TransactionHistories::pickRandom($station_show_id,$past_winners,$from);
             if($transaction_history)
             {
                 try
