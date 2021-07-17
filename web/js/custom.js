@@ -39,11 +39,11 @@ function runDraw() {
   })
 
   }
-  function drawPrize(station_show_id,presenter_id,prize_id)
+  function drawPrize(station_show_id,presenter_id,prize_id,from,admin_draw)
   {
     var r = confirm("Are you sure you want to draw");
   if (r == true) {
-    $.post(host + '/winninghistories/draw', {station_show_id: station_show_id, presenter_id: presenter_id,prize_id:prize_id}, function (data) {
+    $.post(host + '/winninghistories/draw', {station_show_id: station_show_id, presenter_id: presenter_id,prize_id:prize_id,from:from,admin_draw:admin_draw}, function (data) {
       //$('#actionsviewgrid').text('')
       //$('#actionsviewgrid').append(data).trigger('create')
       var data=JSON.parse(data);
@@ -71,8 +71,7 @@ function runDraw() {
     //do nothing
   }
 
-  }
-  
+  }  
   function presenterModal() {
     $('#presentersModal').modal({
       //backdrop: 'static',

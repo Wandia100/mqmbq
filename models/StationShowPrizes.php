@@ -108,26 +108,28 @@ class StationShowPrizes extends \yii\db\ActiveRecord
             'deleted_at' => 'Deleted At',
         ];
     }
-    public static function getShowPrizes($current_day,$station_show_id)
+    public static function getShowPrizes($current_day,$station_show_id,$from_date)
     {
         $sql="SELECT a.draw_count,a.".$current_day." as prize_id,b.amount,b.name,b.description,a.enabled,
         (SELECT COUNT(id) FROM winning_histories WHERE station_show_id=:station_show_id AND station_show_prize_id=
-        a.".$current_day." AND created_at > CURDATE()) AS prizes_given FROM station_show_prizes a  LEFT JOIN prizes b ON a.".$current_day."=b.id 
+        a.".$current_day." AND created_at >:from_date) AS prizes_given FROM station_show_prizes a  LEFT JOIN prizes b ON a.".$current_day."=b.id 
         WHERE station_show_id=:station_show_id AND a.enabled=1 HAVING (a.draw_count > prizes_given)";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':station_show_id',$station_show_id)
+        ->bindValue(':from_date',$from_date)
         ->queryAll();
 
     }
-    public static function getShowPrize($current_day,$station_show_id,$prize_id)
+    public static function getShowPrize($current_day,$station_show_id,$prize_id,$from_date)
     {
         $sql="SELECT a.draw_count,b.mpesa_disbursement,a.".$current_day." as prize_id,b.amount,b.name,b.description,a.enabled,b.enable_tax,b.tax,
         (SELECT COUNT(id) FROM winning_histories WHERE station_show_id=:station_show_id AND station_show_prize_id=
-        a.".$current_day." AND created_at > CURDATE()) AS prizes_given FROM station_show_prizes a  LEFT JOIN prizes b ON a.".$current_day."=b.id 
+        a.".$current_day." AND created_at >:from_date) AS prizes_given FROM station_show_prizes a  LEFT JOIN prizes b ON a.".$current_day."=b.id 
         WHERE station_show_id=:station_show_id AND b.id=:prize_id AND a.enabled=1 HAVING (a.draw_count > prizes_given)";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':station_show_id',$station_show_id)
         ->bindValue(':prize_id',$prize_id)
+        ->bindValue(':from_date',$from_date)
         ->queryOne();
 
     }

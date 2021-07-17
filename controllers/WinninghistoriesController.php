@@ -120,18 +120,36 @@ class WinninghistoriesController extends Controller
         $station_show_id=$value['station_show_id'];
         $presenter_id=$value['presenter_id'];
         $prize_id=$value['prize_id'];
+        if(!isset($value['from']) ||!isset($value['admin_draw']))
+        {
+            $response['status']="fail";
+            $response['message']="PLEASE REFRESH PAGE AND TRY AGAIN";
+            return \Yii::$app->response->data = json_encode($response);
+            
+        }
+        
+        $from=$value['from'];
+        $admin_draw=$value['admin_draw'];
         //if presenter is not admin drop him
-        $presenter_show=StationShowPresenters::presenterStationShow($presenter_id,strtolower(date("l")));
+        if($admin_draw=="1")
+        {
+            $presenter_show=StationShowPresenters::adminStationShow($presenter_id,strtolower(date("l",strtotime($from))));
+        }
+        else
+        {
+            $presenter_show=StationShowPresenters::presenterStationShow($presenter_id,strtolower(date("l")));
+        }
+
         if(!$presenter_show['is_admin'])
         {
             $response['status']="fail";
             $response['message']="PRESENTER MUST BE ADMIN";
         }
-        $show_prize=StationShowPrizes::getShowPrize(strtolower(date("l")),$station_show_id,$prize_id);
+        $show_prize=StationShowPrizes::getShowPrize(strtolower(date("l",strtotime($from))),$station_show_id,$prize_id,$from);
         if($show_prize)
         {
             //pick a random person
-            $past_winners=WinningHistories::distinctWinners($presenter_show['station_id'],$presenter_show['frequency'],date("Y-m-d H:i:s"));
+            $past_winners=WinningHistories::distinctWinners($presenter_show['station_id'],$presenter_show['frequency'],date($from." H:i:s"));
             $transaction_history=TransactionHistories::pickRandom($station_show_id,$past_winners);
             if($transaction_history)
             {
@@ -152,11 +170,11 @@ class WinninghistoriesController extends Controller
                     if($show_prize['prizes_given'] < $show_prize['draw_count'])
                     {
                         $draw_count=$show_prize['prizes_given']+1;
-                        $model->unique_field=$draw_count."#".date("Ymd")."#".$model->station_show_id."#".$prize_id;
+                        $model->unique_field=$draw_count."#".date("Ymd",strtotime($from))."#".$model->station_show_id."#".$prize_id;
                     }
                     else
                     {
-                        $model->unique_field=$show_prize['prizes_given']."#".date("Ymd")."#".$model->station_show_id."#".$prize_id;
+                        $model->unique_field=$show_prize['prizes_given']."#".date("Ymd",strtotime($from))."#".$model->station_show_id."#".$prize_id;
                     }
                     $model->created_at =date("Y-m-d H:i:s");
                     $model->status =0;
@@ -221,7 +239,6 @@ class WinninghistoriesController extends Controller
         \Yii::$app->response->data = json_encode($response);
 
     }
-
     /**
      * Updates an existing WinningHistories model.
      * If update is successful, the browser will be redirected to the 'view' page.

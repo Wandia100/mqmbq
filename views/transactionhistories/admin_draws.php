@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\TransactionHistoriesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Admin Draws';
+$this->title = 'ADMIN DRAWS';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transaction-histories-index">
@@ -179,7 +179,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     $presenter_id=$presenter_station_show['presenter_id'];
                                     $prize_id=$row['prize_id'];
                                     ?>
-                                    <button id="<?=$row['prize_id'];?>" class="btn btn-danger" onclick="drawPrize('<?=$station_show_id;?>','<?=$presenter_id;?>','<?=$prize_id;?>')" type="button"><?=$row['name'];?></button>
+                                    <button id="<?=$row['prize_id'];?>" class="btn btn-danger" onclick="drawPrize('<?=$station_show_id;?>','<?=$presenter_id;?>','<?=$prize_id;?>','<?=$from;?>',1)" type="button"><?=$row['name'];?></button>
                                     <?php
                                 }
                                 ?>

@@ -170,7 +170,7 @@ class TransactionhistoriesController extends Controller
             $target_achievement=round(($transaction_total/$presenter_station_show['target'])*100,2);
             $show_name=$presenter_station_show['show_name']." ".$presenter_station_show['start_time']." - ".$presenter_station_show['end_time'];
             $recent_winners=WinningHistories::getRecentWinners($presenter_station_show['station_show_id'],date("Y-m-d"));
-            $show_prizes=StationShowPrizes::getShowPrizes(strtolower(date("l")),$presenter_station_show['station_show_id']);
+            $show_prizes=StationShowPrizes::getShowPrizes(strtolower(date("l")),$presenter_station_show['station_show_id'],date("Y-m-d"));
             $percent_raised=round(($transaction_total/$presenter_station_show['target'])*100,2);
             $percent_pending=round((($presenter_station_show['target']-$transaction_total)/$presenter_station_show['target'])*100,2);
         }
@@ -192,6 +192,7 @@ class TransactionhistoriesController extends Controller
         $act ->setLog();
         
         return $this->render('presenter', [
+            'from' => date("Y-m-d"),
             'show_name' => $show_name,
             'transaction_total' => $transaction_total,
             'transaction_count' => $transaction_count,
@@ -225,7 +226,7 @@ class TransactionhistoriesController extends Controller
             $target_achievement=round(($transaction_total/$presenter_station_show['target'])*100,2);
             $show_name=$presenter_station_show['show_name']." ".$presenter_station_show['start_time']." - ".$presenter_station_show['end_time'];
             $recent_winners=WinningHistories::getRecentWinners($presenter_station_show['station_show_id'],$from);
-            $show_prizes=StationShowPrizes::getShowPrizes(strtolower(date("l",strtotime($from))),$presenter_station_show['station_show_id']);
+            $show_prizes=StationShowPrizes::getShowPrizes(strtolower(date("l",strtotime($from))),$presenter_station_show['station_show_id'],$from);
             $percent_raised=round(($transaction_total/$presenter_station_show['target'])*100,2);
             $percent_pending=round((($presenter_station_show['target']-$transaction_total)/$presenter_station_show['target'])*100,2);
         }
