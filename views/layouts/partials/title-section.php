@@ -86,6 +86,11 @@ $icon = ArrayHelper::getValue($this->params, 'view-icon', 'pe-7s-folder');
                                 <a href="<?= Url::to(['/report/exportrevenue','from'=> isset($_GET['from'])?$_GET['from']:'','to'=> isset($_GET['to'])?$_GET['to']:'','criterion'=> isset($_GET['criterion'])?$_GET['criterion']:''])?>"> Export</a>
                             </li>
                         <?php } ?> 
+                        <?php  if(Yii::$app->controller->id == 'report' && Yii::$app->controller->action->id == 'payouts'){ ?>
+                            <li class="nav-item"> 
+                                <a href="<?= Url::to(['/report/exportpayouts','from'=> isset($_GET['from'])?$_GET['from']:'','to'=> isset($_GET['to'])?$_GET['to']:'','criterion'=> isset($_GET['criterion'])?$_GET['criterion']:''])?>"> Export Financial summary PDF</a>
+                            </li>
+                        <?php } ?> 
                     </ul>
                 </div>
             </div>

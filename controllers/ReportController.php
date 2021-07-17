@@ -17,6 +17,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
 use app\components\Myhelper;
+use kartik\mpdf\Pdf;
 
 class ReportController extends Controller{
         /**
@@ -27,10 +28,10 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport'],
+                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts'],
                 'rules' => [
                     [
-                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts'],
+                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -174,9 +175,104 @@ class ReportController extends Controller{
         ]);
         
     }
+    
     /**
-     * Function to show Active Payouts report
-     * @return type
+        * Method to generate payout report
+    */
+    public function actionExportpayouts()
+    {
+        $file_name="financial_summary".date("Y-m-d-His").".pdf";
+        $start_date= date('Y-m-d');
+        $end_date = $start_date;
+        if ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'daily' ) {
+            $start_date= date('Y-m-d');
+            $end_date = $start_date;
+            $response1 = Disbursements::getDisbursementByStation($start_date,$end_date);
+            $response2 = Commissions::getPresenterCommission($start_date,$end_date);
+        } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'monthly' ) {
+            $start_date= date('Y-m-01');
+            $d=cal_days_in_month(CAL_GREGORIAN,date('m'),date('Y'));
+            $end_date = date("Y-m-$d");
+            $response1 = Disbursements::getDisbursementByStation($start_date,$end_date);
+            $response2 = Commissions::getPresenterCommission($start_date,$end_date);
+        } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'range' ) {
+                if ( isset( $_GET['from'] ) && isset( $_GET['to'] ) ) {
+                        $end_date       = $_GET['to'];
+                        $start_date     = $_GET['from'];
+                        $date1    = strtotime( $end_date);
+                        $date2    = strtotime( $start_date);
+                        if ( $date1 < $date2 ) {
+                                Yii::$app->session->setFlash('error', 'Error: start date should be before the end date' );
+                        }
+                        $response1 = Disbursements::getDisbursementByStation($start_date,$end_date);
+                        $response2 = Commissions::getPresenterCommission($start_date,$end_date);
+                } else {
+                    $start_date= date('Y-m-01');
+                    $d=cal_days_in_month(CAL_GREGORIAN,date('m'),date('Y'));
+                    $end_date = date("Y-m-$d");
+                    $response1 = Disbursements::getDisbursementByStation($start_date,$end_date);
+                    $response2 = Commissions::getPresenterCommission($start_date,$end_date);
+                }
+        } else {
+            $response1 = Disbursements::getDisbursementByStation($start_date,$end_date);
+            $response2 = Commissions::getPresenterCommission($start_date,$end_date);
+        }
+        $content = $this->renderFile('@app/views/report/partials/payouts_view.php', [
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'response1' => $response1,
+            'response2' => $response1
+        ]);
+        $pdf = new Pdf([
+            // set to use core fonts only
+            'mode' => Pdf::MODE_UTF8,
+            'format' => Pdf::FORMAT_A4,
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            'destination' => Pdf::DEST_FILE,
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+            'cssInline' => '
+                #bill-content-div{ font-family: Cambria,Georgia,serif !important; }
+                table {
+                    border-collapse: collapse;
+                    width:96%;
+                }
+                table, th, td {
+                    border: 1px solid black;
+                }
+                th{
+                    text-align:center !important;
+                    height:50px !important;
+                }
+                .bill_content{
+                    font-family: Cambria, Georgia, serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 20px;
+                    text-align:center !important;
+                }
+                .first_col{
+                    padding-left:2px;
+                }
+            ',
+            'defaultFont' => 'Cambria,Georgia,serif',
+            'defaultFontSize' => '22',
+             // call mPDF methods on the fly
+            'methods' => [
+                //'SetHeader'=>['test'],
+                'SetFooter'=>['{PAGENO}'],
+            ]
+        ]);
+        // return the pdf output as per the destination setting
+        $filepath = \Yii::$app->basePath . "/web/uploads/$file_name";
+        $pdf->output($content, $filepath, Pdf::DEST_FILE);
+        header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
+        header("Content-Type: application/pdf");
+        header("Content-Transfer-Encoding: Binary");
+        header("Content-Length: ".filesize($filepath));
+        header("Content-Disposition: attachment; filename=$filepath");
+        header("location: \"".basename($filepath)."\"");
+        return Yii::$app->response->sendFile($filepath);
+    }
+    /**
+        * Function to show Active Payouts report
+        * @return type
     */
     public function actionPayouts(){ 
         $start_date= date('Y-m-d');
