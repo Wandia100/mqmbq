@@ -70,7 +70,7 @@ class StationShows extends \yii\db\ActiveRecord
     }
     public static function getStationShows() {
         $arr   = [];
-        $model = StationShows::find()->all();
+        $model = StationShows::find()->orderBy("name ASC")->all();
         foreach ( $model as $value ) {
             $arr[ $value->id ] = $value->name;
         }

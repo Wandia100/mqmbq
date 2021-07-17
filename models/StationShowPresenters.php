@@ -86,4 +86,19 @@ class StationShowPresenters extends \yii\db\ActiveRecord
         ->bindValue(':presenter_id',$presenter_id)
         ->queryOne();
     }
+    public static function adminStationShow($presenter_id,$current_day)
+    {
+        $sql="SELECT b.station_id,c.frequency,a.station_show_id,b.name AS show_name,c.name as station_name,b.description,b.show_code,
+        b.target,b.start_time,b.end_time,a.is_admin,a.presenter_id 
+        FROM station_show_presenters a LEFT JOIN station_shows b ON a.station_show_id=b.id 
+        LEFT JOIN stations c ON b.station_id=c.id 
+        WHERE a.presenter_id=:presenter_id AND b.enabled=1 AND b.".$current_day."=1";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':presenter_id',$presenter_id)
+        ->queryOne();
+    }
+    public static function getShowAdmin($station_show_id)
+    {
+        return StationShowPresenters::find()->where(['station_show_id'=>$station_show_id,'is_admin'=>1])->one();
+    }
 }

@@ -203,23 +203,29 @@ class TransactionhistoriesController extends Controller
             'percent_pending' => $percent_pending
         ]);
     }
-    public function actionAdmindraws()
+    public function actionAdmindraws($show_id="",$from="")
     {
         $presenter=Yii::$app->user->identity;
+        $presenter=[];
+        $presenter_station_show=[];
         $shows=StationShows::getStationShows();
-        $presenter_station_show=StationShowPresenters::presenterStationShow($presenter->id,strtolower(date("l")));
-        if($presenter_station_show)
+        if(!empty($show_id) && !empty($from))
+        {
+            $presenter=StationShowPresenters::getShowAdmin($show_id);
+            $presenter_station_show=StationShowPresenters::adminStationShow($presenter->presenter_id,strtolower(date("l",strtotime($from))));
+        }
+        if(!empty($presenter_station_show))
         {
             $station_show_id=$presenter_station_show['station_show_id'];
-            $start_time=date("Y-m-d")." ".$presenter_station_show['start_time'];
-            $end_time=date("Y-m-d")." ".$presenter_station_show['end_time'];
+            $start_time=$from." ".$presenter_station_show['start_time'];
+            $end_time=$from." ".$presenter_station_show['end_time'];
             $show_transactions=TransactionHistories::getShowTransactions($station_show_id,$start_time,$end_time);
             $transaction_total=TransactionHistories::getTransactionTotal($station_show_id,$start_time,$end_time)['total'];
             $transaction_count=count($show_transactions);
             $target_achievement=round(($transaction_total/$presenter_station_show['target'])*100,2);
             $show_name=$presenter_station_show['show_name']." ".$presenter_station_show['start_time']." - ".$presenter_station_show['end_time'];
-            $recent_winners=WinningHistories::getRecentWinners($presenter_station_show['station_show_id'],date("Y-m-d"));
-            $show_prizes=StationShowPrizes::getShowPrizes(strtolower(date("l")),$presenter_station_show['station_show_id']);
+            $recent_winners=WinningHistories::getRecentWinners($presenter_station_show['station_show_id'],$from);
+            $show_prizes=StationShowPrizes::getShowPrizes(strtolower(date("l",strtotime($from))),$presenter_station_show['station_show_id']);
             $percent_raised=round(($transaction_total/$presenter_station_show['target'])*100,2);
             $percent_pending=round((($presenter_station_show['target']-$transaction_total)/$presenter_station_show['target'])*100,2);
         }
@@ -241,6 +247,8 @@ class TransactionhistoriesController extends Controller
         $act ->setLog();
         
         return $this->render('admin_draws', [
+            'show_id' => $show_id,
+            'from' => $from,
             'shows' => $shows,
             'show_name' => $show_name,
             'transaction_total' => $transaction_total,

@@ -27,14 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="form-group">
         <label for="from">STATION SHOW:</label>
         <?php
-        echo Html::dropDownList("show_id", $selection = null, $shows,['prompt'=>'--Select--']);
+        echo Html::dropDownList("show_id", $selection = $show_id, $shows,['prompt'=>'--Select--']);
         ?>
         </div class="form-group">
     <div class="form-group">
                 <label for="from">SHOW DATE:</label>
                     <?= yii\jui\DatePicker::widget( [
                             'name'          => 'from',
-                            'value'         => date("Y-m-d"),
+                            'value'         => (!empty($from)?$from:date("Y-m-d")),
                             'dateFormat'    => 'yyyy-MM-dd',
                             'clientOptions' => [ 'defaultDate' => '2015-01-01' ],
                             'options'       => [ 'class' => 'form-control inmfield required', ]
