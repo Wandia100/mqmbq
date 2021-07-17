@@ -40,7 +40,7 @@
         <tr>
         <td><?=$response2[$i]['name'];?></td>
         <td><?= isset($response2[$i]['presentername'])?$response2[$i]['presentername']:'';?></td>
-        <td><?=$response2[$i]['phone_number'];?></td>
+        <td><?= isset($response2[$i]['phone_number'])?$response2[$i]['phone_number']:'';?></td>
         <td><?= isset($response2[$i]['totalamount'])?$response2[$i]['totalamount']:'';?></td>
         </tr>
         <?php
