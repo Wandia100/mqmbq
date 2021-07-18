@@ -1,4 +1,4 @@
-<b>Disbursements</b>
+<b>Disbursements (<?=$start_date?> to <?=$end_date?>)</b>
 <table class="table table-striped table-hover">
     <thead>
         <tr>
