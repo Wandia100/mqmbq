@@ -19,7 +19,7 @@
             'start_date' => $start_date,
             'end_date' => $end_date,
             'response1' => $response1,
-            'response2' => $response1
+            'response2' => $response2
         ])?>
 
     </div>

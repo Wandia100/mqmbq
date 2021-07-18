@@ -229,7 +229,7 @@ class Disbursements extends \yii\db\ActiveRecord
         LEFT JOIN com21.winning_histories w ON d.reference_id = w.id
         LEFT JOIN com21.stations s ON w.station_id = s.id
         WHERE disbursement_type = 'winning' AND d.created_at BETWEEN  :start_date AND :end_date
-        GROUP BY d.amount, s.name";
+        GROUP BY s.name";
         return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':start_date',$start_date)
         ->bindValue(':end_date',$end_date)

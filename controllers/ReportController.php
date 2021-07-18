@@ -221,7 +221,7 @@ class ReportController extends Controller{
             'start_date' => $start_date,
             'end_date' => $end_date,
             'response1' => $response1,
-            'response2' => $response1
+            'response2' => $response2
         ]);
         $pdf = new Pdf([
             // set to use core fonts only
@@ -314,7 +314,7 @@ class ReportController extends Controller{
         'start_date' => $start_date,
         'end_date' => $end_date,
         'response1' => $response1,
-        'response2' => $response1
+        'response2' => $response2
         ]);
         
     }

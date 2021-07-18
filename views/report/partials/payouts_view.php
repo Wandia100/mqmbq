@@ -14,7 +14,7 @@
         ?>
         <tr>
         <td><?=$response1[$i]['name'];?></td>
-        <td><?=$response1[$i]['totalamount'];?></td>
+        <td><?=number_format($response1[$i]['totalamount'],2);?></td>
         </tr>
         <?php
         $total = $total + $response1[$i]['totalamount'];
@@ -22,7 +22,7 @@
         ?>
         <tr>
             <td><b>Total</b></td>
-            <td><b><?=$total?></b></td>
+            <td><b><?=number_format($total,2)?></b></td>
         </tr>
     </tbody>
 </table>
@@ -46,9 +46,9 @@
         ?>
         <tr>
         <td><?=$response2[$i]['name'];?></td>
-        <td><?= isset($response2[$i]['presentername'])?$response2[$i]['presentername']:'';?></td>
-        <td><?= isset($response2[$i]['phone_number'])?$response2[$i]['phone_number']:'';?></td>
-        <td><?= isset($response2[$i]['totalamount'])?$response2[$i]['totalamount']:'';?></td>
+        <td><?= $response2[$i]['presentername'];?></td>
+        <td><?= $response2[$i]['phone_number'];?></td>
+        <td><?= number_format($response2[$i]['totalamount'],2);?></td>
         </tr>
         <?php
         $totalcom = $totalcom + $response2[$i]['totalamount'];
@@ -58,7 +58,7 @@
             <td><b>TOTAL</b></td>
             <td></td>
             <td></td>
-            <td><b><?=$totalcom?></b></td> 
+            <td><b><?=number_format($totalcom,2)?></b></td> 
         </tr>
     </tbody>
 </table>

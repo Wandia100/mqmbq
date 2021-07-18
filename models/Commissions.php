@@ -193,9 +193,8 @@ class Commissions extends \yii\db\ActiveRecord
         LEFT JOIN com21.stations s ON c.station_id = s.id
         LEFT JOIN com21.station_show_presenters sp ON sp.station_id = s.id
         LEFT JOIN com21.users u ON sp.presenter_id = u.id
-        #WHERE u.perm_group = 3
-        WHERE c.created_at BETWEEN  :start_date AND :end_date
-        GROUP BY c.amount, s.name,u.first_name,u.last_name,u.phone_number";
+        WHERE u.perm_group = 3 AND c.created_at BETWEEN  :start_date AND :end_date
+        GROUP BY s.name,u.first_name,u.last_name,u.phone_number";
         return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':start_date',$start_date)
         ->bindValue(':end_date',$end_date)
