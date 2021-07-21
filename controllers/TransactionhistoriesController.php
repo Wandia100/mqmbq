@@ -294,7 +294,14 @@ class TransactionhistoriesController extends Controller
             }
             else if($row->TransAmount >= 100 && $row->TransAmount < 300)
             {
-                $station_show=StationShows::getStationShow($row->BillRefNumber);
+                $server_name = $_SERVER['SERVER_NAME']; //
+                if (in_array($server_name, COMP21_NET) && strlen($row->BillRefNumber)==1 && strtolower($row->BillRefNumber)=='j') {
+                    $station_show=StationShows::getStationShowNet($row->BillRefNumber);
+                }
+                else
+                {
+                    $station_show=StationShows::getStationShow($row->BillRefNumber);
+                }
                 if($station_show!=NULL)
                 {
                     try 
