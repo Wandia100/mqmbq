@@ -18,12 +18,12 @@
         <ul class="nav">
         <li class="nav-item">
                 <a href="#" target="_blank" class="nav-link">
-                        COM21
+                        
                 </a>
             </li>
             <li class="nav-item">
                 <a href="#" target="_blank" class="nav-link">
-                        COM21
+                        
                 </a>
             </li>            
         </ul>
