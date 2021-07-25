@@ -291,6 +291,7 @@ class TransactionhistoriesController extends Controller
                 //do nothing
                 $row->state=1;
                 $row->save(false);
+                Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName]);
             }
             else if($row->TransAmount >= 100 && $row->TransAmount < 300)
             {
@@ -319,6 +320,7 @@ class TransactionhistoriesController extends Controller
                         $model->save(false);
                         $row->state=1;
                         $row->save(false);
+                        Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName]);
                     }
                     catch (IntegrityException $e) {
                         //allow execution
@@ -338,6 +340,7 @@ class TransactionhistoriesController extends Controller
                     $row->deleted_at=date("Y-m-d H:i:s");
                     $row->state=1;
                     $row->save(false);
+                    Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName]);
                 } 
                 else
                 {

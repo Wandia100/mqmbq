@@ -138,20 +138,7 @@ class ApiController extends Controller
                 $model->TransAmount = $data['TransAmount'];
                 $model->created_at=date("Y-m-d H:i:s");
                 $model->updated_at=date("Y-m-d H:i:s");
-                if($model->save(false))
-                {
-                    $first_name=$data['FirstName'];
-                    if($data['TransAmount'] >=100 && $data['TransAmount'] < 300)
-                    {
-                        Myhelper::setSms('validDraw',$data['MSISDN'],[$first_name]);
-
-                    }
-                    else
-                    {
-                        Myhelper::setSms('invalidDrawAmount',$data['MSISDN'],[$first_name]);
-
-                    }
-                } 
+                $model->save(false);
             }
             catch (IntegrityException $e) {
                 //allow execution
