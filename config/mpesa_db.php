@@ -1,24 +1,34 @@
 <?php
-    $db_host="";
-    $db_username = "comp2120";
-    $db_password = "Zpa@!%vfrG34f";
-    $db_name = "comp21_mpesa";
 	$server_name = $_SERVER['SERVER_NAME'];
 	if ( ( in_array($server_name, COMP21_COKE))) {
 		$db_host      = "18.191.217.111";
+    $db_username = "comp2120";
+    $db_password = "Zpa@!%vfrG34f";
+    $db_name = "comp21_mpesa";
     }
 	else if ( ( in_array($server_name, COMP21_NET))) {
 		$db_host      = "3.16.157.158";
+    $db_username = "comp2120";
+    $db_password = "Zpa@!%vfrG34f";
+    $db_name = "comp21_mpesa";
     }
 	else if ( ( in_array($server_name, COMP21_DEV))) {
 		$db_host      = "3.19.53.19";
+    $db_username = "comp2120";
+    $db_password = "Zpa@!%vfrG34f";
+    $db_name = "comp21_mpesa";
     }
 	else if ( ( in_array($server_name, CMEDIA_COTZ))) {
 		$db_host      = "18.216.231.0";
+    $db_username = "cmedia2120";
+    $db_password = "Zpa@!%vfrG34f";
+    $db_name = "cmedia_mpesa";
     }
 	 else {
 		$db_host      = "127.0.0.1";
 		$db_username = "com2120";
+    $db_password = "Zpa@!%vfrG34f";
+    $db_name = "comp21_mpesa";
      }
        
 return [
