@@ -13,6 +13,9 @@
 	else if ( ( in_array($server_name, COMP21_DEV))) {
 		$db_host      = "3.19.53.19";
     }
+	else if ( ( in_array($server_name, CMEDIA_COTZ))) {
+		$db_host      = "18.216.231.0";
+    }
 	 else {
 		$db_host      = "127.0.0.1";
 		$db_username = "com2120";
