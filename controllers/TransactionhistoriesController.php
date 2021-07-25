@@ -320,7 +320,17 @@ class TransactionhistoriesController extends Controller
                         $model->save(false);
                         $row->state=1;
                         $row->save(false);
-                        Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName]);
+                        if(in_array($_SERVER['SERVER_NAME'], CMEDIA))
+                        {
+                            $totalEntry=TransactionHistories::countEntry($row->MSISDN);
+                            $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
+                            Myhelper::setSms('validDrawEntry',$row->MSISDN,[$row->FirstName,$entryNumber,$totalEntry]);
+                        }
+                        else
+                        {
+                            Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName]);
+                        }
+
                     }
                     catch (IntegrityException $e) {
                         //allow execution

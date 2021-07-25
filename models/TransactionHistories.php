@@ -161,4 +161,12 @@ class TransactionHistories extends \yii\db\ActiveRecord
         ->bindValue(':limits',$limits)
         ->execute();
     }
+    public static function countEntry($phone_number)
+    {
+        return TransactionHistories::find()->where("reference_phone='$phone_number'")->count();
+    }
+    public static function generateEntryNumber($phone_number,$entry_count)
+    {
+        return crc32(substr($phone_number,3).$entry_count);
+    }
 }
