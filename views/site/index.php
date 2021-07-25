@@ -11,26 +11,26 @@ $this->title = 'Com 21';
         <div class="row">
             <div class="col-md-3">
                 <div class="well well-lg text-dark" style="background-color: #FFFFFF">
-                    <h5 class="font-weight-bold">Ksh <?= \app\models\MpesaPayments::getMpesaCounts('today')?></h5>
+                    <h5 class="font-weight-bold"><?=$currency;?> <?= \app\models\MpesaPayments::getMpesaCounts('today')?></h5>
                     <p>Today</p>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="well well-lg  text-white" style="background-color: #8950FC">
-                    <h5 class="font-weight-bold">Ksh <?= \app\models\MpesaPayments::getMpesaCounts('yesterday')?></h5>
+                    <h5 class="font-weight-bold"><?=$currency;?> <?= \app\models\MpesaPayments::getMpesaCounts('yesterday')?></h5>
                     <p>Yesterday</p>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="well well-lg text-white" style="background-color: #F64E60">
-                    <h5 class="font-weight-bold">Ksh <?= \app\models\MpesaPayments::getMpesaCounts('last_7_days')?></h5>
+                    <h5 class="font-weight-bold"><?=$currency;?> <?= \app\models\MpesaPayments::getMpesaCounts('last_7_days')?></h5>
                     <p>Current Week</p>
                 </div>
                 
             </div>
             <div class="col-md-3">
                 <div class="well well-lg text-white" style="background-color: #212121">
-                    <h5 class="font-weight-bold">Ksh <?= \app\models\MpesaPayments::getMpesaCounts('currentmonth')?></h5>
+                    <h5 class="font-weight-bold"><?=$currency;?> <?= \app\models\MpesaPayments::getMpesaCounts('currentmonth')?></h5>
                     <p>Current month</p>
                 </div>
                 
@@ -39,11 +39,11 @@ $this->title = 'Com 21';
          <div class="row">
             <div class="col-md-3">
                 <div class="well well-lg" style="background-color: #C9F7F5">
-                <h5 class="font-weight-bold">Ksh <?=number_format($today_payout);?></h5>
+                <h5 class="font-weight-bold"><?=$currency;?> <?=number_format($today_payout);?></h5>
                     <p>Payouts today</p>
                 </div>
                 <div class="well well-lg" style="background-color: #FFE2E5">
-                <h5 class="font-weight-bold">Ksh <?=number_format($yesterday_payout);?></h5>
+                <h5 class="font-weight-bold"><?=$currency;?> <?=number_format($yesterday_payout);?></h5>
                     <p>Payouts yesterday</p>
                 </div>
             </div>
@@ -79,16 +79,16 @@ $this->title = 'Com 21';
             </div>
             <div class="col-md-3">
                 <div class="well well-lg" style="background-color: #C9F7F5">
-                    <h5 class="font-weight-bold">Ksh <?= \app\models\MpesaPayments::getMpesaCounts('lastweek')?></h5>
+                    <h5 class="font-weight-bold"><?=$currency;?> <?= \app\models\MpesaPayments::getMpesaCounts('lastweek')?></h5>
                     <p>Last week</p>
                 </div>
                 <div class="well well-lg" style="background-color: #FFE2E5">
-                    <h5 class="font-weight-bold">Ksh <?= \app\models\MpesaPayments::getMpesaCounts('lastmonth')?></h5>
+                    <h5 class="font-weight-bold"><?=$currency;?> <?= \app\models\MpesaPayments::getMpesaCounts('lastmonth')?></h5>
                     <p>Last month</p>
                 </div>
                 
                 <div class="well well-lg" style="background-color: #E1F0FF">
-                    <h5 class="font-weight-bold">Ksh <?= \app\models\MpesaPayments::getMpesaCounts('totalrevenue')?></h5>
+                    <h5 class="font-weight-bold"><?=$currency;?> <?= \app\models\MpesaPayments::getMpesaCounts('totalrevenue')?></h5>
                     <p>Total revenue</p>
                 </div>
             </div>

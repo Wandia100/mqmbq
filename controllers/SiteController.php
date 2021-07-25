@@ -68,6 +68,13 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if(in_array($_SERVER['SERVER_NAME'],CMEDIA_COTZ))
+        {
+            $currency="Tsh ";
+        }
+        else{
+            $currency="Ksh ";
+        }
         if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group==3){
             return $this->redirect( [ '/transactionhistories/presenter' ] );
         }else if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group==6){
@@ -78,6 +85,7 @@ class SiteController extends Controller
             $today_payout=WinningHistories::getPayout(date("Y-m-d"))['total'];
             $yesterday_payout=WinningHistories::getPayout(date("Y-m-d",strtotime("yesterday")))['total'];
             return $this->render('index', [
+                'currency' => $currency,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'today_payout' => $today_payout,
