@@ -25,7 +25,7 @@ class TemplateController extends Controller
                 'only' => ['create', 'update','index','delete','view'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','delete'],
+                        'actions' => ['create', 'update','index','delete','view'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
