@@ -167,6 +167,6 @@ class TransactionHistories extends \yii\db\ActiveRecord
     }
     public static function generateEntryNumber($phone_number,$entry_count)
     {
-        return crc32(substr($phone_number,3).$entry_count);
+        return $entry_count.substr($phone_number,3);
     }
 }
