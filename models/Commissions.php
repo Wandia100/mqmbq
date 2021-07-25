@@ -189,13 +189,13 @@ class Commissions extends \yii\db\ActiveRecord
     public static function getPresenterCommission($start_date,$end_date)
     {
         $sql = "SELECT s.name,concat(u.first_name,u.last_name) AS presentername,u.phone_number,sum(c.amount) AS totalamount
-        FROM com21.commissions c
-        LEFT JOIN com21.stations s ON c.station_id = s.id
-        LEFT JOIN com21.station_show_presenters sp ON sp.station_id = s.id
-        LEFT JOIN com21.users u ON sp.presenter_id = u.id
+        FROM commissions c
+        LEFT JOIN stations s ON c.station_id = s.id
+        LEFT JOIN station_show_presenters sp ON sp.station_id = s.id
+        LEFT JOIN users u ON sp.presenter_id = u.id
         WHERE u.perm_group IN (3,5) AND c.created_at BETWEEN  :start_date AND :end_date
         GROUP BY s.name,u.first_name,u.last_name,u.phone_number";
-        return Yii::$app->analytics_db->createCommand($sql)
+        return Yii::$app->db->createCommand($sql)
         ->bindValue(':start_date',$start_date)
         ->bindValue(':end_date',$end_date)
         ->queryAll();
