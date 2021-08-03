@@ -433,12 +433,23 @@ class ReportController extends Controller{
                 $model->hour_date=$the_day;
                 $model->unique_field=date('Ymd').$hr.$station->id;
                 $model->station_id=$station->id;
-                $model->amount=MpesaPayments::getStationTotalMpesa($from_time,$station->station_code)['amount'];
+
+                if(in_array($_SERVER['SERVER_NAME'],COMP21_NET) && strlen($station->station_code)==1)
+                {
+                    $model->amount=MpesaPayments::getStationTotalMpesaNet($from_time,$station->station_code)['amount'];
+                    $model->day_total=MpesaPayments::getStationTotalMpesaNet($the_day,$station->station_code)['amount'];
+
+                }
+                else
+                {
+                    $model->amount=MpesaPayments::getStationTotalMpesa($from_time,$station->station_code)['amount'];
+                    $model->day_total=MpesaPayments::getStationTotalMpesa($the_day,$station->station_code)['amount'];
+
+                }
                 $mpesa_payments = MpesaPayments::getTotalMpesa($from_time)['total_mpesa'];
                 $transaction_histories = TransactionHistories::getTotalTransactions($from_time)['total_history'];
                 $model->invalid_codes=$mpesa_payments - $transaction_histories;
                 $model->total_amount=$mpesa_payments;
-                $model->day_total=MpesaPayments::getStationTotalMpesa($the_day,$station->station_code)['amount'];
                 $model->created_at=date("Y-m-d H:i:s");
                 $model->save(false);
                 }

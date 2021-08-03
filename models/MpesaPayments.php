@@ -104,6 +104,14 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':sname',"%$station_code%")
         ->queryOne();
     }
+    public static function getStationTotalMpesaNet($from_time)
+    {
+        $sql="SELECT COALESCE(SUM(b.TransAmount),0) as amount FROM comp21_mpesa.mpesa_payments b WHERE b.deleted_at IS NULL AND b.created_at LIKE :from_time 
+        AND  LENGTH(b.BillRefNumber)=1";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':from_time',"%$from_time%")
+        ->queryOne();
+    }
     public static function getTotalRevenue()
     {
         $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments";
