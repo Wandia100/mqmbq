@@ -73,7 +73,7 @@ class SiteReport extends \yii\db\ActiveRecord
             if(!$model){
                 $model = new SiteReport();
             }
-            $model -> report_name = $name;
+            $model -> report_name = $value;
             $model -> report_value = $sum;
             $model -> report_date = date('Y-m-d H:i:s');
             $model ->save(FALSE);
