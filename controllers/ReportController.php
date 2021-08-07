@@ -17,6 +17,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
 use app\components\Myhelper;
+use app\models\SiteReport;
 use kartik\mpdf\Pdf;
 
 class ReportController extends Controller{
@@ -829,6 +830,11 @@ class ReportController extends Controller{
         Commissions::logCommission($log_date);
         WinningHistories::logDailyAwards($log_date);
         MpesaPayments::logRevenue($log_date);
+    }
+    public function actionLogsitereport()
+    {
+        Myhelper::checkRemoteAddress();
+        SiteReport::setSiteReport();
     }
 }
 ?>
