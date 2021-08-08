@@ -68,7 +68,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        if(in_array($_SERVER['SERVER_NAME'],CMEDIA_COTZ))
+        if(in_array($_SERVER['SERVER_NAME'],COTZ))
         {
             $currency="Tsh ";
         }
