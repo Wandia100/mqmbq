@@ -60,8 +60,8 @@ class SiteReport extends \yii\db\ActiveRecord
         * Method to set site report
     */
     public function setSiteReport(){
-        $ReportNames = ['yesterday','last_7_days','currentmonth','lastweek','lastmonth','today_payout','yesterday_payout'];
-        $payInReportName = ['yesterday','last_7_days','currentmonth','lastweek','lastmonth'];
+        $ReportNames = ['yesterday','last_7_days','currentmonth','lastweek','lastmonth','totalrevenue','today_payout','yesterday_payout'];
+        $payInReportName = ['yesterday','last_7_days','currentmonth','lastweek','lastmonth','totalrevenue'];
         
         foreach ($ReportNames as $value) {
             if(in_array($value, $payInReportName)){
@@ -78,5 +78,16 @@ class SiteReport extends \yii\db\ActiveRecord
             $model -> report_date = date('Y-m-d H:i:s');
             $model ->save(FALSE);
         }
+    }
+    /**
+     * Method to get site report
+     * @param type $reportName
+     */
+    public static function getSiteReport($reportName){
+        $model = SiteReport::find()->where("report_name = '$reportName'")->one();
+        if($model){
+            return $model->report_value;
+        }
+        return 0;
     }
 }
