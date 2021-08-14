@@ -4,6 +4,10 @@ define( 'COMP21_COKE', array( '18.222.117.89','www.comp21.co.ke', 'comp21.co.ke'
 define( 'COMP21_NET',  array( '18.190.157.46','www.comp21.net', 'comp21.net' ));
 define( 'COMP21_DEV',  array( '3.15.207.63','www.comp21.dev', 'comp21.dev'));
 define( 'CMEDIA_COTZ',  array( 'cmedia.co.tz','www.cmedia.co.tz'));
+define( 'EFMTZ_COM',  array( 'efmtz.com','www.efmtz.com'));
+define( 'COTZ',  array( 'efmtz.com','www.efmtz.com','cmedia.co.tz','www.cmedia.co.tz'));
+
+
 define( 'NITEXTSMSURL',"https://nitext.co.ke/index.php/api/sendSmsMultiple");
 if ( ( in_array($server_name,COMP21_COKE))) {
     define( 'PARTYA', '3015585' );
