@@ -59,7 +59,7 @@ class SiteReport extends \yii\db\ActiveRecord
     /**
         * Method to set site report
     */
-    public function setSiteReport(){
+    public static function setSiteReport(){
         $ReportNames = ['yesterday','last_7_days','currentmonth','lastweek','lastmonth','totalrevenue','today_payout','yesterday_payout'];
         $payInReportName = ['yesterday','last_7_days','currentmonth','lastweek','lastmonth','totalrevenue'];
         
