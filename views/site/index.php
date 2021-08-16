@@ -23,14 +23,14 @@ $this->title = 'Com 21';
             </div>
             <div class="col-md-3">
                 <div class="well well-lg text-white" style="background-color: #F64E60">
-                    <h5 class="font-weight-bold"><?=$currency;?> <?= app\models\SiteReport::getSiteReport('last_7_days') + $today_income ?></h5>
+                    <h5 class="font-weight-bold"><?=$currency;?> <?= app\models\SiteReport::getSiteReport('last_7_days') + str_replace(",", "",$today_income) ?></h5>
                     <p>Current Week</p>
                 </div>
                 
             </div>
             <div class="col-md-3">
                 <div class="well well-lg text-white" style="background-color: #212121">
-                    <h5 class="font-weight-bold"><?=$currency;?> <?= app\models\SiteReport::getSiteReport('currentmonth') + $today_income ?></h5>
+                    <h5 class="font-weight-bold"><?=$currency;?> <?= app\models\SiteReport::getSiteReport('currentmonth') + str_replace(",", "",$today_income) ?></h5>
                     <p>Current month</p>
                 </div>
                 
@@ -88,7 +88,7 @@ $this->title = 'Com 21';
                 </div>
                 
                 <div class="well well-lg" style="background-color: #E1F0FF">
-                    <h5 class="font-weight-bold"><?=$currency;?> <?= app\models\SiteReport::getSiteReport('totalrevenue') + $today_income ?></h5>
+                    <h5 class="font-weight-bold"><?=$currency;?> <?= app\models\SiteReport::getSiteReport('totalrevenue') + str_replace(",", "",$today_income) ?></h5>
                     <p>Total revenue</p>
                 </div>
             </div>
