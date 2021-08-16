@@ -86,7 +86,7 @@ class SiteReport extends \yii\db\ActiveRecord
     public static function getSiteReport($reportName){
         $model = SiteReport::find()->where("report_name = '$reportName'")->one();
         if($model){
-            return $model->report_value;
+            return $model->report_value > 0 ? $model->report_value: 0;
         }
         return 0;
     }
