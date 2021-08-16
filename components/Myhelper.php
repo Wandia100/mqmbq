@@ -109,6 +109,9 @@ class Myhelper extends Component {
 		else if (in_array($_SERVER['REMOTE_ADDR'],array('18.188.246.230','172.31.46.248')) ) {
 			//allow execution for cmedia
 		}
+		else if (in_array($_SERVER['REMOTE_ADDR'],array('13.134.91.9','172.31.36.164')) ) {
+			//allow execution for efmtz
+		}
 		else {
 			echo 'Oops! You Just Died!';
 			exit();
