@@ -281,19 +281,31 @@ class TransactionhistoriesController extends Controller
     public function actionAssignshows()
     {
         Myhelper::checkRemoteAddress();
+        $server_name = $_SERVER['SERVER_NAME']; //
+        if (in_array($server_name, CMEDIA_COTZ) || in_array($server_name, EFMTZ_COM))
+        {
+            $play_min=1000;
+            $play_max=2000;
+        }
+        else
+        {
+            $play_min=100;
+            $play_max=300;
+        }
+
         $data=MpesaPayments::find()->where("state=0")->all();
         for($i=0;$i<count($data); $i++)
         {
             $row=$data[$i];
             //check if amount > 300 and refund after deducting 100
-            if($row->TransAmount <100)
+            if($row->TransAmount <$play_min)
             {
                 //do nothing
                 $row->state=1;
                 $row->save(false);
                 Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName]);
             }
-            else if($row->TransAmount >= 100 && $row->TransAmount < 300)
+            else if($row->TransAmount >= $play_min && $row->TransAmount < $play_max)
             {
                 $server_name = $_SERVER['SERVER_NAME']; //
                 if (in_array($server_name, COMP21_NET) && strlen($row->BillRefNumber)==1 && strtolower($row->BillRefNumber)=='j') {
@@ -342,7 +354,7 @@ class TransactionhistoriesController extends Controller
             else{
                 if($row->TransAmount < 10000)
                 {
-                    $refund=$row->TransAmount-100;
+                    $refund=$row->TransAmount-$play_min;
                     if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
                     {
                         Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",0);
@@ -354,7 +366,7 @@ class TransactionhistoriesController extends Controller
                 } 
                 else
                 {
-                    $refund=$row->TransAmount-100;
+                    $refund=$row->TransAmount-$play_min;
                     if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
                     {
                         Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",4);
