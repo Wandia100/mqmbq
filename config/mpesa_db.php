@@ -23,13 +23,13 @@
     $db_host      = "3.21.41.249";
     $db_username = "cmedia2120";
     $db_password = "Zpa@!%vfrG34f";
-    $db_name = "cmedia_mpesa";
+    $db_name = "efmtz_mpesa";
     }
     else if ( ( in_array($server_name,EFMTZ_COM))) {
       $db_host      = "18.216.231.0";
       $db_username = "efmtz2120";
       $db_password = "Zpa@!%vfrG34f";
-      $db_name = "efmtz_mpesa";
+      $db_name = "cmedia_mpesa";
       }
 	 else {
 		$db_host      = "127.0.0.1";
