@@ -861,5 +861,57 @@ class Myhelper extends Component {
 			$outbox->save(false);
 		}
 	}
+
+	public static function curlGet($headers,$url)
+	{
+			$ch = curl_init($url);
+			curl_setopt_array( $ch, array(
+				CURLOPT_SSL_VERIFYPEER => false,
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_HTTPHEADER     => $headers
+			) );
+			// Send the request
+			$response = curl_exec($ch);
+			curl_close($ch);
+			return $response;
+	}
+	public static function sendTzSms($msisdn,$message,$sender_name,$channel)
+	{
+		$url="http://213.136.80.136:9090/bulksms?message=$message&msisdn=$msisdn&channel=$channel&shortcode=$sender_name&relay_id=".SMS_RELAY_ID."&reference=".SMS_REFERENCE."&username=".SMS_USERNAME."&password=".SMS_PASSWORD;
+		Myhelper::curlGet($url);
+	}
+		/**
+	 * function to get the channel;
+	 *
+	 * @param type $phone_number
+	 *
+	 * @return int
+	 */
+	public static function getSmsChannel( $phone_number ) {
+		$phone_number = preg_replace( "/[^0-9]/", '', $phone_number );
+		if ( strlen( $phone_number ) == 12 ) {
+			$phone_number = preg_replace( "/^255/", '0', $phone_number );
+		}
+		if ( strlen( $phone_number ) == 12 ) {
+			$phone_number = preg_replace( "/^254/", '0', $phone_number );
+		}
+		if ( strlen( $phone_number ) == 15 ) {
+			$phone_number = preg_replace( "/^000255/", '0', $phone_number );
+		}
+		if ( strlen( $phone_number ) == 15 ) {
+			$phone_number = preg_replace( "/^000254/", '0', $phone_number );
+		}
+		$operator_prefix = substr( $phone_number, 0, 3 );
+		$operator        = "";
+		if ( $operator_prefix == "076" || $operator_prefix == "075" || $operator_prefix == "074" ) {
+			$operator = "TANZANIA.VODACOM.RELAY";
+		} elseif ( $operator_prefix == "068" || $operator_prefix == "069" || $operator_prefix == "078" ) {
+			$operator = "TANZANIA.AIRTEL.RELAY";
+		} elseif ( $operator_prefix == "065" || $operator_prefix == "067" || $operator_prefix == "071" ) {
+			$operator = "TANZANIA.TIGO.RELAY";
+		} 
+
+		return $operator;
+	}
 }
 

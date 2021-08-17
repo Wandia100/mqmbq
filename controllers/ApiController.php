@@ -220,6 +220,20 @@ class ApiController extends Controller
             $this->sendSms($payload);
         }
     }
+    public function actionTzsms()
+    {
+        Myhelper::checkRemoteAddress();
+        $sender_name="MSHINDO";
+
+        $smses=Outbox::find()->all();
+        for($i=0; $i<$smses; $i++)
+        {
+            $payload=$smses[$i];
+            $channel=Myhelper::getSmsChannel($payload->receiver);
+            Myhelper::sendTzSms($payload->receiver,$payload->message,$sender_name,$channel);
+            $this->sendSms($payload);
+        }
+    }
     public function actionSms()
     {
         //$data = file_get_contents('php://input');
