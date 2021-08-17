@@ -332,7 +332,7 @@ class TransactionhistoriesController extends Controller
                         $model->save(false);
                         $row->state=1;
                         $row->save(false);
-                        if(in_array($_SERVER['SERVER_NAME'], CMEDIA_COTZ))
+                        if(in_array($_SERVER['SERVER_NAME'],COTZ))
                         {
                             $totalEntry=TransactionHistories::countEntry($row->MSISDN);
                             $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
