@@ -32,3 +32,4 @@ tests/_support/_generated
 /.vagrant
 #configs
 components/Keys.php
+config/credentials.php
