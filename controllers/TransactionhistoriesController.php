@@ -336,7 +336,7 @@ class TransactionhistoriesController extends Controller
                         {
                             $totalEntry=TransactionHistories::countEntry($row->MSISDN);
                             $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-                            Myhelper::setSms('validDrawEntry',$row->MSISDN,[$row->FirstName,$entryNumber,$totalEntry]);
+                            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry]);
                         }
                         else
                         {
