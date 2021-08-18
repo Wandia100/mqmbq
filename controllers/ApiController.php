@@ -225,13 +225,12 @@ class ApiController extends Controller
         Myhelper::checkRemoteAddress();
         $sender_name="MSHINDO";
 
-        $smses=Outbox::find()->all();
+        $smses=Outbox::getOutbox();
         for($i=0; $i<$smses; $i++)
         {
             $payload=$smses[$i];
-            $channel=Myhelper::getSmsChannel($payload->receiver);
-            Myhelper::sendTzSms($payload->receiver,$payload->message,$sender_name,$channel);
-            $this->sendSms($payload);
+            $channel=Myhelper::getSmsChannel($payload['msisdn']);
+            Myhelper::sendTzSms($payload['msisdn'],utf8_encode($payload['message']),$sender_name,$channel);
         }
     }
     public function actionSms()
