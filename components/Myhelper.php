@@ -862,13 +862,12 @@ class Myhelper extends Component {
 		}
 	}
 
-	public static function curlGet($headers,$url)
+	public static function curlGet($url)
 	{
 			$ch = curl_init($url);
 			curl_setopt_array( $ch, array(
 				CURLOPT_SSL_VERIFYPEER => false,
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_HTTPHEADER     => $headers
+				CURLOPT_RETURNTRANSFER => true
 			) );
 			// Send the request
 			$response = curl_exec($ch);
