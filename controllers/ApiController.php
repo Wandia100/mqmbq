@@ -226,7 +226,7 @@ class ApiController extends Controller
         $sender_name="MSHINDO";
 
         $smses=Outbox::getOutbox();
-        for($i=0; $i<$smses; $i++)
+        for($i=0; $i<count($smses); $i++)
         {
             $payload=$smses[$i];
             $channel=Myhelper::getSmsChannel($payload['msisdn']);
