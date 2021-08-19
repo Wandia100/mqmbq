@@ -876,7 +876,7 @@ class Myhelper extends Component {
 	}
 	public static function sendTzSms($msisdn,$message,$sender_name,$channel)
 	{
-		$url="http://213.136.80.136:9090/bulksms?message=$message&msisdn=$msisdn&channel=$channel&shortcode=$sender_name&relay_id=".SMS_RELAY_ID."&reference=".SMS_REFERENCE."&username=".SMS_USERNAME."&password=".SMS_PASSWORD;
+		$url="http://213.136.80.136:9090/bulksms?message=".urlencode($message)."&msisdn=$msisdn&channel=$channel&shortcode=$sender_name&relay_id=".SMS_RELAY_ID."&reference=".SMS_REFERENCE."&username=".SMS_USERNAME."&password=".SMS_PASSWORD;
 		Myhelper::curlGet($url);
 	}
 		/**
