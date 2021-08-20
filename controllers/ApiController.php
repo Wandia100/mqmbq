@@ -230,7 +230,7 @@ class ApiController extends Controller
         {
             $payload=$smses[$i];
             $channel=Myhelper::getSmsChannel($payload['msisdn']);
-            Myhelper::sendTzSms($payload['msisdn'],urlencode($payload['message']),$sender_name,$channel);
+            Myhelper::sendTzSms($payload['msisdn'],$payload['message'],$sender_name,$channel);
         }
     }
     public function actionSms()
