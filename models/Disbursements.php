@@ -91,7 +91,7 @@ class Disbursements extends \yii\db\ActiveRecord
     public static function saveDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type,$status)
     {
 
-        if($amount <= 150000)
+        if($amount <= 1000000)
             {
                 $unique_field=$phone_number.$amount.date('YmdHi');
                Disbursements::createDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type,$status,$unique_field); 
@@ -101,10 +101,10 @@ class Disbursements extends \yii\db\ActiveRecord
                 $count=0;
                 while($amount > 0)
                 {
-                    if($amount > 150000)
+                    if($amount > 1000000)
                     {
-                        $to_pay=150000;
-                        $amount=$amount-150000;
+                        $to_pay=1000000;
+                        $amount=$amount-1000000;
                     }
                     else
                     {
