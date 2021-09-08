@@ -65,7 +65,7 @@ class Outbox extends \yii\db\ActiveRecord
     }
     public static function getOutbox()
     {
-        $smses=Outbox::find()->limit(30)->all();
+        $smses=Outbox::find()->limit(200)->all();
         $pending=[];
         for($i=0;$i <count($smses); $i++)
         {
