@@ -119,6 +119,9 @@ use luc\tourist\Tourist;
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> ">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Winners Report - Pending notifications',  Url::to(['/winninghistories/index','route'=>2]), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Sent SMS',  Url::to(['/sentsms/index','route'=>2]), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?>  <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Financial Summary', Url::to(['/financialsummaries/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
