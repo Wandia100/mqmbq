@@ -61,6 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
             #'station_show_prize_id',
             'reference_name',
             'reference_phone',
+            'amount',
             //'reference_code',
             #'station_id',
             [
@@ -77,7 +78,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'stationshowname',
                 'value'     => 'stationshows.name'
             ],
-            'amount',
             //'transaction_cost',
             'transaction_reference',
             //'conversation_id',
