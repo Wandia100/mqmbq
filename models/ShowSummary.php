@@ -63,6 +63,10 @@ class ShowSummary extends \yii\db\ActiveRecord
     {
         return ShowSummary::find()->where("report_date=:report_date",[':report_date' => $report_date])->count();
     }
+    public static function findShow($report_date,$station_show_id)
+    {
+        return ShowSummary::find()->where("report_date='$report_date'")->andWhere("station_show_id='$station_show_id'")->one();
+    }
     public static function getShowSummary($start_date,$end_date)
     {
         $sql="SELECT station_name,station_show_name,COALESCE(SUM(total_revenue),0) AS revenue,COALESCE(SUM(total_commission),0) AS commission,
@@ -76,24 +80,34 @@ class ShowSummary extends \yii\db\ActiveRecord
     public static function logShowSummary($start_date)
     {
         $end_date = date("$start_date 23:59:59");
-        if(ShowSummary::checkDuplicate($start_date)== 0)
-        {
-            
             $data=StationShows::getStationShowSummary($start_date,$end_date);
             for($i=0;$i<count($data); $i++)
             {
                 $row=$data[$i];
-                $model=new ShowSummary();
-                $model->station_show_id=$row['id'];
-                $model->total_revenue=$row['total_revenue'];
-                $model->total_commission=$row['total_commission'];
-                $model->total_payouts=$row['total_payout'];
-                $model->report_date= $start_date;
-                $model->created_at=date("Y-m-d H:i:s");
-                $model->station_show_name=$row['station_show_name'];
-                $model->station_name=$row['station_name'];
-                $model->save();
+                $show=ShowSummary::findShow($start_date,$row['id']);
+                if($show==NULL)
+                {
+                    $model=new ShowSummary();
+                    $model->station_show_id=$row['id'];
+                    $model->total_revenue=$row['total_revenue'];
+                    $model->total_commission=$row['total_commission'];
+                    $model->total_payouts=$row['total_payout'];
+                    $model->report_date= $start_date;
+                    $model->created_at=date("Y-m-d H:i:s");
+                    $model->station_show_name=$row['station_show_name'];
+                    $model->station_name=$row['station_name'];
+                    $model->save();
+                }
+                else
+                {
+                    $show->total_revenue=$row['total_revenue'];
+                    $show->total_commission=$row['total_commission'];
+                    $show->total_payouts=$row['total_payout'];
+                    $show->save();
+                }
+                
+                
             }
-        }
+        
     }
 }
