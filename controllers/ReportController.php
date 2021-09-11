@@ -768,6 +768,14 @@ class ReportController extends Controller{
         }
         ShowSummary::logShowSummary($start_date);
     }
+    public function actionShowlog($start_date,$end_date)
+    {
+        while($start_date <= $end_date)
+        {
+            ShowSummary::logShowSummary($start_date);
+            $start_date=date('Y-m-d', strtotime($start_date . ' +1 day'));
+        }
+    }
     public function actionLogcommission()
     {
         Myhelper::checkRemoteAddress();
