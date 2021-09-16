@@ -855,7 +855,8 @@ class ReportController extends Controller{
         Myhelper::checkRemoteAddress();
         SiteReport::setSiteReport();
     }
-    public function actionUniqueplayers()
+    //removed action
+    public function Uniqueplayers()
     {
         $this->playerData();
 
