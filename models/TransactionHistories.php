@@ -153,6 +153,13 @@ class TransactionHistories extends \yii\db\ActiveRecord
         return Yii::$app->db->createCommand($sql)
         ->queryAll();
     }
+    public static function getUniquePlayers()
+    {
+        $sql='SELECT a.reference_name,a.reference_phone,b.name FROM transaction_histories a 
+        LEFT JOIN stations b ON a.station_id=b.id GROUP BY a.reference_name,a.reference_phone,b.name';
+        return Yii::$app->db->createCommand($sql)
+        ->queryAll();
+    }
     public static function removeDups($unique_field,$limits)
     {
         $sql='DELETE FROM transaction_histories WHERE mpesa_payment_id=:mpesa_payment_id LIMIT :limits';
