@@ -241,7 +241,7 @@ class StationshowsController extends Controller
             
             $model->id=Uuid::generate()->string;
             $model->created_at = date('Y-m-d H:i:s');
-            $model->save();
+            $model->save(false);
             $act = new \app\models\ActivityLog();
             $act -> desc = "stationshow create";
             $act -> propts = "'{id:$model->id }'";
