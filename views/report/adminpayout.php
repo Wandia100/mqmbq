@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <?php } ?>
     <div class="col-md-2" style="text-align: left">
-        <?= Html::submitButton(($loadcheck)?'DISBURSE Payments':'LOAD Limit', ['class' => ($loadcheck)?'btn btn-success':'btn btn-primary']) ?>
+        <?= Html::submitButton(($loadcheck)?'DISBURSE Payments':'LOAD Limit', ['class' => ($loadcheck)?'btn btn-success showprogressbar':'btn btn-primary showprogressbar']) ?>
     </div>
     
 </div>

@@ -92,7 +92,7 @@ AdminAsset::register($this);
                 <div class="container-fluid">
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12" style="text-align: center">
                                 <img src="<?php
                                 echo \yii\helpers\Url::base(); ?>/images/ajax-loader.gif">
                             </div>
