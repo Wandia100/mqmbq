@@ -29,10 +29,10 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts'],
+                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout'],
                 'rules' => [
                     [
-                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts'],
+                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','adminpayout'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -176,7 +176,36 @@ class ReportController extends Controller{
         ]);
         
     }
-    
+    /**
+        * Method to render admin payout for losers
+        * @return type
+    */
+    public function actionAdminpayout(){
+        if(isset($_POST['limit']) && $_POST['limit'] > 0 ){
+            $limit = (int)$_POST['limit'];
+            $loadcheck = true;
+        }else{
+            $loadcheck = FALSE;
+            $limit = 100;
+        }
+        
+        if(isset($_POST['amount']) && $_POST['amount'] > 0 && $loadcheck){//Disburse amount
+            TransactionHistories::processLosersDisbursements($limit, $_POST['amount']);
+            $this->redirect('adminpayout');
+        }
+        
+        $response= TransactionHistories::getLosersList($limit);
+        
+        return $this->render('adminpayout', [
+            'limit' =>  $limit,
+            'loadcheck'=>$loadcheck,
+            'response' => $response
+        ]);
+    }
+
+
+
+
     /**
         * Method to generate payout report
     */

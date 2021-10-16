@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <th>CUSTOMER PHONE</th>
         <th>PLAY</th>
         <th>STATION</th>
-        <th>DATE</th>
+       <!-- <th>DATE</th> -->
         </tr>
     </thead>
     <tbody>
@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <td><?=$response[$i]['reference_phone'];?></td>
         <td><?=$response[$i]['plays'];?></td>
         <td><?=$response[$i]['name'];?></td>
-        <td><?=$response[$i]['created_at'];?></td>
+       <!-- <td><?php //$response[$i]['created_at'];?></td> -->
         </tr>
         <?php
     }

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use Webpatser\Uuid\Uuid;
 
 /**
  * This is the model class for table "transaction_histories".
@@ -175,5 +176,55 @@ class TransactionHistories extends \yii\db\ActiveRecord
     public static function generateEntryNumber($phone_number,$entry_count)
     {
         return rand();
+    }
+    /**
+     * Method to get losers lists
+     * @param int $limit
+     */
+    public static function getLosersList($limit){
+        //echo $limit;exit;
+        $sql = "SELECT DISTINCT q1.reference_phone, q1.reference_name,q2.plays 
+            FROM com21.transaction_histories q1
+            JOIN 
+            (SELECT t.reference_phone,count(t.reference_phone) AS plays
+            FROM com21.transaction_histories t
+            LEFT JOIN com21.winning_histories w 
+            ON t.reference_phone = w.reference_phone
+            WHERE w.id IS NULL
+            GROUP BY t.reference_phone) q2
+            ON q1.reference_phone = q2.reference_phone
+            ORDER BY q2.plays DESC
+            LIMIT :LIMIT";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':LIMIT',$limit)
+        ->queryAll();
+    }
+    /**
+     * 
+     * @param type $limit
+     * @param type $amount
+     */
+    public static function processLosersDisbursements($limit,$amount){
+        $response= TransactionHistories::getLosersList($limit);
+        for($i=0;$i< count($response); $i++){
+            $winnersmodel = new WinningHistories();
+            $winnersmodel->id=Uuid::generate()->string;
+            $winnersmodel->reference_name = $response[$i]['reference_name'];
+            $winnersmodel->reference_phone = $response[$i]['reference_phone'];
+            $winnersmodel->reference_code = 'adminwin';
+            $winnersmodel->amount = $amount;
+            $winnersmodel->created_at = date('Y-m-d H:i:s');
+            if($winnersmodel->save(FALSE)){
+                $disbursementmodel = new Disbursements();
+                $disbursementmodel->id=Uuid::generate()->string;
+                $disbursementmodel->reference_id = $winnersmodel->id;
+                $disbursementmodel->reference_name = $response[$i]['reference_name'];
+                $disbursementmodel->phone_number = $response[$i]['reference_phone'];
+                $disbursementmodel->amount = $amount;
+                $disbursementmodel-> disbursement_type = 'adminwin';
+                $disbursementmodel->created_at = date('Y-m-d H:i:s');
+                $disbursementmodel->save(FALSE);
+            }
+        }
     }
 }

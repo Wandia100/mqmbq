@@ -241,7 +241,7 @@ class WinningHistories extends \yii\db\ActiveRecord
      */
     public static function getCustomerreport($start_date,$end_date)
     {
-        $sql = "SELECT  DISTINCT q1.reference_phone,q1.plays ,q2.reference_name,q2.station_id,q2.created_at,st.name
+        $sql = "SELECT  DISTINCT q1.reference_phone,q1.plays ,q2.reference_name,q2.station_id,st.name
         FROM winning_histories q2 
         JOIN 
         (SELECT  reference_phone, COUNT(reference_phone) As plays
