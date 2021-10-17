@@ -75,6 +75,9 @@ use luc\tourist\Tourist;
                 </li> 
                 <li class="<?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Admin payout" title="Admin payout">
                     <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Admin payout', ['/report/adminpayout'], ['class' => ''])?>
+                </li>  
+                <li class="<?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Growth trend" title="Growth trend">
+                    <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Growth trends', ['/report/growthtrend'], ['class' => ''])?>
                 </li> 
                 </ul>
                 </li>

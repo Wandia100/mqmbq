@@ -29,10 +29,10 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout'],
+                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout','growthtrend'],
                 'rules' => [
                     [
-                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','adminpayout'],
+                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','adminpayout','growthtrend'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -202,11 +202,16 @@ class ReportController extends Controller{
             'response' => $response
         ]);
     }
-
-
-
-
     /**
+        * Method to render growth trend graph
+    */
+    public function actionGrowthtrend(){
+        
+        return $this->render('growthtrend', [
+        ]);
+    }
+
+        /**
         * Method to generate payout report
     */
     public function actionExportpayouts()

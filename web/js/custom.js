@@ -12,6 +12,7 @@ $(document).ready(function(){
         showprogress();
     });
     commissiondisbursementModal();
+    growthTrendCharts()
 });
 
 /**
@@ -177,4 +178,50 @@ function notified (instance, field, id) {
     $.post(host + '/winninghistories/notified', {value: instance.val(), field: field, id: id}, function (data) {
         location.reload();
     })
+}
+
+/**
+ * SO Line Charts
+ * @returns {undefined}
+ */
+function growthTrendCharts () {
+  var datapoint = ''
+  if ($('#pointspermonth').val() && JSON.stringify(JSON.parse($('#pointspermonth').val())) != '[]') {
+    datapoint = JSON.parse($('#pointspermonth').val())
+  }
+  $(function () {
+    $('#growthtrendchartcontainer').highcharts({
+      chart: {
+        type: 'line'
+      },
+      title: {
+        text: 'Monthly Revenue'
+      },
+      subtitle: {
+        text: 'Source: COM21'
+      },
+      xAxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      },
+      yAxis: {
+        title: {
+          text: 'Revenue'
+        }
+      },
+      plotOptions: {
+        line: {
+          dataLabels: {
+            enabled: true
+          },
+          enableMouseTracking: false
+        }
+      },
+      series: [
+         {
+          name: 'Months',
+          data: datapoint
+        }, 
+      ]
+    })
+  })
 }

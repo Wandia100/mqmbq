@@ -23,6 +23,9 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
+        'https://code.highcharts.com/highcharts.js',
+        'https://code.highcharts.com/highcharts-more.js',
+        'https://code.highcharts.com/modules/exporting.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
