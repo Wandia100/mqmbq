@@ -4,7 +4,7 @@ namespace app\models;
 
 use Yii;
 use Webpatser\Uuid\Uuid;
-
+use yii\db\IntegrityException;
 /**
  * This is the model class for table "transaction_histories".
  *
@@ -206,25 +206,31 @@ class TransactionHistories extends \yii\db\ActiveRecord
      */
     public static function processLosersDisbursements($limit,$amount){
         $response= TransactionHistories::getLosersList($limit);
-        for($i=0;$i< count($response); $i++){
-            $winnersmodel = new WinningHistories();
-            $winnersmodel->id=Uuid::generate()->string;
-            $winnersmodel->reference_name = $response[$i]['reference_name'];
-            $winnersmodel->reference_phone = $response[$i]['reference_phone'];
-            $winnersmodel->reference_code = 'adminwin';
-            $winnersmodel->amount = $amount;
-            $winnersmodel->created_at = date('Y-m-d H:i:s');
-            if($winnersmodel->save(FALSE)){
-                $disbursementmodel = new Disbursements();
-                $disbursementmodel->id=Uuid::generate()->string;
-                $disbursementmodel->reference_id = $winnersmodel->id;
-                $disbursementmodel->reference_name = $response[$i]['reference_name'];
-                $disbursementmodel->phone_number = $response[$i]['reference_phone'];
-                $disbursementmodel->amount = $amount;
-                $disbursementmodel-> disbursement_type = 'adminwin';
-                $disbursementmodel->created_at = date('Y-m-d H:i:s');
-                $disbursementmodel->save(FALSE);
+        try {
+            for($i=0;$i< count($response); $i++){
+                $winnersmodel = new WinningHistories();
+                $winnersmodel->id=Uuid::generate()->string;
+                $winnersmodel->reference_name = $response[$i]['reference_name'];
+                $winnersmodel->reference_phone = $response[$i]['reference_phone'];
+                $winnersmodel->reference_code = 'adminwin';
+                $winnersmodel->amount = $amount;
+                $winnersmodel->created_at = date('Y-m-d H:i:s');
+                $winnersmodel->unique_field=date("Ymd")."#".$response[$i]['reference_phone'];
+                if($winnersmodel->save(FALSE)){
+                    $disbursementmodel = new Disbursements();
+                    $disbursementmodel->id=Uuid::generate()->string;
+                    $disbursementmodel->reference_id = $winnersmodel->id;
+                    $disbursementmodel->reference_name = $response[$i]['reference_name'];
+                    $disbursementmodel->phone_number = $response[$i]['reference_phone'];
+                    $disbursementmodel->amount = $amount;
+                    $disbursementmodel-> disbursement_type = 'adminwin';
+                    $disbursementmodel->created_at = date('Y-m-d H:i:s');
+                    $disbursementmodel->unique_field=date("Ymd")."#".$response[$i]['reference_phone'];
+                    $disbursementmodel->save(FALSE);
+                }
             }
+        }catch(IntegrityException $e){
+                //allow execution
         }
     }
 }
