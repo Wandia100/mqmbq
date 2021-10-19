@@ -206,8 +206,9 @@ class TransactionHistories extends \yii\db\ActiveRecord
      */
     public static function processLosersDisbursements($limit,$amount){
         $response= TransactionHistories::getLosersList($limit);
-        try {
+        
             for($i=0;$i< count($response); $i++){
+                try {
                 $winnersmodel = new WinningHistories();
                 $winnersmodel->id=Uuid::generate()->string;
                 $winnersmodel->reference_name = $response[$i]['reference_name'];
@@ -228,9 +229,10 @@ class TransactionHistories extends \yii\db\ActiveRecord
                     $disbursementmodel->unique_field=date("Ymd")."#".$response[$i]['reference_phone'];
                     $disbursementmodel->save(FALSE);
                 }
-            }
-        }catch(IntegrityException $e){
+            }catch(IntegrityException $e){
                 //allow execution
         }
+            }
+        
     }
 }
