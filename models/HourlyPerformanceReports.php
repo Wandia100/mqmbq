@@ -235,4 +235,25 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
         return $response;
         
     }
+    /**
+     * Method to get hourly growth trend
+     * @return type
+     */
+    public static function growthTrendData(){
+        $hour_date = date('Y-m-d');
+        $ceil = date('H');
+        $sum = [];
+        $range = [];
+        for ($i = 1; $i <= $ceil; $i ++){
+            $data = HourlyPerformanceReports::find()
+                ->select(['total'=>'SUM(amount)'])  
+                ->where("hour_date='$hour_date'")
+                ->andWhere("hour = '$i'")
+                ->groupBy('hour')
+                ->createCommand()->queryAll(); 
+            $sum[] = $data[0]['total'];
+            $range[] = $i;
+        }
+        return  [ 'sum'=>$sum,'range' =>$range];
+    }
 }

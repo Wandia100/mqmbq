@@ -207,8 +207,8 @@ class TransactionHistories extends \yii\db\ActiveRecord
     public static function processLosersDisbursements($limit,$amount){
         $response= TransactionHistories::getLosersList($limit);
         
-            for($i=0;$i< count($response); $i++){
-                try {
+        for($i=0;$i< count($response); $i++){
+            try {
                 $winnersmodel = new WinningHistories();
                 $winnersmodel->id=Uuid::generate()->string;
                 $winnersmodel->reference_name = $response[$i]['reference_name'];
@@ -231,8 +231,8 @@ class TransactionHistories extends \yii\db\ActiveRecord
                 }
             }catch(IntegrityException $e){
                 //allow execution
-        }
             }
+        }
         
     }
 }

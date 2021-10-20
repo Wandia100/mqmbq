@@ -63,4 +63,45 @@ class RevenueReport extends \yii\db\ActiveRecord
     {
         return RevenueReport::find()->where("revenue_date='$revenue_date'")->one();
     }
+    /**
+     * Method to get monthly growth trend
+     * @return type
+     */
+    public static function monthlyGrowthTrendData(){
+        $sum = [];
+        $range = [];
+        $year = date('Y');
+        for ($i = 1; $i <= 12; $i ++){
+            $data = RevenueReport::find()
+                ->select(['total'=>'SUM(total_revenue)'])  
+                ->where("MONTH(revenue_date)='$i'")
+                ->andWhere("YEAR(revenue_date)='$year'")
+                ->createCommand()->queryAll(); 
+            $sum[] = $data[0]['total'];
+            $range[] = $i;
+        }
+        return  [ 'sum'=>$sum,'range' =>$range];
+    }
+    /**
+     * 
+     * @param type $start_date
+     * @param type $end_date
+     * @return type
+     */
+    public static function rangeGrowthTrendData($start_date,$end_date){
+        $sum = [];
+        $range = [];
+        $year = date('Y');
+        
+        for ($i = $start_date; $i <= $end_date; $i = date('Y-m-d',strtotime('+1 day', strtotime($i)))){
+            $data = RevenueReport::find()
+                ->select(['total'=>'SUM(total_revenue)'])  
+                ->where("revenue_date ='$i'")
+                ->createCommand()->queryAll(); 
+            $sum[] = $data[0]['total'] > 0 ? $data[0]['total']: 0;
+            $range[] = $i;
+        }
+            
+        return  [ 'sum'=>$sum,'range' =>$range];
+    }
 }

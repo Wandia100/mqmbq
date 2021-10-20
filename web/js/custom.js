@@ -185,9 +185,12 @@ function notified (instance, field, id) {
  * @returns {undefined}
  */
 function growthTrendCharts () {
-  var datapoint = ''
+  var datapoint = '', titleholder = $('#titleholder').val()
   if ($('#pointspermonth').val() && JSON.stringify(JSON.parse($('#pointspermonth').val())) != '[]') {
     datapoint = JSON.parse($('#pointspermonth').val())
+  }
+   if ($('#categoryid').val() && JSON.stringify(JSON.parse($('#categoryid').val())) != '[]') {
+    var cats = JSON.parse($('#categoryid').val())
   }
   $(function () {
     $('#growthtrendchartcontainer').highcharts({
@@ -195,13 +198,13 @@ function growthTrendCharts () {
         type: 'line'
       },
       title: {
-        text: 'Monthly Revenue'
+        text: titleholder+' Revenue'
       },
       subtitle: {
         text: 'Source: COM21'
       },
       xAxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        categories: cats
       },
       yAxis: {
         title: {
@@ -218,7 +221,7 @@ function growthTrendCharts () {
       },
       series: [
          {
-          name: 'Months',
+          name: titleholder,
           data: datapoint
         }, 
       ]

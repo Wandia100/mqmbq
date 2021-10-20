@@ -206,8 +206,37 @@ class ReportController extends Controller{
         * Method to render growth trend graph
     */
     public function actionGrowthtrend(){
-        
+        $start_date= date('Y-m-d');
+        $end_date = $start_date;
+        if ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'daily' ) {
+            $response= HourlyPerformanceReports::growthTrendData();
+        } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'monthly' ) {
+            $response= RevenueReport::monthlyGrowthTrendData();
+        } elseif ( isset( $_GET['criterion'] ) && $_GET['criterion'] == 'range' ) {
+                if ( isset( $_GET['from'] ) && isset( $_GET['to'] ) ) {
+                        $end_date       = $_GET['to'];
+                        $start_date     = $_GET['from'];
+                        $date1    = strtotime( $end_date);
+                        $date2    = strtotime( $start_date);
+                        if ( $date1 < $date2 ) {
+                                Yii::$app->session->setFlash('error', 'Error: start date should be before the end date' );
+                        }
+                        $response= RevenueReport::rangeGrowthTrendData($start_date,$end_date);
+                } else {
+                    $start_date= date('Y-m-01');
+                    $d=cal_days_in_month(CAL_GREGORIAN,date('m'),date('Y'));
+                    $end_date = date("Y-m-$d");
+                    $response= RevenueReport::rangeGrowthTrendData($start_date,$end_date);
+                }
+        } else {
+            $response= HourlyPerformanceReports::growthTrendData();
+        }
+       
         return $this->render('growthtrend', [
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'range' => json_encode($response['range'],JSON_NUMERIC_CHECK),
+            'response' => json_encode($response['sum'],JSON_NUMERIC_CHECK)
         ]);
     }
 
