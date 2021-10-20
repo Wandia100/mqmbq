@@ -106,6 +106,9 @@ use luc\tourist\Tourist;
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-gift"></i> Prizes', Url::to(['/prizes/index']), ['class' => '', 'id' => 'newapp'])?>
                 </li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
+                    <?= Html::a('<i class="metismenu-icon fa fa-gift"></i> Station Target', Url::to(['/stationtarget/index']), ['class' => '', 'id' => 'newapp'])?>
+                </li>
                     </ul>
                 </li>
                 
@@ -142,6 +145,12 @@ use luc\tourist\Tourist;
                 </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$adminvisibility?> <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Disbursements', Url::to(['/disbursements/index']), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$adminvisibility?> <?=$customercarevisibility?>">
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Station Target Report', Url::to(['/stationtarget/report']), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$adminvisibility?> <?=$customercarevisibility?>">
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Player Trend Report', Url::to(['/playertrend/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                     </ul>
                 </li>

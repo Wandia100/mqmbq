@@ -43,6 +43,16 @@ class StationtargetController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    public function actionReport()
+    {
+        $searchModel = new StationTargetSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     /**
      * Displays a single StationTarget model.
