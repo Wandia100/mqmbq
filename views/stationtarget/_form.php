@@ -12,15 +12,15 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'station_id')->dropDownList(\app\models\Stations::getStations(),['prompt' => '--Select--']) ?>
+
     <?= $form->field($model, 'start_time')->textInput() ?>
 
     <?= $form->field($model, 'end_time')->textInput() ?>
 
-    <?= $form->field($model, 'station_id')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'target')->textInput() ?>
 
-    <?= $form->field($model, 'unique_field')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

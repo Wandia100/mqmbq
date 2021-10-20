@@ -36,7 +36,13 @@ class StationTarget extends \yii\db\ActiveRecord
             [['unique_field'], 'string', 'max' => 50],
         ];
     }
-
+    /**
+        *   Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getStations() {
+        return $this->hasOne(Stations::className(), [ 'id' => 'station_id' ] );
+    }
     /**
      * {@inheritdoc}
      */

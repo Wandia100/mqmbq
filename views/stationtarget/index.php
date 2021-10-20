@@ -29,8 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'start_time',
             'end_time',
-            'station_id',
+            [
+                'attribute' => 'stationname',
+                'value'     => 'stations.name'
+            ],
             'target',
+            'station_id',
             //'unique_field',
 
             ['class' => 'yii\grid\ActionColumn'],
