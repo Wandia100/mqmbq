@@ -1,0 +1,75 @@
+<?php
+
+namespace app\models;
+
+use yii\base\Model;
+use yii\data\ActiveDataProvider;
+use app\models\PlayerTrend;
+
+/**
+ * PlayerTrendSearch represents the model behind the search form of `app\models\PlayerTrend`.
+ */
+class PlayerTrendSearch extends PlayerTrend
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['id', 'frequency'], 'integer'],
+            [['msisdn', 'hour', 'station_id', 'station', 'hour_date', 'unique_field', 'created_at'], 'safe'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function scenarios()
+    {
+        // bypass scenarios() implementation in the parent class
+        return Model::scenarios();
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function search($params)
+    {
+        $query = PlayerTrend::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'frequency' => $this->frequency,
+            'hour_date' => $this->hour_date,
+            'created_at' => $this->created_at,
+        ]);
+
+        $query->andFilterWhere(['like', 'msisdn', $this->msisdn])
+            ->andFilterWhere(['like', 'hour', $this->hour])
+            ->andFilterWhere(['like', 'station_id', $this->station_id])
+            ->andFilterWhere(['like', 'station', $this->station])
+            ->andFilterWhere(['like', 'unique_field', $this->unique_field]);
+
+        return $dataProvider;
+    }
+}
