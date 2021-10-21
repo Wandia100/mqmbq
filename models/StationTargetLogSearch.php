@@ -9,7 +9,7 @@ use app\models\StationTarget;
 /**
  * StationTargetSearch represents the model behind the search form of `app\models\StationTarget`.
  */
-class StationTargetSearch extends StationTarget
+class StationTargetLogSearch extends StationTargetLog
 {
     /**
      * {@inheritdoc}
@@ -38,9 +38,9 @@ class StationTargetSearch extends StationTarget
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $daily = false, $monthly = false, $from = null, $to = null)
     {
-        $query = StationTarget::find();
+        $query = StationTargetLog::find();
 
         // add conditions that should always apply here
 
@@ -69,18 +69,18 @@ class StationTargetSearch extends StationTarget
         $today     = date( 'Y-m-d' );
         $yesterday = date( 'Y-m-d', strtotime( '-1 day' ) );
         if ( $daily ) {
-                $query->andWhere( "DATE(created_at)>= DATE('" . $yesterday . "')" );
-                $query->andWhere( "DATE(created_at)<= DATE('" . $today . "')" );
+                $query->andWhere( "DATE(range_date)>= DATE('" . $yesterday . "')" );
+                $query->andWhere( "DATE(range_date)<= DATE('" . $today . "')" );
         }
         if ( $monthly ) {
-                $query->andWhere( "MONTH(created_at)= MONTH(CURDATE())" );
-                $query->andWhere( "YEAR(created_at)= YEAR(CURDATE())" );
+                $query->andWhere( "MONTH(range_date)= MONTH(CURDATE())" );
+                $query->andWhere( "YEAR(range_date)= YEAR(CURDATE())" );
         }
         if ( $from != null && $to != null ) {
-                $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
-                $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
+                $query->andWhere( "DATE(range_date)>= DATE('" . $from . "')" );
+                $query->andWhere( "DATE(range_date)<= DATE('" . $to . "')" );
         }
-        $query->orderBy('created_at DESC');
+        $query->orderBy('range_date DESC');
 
         return $dataProvider;
     }

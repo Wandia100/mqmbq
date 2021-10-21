@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\StationTarget;
 use app\models\StationTargetSearch;
+use app\models\StationTargetLogSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -46,10 +47,10 @@ class StationtargetController extends Controller
     }
     public function actionReport()
     {
-        $searchModel = new StationTargetSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new StationTargetLogSearch();
+        $dataProvider =Yii::$app->myhelper->getdataprovider($searchModel);
 
-        return $this->render('index', [
+        return $this->render('report', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
