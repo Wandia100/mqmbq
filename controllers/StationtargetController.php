@@ -8,6 +8,7 @@ use app\models\StationTargetSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\db\IntegrityException;
 
 /**
  * StationtargetController implements the CRUD actions for StationTarget model.
@@ -45,6 +46,10 @@ class StationtargetController extends Controller
     }
     public function actionReport()
     {
+        $hour_date=date("Y-m-d");
+        //$hour=date("H");
+        $hour=14;
+        var_dump(StationTarget::setTargetLog($hour,$hour_date)); exit();
         $searchModel = new StationTargetSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -76,8 +81,21 @@ class StationtargetController extends Controller
     {
         $model = new StationTarget();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->unique_field=$model->station_id.$model->start_time;
+            try
+            {
+                if($model->save())
+                {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            }
+            catch(IntegrityException $e)
+            {
+                //do nothing
+            }
+           
+            
         }
 
         return $this->render('create', [

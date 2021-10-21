@@ -42,8 +42,9 @@ class StationTargetLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['range_date', 'start_time', 'end_time', 'created_at'], 'safe'],
+            [['range_date','created_at'], 'safe'],
             [['target', 'achieved', 'diff'], 'integer'],
+            [['start_time', 'end_time'], 'string','max'=>2],
             [['station_name'], 'string', 'max' => 50],
             [['station_id'], 'string', 'max' => 36],
         ];

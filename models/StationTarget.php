@@ -3,7 +3,9 @@
 namespace app\models;
 
 use Yii;
-
+use app\models\HourlyPerformanceReports;
+use app\models\StationTargetLog;
+use yii\db\IntegrityException;
 /**
  * This is the model class for table "station_target".
  *
@@ -30,7 +32,7 @@ class StationTarget extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['start_time', 'end_time'], 'safe'],
+            [['start_time', 'end_time'], 'string','max'=>2],
             [['target'], 'integer'],
             [['station_id'], 'string', 'max' => 36],
             [['unique_field'], 'string', 'max' => 50],
@@ -56,5 +58,44 @@ class StationTarget extends \yii\db\ActiveRecord
             'target' => 'Target',
             'unique_field' => 'Unique Field',
         ];
+    }
+    public static function getTargets($start_time)
+    {
+        $sql="SELECT a.id,a.start_time,a.end_time,b.name AS station_name,a.target,a.station_id
+        FROM station_target a LEFT JOIN stations b ON a.station_id=b.id WHERE a.start_time >=:start_time AND a.end_time > :start_time";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':start_time',$start_time)
+        ->queryAll();
+    }
+    public static function setTargetLog($hour,$hour_date)
+    {
+        $data=StationTarget::getTargets($hour);
+        for($i=0; $i<count($data); $i++)
+        {
+            $start_time=$data[$i]['start_time'];
+            $end_time=$data[$i]['end_time'];
+            $target=$data[$i]['target'];
+            $station_id=$data[$i]['station_id'];
+            $achieved=HourlyPerformanceReports::getRangeTotal($start_time,$end_time,$hour_date,$station_id);
+            try{
+                $model=new StationTargetLog();
+                $model->station_name=$data[$i]['station_name'];
+                $model->station_id=$station_id;
+                $model->range_date=$hour_date;
+                $model->station_target_id=$data[$i]['id'];
+                $model->start_time=$start_time;
+                $model->end_time=$end_time;
+                $model->target=$target;
+                $model->achieved=$achieved;
+                $model->diff=round($target-$achieved);
+                $model->unique_field=$model->station_target_id.$hour_date;
+                $model->save(false);
+            }
+            catch(IntegrityException $e)
+            {
+                //do nothing
+            }
+            
+        }
     }
 }
