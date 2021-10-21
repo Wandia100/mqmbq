@@ -46,10 +46,6 @@ class StationtargetController extends Controller
     }
     public function actionReport()
     {
-        $hour_date=date("Y-m-d");
-        //$hour=date("H");
-        $hour=14;
-        var_dump(StationTarget::setTargetLog($hour,$hour_date)); exit();
         $searchModel = new StationTargetSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -57,6 +53,14 @@ class StationtargetController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+    public function actionLogtarget()
+    {
+        
+        $hour_date=date("Y-m-d");
+        //$hour=date("H");
+        $hour=14;
+        StationTarget::setTargetLog($hour,$hour_date);
     }
 
     /**

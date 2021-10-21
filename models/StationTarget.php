@@ -76,25 +76,43 @@ class StationTarget extends \yii\db\ActiveRecord
             $end_time=$data[$i]['end_time'];
             $target=$data[$i]['target'];
             $station_id=$data[$i]['station_id'];
+            $station_target_id=$data[$i]['id'];
+            $unique_field=$station_target_id.$hour_date;
             $achieved=HourlyPerformanceReports::getRangeTotal($start_time,$end_time,$hour_date,$station_id);
-            try{
-                $model=new StationTargetLog();
-                $model->station_name=$data[$i]['station_name'];
-                $model->station_id=$station_id;
-                $model->range_date=$hour_date;
-                $model->station_target_id=$data[$i]['id'];
-                $model->start_time=$start_time;
-                $model->end_time=$end_time;
+            //var_dump($achieved); exit();
+            //check if exists
+            $model=StationTargetLog::find()->where(['unique_field'=>$unique_field])->one();
+            if($model==NULL)
+            {
+                try{
+                    $model=new StationTargetLog();
+                    $model->station_name=$data[$i]['station_name'];
+                    $model->station_id=$station_id;
+                    $model->range_date=$hour_date;
+                    $model->station_target_id=$station_target_id;
+                    $model->start_time=$start_time;
+                    $model->end_time=$end_time;
+                    $model->target=$target;
+                    $model->achieved=$achieved;
+                    $model->diff=round($target-$achieved);
+                    $model->unique_field=$unique_field;
+                    $model->save(false);
+                }
+                catch(IntegrityException $e)
+                {
+                    //do nothing
+                }
+            }
+            else
+            {
+               
                 $model->target=$target;
                 $model->achieved=$achieved;
                 $model->diff=round($target-$achieved);
-                $model->unique_field=$model->station_target_id.$hour_date;
                 $model->save(false);
+
             }
-            catch(IntegrityException $e)
-            {
-                //do nothing
-            }
+            
             
         }
     }
