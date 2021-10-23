@@ -38,7 +38,7 @@ class PlayerTrendSearch extends PlayerTrend
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $daily = false, $monthly = false, $from = null, $to = null)
     {
         $query = PlayerTrend::find();
 
@@ -69,7 +69,21 @@ class PlayerTrendSearch extends PlayerTrend
             ->andFilterWhere(['like', 'station_id', $this->station_id])
             ->andFilterWhere(['like', 'station', $this->station])
             ->andFilterWhere(['like', 'unique_field', $this->unique_field]);
-
+        $today     = date( 'Y-m-d' );
+        $yesterday = date( 'Y-m-d', strtotime( '-1 day' ) );
+        if ( $daily ) {
+                $query->andWhere( "DATE(hour_date)>= DATE('" . $yesterday . "')" );
+                $query->andWhere( "DATE(hour_date)<= DATE('" . $today . "')" );
+        }
+        if ( $monthly ) {
+                $query->andWhere( "MONTH(hour_date)= MONTH(CURDATE())" );
+                $query->andWhere( "YEAR(hour_date)= YEAR(CURDATE())" );
+        }
+        if ( $from != null && $to != null ) {
+                $query->andWhere( "DATE(hour_date)>= DATE('" . $from . "')" );
+                $query->andWhere( "DATE(hour_date)<= DATE('" . $to . "')" );
+        }
+        $query->orderBy('hour_date,frequency DESC');
         return $dataProvider;
     }
 }

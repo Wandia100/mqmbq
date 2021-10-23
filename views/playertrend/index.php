@@ -7,18 +7,27 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\PlayerTrendSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Player Trends';
+$this->title = 'PLAYER TRENDS REPORT';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="player-trend-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Player Trend', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <div class="panel panel-info">
+        <div class="panel-heading"> Filters</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                        <?=$this->renderFile('@app/views/layouts/partials/_date_filter.php', [
+                                'data' => [],
+                                'url'  => '/playertrend/index',
+                                'from' => date( 'Y-m-d', strtotime( '-14 days' ) )
+                        ])?>
+                </div>
+            </div>
+            <div class="row">
+                <?= $this->render('//_notification'); ?>  
+            </div>
+        </div>
+    </div>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
