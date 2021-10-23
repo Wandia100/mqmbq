@@ -8,7 +8,8 @@ use app\models\PlayerTrendSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use app\models\MpesaPayments;
+use yii\db\IntegrityException;
 /**
  * PlayertrendController implements the CRUD actions for PlayerTrend model.
  */
@@ -107,6 +108,30 @@ class PlayertrendController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+    public function actionLogtrend()
+    {
+        $created_at=date("Y-m-d");
+        $hour=date("H",strtotime("- 1 hour"));
+        $data=MpesaPayments::getPlayerTrend($created_at." ".$hour);
+        for($i=0; $i< count($data); $i++)
+        {
+            try
+            {
+                $model=new PlayerTrend();
+                $model->msisdn=$data[$i]['msisdn'];
+                $model->frequency=$data[$i]['frequency'];
+                $model->hour=$hour;
+                $model->station=$data[$i]['station'];;
+                $model->hour_date=$created_at;
+                $model->unique_field=$created_at.$hour.$model->station;
+                $model->save(false);
+            }
+            catch(IntegrityException $e)
+            {
+                //do nothing
+            }
+        }
     }
 
     /**

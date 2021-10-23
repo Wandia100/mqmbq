@@ -59,6 +59,9 @@ class PlayerTrendSearch extends PlayerTrend
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'msisdn' => $this->msisdn,
+            'hour' => $this->hour,
+            'station' => $this->station,
             'frequency' => $this->frequency,
             'hour_date' => $this->hour_date,
             'created_at' => $this->created_at,
