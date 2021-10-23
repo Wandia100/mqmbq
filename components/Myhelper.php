@@ -853,6 +853,10 @@ class Myhelper extends Component {
 					$toreplace       = [ "[customer_name]", "[prize_name]", "[amount]", "[station_name]" ];
 					$data['message'] = str_replace( $toreplace, $variables, $temp );
 					break;
+				case 'rewardPlayer':
+					$toreplace       = ["[amount]" ];
+					$data['message'] = str_replace( $toreplace, $variables, $temp );
+					break;
 				default:
 					$data['message'] = isset( $variables['message'] ) ? $variables['message'] : '';
 					break;

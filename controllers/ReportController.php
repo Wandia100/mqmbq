@@ -32,7 +32,7 @@ class ReportController extends Controller{
                 'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout','growthtrend'],
                 'rules' => [
                     [
-                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','adminpayout','growthtrend'],
+                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','growthtrend'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -77,6 +77,16 @@ class ReportController extends Controller{
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
                                 $users = Yii::$app->myhelper->getMembers( array( '' ), array(38) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['adminpayout'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(29) );
                                 return in_array( Yii::$app->user->identity->email, $users );
                             }
                         }

@@ -21,7 +21,24 @@ class StationtargetController extends Controller
      */
     public function behaviors()
     {
+        
         return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['create', 'update','index','report'],
+                'rules' => [
+                    [
+                        'actions' => ['create', 'update','index','report'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if(!Yii::$app->user->isGuest){
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(29) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

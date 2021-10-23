@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use Webpatser\Uuid\Uuid;
 use yii\db\IntegrityException;
+use app\components\Myhelper;
 /**
  * This is the model class for table "transaction_histories".
  *
@@ -228,6 +229,8 @@ class TransactionHistories extends \yii\db\ActiveRecord
                     $disbursementmodel->created_at = date('Y-m-d H:i:s');
                     $disbursementmodel->unique_field=date("Ymd")."#".$response[$i]['reference_phone'];
                     $disbursementmodel->save(FALSE);
+                    $arr=['amount'=>$amount];
+                    Myhelper::setSms('rewardPlayer',$response[$i]['reference_phone'],$arr);
                 }
             }catch(IntegrityException $e){
                 //allow execution
