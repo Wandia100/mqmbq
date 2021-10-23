@@ -60,7 +60,7 @@ class StationtargetController extends Controller
         
         $hour_date=date("Y-m-d");
         //$hour=date("H");
-        $hour=14;
+        $hour=date("H", strtotime ("-1 hour"));
         StationTarget::setTargetLog($hour,$hour_date);
     }
 

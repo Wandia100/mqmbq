@@ -66,21 +66,7 @@ class StationTargetSearch extends StationTarget
 
         $query->andFilterWhere(['like', 'station_id', $this->station_id])
             ->andFilterWhere(['like', 'unique_field', $this->unique_field]);
-        $today     = date( 'Y-m-d' );
-        $yesterday = date( 'Y-m-d', strtotime( '-1 day' ) );
-        if ( $daily ) {
-                $query->andWhere( "DATE(created_at)>= DATE('" . $yesterday . "')" );
-                $query->andWhere( "DATE(created_at)<= DATE('" . $today . "')" );
-        }
-        if ( $monthly ) {
-                $query->andWhere( "MONTH(created_at)= MONTH(CURDATE())" );
-                $query->andWhere( "YEAR(created_at)= YEAR(CURDATE())" );
-        }
-        if ( $from != null && $to != null ) {
-                $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
-                $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
-        }
-        $query->orderBy('created_at DESC');
+        $query->orderBy('id DESC');
 
         return $dataProvider;
     }

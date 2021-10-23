@@ -258,9 +258,9 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
     }
     public static function getRangeTotal($start_time,$end_time,$hour_date,$station_id)
     {
-        $sql="SELECT SUM(amount) as total  FROM hourly_performance_reports WHERE 
+        $sql="SELECT COALESCE(SUM(amount),0) as total  FROM hourly_performance_reports WHERE 
         hour_date=:hour_date AND `hour` >=:start_time AND `hour` < :end_time AND station_id=:station_id";
-        $resp= Yii::$app->db->createCommand($sql)
+        $resp= Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':start_time',$start_time)
         ->bindValue(':end_time',$end_time)
         ->bindValue(':hour_date',$hour_date)

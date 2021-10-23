@@ -94,7 +94,7 @@ class StationTarget extends \yii\db\ActiveRecord
                     $model->end_time=$end_time;
                     $model->target=$target;
                     $model->achieved=$achieved;
-                    $model->diff=round($target-$achieved);
+                    $model->diff=round($achieved-$target);
                     $model->unique_field=$unique_field;
                     $model->save(false);
                 }
@@ -108,7 +108,7 @@ class StationTarget extends \yii\db\ActiveRecord
                
                 $model->target=$target;
                 $model->achieved=$achieved;
-                $model->diff=round($target-$achieved);
+                $model->diff=round($achieved-$target);
                 $model->save(false);
 
             }
