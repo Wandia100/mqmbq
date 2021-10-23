@@ -17,8 +17,8 @@ class StationTargetLogSearch extends StationTargetLog
     public function rules()
     {
         return [
-            [['id', 'target'], 'integer'],
-            [['start_time', 'end_time', 'station_id', 'unique_field'], 'safe'],
+            [['id', 'target','achieved','diff'], 'integer'],
+            [['start_time', 'end_time', 'station_id', 'unique_field','station_name','range_date','station_target_id'], 'safe'],
         ];
     }
 
@@ -62,6 +62,11 @@ class StationTargetLogSearch extends StationTargetLog
             'start_time' => $this->start_time,
             'end_time' => $this->end_time,
             'target' => $this->target,
+            'station_name' => $this->station_name,
+            'range_date' => $this->range_date,
+            'station_target_id' => $this->station_target_id,
+            'achieved' => $this->achieved,
+            'diff' => $this->diff,
         ]);
 
         $query->andFilterWhere(['like', 'station_id', $this->station_id])

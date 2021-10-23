@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'station_name',
             'range_date',
             'start_time',
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'achieved',
             'diff',
             'target',
-            'station_id',
+            //'station_id',
             //'unique_field',
 
          //   ['class' => 'yii\grid\ActionColumn'],
