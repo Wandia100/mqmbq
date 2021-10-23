@@ -185,11 +185,11 @@ class TransactionHistories extends \yii\db\ActiveRecord
     public static function getLosersList($limit){
         //echo $limit;exit;
         $sql = "SELECT DISTINCT q1.reference_phone, q1.reference_name,q2.plays 
-            FROM com21.transaction_histories q1
+            FROM transaction_histories q1
             JOIN 
             (SELECT t.reference_phone,count(t.reference_phone) AS plays
-            FROM com21.transaction_histories t
-            LEFT JOIN com21.winning_histories w 
+            FROM transaction_histories t
+            LEFT JOIN winning_histories w 
             ON t.reference_phone = w.reference_phone
             WHERE w.id IS NULL
             GROUP BY t.reference_phone) q2
