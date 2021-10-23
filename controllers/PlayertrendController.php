@@ -124,7 +124,7 @@ class PlayertrendController extends Controller
                 $model->hour=$hour;
                 $model->station=$data[$i]['station'];;
                 $model->hour_date=$created_at;
-                $model->unique_field=$created_at.$hour.$model->station;
+                $model->unique_field=$created_at.$hour.$model->station.$model->msisdn;
                 $model->save(false);
             }
             catch(IntegrityException $e)
