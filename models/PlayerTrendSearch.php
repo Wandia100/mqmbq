@@ -18,7 +18,7 @@ class PlayerTrendSearch extends PlayerTrend
     {
         return [
             [['id', 'frequency'], 'integer'],
-            [['msisdn', 'hour', 'station_id', 'station', 'hour_date', 'unique_field', 'created_at'], 'safe'],
+            [['msisdn', 'hour','station', 'hour_date', 'unique_field', 'created_at'], 'safe'],
         ];
     }
 
@@ -69,7 +69,6 @@ class PlayerTrendSearch extends PlayerTrend
 
         $query->andFilterWhere(['like', 'msisdn', $this->msisdn])
             ->andFilterWhere(['like', 'hour', $this->hour])
-            ->andFilterWhere(['like', 'station_id', $this->station_id])
             ->andFilterWhere(['like', 'station', $this->station])
             ->andFilterWhere(['like', 'unique_field', $this->unique_field]);
         $today     = date( 'Y-m-d' );

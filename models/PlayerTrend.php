@@ -45,7 +45,6 @@ class PlayerTrend extends \yii\db\ActiveRecord
             [['hour_date', 'created_at'], 'safe'],
             [['msisdn'], 'string', 'max' => 12],
             [['hour'], 'string', 'max' => 2],
-            [['station_id'], 'string', 'max' => 36],
             [['station', 'unique_field'], 'string', 'max' => 50],
         ];
     }
@@ -59,7 +58,6 @@ class PlayerTrend extends \yii\db\ActiveRecord
             'id' => 'ID',
             'msisdn' => 'Msisdn',
             'hour' => 'Hour',
-            'station_id' => 'Station ID',
             'station' => 'Station',
             'frequency' => 'Frequency',
             'hour_date' => 'Hour Date',
