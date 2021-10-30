@@ -195,23 +195,26 @@ class UsersController extends Controller
     {
         $model = new Users();
         if ($model->load(Yii::$app->request->post())) {
-           // $userscount = Users::find()->count() + 1;
-            //$model->id = md5($userscount);
-            $model->id=Uuid::generate()->string;
-            $model->created_at = date('Y-m-d H:i:s');
-            $model->created_by = Yii::$app->user->identity->id;
-            $model->password = password_hash($model->password, PASSWORD_BCRYPT, array('cost' => 5));
-            if($model->save(FALSE)){
-                $act = new \app\models\ActivityLog();
-                $act -> desc = "users create";
-                $act -> propts = "'{id:$model->id }'";
-                $act ->setLog();
-                return $this->redirect(['view', 'id' => $model->id]);
-            }else{ 
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-                
+           if(Users::find()->where("email = '$model->email'")->andWhere("perm_group = '{$model->perm_group}'")->one()){
+                Yii::$app->session->setFlash('error', 'Error:  Duplicate User');
+                return $this->redirect(['create']);
+            }else{
+                $model->id=Uuid::generate()->string;
+                $model->created_at = date('Y-m-d H:i:s');
+                $model->created_by = Yii::$app->user->identity->id;
+                $model->password = password_hash($model->password, PASSWORD_BCRYPT, array('cost' => 5));
+                if($model->save(FALSE)){
+                    $act = new \app\models\ActivityLog();
+                    $act -> desc = "users create";
+                    $act -> propts = "'{id:$model->id }'";
+                    $act ->setLog();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }else{ 
+                    return $this->render('create', [
+                        'model' => $model,
+                    ]);
+
+                }
             }
         }
 
