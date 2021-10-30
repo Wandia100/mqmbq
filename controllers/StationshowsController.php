@@ -164,17 +164,21 @@ class StationshowsController extends Controller
      */
     public function actionAddpresenter($id,$rs=1){
         $model = $this->findModel($id);
-        $ShowPresenter = new StationShowPresenters();
-        $ShowPresenter->id=Uuid::generate()->string;
-        $ShowPresenter -> station_id = $model->stations->id;
-        $ShowPresenter -> station_show_id = $id;
-        $ShowPresenter->presenter_id = $_POST['presenter_id'];
-        $ShowPresenter->created_at = date('Y-m-d H:i:s');
-        $ShowPresenter->save();
-        $act = new \app\models\ActivityLog();
-        $act -> desc = "stationshow addpresenter";
-        $act -> propts = "'{id:$ShowPresenter->id }'";
-        $act ->setLog();
+        if(StationShowPresenters::find()->where("station_show_id =  '$id'")->andWhere("presenter_id = '{$_POST['presenter_id']}'")->one()){
+            Yii::$app->session->setFlash('error', 'Error:  Duplicate presenter');
+        }else{
+            $ShowPresenter = new StationShowPresenters();
+            $ShowPresenter->id=Uuid::generate()->string;
+            $ShowPresenter -> station_id = $model->stations->id;
+            $ShowPresenter -> station_show_id = $id;
+            $ShowPresenter->presenter_id = $_POST['presenter_id'];
+            $ShowPresenter->created_at = date('Y-m-d H:i:s');
+            $ShowPresenter->save();
+            $act = new \app\models\ActivityLog();
+            $act -> desc = "stationshow addpresenter";
+            $act -> propts = "'{id:$ShowPresenter->id }'";
+            $act ->setLog();
+        }
         return $this->redirect(['view', 'id' => $id,'rs' => $rs]);
     }
     /**
