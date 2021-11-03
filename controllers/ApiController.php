@@ -157,15 +157,18 @@ class ApiController extends Controller
         $data = json_decode($jsondata,true);
         if($data['TransAmount']==100)
         {
-            $response['ResultCode']=0;
-            $response['ResultDesc']="Accepted";
+            $resp['ResultCode']=0;
+            $resp['ResultDesc']="Accepted";
         }
         else
         {
-            $response['ResultCode']=1;
-            $response['ResultDesc']="Rejected";
+            $resp['ResultCode']=1;
+            $resp['ResultDesc']="Rejected";
         }
-        \Yii::$app->response->data = json_encode($response);
+        //\Yii::$app->response->data = json_encode($response);
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_JSON;
+        $response->data = $resp;
     }
     #code to disburse payments
     public function actionPayout()
