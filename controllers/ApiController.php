@@ -146,7 +146,10 @@ class ApiController extends Controller
    
         }
         
-        Yii::$app->response->data = json_encode($data);
+        //Yii::$app->response->data = json_encode($data);
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_JSON;
+        $response->data = $data;
     }
     public function actionValidation()
     {
