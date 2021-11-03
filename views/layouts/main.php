@@ -59,12 +59,23 @@ AdminAsset::register($this);
                 }else if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group == 6){
                      $customercarevisibility = 'hidden';
                 }
-                echo $this->render('partials/top-header', ['superadminvisibility'=>$superadminvisibility,'adminvisibility'=>$adminvisibility,'presentervisibility'=>$presentervisibility,'managementvisibility'=>$managementvisibility,'stationmanagementvisibility'=>$stationmanagementvisibility,'customercarevisibility'=>$customercarevisibility]); ?>
+
+                if(!Yii::$app->user->isGuest)
+                {
+                    echo $this->render('partials/top-header', ['superadminvisibility'=>$superadminvisibility,'adminvisibility'=>$adminvisibility,'presentervisibility'=>$presentervisibility,'managementvisibility'=>$managementvisibility,'stationmanagementvisibility'=>$stationmanagementvisibility,'customercarevisibility'=>$customercarevisibility]);
+
+                }
+                 ?>
             <?php
             // echo $this->render('partials/theme-setting', []); 
             ?>
             <div class="app-main">
-                <?= $this->render('partials/sidebar', ['superadminvisibility'=>$superadminvisibility,'adminvisibility'=>$adminvisibility,'presentervisibility'=>$presentervisibility,'managementvisibility'=>$managementvisibility,'stationmanagementvisibility'=>$stationmanagementvisibility,'customercarevisibility'=>$customercarevisibility]); ?>
+                <?php
+                if(!Yii::$app->user->isGuest)
+                {
+                    echo $this->render('partials/sidebar', ['superadminvisibility'=>$superadminvisibility,'adminvisibility'=>$adminvisibility,'presentervisibility'=>$presentervisibility,'managementvisibility'=>$managementvisibility,'stationmanagementvisibility'=>$stationmanagementvisibility,'customercarevisibility'=>$customercarevisibility]);
+                }
+                  ?>
                 <div class="app-main__outer">
                     <div class="app-main__inner">
                         
@@ -72,7 +83,10 @@ AdminAsset::register($this);
                             if(in_array(Yii::$app->controller->id, Yii::$app->params['reportscontrollers']) && Yii::$app->controller->action->id == 'index'){
                                 //do nothing
                             }else{
-                                echo $this->render('partials/title-section', ['title' => $this->title]); 
+                                if(!Yii::$app->user->isGuest)
+                                {
+                                    echo $this->render('partials/title-section', ['title' => $this->title]);
+                                } 
                             }
                         ?>
                         <?=$content; ?>
