@@ -251,7 +251,7 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
                 ->andWhere("hour = '$i'")
                 ->groupBy('hour')
                 ->createCommand()->queryAll(); 
-            $sum[] = $data[0]['total'];
+                $sum[] =isset($data[0]['total'])?$data[0]['total']:0;
             $range[] = $i;
         }
         return  [ 'sum'=>$sum,'range' =>$range];
