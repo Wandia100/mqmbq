@@ -140,6 +140,22 @@ class OutboxController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+    public function actionBulk()
+    {
+        $model = new Outbox();
+        if ($model->load(Yii::$app->request->post()) 
+        && isset($model->message) 
+        && !empty($model->message) 
+        && !empty($model->sender) 
+        && isset($model->sender)) {
+            Outbox::insertBulk($model->message,$model->sender);
+            return $this->redirect(['outbox/index']);
+        }
+
+        return $this->render('bulk', [
+            'model' => $model,
+        ]);
+    }
     public function actionBulky($limit)
     {
         $batch_size=ceil($limit/10);
