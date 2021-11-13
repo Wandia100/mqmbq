@@ -87,4 +87,11 @@ class Outbox extends \yii\db\ActiveRecord
         }
         return $pending;
     }
+    public static function insertBulk($message,$sender)
+    {
+        $sql="INSERT INTO outbox (receiver,sender,message,status)
+        (SELECT DISTINCT(receiver),'DEFAULT','".$message."','1' FROM sent_sms)";
+        return Yii::$app->sms_db->createCommand($sql)
+        ->execute();
+    }
 }

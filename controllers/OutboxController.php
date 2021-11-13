@@ -23,10 +23,10 @@ class OutboxController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index'],
+                'only' => ['create', 'update','index','bulk'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index'],
+                        'actions' => ['create', 'update','index','bulk'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if(!Yii::$app->user->isGuest){
@@ -139,5 +139,30 @@ class OutboxController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    public function actionBulk()
+    {
+        $model = new Outbox();
+        if ($model->load(Yii::$app->request->post()) 
+        && isset($model->message) 
+        && !empty($model->message) 
+        && !empty($model->sender) 
+        && isset($model->sender)) {
+            Outbox::insertBulk($model->message,$model->sender);
+            return $this->redirect(['outbox/index']);
+        }
+
+        return $this->render('bulk', [
+            'model' => $model,
+        ]);
+    }
+    public function actionBulky($limit)
+    {
+        $batch_size=ceil($limit/10);
+        for($i=0; $i <10; $i++)
+        {
+            $data=Outbox::find()->where("state=1")->orderBy('id DESC')->limit($batch_size)->all();
+            ///Outbox::sendBatch($data);
+        }
     }
 }
