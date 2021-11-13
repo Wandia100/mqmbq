@@ -17,7 +17,7 @@ class PrizesSearch extends Prizes
     public function rules()
     {
         return [
-            [['id', 'name', 'description', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['id', 'name', 'description', 'created_at', 'updated_at', 'deleted_at','disbursable_amount'], 'safe'],
             [['mpesa_disbursement','amount', 'enabled'], 'integer'],
         ];
     }
@@ -68,7 +68,8 @@ class PrizesSearch extends Prizes
             ->andFilterWhere(['like', 'amount', $this->amount])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'created_at', $this->created_at])
-            ->andFilterWhere(['like', 'description', $this->description]);
+            ->andFilterWhere(['like', 'description', $this->description])
+            ->andFilterWhere(['like','disbursable_amount', $this->disbursable_amount]);
         $query->orderBy('created_at DESC');
         return $dataProvider;
     }

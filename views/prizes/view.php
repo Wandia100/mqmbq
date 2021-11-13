@@ -29,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'enabled',
             'enable_tax',
             'tax',
+            'disbursable_amount',
             'created_at',
             'updated_at',
             'deleted_at',
