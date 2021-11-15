@@ -16,8 +16,8 @@ $this->title = 'Sign In';
         <div class="agile_info">
             <div class="w3l_form">
                 <div class="left_grid_info">
-                    <h1>Com21</h1>
-                        <p>Welcome to the Com21 Raffle platform. This is a management platform for all Com21 Raffle features</p>
+                    <h1>Game</h1>
+                        <p>Welcome to the Game Raffle platform. This is a management platform for all Game Raffle features</p>
                         
                 </div>
             </div>
