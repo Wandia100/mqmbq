@@ -18,7 +18,7 @@
     $db_password = "Zpa@!%vfrG34f";
     $db_name = "comp21_sms";
     }
-    else if ( ( in_array($host_name,BANDIKABANDUA))) {
+  else if ( ( in_array($host_name,BANDIKABANDUA))) {
       $db_host      = "smsdb.tzpromo.com";
       $db_username = "bandika_sms";
       $db_password = "Zpa@!%vfrG34f";
