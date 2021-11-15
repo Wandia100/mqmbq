@@ -24,6 +24,12 @@
       $db_password = "Zpa@!%vfrG34f";
       $db_name = "bandika_sms";
       }    
+  else if ( ( in_array($host_name,MCHEZOBOMBA))) {
+        $db_host      = "smsdb.tzpromos.com";
+        $db_username = "mchezo_sms";
+        $db_password = "Zpa@!%vfrG34f";
+        $db_name = "mchezo_sms";
+        }        
 	else if ( ( in_array($host_name,CMEDIA_COTZ ))) {
 		$db_host      =  "18.118.134.230";
     $db_username = "cmedia2120";

@@ -6,7 +6,7 @@ define( 'COMP21_DEV',  array( '3.15.207.63','www.comp21.dev', 'comp21.dev'));
 define( 'CMEDIA_COTZ',  array( 'cmedia.co.tz','www.cmedia.co.tz'));
 define( 'EFMTZ_COM',  array( 'efmtz.com','www.efmtz.com'));
 define( 'BANDIKABANDUA',  array( 'ip-172-31-45-166'));
-define( 'MCHEZOBOMBA',  array( 'ip-172-31-45-166'));
+define( 'MCHEZOBOMBA',  array( 'ip-172-31-35-168'));
 define( 'COTZ',  array( 'efmtz.com','www.efmtz.com','cmedia.co.tz','www.cmedia.co.tz'));
 
 

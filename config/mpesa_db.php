@@ -23,7 +23,13 @@
       $db_username = "bandika_money";
       $db_password = "Zpa@!%vfrG34f";
       $db_name = "bandika_money";
-      }    
+      }
+  else if ( ( in_array($host_name,MCHEZOBOMBA))) {
+        $db_host      = "moneydb.tzpromos.com";
+        $db_username = "mchezo_money";
+        $db_password = "Zpa@!%vfrG34f";
+        $db_name = "mchezo_money";
+        }            
 	else if ( ( in_array($host_name, CMEDIA_COTZ))) {
 		
     $db_host      = "3.21.41.249";
