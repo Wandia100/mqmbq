@@ -1,31 +1,37 @@
 <?php
-	$server_name = $_SERVER['SERVER_NAME'];
-	if ( ( in_array($server_name, COMP21_COKE))) {
+	$host_name = gethostname();
+	if ( ( in_array($host_name, COMP21_COKE))) {
 		$db_host      = "18.191.217.111";
     $db_username = "comp2120";
     $db_password = "Zpa@!%vfrG34f";
     $db_name = "comp21_mpesa";
     }
-	else if ( ( in_array($server_name, COMP21_NET))) {
+	else if ( ( in_array($host_name, COMP21_NET))) {
 		$db_host      = "3.16.157.158";
     $db_username = "comp2120";
     $db_password = "Zpa@!%vfrG34f";
     $db_name = "comp21_mpesa";
     }
-	else if ( ( in_array($server_name, COMP21_DEV))) {
+	else if ( ( in_array($host_name, COMP21_DEV))) {
 		$db_host      = "3.19.53.19";
     $db_username = "comp2120";
     $db_password = "Zpa@!%vfrG34f";
     $db_name = "comp21_mpesa";
     }
-	else if ( ( in_array($server_name, CMEDIA_COTZ))) {
+    else if ( ( in_array($host_name,BANDIKABANDUA))) {
+      $db_host      = "moneydb.tzpromo.com";
+      $db_username = "bandika_money";
+      $db_password = "Zpa@!%vfrG34f";
+      $db_name = "bandika_money";
+      }    
+	else if ( ( in_array($host_name, CMEDIA_COTZ))) {
 		
     $db_host      = "3.21.41.249";
     $db_username = "cmedia2120";
     $db_password = "Zpa@!%vfrG34f";
     $db_name = "cmedia_mpesa";
     }
-    else if ( ( in_array($server_name,EFMTZ_COM))) {
+    else if ( ( in_array($host_name,EFMTZ_COM))) {
       $db_host      = "18.216.231.0";
       $db_username = "efmtz_mpesa";
       $db_password = "Zpa@!%vfrG34f";
