@@ -23,6 +23,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'enabled')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--'])?>
     <?= $form->field($model, 'enable_tax')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--'])?>
     <?= $form->field($model, 'tax')->textInput() ?>
+    <?= $form->field($model, 'disbursable_amount')->textInput() ?>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-block btn-success']) ?>
     </div>

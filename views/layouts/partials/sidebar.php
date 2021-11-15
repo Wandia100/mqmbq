@@ -168,7 +168,7 @@ use luc\tourist\Tourist;
                 <li class="<?=$adminvisibility?> <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>  <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i>Station manager Disbursement', Url::to(['/commissions/index','t'=>'m']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
-                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
+                <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(41) ) ) ? '':'hidden'?>  ">
                     <?=Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Admin Draws', Url::to(['/transactionhistories/admindraws']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                     </ul>

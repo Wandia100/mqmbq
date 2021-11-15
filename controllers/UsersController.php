@@ -258,9 +258,9 @@ class UsersController extends Controller
     {
         $this->findModel($id)->delete();
         $act = new \app\models\ActivityLog();
-         $act -> desc = "users delete";
-         $act -> propts = "'{id:$id }'";
-         $act ->setLog();
+        $act -> desc = "users delete";
+        $act -> propts = "'{id:$id }'";
+        $act ->setLog();
         return $this->redirect(['index']);
     }
 

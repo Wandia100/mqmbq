@@ -11,6 +11,14 @@ $(document).ready(function(){
      $("#processbtn, .showprogressbar").on('click', function(e){
         showprogress();
     });
+     $("#prizes-mpesa_disbursement").on('change', function(e){
+        if($("#prizes-mpesa_disbursement").val() == 1){
+            $("#prizes-disbursable_amount").removeClass('hidden'); 
+         }else{
+             $("#prizes-disbursable_amount").val('');
+             $("#prizes-disbursable_amount").addClass('hidden');
+         }
+    });
     commissiondisbursementModal();
     growthTrendCharts()
 });
@@ -154,6 +162,21 @@ function saveRecord (instance, field, id) {
     $.post(host + '/stationshowpresenters/saverecord', {value: instance.val(), field: field, id: id}, function (data) {
 
     })
+}
+/**
+ * 
+ * @param {type} instance
+ * @param {type} field
+ * @param {type} id
+ * @returns {undefined}
+ */
+function toggleDisbursement(instance){
+    console.log('am here');
+    if(instance.val() == 1){
+       $("#prizes-disbursable_amount").removeClass('hidden'); 
+    }else{
+        $("#prizes-disbursable_amount").addClass('hidden');
+    }
 }
 /**
  *
