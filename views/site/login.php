@@ -43,6 +43,11 @@ $this->title = 'Sign In';
                 <?= Html::submitButton('Login', ['class' => 'btn btn-danger btn-block', 'name' => 'login-button']) ?>
                 <?php ActiveForm::end(); ?>
                 <p class="account">By clicking login, you agree to our <a href="#">Terms & Conditions!</a></p>
+                	
+                <div class="forgot-password">
+                    <br/>
+                  <p class="">Click , <?= Html::a('Forgot password ?', ['/site/forgotpass'], [''])?></p>
+                </div>
             </div>
         </div>
         <!-- //main content -->

@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\ForgotPass;
 use yii\helpers\Url;
 use app\models\WinningHistories;
 use app\models\WinningHistoriesSearch;
@@ -145,6 +146,27 @@ class SiteController extends Controller
             return $this->refresh();
         }
         return $this->render('contact', [
+            'model' => $model,
+        ]);
+    }
+    /**
+     * Displays forgot pass page.
+     *
+     * @return Response|string
+     */
+    public function actionForgotpass()
+    {
+        //$this->layout = 'login';
+        $model = new ForgotPass();
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->sendPassCode(Yii::$app->params['adminEmail']);
+            
+            Yii::$app->session->setFlash('password reset. checkmail');
+
+            return $this->redirect( [ '/site/login' ] );
+        }
+        return $this->render('forgotpass', [
             'model' => $model,
         ]);
     }
