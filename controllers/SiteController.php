@@ -13,6 +13,7 @@ use app\models\ForgotPass;
 use yii\helpers\Url;
 use app\models\WinningHistories;
 use app\models\WinningHistoriesSearch;
+use app\models\Users;
 
 class SiteController extends Controller
 {
@@ -158,13 +159,58 @@ class SiteController extends Controller
     {
         //$this->layout = 'login';
         $model = new ForgotPass();
+        $model->passstate = 1;
+        $model->scenario = 'sc_email';
         if ($model->load(Yii::$app->request->post())) {
-            
-            $model->sendPassCode(Yii::$app->params['adminEmail']);
-            
-            Yii::$app->session->setFlash('password reset. checkmail');
-
-            return $this->redirect( [ '/site/login' ] );
+            $userrecord = Users::find()->where(['email'=>$model->email])->andWhere('enabled=1')->one();
+            if($userrecord && is_null($userrecord->pass_code)){ //generate passcode
+                
+                $model->processPassCode($userrecord);
+                $model->scenario = 'sc_code';
+                $model->passstate = 2;
+                return $this->render('forgotpass', [
+                    'model' => $model,
+                ]);
+            }else if($userrecord && in_array($userrecord->pass_state, [2,3,4]) && $userrecord->pass_code == $model->passcode){ //Pass code match
+                $model->scenario = 'sc_resetpass';
+                $userrecord->pass_state = 6;
+                $model->passstate =6;
+                $userrecord->save(FALSE);
+                return $this->render('forgotpass', [
+                    'model' => $model,
+                ]);
+            }else if($userrecord && $userrecord->pass_state==6 && !is_null($model->pass) && $model->pass == $model->confirm_pass){ //Password match
+                $model->proceeNewPass($userrecord);
+                Yii::$app->session->setFlash('success', 'Success: password reset successfully, login');
+                return $this->redirect( [ '/site/login' ] );
+            }else if($userrecord && in_array ($userrecord->pass_state, [2,3]) && $userrecord->pass_code != $model->passcode){ // Pass code do not match
+                $model->addError('passcode',"Wrong code. kindly retry");
+                $model->scenario = 'sc_code';
+                $model->passstate =$userrecord->pass_state++;
+                $model->attempts = $userrecord->pass_state-1;
+                $userrecord->pass_state = $userrecord->pass_state++;
+                $userrecord->save(FALSE);
+                return $this->render('forgotpass', [
+                    'model' => $model,
+                ]);
+            }else if($userrecord && $userrecord->pass_state == 4){ //after 3 passcode attempt
+                $userrecord->pass_code =  NULL;
+                $userrecord->pass_state =  NULL;
+                $userrecord->save(FALSE);
+                return $this->redirect(['/site/forgotpass']);
+            }else if($userrecord && $userrecord->pass_state==6 && $model->pass != $model->confirm_pass){ //Password match
+                $model->addError('confirm_pass',"Password do not match. kindly retry");
+                $model->scenario = 'sc_resetpass';
+                $model->passstate =6;
+                return $this->render('forgotpass', [
+                    'model' => $model,
+                ]);
+            }else{
+                $userrecord->pass_code =  NULL;
+                $userrecord->pass_state =  NULL;
+                $userrecord->save(FALSE);
+                return $this->redirect(['/site/forgotpass']);
+            }
         }
         return $this->render('forgotpass', [
             'model' => $model,

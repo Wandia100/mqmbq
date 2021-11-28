@@ -13,7 +13,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-contact">
     <h1><?= Html::encode($this->title) ?></h1>
-
+    <div class="row"> 
+         <?= $this->render('//_notification'); ?>         
+    </div>
     <?php if (Yii::$app->session->hasFlash('forgotpass')): ?>
 
         <div class="alert alert-success">
@@ -43,13 +45,40 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?php $form = ActiveForm::begin(['id' => 'forgotpass-form']); ?>
 
-                    <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
+                    <?php
+                        if($model->passstate == 1){
+                           echo $form->field($model, 'email')->textInput(['autofocus' => true]); 
+                        }else{
+                            echo $form->field($model, 'email')->hiddenInput()->label(false);
+                        }
+                    ?>
 
-                    <?= $form->field($model, 'pass') ?>
 
-                    <?= $form->field($model, 'confirm_pass') ?>
+                    <?php
+                        if(in_array($model->passstate, [2,3,4])){
+                           $remattempts = $model->attempts == 0? 3: 4-$model->attempts;
+                           echo 'Remaining attempts ='.$remattempts; 
+                           echo $form->field($model, 'passcode') ;
+                        }else{
+                            echo $form->field($model, 'passcode')->hiddenInput()->label(false);
+                        }
+                    ?>
+                
+                    <?php
+                        if($model->passstate == 6){
+                            echo $form->field($model, 'pass');
+                        }else{
+                            echo $form->field($model, 'pass')->hiddenInput()->label(false);
+                        }
+                    ?>
 
-                    <?= $form->field($model, 'passcode') ?>
+                    <?php
+                        if($model->passstate == 6){
+                           echo $form->field($model, 'confirm_pass'); 
+                        }else{
+                            echo $form->field($model, 'confirm_pass')->hiddenInput()->label(false);
+                        }
+                    ?>
 
 
                     <div class="form-group">

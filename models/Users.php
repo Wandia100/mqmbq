@@ -23,6 +23,8 @@ use Yii;
  * @property string $created_at
  * @property string $updated_at
  * @property string|null $created_by
+ * @property int $pass_state
+ * @property int $pass_code
  */
 class Users extends \yii\db\ActiveRecord
 {
@@ -49,7 +51,7 @@ class Users extends \yii\db\ActiveRecord
         return [
             [['id', 'first_name', 'last_name', 'email', 'password'], 'required'],
             [['date_of_birth', 'created_at', 'updated_at','deleted_at','defaultpermissiondenied', 'extpermission'], 'safe'],
-            [['perm_group', 'enabled'], 'integer'],
+            [['perm_group', 'enabled','pass_state','pass_code'], 'integer'],
             [['id', 'created_by'], 'string', 'max' => 36],
             [['first_name', 'last_name', 'profile_image'], 'string', 'max' => 50],
             [['national_id', 'phone_number'], 'string', 'max' => 30],

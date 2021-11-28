@@ -24,6 +24,8 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     public $updated_at;
     public $created_by;
     public $deleted_at;
+    public $pass_state;
+    public $pass_code;
     /**
      * {@inheritdoc}
      */
