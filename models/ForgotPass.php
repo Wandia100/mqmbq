@@ -59,16 +59,18 @@ class ForgotPass extends Model
      * @param string $email the target email address
      * @return bool whether the model passes validation
      */
-    public function sendPassCode()
+    public function sendPassCode($userrecord)
     {
         //Send Email
-        Yii::$app->mailer->compose()
+        /*Yii::$app->mailer->compose()
             ->setTo($this->email)
             ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
             ->setReplyTo([$this->email => $this->name])
             ->setSubject($this->subject)
             ->setTextBody("Your com21 portal One time password(OTP) is : ".$this->passcode)
             ->send();
+         * 
+         */
         
         //Send sms
         
@@ -81,10 +83,10 @@ class ForgotPass extends Model
     public function processPassCode($userrecord){
         $userrecord->pass_state = 2;
         $userrecord->pass_code = mt_rand(1000,9999);
-        #if($this->sendPassCode()){
+        if($this->sendPassCode($userrecord)){
             $userrecord->save(false);
             Yii::$app->session->setFlash('success','password code to your email and phone. check sms or mail');
-        #}
+        }
         return TRUE;
     }
     /**
