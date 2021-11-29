@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 
                     <?php
                         if($model->passstate == 6){
-                            echo $form->field($model, 'pass');
+                            echo $form->field($model, 'pass')->passwordInput(['autocomplete'=>'off']);
                         }else{
                             echo $form->field($model, 'pass')->hiddenInput()->label(false);
                         }
@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <?php
                         if($model->passstate == 6){
-                           echo $form->field($model, 'confirm_pass'); 
+                           echo $form->field($model, 'confirm_pass')->passwordInput(['autocomplete'=>'off']); 
                         }else{
                             echo $form->field($model, 'confirm_pass')->hiddenInput()->label(false);
                         }

@@ -163,15 +163,24 @@ class SiteController extends Controller
         $model->scenario = 'sc_email';
         if ($model->load(Yii::$app->request->post())) {
             $userrecord = Users::find()->where(['email'=>$model->email])->andWhere('enabled=1')->one();
-            if($userrecord && is_null($userrecord->pass_code)){ //generate passcode
-                
+            if(!$userrecord){
+                Yii::$app->session->setFlash('error', 'Error: Contact Admin!');
+                return $this->redirect(['/site/login']);
+            }else if($userrecord && is_null($userrecord->pass_code)){ //generate passcode (OTP)
                 $model->processPassCode($userrecord);
                 $model->scenario = 'sc_code';
                 $model->passstate = 2;
                 return $this->render('forgotpass', [
                     'model' => $model,
                 ]);
-            }else if($userrecord && in_array($userrecord->pass_state, [2,3,4]) && $userrecord->pass_code == $model->passcode){ //Pass code match
+            }else if($userrecord && in_array ($userrecord->pass_state, [2,3,4]) && $userrecord->pass_expiry <= date('Y-m-d H:i:s')){ //OTP expiry
+                $userrecord->pass_code =  NULL;
+                $userrecord->pass_state =  NULL;
+                $userrecord->pass_expiry = NULL;
+                $userrecord->save(FALSE);
+                Yii::$app->session->setFlash('error', 'Error: OTP expired!');
+                return $this->redirect(['/site/forgotpass']);
+            }else if($userrecord && in_array($userrecord->pass_state, [2,3,4]) && $userrecord->pass_code == $model->passcode){ //Passcode/OTP match
                 $model->scenario = 'sc_resetpass';
                 $userrecord->pass_state = 6;
                 $model->passstate =6;
@@ -179,11 +188,7 @@ class SiteController extends Controller
                 return $this->render('forgotpass', [
                     'model' => $model,
                 ]);
-            }else if($userrecord && $userrecord->pass_state==6 && !is_null($model->pass) && $model->pass == $model->confirm_pass){ //Password match
-                $model->proceeNewPass($userrecord);
-                Yii::$app->session->setFlash('success', 'Success: password reset successfully, login');
-                return $this->redirect( [ '/site/login' ] );
-            }else if($userrecord && in_array ($userrecord->pass_state, [2,3]) && $userrecord->pass_code != $model->passcode){ // Pass code do not match
+            }else if($userrecord && in_array ($userrecord->pass_state, [2,3]) && $userrecord->pass_code != $model->passcode){ // Passcode/OTP do not match
                 $model->addError('passcode',"Wrong code. kindly retry");
                 $model->scenario = 'sc_code';
                 $model->passstate =$userrecord->pass_state++;
@@ -193,12 +198,19 @@ class SiteController extends Controller
                 return $this->render('forgotpass', [
                     'model' => $model,
                 ]);
-            }else if($userrecord && $userrecord->pass_state == 4){ //after 3 passcode attempt
+            }else if($userrecord && $userrecord->pass_state == 4){ //after 3 passcode/OTP attempt
                 $userrecord->pass_code =  NULL;
                 $userrecord->pass_state =  NULL;
+                $userrecord->pass_expiry = NULL;
+                $userrecord->enabled = 0;
                 $userrecord->save(FALSE);
+                Yii::$app->session->setFlash('error', 'Error: Account blocked!');
                 return $this->redirect(['/site/forgotpass']);
-            }else if($userrecord && $userrecord->pass_state==6 && $model->pass != $model->confirm_pass){ //Password match
+            }else if($userrecord && $userrecord->pass_state==6 && !is_null($model->pass) && $model->pass == $model->confirm_pass){ //Password match
+                $model->proceeNewPass($userrecord);
+                Yii::$app->session->setFlash('success', 'Success: password reset successfully, login');
+                return $this->redirect( [ '/site/login' ] );
+            }else if($userrecord && $userrecord->pass_state==6 && $model->pass != $model->confirm_pass){ //Password no match
                 $model->addError('confirm_pass',"Password do not match. kindly retry");
                 $model->scenario = 'sc_resetpass';
                 $model->passstate =6;
@@ -208,6 +220,7 @@ class SiteController extends Controller
             }else{
                 $userrecord->pass_code =  NULL;
                 $userrecord->pass_state =  NULL;
+                $userrecord->pass_expiry = NULL;
                 $userrecord->save(FALSE);
                 return $this->redirect(['/site/forgotpass']);
             }

@@ -81,8 +81,10 @@ class ForgotPass extends Model
      * @param type $userrecord
      */
     public function processPassCode($userrecord){
+        $expiry = date('Y-m-d H:i:s', strtotime('+1 minute',time()));
         $userrecord->pass_state = 2;
         $userrecord->pass_code = mt_rand(1000,9999);
+        $userrecord->pass_expiry = $expiry;
         if($this->sendPassCode($userrecord)){
             $userrecord->save(false);
             Yii::$app->session->setFlash('success','password code to your email and phone. check sms or mail');
