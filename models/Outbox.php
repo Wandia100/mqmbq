@@ -104,7 +104,6 @@ class Outbox extends \yii\db\ActiveRecord
         $sentsms->message=$outbox->message;
         $sentsms->created_date=$outbox->created_date;
         $sentsms->category=$outbox->category;
-        $sentsms->link_id=$outbox->link_id;
         $sentsms->save();
         $outbox->delete(false);
         Outbox::sendBulkSms($sentsms->receiver,$sentsms->message,$sentsms->sender);
