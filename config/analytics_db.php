@@ -13,7 +13,7 @@
     $db_name = "comp21_analytics";
     }
 	else if ( ( in_array($host_name,COMP21_DEV))) {
-		$db_host      = "18.190.154.11";
+		$db_host      =  "18.217.3.231";
     $db_username = "comp2120";
     $db_password = "Zpa@!%vfrG34f";
     $db_name = "comp21_analytics";
