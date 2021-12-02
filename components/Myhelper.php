@@ -6,7 +6,7 @@ use app\models\PermissionGroup;
 use app\models\Users;
 use app\models\Outbox;
 use app\models\Template;
-
+use app\components\OutboxJob;
 use Yii;
 use yii\base\Component;
 use yii\helpers\Html;
@@ -610,7 +610,21 @@ class Myhelper extends Component {
 
 		return true;
 	}
-
+    public static function curlPost($postData,$headers,$url)
+    {
+        $ch = curl_init($url);
+		curl_setopt_array( $ch, array(
+			CURLOPT_POST           => true,
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_HTTPHEADER     => $headers,
+			CURLOPT_POSTFIELDS     =>$postData
+		) );
+		// Send the request
+		$response = curl_exec($ch);
+		curl_close($ch);
+        return $response;
+    }
 	/**
 	 * Method to get duration of the cache in seconds
 	 * @return int
@@ -863,6 +877,7 @@ class Myhelper extends Component {
 			}
 			$outbox->attributes = $data;
 			$outbox->save(false);
+			Yii::$app->queue->push(new OutboxJob(['id'=>$outbox->id]));
 		}
 	}
 

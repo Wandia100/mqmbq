@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\components\Myhelper;
 
 /**
  * This is the model class for table "outbox".
@@ -93,5 +94,37 @@ class Outbox extends \yii\db\ActiveRecord
         (SELECT DISTINCT(receiver),'DEFAULT','".$message."','1' FROM sent_sms)";
         return Yii::$app->sms_db->createCommand($sql)
         ->execute();
+    }
+    public static function sendOutbox($id)
+    {
+        $outbox=Outbox::findOne($id);
+        $sentsms=new SentSms();
+        $sentsms->receiver=$outbox->receiver;
+        $sentsms->sender=$outbox->sender;
+        $sentsms->message=$outbox->message;
+        $sentsms->created_date=$outbox->created_date;
+        $sentsms->category=$outbox->category;
+        $sentsms->link_id=$outbox->link_id;
+        $sentsms->save();
+        $outbox->delete(false);
+        Outbox::sendBulkSms($sentsms->receiver,$sentsms->message,$sentsms->sender);
+                
+    }
+    public static function sendBulkSms($receiver,$message,$sender)
+    {
+        $postData =  [
+            [
+                "msisdn"=> $receiver,
+                'sender'=>$sender,
+                "message"=>$message
+            ]
+        ];
+        $postData=json_encode($postData);
+        $headers=array(
+            'Content-Type: application/json',
+            'Authorization:'.API_TOKEN
+        );
+        $url=SMS_URL;
+		Myhelper::curlPost($postData,$headers,$url);
     }
 }
