@@ -837,7 +837,7 @@ class Myhelper extends Component {
 	 * @param integer $receiver receiver mobile number
 	 * @param array $variables array maping the variable to replace in the sms templat
 	 */
-	public static function setSms( $name, $receiver, $variables = [], $sender = "DEFAULT" ) {
+	public static function setSms( $name, $receiver, $variables = [], $sender = "PIGA KAZI" ) {
 		$outbox = new Outbox();
 		if ( $receiver != "") {
 			$temp = Template::getTemplate($name);
