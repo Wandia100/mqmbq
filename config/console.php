@@ -2,11 +2,11 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
-
+$sms_db= require __DIR__ . '/sms_db.php';
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log','queue'],
     'controllerNamespace' => 'app\commands',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -26,6 +26,14 @@ $config = [
             ],
         ],
         'db' => $db,
+        'sms_db' =>$sms_db,
+        'queue' =>  [
+            'class' => \yii\queue\db\Queue::class,
+            'db' => $sms_db, // DB connection component or its config 
+            'tableName' => '{{%queue}}', // Table name
+            'channel' => 'default', // Queue channel key
+            'mutex' => \yii\mutex\MysqlMutex::class, // Mutex used to sync queries
+        ],
     ],
     'params' => $params,
     /*

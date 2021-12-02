@@ -9,7 +9,7 @@ $analytics_db = require __DIR__ . '/analytics_db.php';
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log','queue'],
     'defaultRoute' =>'site/index',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -50,6 +50,13 @@ $config = [
         'mpesa_db' => $mpesa_db,
         'sms_db' => $sms_db,
         'analytics_db'=>$analytics_db,
+        'queue' =>  [
+            'class' => \yii\queue\db\Queue::class,
+            'db' => $sms_db, // DB connection component or its config 
+            'tableName' => '{{%queue}}', // Table name
+            'channel' => 'default', // Queue channel key
+            'mutex' => \yii\mutex\MysqlMutex::class, // Mutex used to sync queries
+        ],
         'myhelper'        => [
                 'class' => 'app\components\Myhelper',
         ],
