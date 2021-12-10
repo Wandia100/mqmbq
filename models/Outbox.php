@@ -100,7 +100,7 @@ class Outbox extends \yii\db\ActiveRecord
         $outbox=Outbox::findOne($id);
         $sentsms=new SentSms();
         $sentsms->receiver=$outbox->receiver;
-        $sentsms->sender=$outbox->sender;
+        $sentsms->sender=SENDER_NAME;
         $sentsms->message=$outbox->message;
         $sentsms->created_date=$outbox->created_date;
         $sentsms->category=$outbox->category;

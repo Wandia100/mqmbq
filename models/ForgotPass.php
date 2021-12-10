@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use app\models\Outbox;
+use app\components\OutboxJob;
 
 /**
  * ContactForm is the model behind the contact form.
@@ -36,7 +38,7 @@ class ForgotPass extends Model
             // email has to be a valid email address
             ['email', 'email'],
             // verifyCode needs to be entered correctly
-            #['verifyCode', 'captcha'],
+            //['verifyCode', 'captcha'],
         ];
     }
 
@@ -73,7 +75,11 @@ class ForgotPass extends Model
          */
         
         //Send sms
-        
+        $outbox= new Outbox();
+        $outbox->receiver=$userrecord->phone_number;
+        $outbox->message="Your one time password is ".$userrecord->passcode;
+        $outbox->save(false);
+        Yii::$app->queue->push(new OutboxJob(['id'=>$outbox->id]));
         return TRUE;
     }
     /**
