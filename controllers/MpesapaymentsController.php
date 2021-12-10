@@ -257,7 +257,7 @@ class MpesapaymentsController extends Controller
     }
     public function beforeAction($action)
 {            
-    if (in_array($action->id,array('save','insertpayment'))) {
+    if (in_array($action->id,array('save','insertpayment','pay'))) {
         $this->enableCsrfValidation = false;
     }
 
