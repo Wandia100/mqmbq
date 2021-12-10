@@ -149,7 +149,7 @@ class Outbox extends \yii\db\ActiveRecord
             "unique_id"=>(int)$sms->id
         ];
         $payload=[$row];
-        $data = array('username' => NITEXT_USERNAME,'password' => NITEXT_PASSWORD,'oa' => 'nitext','payload' => json_encode($payload));
+        $data = array('username' => NITEXT_USERNAME,'password' => NITEXT_PASSWORD,'oa' => SENDER_NAME,'payload' => json_encode($payload));
         $data = http_build_query($data);
 
         $curl = curl_init();
