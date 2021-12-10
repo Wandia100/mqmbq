@@ -77,7 +77,7 @@ class ForgotPass extends Model
         //Send sms
         $outbox= new Outbox();
         $outbox->receiver=$userrecord->phone_number;
-        $outbox->message="Your one time password is ".$userrecord->passcode;
+        $outbox->message="Your one time password is ".$userrecord->pass_code;
         $outbox->save(false);
         Yii::$app->queue->push(new OutboxJob(['id'=>$outbox->id]));
         return TRUE;
