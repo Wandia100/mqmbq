@@ -931,5 +931,19 @@ class Myhelper extends Component {
 
 		return $operator;
 	}
+	public static function checkLocalToken() 
+	{
+        $header  = getallheaders();
+		$token=trim($header['Authorization']);
+        if ( isset( $token) ) {
+            if ($token==DEPOSIT_AUTHORIZATION ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+	}
 }
 

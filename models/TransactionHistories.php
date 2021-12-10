@@ -238,4 +238,99 @@ class TransactionHistories extends \yii\db\ActiveRecord
         }
         
     }
+    public static function processPayment($id)
+    {
+        if (in_array(gethostname(),COTZ))
+        {
+            $play_min=1000;
+            $play_max=2000;
+        }
+        else
+        {
+            $play_min=100;
+            $play_max=300;
+        }
+
+        $row=MpesaPayments::findOne($id);
+        //check if amount > 300 and refund after deducting 100
+        if($row->TransAmount <$play_min)
+        {
+            //do nothing
+            $row->state=1;
+            $row->save(false);
+            Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName]);
+        }
+        else if($row->TransAmount >= $play_min && $row->TransAmount < $play_max)
+        {
+            if (gethostname()==COMP21_NET && strlen($row->BillRefNumber)==1 && strtolower($row->BillRefNumber)=='j') {
+                $station_show=StationShows::getStationShowNet($row->BillRefNumber);
+            }
+            else
+            {
+                $station_show=StationShows::getStationShow($row->BillRefNumber);
+            }
+            if($station_show!=NULL)
+            {
+                try 
+                {
+                    $model=new TransactionHistories();
+                    $model->id=Uuid::generate()->string;
+                    $model->mpesa_payment_id=$row->id;
+                    $model->reference_name=$row->FirstName." ".$row->MiddleName." ".$row->LastName;
+                    $model->reference_phone=$row->MSISDN;
+                    $model->reference_code=$row->BillRefNumber;
+                    $model->station_id=$station_show['station_id'];
+                    $model->station_show_id=$station_show['show_id'];
+                    $model->amount=$row->TransAmount;
+                    $model->created_at=$row->created_at;
+                    $model->save(false);
+                    $row->state=1;
+                    $row->save(false);
+                    if(in_array(gethostname(),COTZ))
+                    {
+                        $totalEntry=TransactionHistories::countEntry($row->MSISDN);
+                        $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
+                        Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry]);
+                    }
+                    else
+                    {
+                        Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName]);
+                    }
+
+                }
+                catch (IntegrityException $e) {
+                    //allow execution
+                }
+                
+            }
+           
+        }
+        else{
+            if($row->TransAmount < 10000)
+            {
+                $refund=$row->TransAmount-$play_min;
+                if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
+                {
+                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",0);
+                }
+                $row->deleted_at=date("Y-m-d H:i:s");
+                $row->state=1;
+                $row->save(false);
+                Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName]);
+            } 
+            else
+            {
+                $refund=$row->TransAmount-$play_min;
+                if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
+                {
+                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",4);
+                }
+                $row->deleted_at=date("Y-m-d H:i:s");
+                $row->state=1;
+                $row->save(false);
+
+            }
+           
+        }
+    }
 }

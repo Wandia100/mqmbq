@@ -13,6 +13,7 @@ use Webpatser\Uuid\Uuid;
 use app\components\Myhelper;
 use yii\web\UploadedFile;
 use yii\db\IntegrityException;
+use app\components\DepositJob;
 
 
 /**
@@ -242,6 +243,16 @@ class MpesapaymentsController extends Controller
         {
             $row=$dups[$i];
             MpesaPayments::removeDups($row['TransID'],$row['total']-1);
+        }
+    }
+    public function actionPay()
+    {
+        
+        if(Myhelper::checkLocalToken())
+        {
+            $jsondata = file_get_contents('php://input');
+            $data= json_decode($jsondata);
+            Yii::$app->queue->push(new DepositJob(['id'=>$data->id]));
         }
     }
     public function beforeAction($action)

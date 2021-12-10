@@ -1,17 +1,17 @@
 <?php
 $host_name =gethostname();
-define( 'COMP21_COKE', array( '18.222.117.89','www.comp21.co.ke', 'comp21.co.ke'));
-define( 'COMP21_NET',  array( '18.190.157.46','www.comp21.net', 'comp21.net' ));
-define( 'COMP21_DEV',  array( 'ip-172-31-46-231'));
-define( 'CMEDIA_COTZ',  array( 'cmedia.co.tz','www.cmedia.co.tz'));
-define( 'EFMTZ_COM',  array( 'efmtz.com','www.efmtz.com'));
-define( 'BANDIKABANDUA',  array( 'ip-172-31-45-166'));
-define( 'MCHEZOBOMBA',  array( 'ip-172-31-35-168'));
-define( 'COTZ',  array( 'efmtz.com','www.efmtz.com','cmedia.co.tz','www.cmedia.co.tz'));
+define( 'COMP21_COKE','ip-172-31-14-172');
+define( 'COMP21_NET','ip-172-31-41-69');
+define( 'COMP21_DEV','ip-172-31-46-231');
+define( 'CMEDIA_COTZ','ip-172-31-46-248');
+define( 'EFMTZ_COM','ip-172-31-36-164');
+define( 'BANDIKABANDUA','ip-172-31-45-166');
+define( 'MCHEZOBOMBA', 'ip-172-31-35-168');
+define( 'COTZ',[CMEDIA_COTZ,EFMTZ_COM,BANDIKABANDUA,MCHEZOBOMBA]);
 
 
 define( 'NITEXTSMSURL',"https://nitext.co.ke/index.php/api/sendSmsMultiple");
-if ( ( in_array($host_name,COMP21_COKE))) {
+if ( ( in_array($host_name,[COMP21_COKE]))) {
     define( 'PARTYA', '3015585' );
     define( 'REMARKS', 'Remarks' );
     define( 'QUEUETIMEOUTURL',"https://comp21.co.ke/api/disbursement-payment-timeout-result" );
@@ -21,7 +21,7 @@ if ( ( in_array($host_name,COMP21_COKE))) {
     define( 'MPESAPAYMENTREQUESTURL',"https://api.safaricom.co.ke/mpesa/b2c/v1/paymentrequest");
     define( 'MPESATOKENURL',"https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials");
 }
-else if ( ( in_array($host_name,COMP21_NET))) {
+else if ( ( in_array($host_name,[COMP21_NET]))) {
     define( 'PARTYA', '3015585' );
     define( 'REMARKS', 'Remarks' );
     define( 'QUEUETIMEOUTURL',"https://comp21.net/api/disbursement-payment-timeout-result" );
@@ -31,7 +31,7 @@ else if ( ( in_array($host_name,COMP21_NET))) {
     define( 'MPESAPAYMENTREQUESTURL',"https://api.safaricom.co.ke/mpesa/b2c/v1/paymentrequest");
     define( 'MPESATOKENURL',"https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials");
 }
-else if ( ( in_array($host_name,COMP21_DEV))) {
+else if ( ( in_array($host_name,[COMP21_DEV]))) {
     define( 'PARTYA', '161744' );
     define( 'REMARKS', 'Remarks' );
     define( 'QUEUETIMEOUTURL',"https://comp21.dev/api/disbursement-payment-timeout-result" );
