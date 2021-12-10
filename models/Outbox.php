@@ -106,10 +106,25 @@ class Outbox extends \yii\db\ActiveRecord
         $sentsms->category=$outbox->category;
         $sentsms->save();
         $outbox->delete(false);
-        Outbox::sendBulkSms($sentsms->receiver,$sentsms->message,$sentsms->sender);
+        #handle coke&net,dev and cotz
+        $hostname=gethostname();
+        if(in_array($hostname,[COMP21_COKE,COMP21_NET]))
+        {
+            Outbox::niTextSms($sentsms);
+        }
+        if(in_array($hostname,[COMP21_DEV]))
+        {
+            Outbox::jambobetSms($sentsms->receiver,$sentsms->message,$sentsms->sender);
+        }
+        if(in_array($hostname,COTZ))
+        {
+            $channel=Myhelper::getSmsChannel($sentsms['msisdn']);
+            Myhelper::sendTzSms($sentsms->receiver,$sentsms->message,SENDER_NAME,$channel);
+        }
+        
                 
     }
-    public static function sendBulkSms($receiver,$message,$sender)
+    public static function jambobetSms($receiver,$message,$sender)
     {
         $postData =  [
             [
@@ -125,5 +140,36 @@ class Outbox extends \yii\db\ActiveRecord
         );
         $url=SMS_URL;
 		Myhelper::curlPost($postData,$headers,$url);
+    }
+    public static function niTextSms($sms)
+    {
+        $row=[
+            "msisdn"=>(int)$sms->receiver,
+            "message"=>$sms->message,
+            "unique_id"=>(int)$sms->id
+        ];
+        $payload=[$row];
+        $data = array('username' => NITEXT_USERNAME,'password' => NITEXT_PASSWORD,'oa' => 'nitext','payload' => json_encode($payload));
+        $data = http_build_query($data);
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => NITEXTSMSURL,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/x-www-form-urlencoded",
+                "Cookie: ".NITEXT_COOKIE
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
     }
 }
