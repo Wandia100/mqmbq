@@ -156,30 +156,20 @@ class WinninghistoriesController extends Controller
             {
                 try
                 {
-                    $win_key=Uuid::generate()->string;
-                    $model=new WinningHistories();
-                    $model->id=$win_key;
-                    $model->prize_id =$prize_id;
-                    $model->station_show_prize_id =$prize_id;
-                    $model->reference_name =$transaction_history['reference_name'];
-                    $model->reference_phone =$transaction_history['reference_phone'];
-                    $model->reference_code =$transaction_history['reference_code'];
-                    $model->station_id =$transaction_history['station_id'];
-                    $model->station_show_id =$transaction_history['station_show_id'];
-                    $model->presenter_id =$presenter_id;
-                    $model->amount =$show_prize['amount'];
                     if($show_prize['prizes_given'] < $show_prize['draw_count'])
                     {
                         $draw_count=$show_prize['prizes_given']+1;
-                        $model->unique_field=$draw_count."#".date("Ymd",strtotime($from))."#".$model->station_show_id."#".$prize_id;
+                        $unique_field=$draw_count."#".date("Ymd",strtotime($from))."#".$transaction_history['station_show_id']."#".$prize_id;
                     }
                     else
                     {
-                        $model->unique_field=$show_prize['prizes_given']."#".date("Ymd",strtotime($from))."#".$model->station_show_id."#".$prize_id;
+                        $unique_field=$show_prize['prizes_given']."#".date("Ymd",strtotime($from))."#".$transaction_history['station_show_id']."#".$prize_id;
                     }
-                    $model->created_at =date("Y-m-d H:i:s");
-                    $model->status =0;
-                    if($model->save(false))
+                    $win_key=Uuid::generate()->string;
+                    $model=WinningHistories::saveWin($win_key,$prize_id,$transaction_history['reference_name'],$transaction_history['reference_phone']
+                            ,$transaction_history['reference_code'],$transaction_history['station_id'],$transaction_history['station_show_id']
+                        ,$presenter_id,$show_prize['amount'],$unique_field);
+                    if($model!=NULL)
                     {
                         
                         if($show_prize['enable_tax'])
@@ -197,6 +187,19 @@ class WinninghistoriesController extends Controller
                             if($show_prize['mpesa_disbursement'])
                             {
                                 Disbursements::saveDisbursement($win_key,$transaction_history['reference_name'],$transaction_history['reference_phone'],$to_pay,"winning",0);
+                            }
+                            else
+                            {
+                                if(!$show_prize['mpesa_disbursement'] && $show_prize['disbursable_amount'] > 0 )
+                                {
+                                    $win_key=Uuid::generate()->string;
+                                    $unique_field.="extra";
+                    $model=WinningHistories::saveWin($win_key,NULL,$transaction_history['reference_name'],$transaction_history['reference_phone']
+                            ,$transaction_history['reference_code'],$transaction_history['station_id'],$transaction_history['station_show_id']
+                        ,$presenter_id,$show_prize['disbursable_amount'],$unique_field);
+                                    Disbursements::saveDisbursement($win_key,$transaction_history['reference_name'],$transaction_history['reference_phone'],$show_prize['disbursable_amount'],"winning",0);
+                                }
+
                             }
                             $draw_count_balance=$show_prize['draw_count']-$show_prize['prizes_given']-1;
                             $transaction_history['draw_count_balance']=$draw_count_balance;

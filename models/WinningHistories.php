@@ -257,4 +257,32 @@ class WinningHistories extends \yii\db\ActiveRecord
         ->bindValue(':end_date',$end_date)
         ->queryAll();
     }
+    public static function saveWin($win_key,$prize_id,$reference_name,$reference_phone,
+    $reference_code,$station_id,$station_show_id,$presenter_id,$amount,$unique_field)
+    {
+        try
+        {
+            $model=new WinningHistories();
+            $model->id=$win_key;
+            $model->prize_id =$prize_id;
+            $model->station_show_prize_id =$prize_id;
+            $model->reference_name =$reference_name;
+            $model->reference_phone =$reference_phone;
+            $model->reference_code =$reference_code;
+            $model->station_id =$station_id;
+            $model->station_show_id =$station_show_id;
+            $model->presenter_id =$presenter_id;
+            $model->amount =$amount;
+            $model->unique_field=$unique_field;
+            $model->created_at =date("Y-m-d H:i:s");
+            $model->status =0;
+            $model->save(false);  
+            return $model; 
+        }
+        catch(IntegrityException $e)
+        {
+            var_dump($e->getMessage());
+        }
+                             
+    }
 }
