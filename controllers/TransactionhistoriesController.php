@@ -282,7 +282,7 @@ class TransactionhistoriesController extends Controller
     {
         Myhelper::checkRemoteAddress();
         $hostname = gethostname(); //
-        if (in_array($hostname,COTZ))
+        if (in_array($hostname, COTZ))
         {
             $play_min=1000;
             $play_max=2000;
@@ -306,6 +306,7 @@ class TransactionhistoriesController extends Controller
                 Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName]);
             }
             else if($row->TransAmount >= $play_min && $row->TransAmount < $play_max)
+            {
                 if (in_array($hostname,[COMP21_NET]) && strlen($row->BillRefNumber)==1 && strtolower($row->BillRefNumber)=='j') {
                     $station_show=StationShows::getStationShowNet($row->BillRefNumber);
                 }
