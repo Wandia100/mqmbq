@@ -110,10 +110,10 @@ class ForgotPass extends Model
         $userrecord->pass_code =  NULL;
         $userrecord->pass_state =  7;//password changed
         $userrecord->save(FALSE);
-        $act = new \app\models\ActivityLog();
+        /*$act = new \app\models\ActivityLog();
         $act -> desc = "users password change";
         $act -> propts = "'{id:$userrecord->id }'";
-        $act ->setLog();
+        $act ->setLog();*/
         return TRUE;
     }
 }
