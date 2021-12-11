@@ -508,7 +508,7 @@ class ReportController extends Controller{
                 $model->unique_field=date('Ymd').$hr.$station->id;
                 $model->station_id=$station->id;
 
-                if(in_array($_SERVER['SERVER_NAME'],COMP21_NET) && strlen($station->station_code)==1)
+                if(in_array(gethostname(),[COMP21_NET]) && strlen($station->station_code)==1)
                 {
                     $model->amount=MpesaPayments::getStationTotalMpesaNet($from_time,$station->station_code)['amount'];
                     $model->day_total=MpesaPayments::getStationTotalMpesaNet($the_day,$station->station_code)['amount'];
