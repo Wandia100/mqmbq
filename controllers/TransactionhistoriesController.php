@@ -281,8 +281,8 @@ class TransactionhistoriesController extends Controller
     public function actionAssignshows()
     {
         Myhelper::checkRemoteAddress();
-        $server_name = $_SERVER['SERVER_NAME']; //
-        if (in_array($server_name, CMEDIA_COTZ) || in_array($server_name, EFMTZ_COM))
+        $hostname = gethostname(); //
+        if (in_array($hostname,COTZ))
         {
             $play_min=1000;
             $play_max=2000;
@@ -306,9 +306,7 @@ class TransactionhistoriesController extends Controller
                 Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName]);
             }
             else if($row->TransAmount >= $play_min && $row->TransAmount < $play_max)
-            {
-                $server_name = $_SERVER['SERVER_NAME']; //
-                if (in_array($server_name, COMP21_NET) && strlen($row->BillRefNumber)==1 && strtolower($row->BillRefNumber)=='j') {
+                if (in_array($hostname,[COMP21_NET]) && strlen($row->BillRefNumber)==1 && strtolower($row->BillRefNumber)=='j') {
                     $station_show=StationShows::getStationShowNet($row->BillRefNumber);
                 }
                 else
@@ -332,7 +330,7 @@ class TransactionhistoriesController extends Controller
                         $model->save(false);
                         $row->state=1;
                         $row->save(false);
-                        if(in_array($_SERVER['SERVER_NAME'],COTZ))
+                        if(in_array($hostname,COTZ))
                         {
                             $totalEntry=TransactionHistories::countEntry($row->MSISDN);
                             $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);

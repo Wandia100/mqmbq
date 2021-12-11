@@ -70,7 +70,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        if(in_array($_SERVER['SERVER_NAME'],COTZ))
+        if(in_array(gethostname(),COTZ))
         {
             $currency="Tsh ";
         }

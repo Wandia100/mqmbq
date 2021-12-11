@@ -771,15 +771,15 @@ class Myhelper extends Component {
 	public static function drawMessage($first_name)
 	{
 		$message="";
-		$server_name = $_SERVER['SERVER_NAME'];
+		$hostname = gethostname();
 		
-		if ( ( in_array($server_name,COMP21_COKE))) {
+		if ( ( in_array($hostname,[COMP21_COKE]))) {
 			$message = "$first_name, Umeingia Draw! Endelea Kushiriki, Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
 		}
-		else if ( ( in_array($server_name, COMP21_NET))) {
+		else if ( ( in_array($hostname, [COMP21_NET]))) {
 			$message = "$first_name, Umeingia Draw! Endelea Kushiriki, Waweza tunukiwa, PB 4044043 Ksh 100, T&C apply. Customer care  0719034036";
 		}
-		else if ( ( in_array($server_name, COMP21_DEV))) {
+		else if ( ( in_array($hostname, [COMP21_DEV]))) {
 			$message = "$first_name, Umeingia Draw! Endelea Kushiriki, Waweza tunukiwa, PB 321321 Ksh 100, T&C apply. Customer care  0719034037";		}
 		 else {
 			$message = "$first_name, Umeingia Draw! Endelea Kushiriki, Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
@@ -789,13 +789,13 @@ class Myhelper extends Component {
 	public static function invalidAmountMessage($first_name)
 	{
 		$message="";
-		$server_name = $_SERVER['SERVER_NAME'];
-		if ( ( in_array($server_name, COMP21_COKE))) {
+		$hostname = gethostname();
+		if ( ( in_array($hostname, [COMP21_COKE]))) {
 			$message = "$first_name, Kushiriki kwenye draw ni shilingi mia moja tu,Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
 		}
-		else if ( ( in_array($server_name, COMP21_NET))) {
+		else if ( ( in_array($hostname, [COMP21_NET]))) {
 			$message = "$first_name, Kushiriki kwenye draw ni shilingi mia moja tu,Waweza tunukiwa, PB 4044043 Ksh 100, T&C apply. Customer care  0719034036";		}
-		else if ( ( in_array($server_name, COMP21_DEV))) {
+		else if ( ( in_array($hostname, [COMP21_DEV]))) {
 			$message = "$first_name, Kushiriki kwenye draw ni shilingi mia moja tu,Waweza tunukiwa, PB 321321 Ksh 100, T&C apply. Customer care  0719034037";		}
 		 else {
 			$message = "$first_name, Kushiriki kwenye draw ni shilingi mia moja tu,Waweza tunukiwa, PB 5668989 Ksh 100, T&C apply. Customer care  0719034035";
@@ -805,14 +805,14 @@ class Myhelper extends Component {
 	public static function winningMessage($transaction_history,$show_prize,$station_name)
 	{
 		$message="";
-		$server_name = $_SERVER['SERVER_NAME'];
-		if ( ( in_array($server_name, COMP21_COKE))) {
+		$hostname = gethostname();
+		if ( ( in_array($hostname, [COMP21_COKE]))) {
 			$message="CONGRATULATIONS ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. For more details C/Care 0719034035.T&C apply. 20% Tax Charged.";
 		}
-		else if ( ( in_array($server_name, COMP21_NET))) {
+		else if ( ( in_array($hostname, [COMP21_NET]))) {
 			$message="CONGRATULATIONS ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. For more details C/Care 0719034036.T&C apply. 20% Tax Charged.";
 			}
-		else if ( ( in_array($server_name, COMP21_DEV))) {
+		else if ( ( in_array($hostname, [COMP21_DEV]))) {
 			$message="CONGRATULATIONS ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. For more details C/Care 0719034037.T&C apply. 20% Tax Charged.";		}
 		 else {
 			$message="CONGRATULATIONS ".$transaction_history['reference_name']."!, You have won ".$show_prize['name']." worth Kshs ".$show_prize['amount']." from $station_name. For more details C/Care 0719034035.T&C apply. 20% Tax Charged.";
