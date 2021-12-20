@@ -79,9 +79,9 @@ class Outbox extends \yii\db\ActiveRecord
             $sent_sms->created_date=$sms->created_date;
             $sent_sms->save(false);
             $pen=[
-                "msisdn"=>(int)$sms->receiver,
-                "message"=>$sms->message,
-                "unique_id"=>(int)$sms->id
+                "msisdn"=> $sent_sms->receiver,
+                'sender'=>$sent_sms->sender,
+                "message"=>$sent_sms->message
             ];
             $sms->delete(false);
             array_push($pending,$pen);
@@ -102,7 +102,7 @@ class Outbox extends \yii\db\ActiveRecord
         }
         
     }
-    public static function sendBatch($limit)
+    public static function nitextBatch($limit)
     {
         $payload=Outbox::getOutbox($limit);
         $data = array('username' => NITEXT_USERNAME,'password' => NITEXT_PASSWORD,'oa' =>SENDER_NAME,'payload' => json_encode($payload));
@@ -127,6 +127,18 @@ class Outbox extends \yii\db\ActiveRecord
 
         $response = curl_exec($curl);
         curl_close($curl);
+    }
+    public static function jambobetBatch($limit)
+    {
+        $postData=Outbox::getOutbox($limit);
+        $postData=json_encode($postData);
+        $headers=array(
+            'Content-Type: application/json',
+            'Authorization:'.API_TOKEN
+        );
+        $url=SMS_URL;
+		Myhelper::curlPost($postData,$headers,$url);
+        
     }
     public static function sendOutbox($id)
     {

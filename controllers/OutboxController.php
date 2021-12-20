@@ -159,7 +159,7 @@ class OutboxController extends Controller
         $batch_size=ceil($limit/10);
         for($i=0; $i <10; $i++)
         {
-            Outbox::sendBatch($batch_size);
+            Outbox::jambobetBatch($batch_size);
         }
     }
 }
