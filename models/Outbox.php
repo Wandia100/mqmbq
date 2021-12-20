@@ -149,7 +149,7 @@ class Outbox extends \yii\db\ActiveRecord
         $sentsms->message=$outbox->message;
         $sentsms->created_date=$outbox->created_date;
         $sentsms->category=$outbox->category;
-        $sentsms->save();
+        $sentsms->save(false);
         $outbox->delete(false);
         #handle coke&net,dev and cotz
         $hostname=gethostname();
