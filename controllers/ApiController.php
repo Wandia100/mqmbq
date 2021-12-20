@@ -9,6 +9,7 @@ use app\models\SentSms;
 use Webpatser\Uuid\Uuid;
 use app\components\Myhelper;
 use app\components\Keys;
+use app\components\DepositJob;
 use yii\db\IntegrityException;
 
 class ApiController extends Controller
@@ -139,6 +140,7 @@ class ApiController extends Controller
                 $model->created_at=date("Y-m-d H:i:s");
                 $model->updated_at=date("Y-m-d H:i:s");
                 $model->save(false);
+                Yii::$app->queue->push(new DepositJob(['id'=>$data->TransID]));
             }
             catch (IntegrityException $e) {
                 //allow execution
