@@ -145,10 +145,8 @@ class OutboxController extends Controller
         $model = new Outbox();
         if ($model->load(Yii::$app->request->post()) 
         && isset($model->message) 
-        && !empty($model->message) 
-        && !empty($model->sender) 
-        && isset($model->sender)) {
-            Outbox::insertBulk($model->message,$model->sender);
+        && !empty($model->message)) {
+            Outbox::insertBulk($model->message);
             return $this->redirect(['outbox/index']);
         }
 
@@ -161,8 +159,7 @@ class OutboxController extends Controller
         $batch_size=ceil($limit/10);
         for($i=0; $i <10; $i++)
         {
-            $data=Outbox::find()->where("state=1")->orderBy('id DESC')->limit($batch_size)->all();
-            ///Outbox::sendBatch($data);
+            Outbox::sendBatch($batch_size);
         }
     }
 }

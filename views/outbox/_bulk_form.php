@@ -13,7 +13,6 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'sender')->dropDownList(["DEFAULT"=>"DEFAULT"],['prompt' => '--Select--']) ?>
     <?= $form->field($model, 'message')->textarea(['rows' => 6]) ?>
     <div class="form-group">
         <?= Html::submitButton('Send Bulk SMS', ['class' => 'btn btn-success']) ?>

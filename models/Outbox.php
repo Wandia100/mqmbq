@@ -64,20 +64,13 @@ class Outbox extends \yii\db\ActiveRecord
         $outbox->category=$category;
         $outbox->save(false);
     }
-    public static function getOutbox()
+    public static function getOutbox($limit)
     {
-        $smses=Outbox::find()->limit(200)->all();
+        $smses=Outbox::find()->where(['status'=>1])->limit($limit)->all();
         $pending=[];
         for($i=0;$i <count($smses); $i++)
         {
             $sms=$smses[$i];
-            $pen=[
-                "msisdn"=>(int)$sms->receiver,
-                "message"=>$sms->message,
-                "unique_id"=>(int)$sms->id
-            ];
-            array_push($pending,$pen);
-            $sms->delete(false);
             $sent_sms=new SentSms();
             $sent_sms->receiver=$sms->receiver;
             $sent_sms->message=$sms->message;
@@ -85,15 +78,55 @@ class Outbox extends \yii\db\ActiveRecord
             $sent_sms->category=$sms->category;
             $sent_sms->created_date=$sms->created_date;
             $sent_sms->save(false);
+            $pen=[
+                "msisdn"=>(int)$sms->receiver,
+                "message"=>$sms->message,
+                "unique_id"=>(int)$sms->id
+            ];
+            $sms->delete(false);
+            array_push($pending,$pen);
         }
         return $pending;
     }
-    public static function insertBulk($message,$sender)
+    public static function insertBulk($message)
     {
-        $sql="INSERT INTO outbox (receiver,sender,message,status)
-        (SELECT DISTINCT(receiver),'DEFAULT','".$message."','1' FROM sent_sms)";
-        return Yii::$app->sms_db->createCommand($sql)
-        ->execute();
+        $result= MpesaPayments::find()->select(['MSISDN'])->distinct()->all();
+        foreach($result as $row)
+        {
+            $model=new Outbox();
+            $model->receiver=$row['MSISDN'];
+            $model->sender=SENDER_NAME;
+            $model->message=$message;
+            $model->status=1;
+            $model->save(false);
+        }
+        
+    }
+    public static function sendBatch($limit)
+    {
+        $payload=Outbox::getOutbox($limit);
+        $data = array('username' => NITEXT_USERNAME,'password' => NITEXT_PASSWORD,'oa' =>SENDER_NAME,'payload' => json_encode($payload));
+        $data = http_build_query($data);
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => NITEXTSMSURL,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/x-www-form-urlencoded",
+                "Cookie: ".NITEXT_COOKIE
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
     }
     public static function sendOutbox($id)
     {
