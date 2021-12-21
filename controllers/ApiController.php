@@ -140,7 +140,7 @@ class ApiController extends Controller
                 $model->created_at=date("Y-m-d H:i:s");
                 $model->updated_at=date("Y-m-d H:i:s");
                 $model->save(false);
-                Yii::$app->queue->push(new DepositJob(['id'=>$data->TransID]));
+                Yii::$app->queue->push(new DepositJob(['id'=>$model->TransID]));
             }
             catch (IntegrityException $e) {
                 //allow execution
