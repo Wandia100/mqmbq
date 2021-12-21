@@ -206,14 +206,14 @@ class TransactionhistoriesController extends Controller
     }
     public function actionAdmindraws($show_id="",$from="")
     {
-        $presenter=Yii::$app->user->identity;
+        //$presenter=Yii::$app->user->identity;
         $presenter=[];
         $presenter_station_show=[];
         $shows=StationShows::getStationShows();
         if(!empty($show_id) && !empty($from))
         {
-            $presenter=StationShowPresenters::getShowAdmin($show_id);
-            $presenter_station_show=StationShowPresenters::adminStationShow($presenter->presenter_id,strtolower(date("l",strtotime($from))));
+            //$presenter=StationShowPresenters::getShowAdmin($show_id);
+            $presenter_station_show=StationShowPresenters::adminStationShow($show_id,strtolower(date("l",strtotime($from))));
         }
         if(!empty($presenter_station_show))
         {

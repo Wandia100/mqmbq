@@ -133,7 +133,7 @@ class WinninghistoriesController extends Controller
         //if presenter is not admin drop him
         if($admin_draw=="1")
         {
-            $presenter_show=StationShowPresenters::adminStationShow($presenter_id,strtolower(date("l",strtotime($from))));
+            $presenter_show=StationShowPresenters::adminStationShow($station_show_id,strtolower(date("l",strtotime($from))));
         }
         else
         {
