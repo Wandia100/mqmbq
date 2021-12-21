@@ -78,7 +78,7 @@ class ForgotPass extends Model
         $outbox= new Outbox();
         $outbox->receiver=$userrecord->phone_number;
         $outbox->message="Your one time password is ".$userrecord->pass_code;
-        $outbox->sender="default";
+        $outbox->sender=SENDER_NAME;
         $outbox->category=1;
         $outbox->status=0;
         $outbox->created_date=date("Y-m-d H:i:s");
