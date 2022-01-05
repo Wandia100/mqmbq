@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use Webpatser\Uuid\Uuid;
 use app\components\Keys;
+use app\components\DisburseJob;
 use yii\db\IntegrityException;
 
 /**
@@ -198,6 +199,8 @@ class Disbursements extends \yii\db\ActiveRecord
             $model->disbursement_type=$disbursement_type;
             $model->created_at=date("Y-m-d H:i:s");
             $model->save(false);
+            Yii::$app->queue->push(new DisburseJob(['id'=>$model->id]));
+            
         } catch (IntegrityException $e) {
             //allow execution
         }
