@@ -195,9 +195,8 @@ class TransactionHistories extends \yii\db\ActiveRecord
             GROUP BY t.reference_phone) q2
             ON q1.reference_phone = q2.reference_phone
             ORDER BY q2.plays DESC
-            LIMIT :LIMIT";
+            LIMIT $limit";
         return Yii::$app->db->createCommand($sql)
-        ->bindValue(':LIMIT',$limit)
         ->queryAll();
     }
     /**

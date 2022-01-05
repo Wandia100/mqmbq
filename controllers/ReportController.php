@@ -18,6 +18,7 @@ use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
 use app\components\Myhelper;
 use app\models\SiteReport;
+use app\models\Loser;
 use kartik\mpdf\Pdf;
 
 class ReportController extends Controller{
@@ -211,6 +212,28 @@ class ReportController extends Controller{
             'loadcheck'=>$loadcheck,
             'response' => $response
         ]);
+    }
+    public function actionLogloser()
+    {
+        $limit=700;
+        $data= TransactionHistories::getLosersList($limit);
+        Loser::deleteAll();
+        for($i=0; $i<count($data); $i++)
+        {
+            $row=$data[$i];
+            try{
+                $model=new Loser();
+                $model->reference_name=$row['reference_name'];
+                $model->reference_phone=$row['reference_phone'];
+                $model->plays=$row['plays'];
+                $model->save(false);
+            }
+            catch(IntegrityException $e){
+                //allow execution
+            }
+            
+            
+        }
     }
     /**
         * Method to render growth trend graph
