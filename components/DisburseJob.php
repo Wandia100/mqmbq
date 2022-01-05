@@ -11,9 +11,9 @@ class DisburseJob extends BaseObject implements \yii\queue\JobInterface
     public function execute($queue)
     {
         //code to send sms by id
-        if(in_array(gethostname(),[COMP21_COKE,COMP21_DEV,COMP21_NET]))
+        if(in_array(gethostname(),[COMP21_COKE]))
         {
-            Disbursements::safaricomPayout($this->id);
+            Disbursements::cokePayout($this->id);
         }
         
     }

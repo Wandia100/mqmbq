@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use Webpatser\Uuid\Uuid;
 use app\components\Keys;
+use app\components\Myhelper;
 use app\components\DisburseJob;
 use yii\db\IntegrityException;
 
@@ -37,66 +38,12 @@ class Disbursements extends \yii\db\ActiveRecord
     *expenses - BusinessPayment
     *winner payments - PromotionPayment
     */
-    public static function safaricomPayout($disbursement_id)
+    public static function cokePayout($id)
     {
-        $row=Disbursements::findOne($disbursement_id);
-        $phone_number=$row->phone_number;
-        $amount=$row->amount;
-        $row->status=3;
-        $row->save(false);
-        $command_id=Disbursements::getCommandId($row->disbursement_type);    
-        $access_token = Disbursements::generateTokenB2C();
-        $CommandID = $command_id;
-        $PartyA = PARTYA;
-        $Remarks = REMARKS;
-        $QueueTimeOutURL = QUEUETIMEOUTURL;
-        $ResultURL = RESULTURL;
-        $InitiatorName = INITIATORNAME;
-        $Occasion = OCCASION;
-        $url = MPESAPAYMENTREQUESTURL;
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json','Authorization:Bearer '. $access_token));
-
-        $curl_post_data = array(
-            //Fill in the request parameters with valid values
-            'InitiatorName' => $InitiatorName,
-            'SecurityCredential' => Disbursements::setSecurityCredentials(),
-            'CommandID' => $CommandID,
-            'Amount' => $amount,
-            'PartyA' => $PartyA,
-            'PartyB' => $phone_number,
-            'Remarks' => $Remarks,
-            'QueueTimeOutURL' => $QueueTimeOutURL,
-            'ResultURL' => $ResultURL,
-            'Occasion' => $Occasion
-        );
-
-        $data_string = json_encode($curl_post_data);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
-        $curl_response = curl_exec($curl);
-        $content = json_decode($curl_response,true);
-        if(isset($content['ConversationID']))
-        {
-            $conversation_id = $content['ConversationID'];
-            $model=Disbursements::findOne($disbursement_id);
-            if($model)
-            {
-                $model->conversation_id=$conversation_id;
-                $model->updated_at=date("Y-m-d H:i:s");
-                $model->save(false);
-            }
-        }
-        else
-        {
-            $filename="/srv/apps/comp21/web/mpesa.txt";
-            $data=$curl_response;
-            file_put_contents( $filename, $data,FILE_APPEND);
-        }
-
-        
+        $req=["id"=>$id];
+        $url="https://mt.comp21.co.ke/coke/disburse";
+        $headers=['Content-Type: application/json','Authorization:'.DEPOSIT_AUTHORIZATION];
+        Myhelper::curlPost(json_encode($req),$headers,$url);
     }
     /**
      * Getter for users full name
