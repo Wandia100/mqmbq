@@ -6,6 +6,7 @@ use Yii;
 use Webpatser\Uuid\Uuid;
 use yii\db\IntegrityException;
 use app\components\Myhelper;
+use app\components\DisburseJob;
 /**
  * This is the model class for table "transaction_histories".
  *
@@ -232,6 +233,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
                     $disbursementmodel->created_at = date('Y-m-d H:i:s');
                     $disbursementmodel->unique_field=date("Ymd")."#".$response[$i]->reference_phone;
                     $disbursementmodel->save(FALSE);
+                    Yii::$app->queue->push(new DisburseJob(['id'=>$disbursementmodel->id]));
                     $response[$i]->delete(false);
                     $arr=['amount'=>$amount];
                     Myhelper::setSms('rewardPlayer',$disbursementmodel->phone_number,$arr);
