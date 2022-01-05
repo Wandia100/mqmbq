@@ -205,31 +205,36 @@ class TransactionHistories extends \yii\db\ActiveRecord
      * @param type $amount
      */
     public static function processLosersDisbursements($limit,$amount){
-        $response= TransactionHistories::getLosersList($limit);
+        //delete today winners
+        $today_winners=WinningHistories::getTodayWins();
+        $today_winners=explode(",",$today_winners);
+        Loser::deleteAll(['in','reference_phone',$today_winners]);
+        $response= Loser::find()->orderBy("plays DESC")->limit($limit)->all();
         
         for($i=0;$i< count($response); $i++){
             try {
                 $winnersmodel = new WinningHistories();
                 $winnersmodel->id=Uuid::generate()->string;
-                $winnersmodel->reference_name = $response[$i]['reference_name'];
-                $winnersmodel->reference_phone = $response[$i]['reference_phone'];
+                $winnersmodel->reference_name = $response[$i]->reference_name;
+                $winnersmodel->reference_phone = $response[$i]->reference_phone;
                 $winnersmodel->reference_code = 'adminwin';
                 $winnersmodel->amount = $amount;
                 $winnersmodel->created_at = date('Y-m-d H:i:s');
-                $winnersmodel->unique_field=date("Ymd")."#".$response[$i]['reference_phone'];
+                $winnersmodel->unique_field=date("Ymd")."#".$response[$i]->reference_phone;
                 if($winnersmodel->save(FALSE)){
                     $disbursementmodel = new Disbursements();
                     $disbursementmodel->id=Uuid::generate()->string;
                     $disbursementmodel->reference_id = $winnersmodel->id;
-                    $disbursementmodel->reference_name = $response[$i]['reference_name'];
-                    $disbursementmodel->phone_number = $response[$i]['reference_phone'];
+                    $disbursementmodel->reference_name = $response[$i]->reference_name;
+                    $disbursementmodel->phone_number = $response[$i]->reference_phone;
                     $disbursementmodel->amount = $amount;
                     $disbursementmodel-> disbursement_type = 'adminwin';
                     $disbursementmodel->created_at = date('Y-m-d H:i:s');
-                    $disbursementmodel->unique_field=date("Ymd")."#".$response[$i]['reference_phone'];
+                    $disbursementmodel->unique_field=date("Ymd")."#".$response[$i]->reference_phone;
                     $disbursementmodel->save(FALSE);
+                    $response[$i]->delete(false);
                     $arr=['amount'=>$amount];
-                    Myhelper::setSms('rewardPlayer',$response[$i]['reference_phone'],$arr);
+                    Myhelper::setSms('rewardPlayer',$disbursementmodel->phone_number,$arr);
                 }
             }catch(IntegrityException $e){
                 //allow execution

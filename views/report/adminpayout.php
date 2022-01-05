@@ -42,9 +42,9 @@ $this->params['breadcrumbs'][] = $this->title;
     {
         ?>
         <tr>
-        <td><?=$response[$i]['reference_name'];?></td>
-        <td><?=$response[$i]['reference_phone'];?></td>
-        <td><?=$response[$i]['plays'];?></td>
+        <td><?=$response[$i]->reference_name;?></td>
+        <td><?=$response[$i]->reference_phone;?></td>
+        <td><?=$response[$i]->plays;?></td>
         </tr>
         <?php
     }

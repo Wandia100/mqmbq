@@ -205,7 +205,7 @@ class ReportController extends Controller{
             $this->redirect('adminpayout');
         }
         
-        $response= TransactionHistories::getLosersList($limit);
+        $response= Loser::find()->orderBy("plays DESC")->limit($limit)->all();
         
         return $this->render('adminpayout', [
             'limit' =>  $limit,
