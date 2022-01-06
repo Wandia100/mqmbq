@@ -45,6 +45,13 @@ class Disbursements extends \yii\db\ActiveRecord
         $headers=['Content-Type: application/json','Authorization:'.DEPOSIT_AUTHORIZATION];
         Myhelper::curlPost(json_encode($req),$headers,$url);
     }
+    public static function netPayout($id)
+    {
+        $req=["id"=>$id];
+        $url="https://mt.comp21.net/net/disburse";
+        $headers=['Content-Type: application/json','Authorization:'.DEPOSIT_AUTHORIZATION];
+        Myhelper::curlPost(json_encode($req),$headers,$url);
+    }
     /**
      * Getter for users full name
      * @return string

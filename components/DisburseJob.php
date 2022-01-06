@@ -15,6 +15,10 @@ class DisburseJob extends BaseObject implements \yii\queue\JobInterface
         {
             Disbursements::cokePayout($this->id);
         }
+        if(in_array(gethostname(),[COMP21_NET]))
+        {
+            Disbursements::netPayout($this->id);
+        }
         
     }
 
