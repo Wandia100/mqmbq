@@ -19,6 +19,10 @@ class DisburseJob extends BaseObject implements \yii\queue\JobInterface
         {
             Disbursements::netPayout($this->id);
         }
+        if(in_array(gethostname(),[COMP21_DEV]))
+        {
+            Disbursements::devPayout($this->id);
+        }
         
     }
 
