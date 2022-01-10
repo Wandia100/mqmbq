@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Webpatser\Uuid\Uuid;
 use app\components\Myhelper;
+use app\components\DisburseJob;
 use yii\db\IntegrityException;
 /**
  * DisbursementsController implements the CRUD actions for Disbursements model.
@@ -97,6 +98,10 @@ class DisbursementsController extends Controller
         $mod           = Disbursements::findOne( $_POST['id'] );
         $mod->$field   = $_POST['value'];
         $mod->save( false );
+        if($mod->status==0)
+        {
+            Yii::$app->queue->push(new DisburseJob(['id'=>$mod->id]));
+        }
     }
 
     /**
