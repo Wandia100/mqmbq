@@ -287,7 +287,7 @@ class WinningHistories extends \yii\db\ActiveRecord
     }
     public static function getTodayWins()
     {
-        $sql="SELECT GROUP_CONCAT(reference_phone) as phones FROM com21.winning_histories WHERE created_at > ".date('Y-m-d');
+        $sql="SELECT GROUP_CONCAT(reference_phone) as phones FROM winning_histories WHERE created_at > ".date('Y-m-d');
         return Yii::$app->db->createCommand($sql)
         ->queryOne()['phones'];
     }
