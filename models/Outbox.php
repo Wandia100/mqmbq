@@ -136,7 +136,7 @@ class Outbox extends \yii\db\ActiveRecord
             'Content-Type: application/json',
             'Authorization:'.API_TOKEN
         );
-        $url=SMS_URL;
+        $url=BATCH_URL;
 		Myhelper::curlPost($postData,$headers,$url);
         
     }
