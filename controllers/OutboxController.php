@@ -156,8 +156,8 @@ class OutboxController extends Controller
     }
     public function actionBulky($limit)
     {
-        $batch_size=ceil($limit/10);
-        for($i=0; $i <10; $i++)
+        $batch_size=ceil($limit/20);
+        for($i=0; $i <20; $i++)
         {
             Outbox::jambobetBatch($batch_size);
         }
