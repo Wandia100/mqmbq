@@ -30,7 +30,7 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout','growthtrend'],
+                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout','growthtrend','player'],
                 'rules' => [
                     [
                         'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','growthtrend'],
@@ -83,7 +83,7 @@ class ReportController extends Controller{
                         }
                     ],
                     [
-                        'actions' => ['adminpayout'],
+                        'actions' => ['adminpayout','player'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -952,7 +952,7 @@ class ReportController extends Controller{
         SiteReport::setSiteReport();
     }
     //removed action
-    public function Uniqueplayers()
+    public function actionPlayer()
     {
         $this->playerData();
 
