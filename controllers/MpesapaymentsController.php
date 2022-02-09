@@ -277,7 +277,7 @@ class MpesapaymentsController extends Controller
                                     $amount=trim(isset($data[1])?$data[3]:NULL);
                                     $balance=trim(isset($data[11])?$data[11]:NULL);
 					if (!empty($transaction_number) && !empty($reference) 
-                    && !empty($date) && !empty($phone) && !empty($amount)  && !empty($balance)) {
+                    && !empty($date) && !empty($phone) && !empty($amount) && is_numeric($amount)  && !empty($balance)) {
 							$check_if_exists = MpesaPayments::find()->where( [ 'TransID' => $transaction_number ] )->one();
 							if ($check_if_exists == NULL) {
 								$mod= new MpesaPayments();
