@@ -42,15 +42,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             <li>The document can be requested from Airtel.</li>
                             <li>The format should be as follows:
                                 <ul>
-                                    <li>Column[0]-transaction number</li>
-                                    <li>Column[2]-reference code</li>
-                                    <li>Column[3]-date</li>
-                                    <li>Column[4]-phone</li>
-                                    <li>Column[6]-amount</li>
-                                    <li>Column[8]-balance</li>
+                                    <li>Column[1]-transaction number</li>
+                                    <li>Column[9]-reference code</li>
+                                    <li>Column[4]-date</li>
+                                    <li>Column[2]-phone</li>
+                                    <li>Column[3]-amount</li>
+                                    <li>Column[11]-balance</li>
                                 </ul>
                             </li>
-                            <li>Then remove the titles row on the top.</li>
+                            <li>Then ensure file is in csv format.</li>
                             <li>Only documents (<strong>CSV</strong>) are allowed.</li>
 
                         </ul>
