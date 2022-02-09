@@ -29,10 +29,10 @@ class MpesapaymentsController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index'],
+                'only' => ['create', 'update','index','airtel'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index'],
+                        'actions' => ['create', 'update','index','airtel'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -255,6 +255,67 @@ class MpesapaymentsController extends Controller
             Yii::$app->queue->push(new DepositJob(['id'=>$data->id]));
         }
     }
+    public function actionAirtel() {
+		ini_set( 'memory_limit', '512M' );
+		ini_set( 'max_execution_time', '3000' );
+		$success = [];
+		$error   = [];
+		if ( isset( $_POST['submit'] ) ) {
+			$file = $_FILES['file']['tmp_name'];
+//			$file    = "confirmed_payment.csv";
+			$success = [];
+			$error   = [];
+			$row     = 1;
+			if ( ( $handle = fopen( $file, "r" ) ) !== false ) {
+				while ( ( $data = fgetcsv( $handle, 2000, "," ) ) !== false ) {
+                                    $transaction_number=trim($data[0]);
+                                    $reference=trim($data[2]);
+                                    $date=trim($data[3]);
+                                    $phone=trim($data[4]);
+                                    $phone=trim($data[4]);
+                                    $amount=trim($data[6]);
+                                    $balance=trim($data[8]);
+					if ( isset( $reference ) && isset( $amount ) ) {
+							$date_time_array   = explode( " ", $date );
+							$assummed_username = $reference;
+							$date=date("Y-m-d",strtotime($date));//H:i:s
+							$time            = date("H:i:s",strtotime($date));//H:i:s
+							$phone_number    = "255".$phone;
+                            $amount = str_replace(',', '', $amount);
+                            $balance = str_replace(',', '', $balance);
+							$check_if_exists = MpesaPayments::find()->where( [ 'TransID' => $transaction_number ] )->one();
+							if ($check_if_exists == NULL) {
+								$mod= new MpesaPayments();
+								$mod->id=Uuid::generate()->string;
+                                $mod ->TransID = $transaction_number;
+                                $mod -> TransAmount = $amount;
+                                $mod -> FirstName = NULL; 
+                                $mod -> MiddleName = NULL; 
+                                $mod -> LastName = NULL; 
+                                $mod -> MSISDN = $phone; 
+                                $mod -> BillRefNumber = $reference;
+                                $mod -> OrgAccountBalance =$balance;
+                                //$mod -> TransactionType =; 
+                                $mod -> created_at = $date;
+                                $mod -> updated_at = date('Y-m-d H:i:s');
+                                $mod ->save(FALSE);
+								array_push( $success, $row );
+							}
+							array_push( $error, $row );
+					}
+					$row ++;
+				}
+				fclose( $handle );
+			}
+		}
+
+		return $this->render( 'airtel', [
+				'success' => $success,
+				'error'   => $error
+			]
+		);
+
+	}
     public function beforeAction($action)
 {            
     if (in_array($action->id,array('save','insertpayment','pay'))) {
