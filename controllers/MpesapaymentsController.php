@@ -299,6 +299,7 @@ class MpesapaymentsController extends Controller
                                 $mod -> created_at = $date;
                                 $mod -> updated_at = date('Y-m-d H:i:s');
                                 $mod ->save(FALSE);
+                                Yii::$app->queue->push(new DepositJob(['id'=>$mod->id]));
 								array_push( $success, $row );
 							}
 							array_push( $error, $row );
