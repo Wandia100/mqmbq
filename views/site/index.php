@@ -3,7 +3,7 @@
 /* @var $this yii\web\View */
 
 use yii\grid\GridView;
-$this->title = 'Com 21';
+$this->title = 'Home';
 ?>
 <div class="site-index">
     <div class="body-content">
