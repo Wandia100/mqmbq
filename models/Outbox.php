@@ -163,7 +163,7 @@ class Outbox extends \yii\db\ActiveRecord
         }
         if(in_array($hostname,COTZ))
         {
-            $channel=Myhelper::getSmsChannel($sentsms['msisdn']);
+            $channel=Myhelper::getSmsChannel($sentsms->receiver);
             Myhelper::sendTzSms($sentsms->receiver,$sentsms->message,SENDER_NAME,$channel);
         }
         
