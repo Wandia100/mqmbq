@@ -321,4 +321,11 @@ class Disbursements extends \yii\db\ActiveRecord
 
         
     }
+    public static function tzPayout($id,$product)
+    {
+        $req=["id"=>$id,"product"=>$product];
+        $url="https://tigo.efmtz.com/api/tzdisburse";
+        $headers=['Content-Type: application/json','Authorization:'.DEPOSIT_AUTHORIZATION];
+        Myhelper::curlPost($req,$headers,$url);
+    }
 }
