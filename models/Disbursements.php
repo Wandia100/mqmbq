@@ -324,6 +324,7 @@ class Disbursements extends \yii\db\ActiveRecord
     public static function tzPayout($id,$product)
     {
         $req=["id"=>$id,"product"=>$product];
+        $req=json_encode($req);
         $url=TIGO_PAY_URL;
         $headers=['Content-Type: application/json','Authorization:'.DEPOSIT_AUTHORIZATION];
         Myhelper::curlPost($req,$headers,$url);
