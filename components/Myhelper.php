@@ -945,5 +945,17 @@ class Myhelper extends Component {
             return false;
         }
 	}
+        
+        public function getStations() {
+           $return = [];
+           $data = \app\models\StationManagementStations::find()
+                    ->select('station_id')
+                    ->where(['station_management_id'=> \Yii::$app->user->identity->id])
+                    ->all();
+            foreach ($data as $value) {
+                $return[]=$value->station_id;
+            }
+            return $return;
+        }
 }
 
