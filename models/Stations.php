@@ -113,6 +113,12 @@ class Stations extends \yii\db\ActiveRecord
     }
     public static function getActiveStations()
     {
-        return Stations::find()->where("deleted_at is null")->orderBy("name asc")->all();
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager')){
+           return Stations::find()->where(['IN','id', \Yii::$app->myhelper->getStations()])->andWhere("deleted_at is null")->orderBy("name asc")->all();
+        }else{
+            return Stations::find()->where("deleted_at is null")->orderBy("name asc")->all();
+        }
+        
     }
 }
