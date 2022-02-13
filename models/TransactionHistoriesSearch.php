@@ -109,6 +109,10 @@ class TransactionHistoriesSearch extends TransactionHistories
             $query->andWhere( "transaction_histories.created_at >= '$from'" );
             $query->andWhere( "transaction_histories.created_at <= '$to'" );
         }
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager')){
+           $query->where(['IN','transaction_histories.station_id', \Yii::$app->myhelper->getStations()]); 
+        }
         $query->orderBy('transaction_histories.created_at DESC');
         return $dataProvider;
     }
