@@ -249,7 +249,15 @@ class Disbursements extends \yii\db\ActiveRecord
         FROM disbursements d
         LEFT JOIN winning_histories w ON d.reference_id = w.id
         LEFT JOIN stations s ON w.station_id = s.id
-        WHERE disbursement_type = 'winning' AND d.created_at BETWEEN  :start_date AND :end_date
+        WHERE";
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager')){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+            $sql .=" w.station_id IN ($stations) AND ";
+        }
+        $sql .= "disbursement_type = 'winning' AND d.created_at BETWEEN  :start_date AND :end_date
         GROUP BY s.name";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':start_date',$start_date)

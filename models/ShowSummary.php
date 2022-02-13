@@ -70,22 +70,20 @@ class ShowSummary extends \yii\db\ActiveRecord
     public static function getShowSummary($start_date,$end_date)
     {
         $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
-            $stations = implode(",", array_map(function($string) {
-                return '"' . $string . '"';
-            }, \Yii::$app->myhelper->getStations()));
-            $sql="SELECT station_name,station_show_name,COALESCE(SUM(total_revenue),0) AS revenue,COALESCE(SUM(total_commission),0) AS commission,
-            COALESCE(SUM(total_payouts),0) AS payout FROM show_summary WHERE `station_id` IN ($stations) AND report_date BETWEEN  :start_date AND :end_date GROUP BY station_show_id,station_name,station_show_name ORDER BY 
+         $sql="SELECT station_name,station_show_name,COALESCE(SUM(total_revenue),0) AS revenue,COALESCE(SUM(total_commission),0) AS commission,
+            COALESCE(SUM(total_payouts),0) AS payout FROM show_summary WHERE ";
+            if($session->get('isstationmanager')){
+                $stations = implode(",", array_map(function($string) {
+                   return '"' . $string . '"';
+                }, \Yii::$app->myhelper->getStations()));
+                $sql .=" `station_id` IN ($stations) AND ";
+            }
+        $sql .=" report_date BETWEEN  :start_date AND :end_date GROUP BY station_show_id,station_name,station_show_name ORDER BY 
             revenue DESC";
-        }else{
-            $sql="SELECT station_name,station_show_name,COALESCE(SUM(total_revenue),0) AS revenue,COALESCE(SUM(total_commission),0) AS commission,
-            COALESCE(SUM(total_payouts),0) AS payout FROM show_summary WHERE report_date BETWEEN  :start_date AND :end_date GROUP BY station_show_id,station_name,station_show_name ORDER BY 
-            revenue DESC";
-        }
-        
         return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':start_date',$start_date)
         ->bindValue(':end_date',$end_date)
+        #->bindValue(":stations",$stations)
         ->queryAll();
     }
     public static function logShowSummary($start_date)

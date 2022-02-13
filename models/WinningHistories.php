@@ -250,7 +250,15 @@ class WinningHistories extends \yii\db\ActiveRecord
         GROUP BY reference_phone)  q1
         ON q2.reference_phone = q1.reference_phone
         JOIN stations st ON q2.station_id = st.id
-        WHERE q2.created_at BETWEEN  :start_date AND :end_date
+        WHERE";
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager')){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+            $sql .=" `station_id` IN ($stations) AND ";
+        } 
+        $sql .= "q2.created_at BETWEEN  :start_date AND :end_date
         ORDER BY q1.plays DESC";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':start_date',$start_date)
