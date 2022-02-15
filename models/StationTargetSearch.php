@@ -66,6 +66,11 @@ class StationTargetSearch extends StationTarget
 
         $query->andFilterWhere(['like', 'station_id', $this->station_id])
             ->andFilterWhere(['like', 'unique_field', $this->unique_field]);
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager')){
+           $query->where(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
+        }
+        
         $query->orderBy('id DESC');
 
         return $dataProvider;

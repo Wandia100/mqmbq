@@ -112,6 +112,12 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            $session = Yii::$app->session;
+            if(in_array(\Yii::$app->user->identity->perm_group, [4,5])){
+                $session->set('isstationmanager', true);
+            }else{
+                $session->set('isstationmanager', false);
+            }
             return $this->goBack();
         }
 
