@@ -280,7 +280,7 @@ class TransactionhistoriesController extends Controller
     }
     public function actionAssignshows()
     {
-        Myhelper::checkRemoteAddress();
+        //Myhelper::checkRemoteAddress();
         $hostname = gethostname(); //
         if (in_array($hostname, COTZ))
         {
