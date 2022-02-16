@@ -330,6 +330,7 @@ class TransactionhistoriesController extends Controller
                         $model->created_at=$row->created_at;
                         $model->save(false);
                         $row->state=1;
+                        $row->station_id=$station_show['station_id'];
                         $row->save(false);
                         if(in_array($hostname,COTZ))
                         {
