@@ -317,7 +317,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
                 $refund=$row->TransAmount-$play_min;
                 if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
                 {
-                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",0);
+                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",0,NULL);
                 }
                 $row->deleted_at=date("Y-m-d H:i:s");
                 $row->state=1;
@@ -329,7 +329,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
                 $refund=$row->TransAmount-$play_min;
                 if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
                 {
-                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",4);
+                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",4,NULL);
                 }
                 $row->deleted_at=date("Y-m-d H:i:s");
                 $row->state=1;

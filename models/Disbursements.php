@@ -107,13 +107,13 @@ class Disbursements extends \yii\db\ActiveRecord
             'deleted_at' => 'Deleted At',
         ];
     }
-    public static function saveDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type,$status)
+    public static function saveDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type,$status,$station_id)
     {
 
         if($amount <= MAX_AMOUNT)
             {
                 $unique_field=$phone_number.$amount.date('YmdHi');
-               Disbursements::createDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type,$status,$unique_field); 
+               Disbursements::createDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type,$status,$unique_field,$station_id); 
             }
             else
             {
@@ -132,19 +132,20 @@ class Disbursements extends \yii\db\ActiveRecord
                     }
                     $count++;
                     $unique_field=$phone_number.$amount.date('YmdHi')."-".$count;
-                    Disbursements::createDisbursement($reference_id,$reference_name,$phone_number,$to_pay,$disbursement_type,$status,$unique_field);
+                    Disbursements::createDisbursement($reference_id,$reference_name,$phone_number,$to_pay,$disbursement_type,$status,$unique_field,$station_id);
                 }
             }
         
         
         
     }
-    public static function createDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type,$status,$unique_field)
+    public static function createDisbursement($reference_id,$reference_name,$phone_number,$amount,$disbursement_type,$status,$unique_field,$station_id)
     {
         try {
             $model=new Disbursements();
             $model->id=Uuid::generate()->string;
             $model->reference_id=$reference_id;
+            $model->station_id=$station_id;
             $model->reference_name=$reference_name;
             $model->phone_number=$phone_number;
             $model->amount=$amount;

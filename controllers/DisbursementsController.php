@@ -158,7 +158,7 @@ class DisbursementsController extends Controller
                 $model->phone_number=trim($model->phone_number);
             }
             //handle amount more than 150k
-            Disbursements::saveDisbursement("",$model->reference_name,$model->phone_number,$model->amount,$model->disbursement_type,0);
+            Disbursements::saveDisbursement("",$model->reference_name,$model->phone_number,$model->amount,$model->disbursement_type,0,NULL);
             return $this->redirect(['index']);
         }
 
