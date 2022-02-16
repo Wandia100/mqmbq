@@ -95,6 +95,15 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':from_time',"%$from_time%")
         ->queryOne();
     }
+    public static function getTotalMpesaPerStation($from_time,$station_id)
+    {
+        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments where deleted_at IS NULL AND created_at 
+        LIKE :from_time AND station_id=:station_id";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':from_time',"%$from_time%")
+        ->bindValue(':station_id',$station_id)
+        ->queryOne();
+    }
     public static function getStationTotalMpesa($from_time,$station_code)
     {
         $sql="SELECT COALESCE(SUM(b.TransAmount),0) as amount FROM mpesa_payments b WHERE b.deleted_at IS NULL AND b.created_at LIKE :from_time 
@@ -254,19 +263,27 @@ class MpesaPayments extends \yii\db\ActiveRecord
         $report=RevenueReport::checkDuplicate($revenue_date);
         if($report==NULL)
         {
-            try
+            $stations=Stations::find()->where("deleted_at is null")->orderBy("name asc")->all();
+            for($i=0; $i<count($stations); $i++)
             {
-                $model=new RevenueReport();
-                $model->revenue_date=$revenue_date;
-                $model->total_awarded=WinningHistories::getPayout($revenue_date)['total'];;
-                $model->total_revenue=MpesaPayments::getTotalMpesa($revenue_date)['total_mpesa'];
-                $model->net_revenue=round($model->total_revenue-$model->total_awarded);
-                $model->save(false);
+                $row=$stations[$i];
+                try
+                {
+                    $model=new RevenueReport();
+                    $model->revenue_date=$revenue_date;
+                    $model->station_id=$row->id;
+                    $model->total_awarded=WinningHistories::getPayoutPerStation($revenue_date,$row->id)['total'];
+                    $model->total_revenue=MpesaPayments::getTotalMpesaPerStation($revenue_date,$row->id)['total_mpesa'];
+                    $model->net_revenue=round($model->total_revenue-$model->total_awarded);
+                    $model->unique_field=$row->id.$revenue_date;
+                    $model->save(false);
+                }
+                catch(IntegrityException $e)
+                {
+                    //allow execution
+                }
             }
-            catch(IntegrityException $e)
-            {
-                //allow execution
-            }
+            
         }
         else
         {
