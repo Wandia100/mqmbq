@@ -17,7 +17,7 @@ class DisbursementsSearch extends Disbursements
     public function rules()
     {
         return [
-            [['id', 'reference_id', 'reference_name', 'phone_number', 'conversation_id', 'disbursement_type', 'transaction_reference', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['id', 'reference_id', 'reference_name', 'phone_number', 'conversation_id', 'disbursement_type', 'transaction_reference', 'created_at', 'updated_at', 'deleted_at','station_id'], 'safe'],
             [['amount'], 'number'],
             [['status'], 'integer'],
         ];

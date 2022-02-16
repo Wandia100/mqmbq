@@ -80,7 +80,7 @@ class Disbursements extends \yii\db\ActiveRecord
             [['status'], 'integer'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
-            [['unique_field'], 'string', 'max' => 50],
+            [['unique_field','station_id'], 'string', 'max' => 50],
             [['reference_id', 'disbursement_type', 'transaction_reference'], 'string', 'max' => 100],
             [['reference_name', 'phone_number', 'conversation_id'], 'string', 'max' => 255],
             [['id'], 'unique'],
