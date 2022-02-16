@@ -53,6 +53,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
             [['is_archived'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
+            [['operator'], 'string', 'max' => 20],
             [['station_id'], 'string', 'max' => 50],
             [['excelfile'], 'required'],
             [['excelfile'], 'file', 'skipOnEmpty' => TRUE, 'extensions' => 'csv'],

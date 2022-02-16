@@ -17,7 +17,7 @@ class MpesaPaymentsSearch extends MpesaPayments
     public function rules()
     {
         return [
-            [['id', 'TransID', 'FirstName', 'MiddleName', 'LastName', 'MSISDN', 'InvoiceNumber', 'BusinessShortCode', 'ThirdPartyTransID', 'TransactionType', 'OrgAccountBalance', 'BillRefNumber', 'TransAmount', 'created_at', 'updated_at', 'deleted_at','station_id'], 'safe'],
+            [['id', 'TransID', 'FirstName', 'MiddleName', 'LastName', 'MSISDN', 'InvoiceNumber', 'BusinessShortCode', 'ThirdPartyTransID', 'TransactionType', 'OrgAccountBalance', 'BillRefNumber', 'TransAmount', 'created_at', 'updated_at', 'deleted_at','station_id','operator'], 'safe'],
             [['is_archived'], 'integer'],
         ];
     }

@@ -290,6 +290,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
                     $model->amount=$row->TransAmount;
                     $model->created_at=$row->created_at;
                     $model->save(false);
+                    $row->operator=Myhelper::getOperator($row->MSISDN);
                     $row->state=1;
                     $row->station_id=$station_show['station_id'];
                     $row->save(false);

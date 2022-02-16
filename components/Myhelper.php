@@ -932,6 +932,32 @@ class Myhelper extends Component {
 
 		return $operator;
 	}
+	public static function getOperator($phone_number) {
+		$operator_prefix = substr( $phone_number, 0, 5 );
+		$operator        = "";
+		 if (in_array($operator_prefix,["25576","25575","25574"]))
+		{
+			$operator="vodacom";
+		}
+		else if (in_array($operator_prefix,["25568","25569","25578"]))
+		{
+			$operator="airtel";
+		}
+		else if (in_array($operator_prefix,["25565","25567","25571"]))
+		{
+			$operator="tigo";
+		}
+		else if (in_array($operator_prefix,["25472","25471","25470","25474","25475","25476","25479","25411"]))
+		{
+			$operator="safaricom";
+		}
+		else
+		{
+			$operator="notset";
+		}
+
+		return $operator;
+	}
 	public static function checkLocalToken() 
 	{
         $header  = getallheaders();
