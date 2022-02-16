@@ -225,6 +225,7 @@ class ReportController extends Controller{
                 $model=new Loser();
                 $model->reference_name=$row['reference_name'];
                 $model->reference_phone=$row['reference_phone'];
+                $model->station_id=$row['station_id'];
                 $model->plays=$row['plays'];
                 $model->save(false);
             }

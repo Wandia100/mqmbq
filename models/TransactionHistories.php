@@ -185,7 +185,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
      */
     public static function getLosersList($limit){
         //echo $limit;exit;
-        $sql = "SELECT DISTINCT q1.reference_phone, q1.reference_name,q2.plays 
+        $sql = "SELECT DISTINCT q1.reference_phone,q1.station_id,q1.reference_name,q2.plays 
             FROM transaction_histories q1
             JOIN 
             (SELECT t.reference_phone,count(t.reference_phone) AS plays
@@ -236,7 +236,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
                     Yii::$app->queue->push(new DisburseJob(['id'=>$disbursementmodel->id]));
                     $response[$i]->delete(false);
                     $arr=['amount'=>$amount];
-                    Myhelper::setSms('rewardPlayer',$disbursementmodel->phone_number,$arr);
+                    Myhelper::setSms('rewardPlayer',$disbursementmodel->phone_number,$arr,$response[$i]->station_id);
                 }
             }catch(IntegrityException $e){
                 //allow execution
@@ -264,7 +264,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
             //do nothing
             $row->state=1;
             $row->save(false);
-            Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],SENDER_NAME);
+            Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
         }
         else if($row->TransAmount >= $play_min && $row->TransAmount < $play_max)
         {
@@ -296,11 +296,11 @@ class TransactionHistories extends \yii\db\ActiveRecord
                     {
                         $totalEntry=TransactionHistories::countEntry($row->MSISDN);
                         $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-                        Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry]);
+                        Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],$station_show['station_id']);
                     }
                     else
                     {
-                        Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName]);
+                        Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],$station_show['station_id']);
                     }
 
                 }
@@ -322,7 +322,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
                 $row->deleted_at=date("Y-m-d H:i:s");
                 $row->state=1;
                 $row->save(false);
-                Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName]);
+                Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],NULL);
             } 
             else
             {

@@ -837,7 +837,7 @@ class Myhelper extends Component {
 	 * @param integer $receiver receiver mobile number
 	 * @param array $variables array maping the variable to replace in the sms templat
 	 */
-	public static function setSms( $name, $receiver, $variables = [], $sender = SENDER_NAME ) {
+	public static function setSms( $name, $receiver, $variables = [], $sender = SENDER_NAME,$station_id ) {
 		$outbox = new Outbox();
 		if ( $receiver != "") {
 			$temp = Template::getTemplate($name);
@@ -846,6 +846,7 @@ class Myhelper extends Component {
 				'receiver'     => $receiver,
 				'created_date' => date( 'Y-m-d H:i:s' ),
 				'category'     =>$temp->id,
+				'station_id'     =>$station_id,
 				'status'       => 0
 			];
 			$temp=$temp->message;

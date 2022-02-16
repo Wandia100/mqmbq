@@ -207,7 +207,7 @@ class WinninghistoriesController extends Controller
                             $arr=[$transaction_history['reference_name'],$show_prize['name'],$show_prize['amount'],$station_name];
                             //$message=Myhelper::winningMessage($transaction_history,$show_prize,$station_name);
                             //send an sms
-                            Myhelper::setSms('winningMessage',$transaction_history['reference_phone'],$arr);
+                            Myhelper::setSms('winningMessage',$transaction_history['reference_phone'],$arr,$transaction_history['station_id']);
                         }
                         else
                         {

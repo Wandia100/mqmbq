@@ -41,7 +41,7 @@ class Loser extends \yii\db\ActiveRecord
             [['reference_phone'], 'required'],
             [['plays'], 'integer'],
             [['created_at', 'deleted_at'], 'safe'],
-            [['reference_name'], 'string', 'max' => 50],
+            [['reference_name','station_id'], 'string', 'max' => 50],
             [['reference_phone'], 'string', 'max' => 12],
             [['reference_phone'], 'unique'],
         ];
