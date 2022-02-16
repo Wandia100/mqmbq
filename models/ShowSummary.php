@@ -98,6 +98,7 @@ class ShowSummary extends \yii\db\ActiveRecord
                 {
                     $model=new ShowSummary();
                     $model->station_show_id=$row['id'];
+                    $model->station_id=$row['station_id'];
                     $model->total_revenue=$row['total_revenue'];
                     $model->total_commission=$row['total_commission'];
                     $model->total_payouts=$row['total_payout'];
