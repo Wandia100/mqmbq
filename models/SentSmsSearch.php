@@ -18,7 +18,7 @@ class SentSmsSearch extends SentSms
     {
         return [
             [['id', 'category'], 'integer'],
-            [['receiver', 'sender', 'message', 'created_date'], 'safe'],
+            [['receiver', 'sender', 'message', 'created_date','station_id'], 'safe'],
         ];
     }
 
