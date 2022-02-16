@@ -264,7 +264,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
             //do nothing
             $row->state=1;
             $row->save(false);
-            Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName]);
+            Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],SENDER_NAME);
         }
         else if($row->TransAmount >= $play_min && $row->TransAmount < $play_max)
         {
