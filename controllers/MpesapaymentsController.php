@@ -274,7 +274,7 @@ class MpesapaymentsController extends Controller
                                     $date=date("Y-m-d",strtotime($date));
                                     $phone=trim(isset($data[2])?$data[2]:NULL);
                                     $phone = "255".$phone;
-                                    $amount=trim(isset($data[1])?$data[3]:NULL);
+                                    $amount=trim(isset($data[3])?$data[3]:NULL);
                                     $balance=trim(isset($data[11])?$data[11]:NULL);
 					if (!empty($transaction_number) && !empty($reference) 
                     && !empty($date) && !empty($phone) && !empty($amount) && is_numeric($amount)  && !empty($balance)) {
