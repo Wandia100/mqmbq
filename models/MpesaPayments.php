@@ -127,6 +127,13 @@ class MpesaPayments extends \yii\db\ActiveRecord
         $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments";
         return Yii::$app->mpesa_db->createCommand($sql)->queryOne();
     }
+    public static function getTotalRevenuePerStation($station_id)
+    {
+        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments where station_id=:station_id";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':station_id',$station_id)
+        ->queryOne();
+    }
     public static function getTotalMpesaInRange($from_time,$to_time)
     {
         $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from 
@@ -135,6 +142,17 @@ class MpesaPayments extends \yii\db\ActiveRecord
         return Yii::$app->mpesa_db->createCommand($sql)
         ->bindValue(':from_time',$from_time)
         ->bindValue(':to_time',$to_time)
+        ->queryOne();
+    }
+    public static function getTotalMpesaInRangePerStation($from_time,$to_time,$station_id)
+    {
+        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from 
+        mpesa_payments where created_at > :from_time and
+        created_at <= :to_time and station_id=:station_id";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':from_time',$from_time)
+        ->bindValue(':to_time',$to_time)
+        ->bindValue(':station_id',$station_id)
         ->queryOne();
     }
     public static function revenueReport($start_date,$end_date)
@@ -184,6 +202,43 @@ class MpesaPayments extends \yii\db\ActiveRecord
             break;
         default :   
             $sum = MpesaPayments::getTotalRevenue()['total_mpesa'];
+        endswitch;
+        return $sum;    
+    }
+    public static function getMpesaCountsPerStation($type,$station_id){
+        $today = date('Y-m-d H:i:s');
+        $sum = 0;
+        switch ($type):
+        case 'today':
+            $midnight = date('Y-m-d 00:00:00');
+            $sum = MpesaPayments::getTotalMpesaInRangePerStation($midnight,$today,$station_id)['total_mpesa'];
+            break;
+        case 'yesterday':
+            $yestFloor = date( 'Y-m-d 00:00:00',strtotime('-1 day', time()));
+            $yestCeil = date( 'Y-m-d 23:59:59',strtotime('-1 day', time()));
+            $sum = MpesaPayments::getTotalMpesaInRangePerStation($yestFloor, $yestCeil,$station_id)['total_mpesa'];
+            break;
+        case 'last_7_days':
+           // $_7daysFloor = date( 'Y-m-d 00:00:00',strtotime('-7 day', time())); //Change to check from monday to today
+            $_lastMonday = date('Y-m-d 00:00:00',strtotime('Monday this week'));
+            $sum = MpesaPayments::getTotalMpesaInRangePerStation($_lastMonday, $today,$station_id)['total_mpesa'];
+            break;
+        case 'currentmonth':
+            $cFloor = date( 'Y-m-1 00:00:00');
+            $sum = MpesaPayments::getTotalMpesaInRangePerStation($cFloor, $today,$station_id)['total_mpesa'];
+            break;
+        case 'lastweek':
+            $floorDate = date("Y-m-d 00:00:00", strtotime(date("w") ? "2 sundays ago" : "last sunday"));
+            $ceilDate = date("Y-m-d 23:59:59", strtotime("last saturday"));
+            $sum = MpesaPayments::getTotalMpesaInRangePerStation($floorDate, $ceilDate,$station_id)['total_mpesa'];
+            break;
+        case 'lastmonth':
+            $lFloor = date( 'Y-m-1 00:00:00',strtotime('-1 month', time()));
+            $lCeil = date('Y-m-d 23:59:59', strtotime('last day of previous month'));
+            $sum = MpesaPayments::getTotalMpesaInRangePerStation($lFloor, $lCeil,$station_id)['total_mpesa'];
+            break;
+        default :   
+            $sum = MpesaPayments::getTotalRevenuePerStation($station_id)['total_mpesa'];
         endswitch;
         return $sum;    
     }
