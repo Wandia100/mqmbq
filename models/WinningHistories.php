@@ -175,8 +175,21 @@ class WinningHistories extends \yii\db\ActiveRecord
     }
     public static function getPayout($the_day)
     {
-        $sql="SELECT COALESCE(SUM(amount),0) AS total FROM winning_histories WHERE 
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager'))
+        {
+            $stations = implode(",", array_map(function($string) {
+                return '"' . $string . '"';
+                }, \Yii::$app->myhelper->getStations()));
+            $sql="SELECT COALESCE(SUM(amount),0) AS total FROM winning_histories WHERE 
+            created_at LIKE :the_day AND station_id IN ($stations)";        
+        }
+        else
+        {
+            $sql="SELECT COALESCE(SUM(amount),0) AS total FROM winning_histories WHERE 
          created_at LIKE :the_day";
+        }
+        
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':the_day',"%$the_day%")
         ->queryOne();

@@ -125,7 +125,20 @@ class MpesaPayments extends \yii\db\ActiveRecord
     }
     public static function getTotalRevenue()
     {
-        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments";
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager'))
+        {
+            $stations = implode(",", array_map(function($string) {
+                return '"' . $string . '"';
+                }, \Yii::$app->myhelper->getStations()));
+            $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments 
+            AND station_id IN ($stations)";        
+        }
+        else
+        {
+            $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments";
+        }
+        
         return Yii::$app->mpesa_db->createCommand($sql)->queryOne();
     }
     public static function getTotalRevenuePerStation($station_id)
@@ -137,9 +150,22 @@ class MpesaPayments extends \yii\db\ActiveRecord
     }
     public static function getTotalMpesaInRange($from_time,$to_time)
     {
-        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from 
-        mpesa_payments where created_at > :from_time and
-        created_at <= :to_time";
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager'))
+        {
+            $stations = implode(",", array_map(function($string) {
+                return '"' . $string . '"';
+                }, \Yii::$app->myhelper->getStations()));
+            $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from 
+                    mpesa_payments where created_at > :from_time and
+                    created_at <= :to_time AND station_id IN ($stations)";        
+        }
+        else
+        {
+            $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from 
+                mpesa_payments where created_at > :from_time and
+                created_at <= :to_time";
+        }
         return Yii::$app->mpesa_db->createCommand($sql)
         ->bindValue(':from_time',$from_time)
         ->bindValue(':to_time',$to_time)

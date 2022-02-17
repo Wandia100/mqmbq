@@ -100,10 +100,25 @@ class SiteReport extends \yii\db\ActiveRecord
      * @param type $reportName
      */
     public static function getSiteReport($reportName){
-        $model = SiteReport::find()->where("report_name = '$reportName'")->one();
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager'))
+        {
+            $stations = implode(",", array_map(function($string) {
+                return '"' . $string . '"';
+                }, \Yii::$app->myhelper->getStations()));
+            $sql="select COALESCE(sum(report_value),0) as report_value from 
+                    site_report where report_name = '$reportName' AND station_id IN ($stations)";        
+        }
+        else
+        {
+            $sql="select COALESCE(sum(report_value),0) as report_value from 
+            site_report where report_name = '$reportName'";
+        }
+        /*$model = SiteReport::find()->where("report_name = '$reportName'")->one();
         if($model){
             return $model->report_value > 0 ? $model->report_value: 0;
-        }
-        return 0;
+        }*/
+        return Yii::$app->analytics_db->createCommand($sql)
+        ->queryOne()['report_value'];
     }
 }
