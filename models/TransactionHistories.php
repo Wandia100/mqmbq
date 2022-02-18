@@ -304,6 +304,9 @@ class TransactionHistories extends \yii\db\ActiveRecord
                     {
                         Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,$station_show['station_id']);
                     }
+                    $row->operator=Myhelper::getOperator($row->MSISDN);
+                    $row->state=1;
+                    $row->save(false);
 
                 }
                 catch (IntegrityException $e) {

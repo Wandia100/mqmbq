@@ -362,6 +362,9 @@ class TransactionhistoriesController extends Controller
                         {
                             Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
                         }
+                        $row->operator=Myhelper::getOperator($row->MSISDN);
+                        $row->state=1;
+                        $row->save(false);
                 }
                
             }
