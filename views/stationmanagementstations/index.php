@@ -27,8 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'station_id',
-            'station_management_id',
+            [
+                'attribute' => 'stationname',
+                'value'     => 'stations.name'
+            ],
+            [
+                'attribute' => 'stationmanagementname',
+                'value'     => 'users.first_name'
+            ],
             'created_at',
             'updated_at',
             //'deleted_at',

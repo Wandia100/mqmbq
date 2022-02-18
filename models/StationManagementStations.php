@@ -48,7 +48,7 @@ class StationManagementStations extends \yii\db\ActiveRecord
             [['id'], 'required'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
-            [['station_id', 'station_management_id'], 'string', 'max' => 255],
+            [['station_id', 'station_management_id','unique_field'], 'string', 'max' => 255],
             [['id'], 'unique'],
         ];
     }
