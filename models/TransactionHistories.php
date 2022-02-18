@@ -311,6 +311,19 @@ class TransactionHistories extends \yii\db\ActiveRecord
                 }
                 
             }
+            else
+            {
+                if(in_array(gethostname(),COTZ))
+                        {
+                            $totalEntry=TransactionHistories::countEntry($row->MSISDN);
+                            $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
+                            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],NULL);
+                        }
+                        else
+                        {
+                            Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],NULL);
+                        }
+            }
            
         }
         else{
