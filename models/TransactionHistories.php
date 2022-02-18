@@ -173,7 +173,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
     }
     public static function countEntry($phone_number)
     {
-        return TransactionHistories::find()->where("reference_phone='$phone_number'")->count();
+        return MpesaPayments::find()->where("MSISDN='$phone_number'")->count();
     }
     public static function generateEntryNumber($phone_number,$entry_count)
     {
