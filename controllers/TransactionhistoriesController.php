@@ -303,7 +303,7 @@ class TransactionhistoriesController extends Controller
                 //do nothing
                 $row->state=1;
                 $row->save(false);
-                Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],NULL);
+                Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
             }
             else if($row->TransAmount >= $play_min && $row->TransAmount < $play_max)
             {
@@ -337,11 +337,11 @@ class TransactionhistoriesController extends Controller
                         {
                             $totalEntry=TransactionHistories::countEntry($row->MSISDN);
                             $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-                            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],$station_show['station_id']);
+                            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_show['station_id']);
                         }
                         else
                         {
-                            Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],$station_show['station_id']);
+                            Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,$station_show['station_id']);
                         }
 
                     }
@@ -356,11 +356,11 @@ class TransactionhistoriesController extends Controller
                         {
                             $totalEntry=TransactionHistories::countEntry($row->MSISDN);
                             $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-                            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],NULL);
+                            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,NULL);
                         }
                         else
                         {
-                            Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],NULL);
+                            Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
                         }
                 }
                
@@ -376,7 +376,7 @@ class TransactionhistoriesController extends Controller
                     $row->deleted_at=date("Y-m-d H:i:s");
                     $row->state=1;
                     $row->save(false);
-                    Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],NULL);
+                    Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
                 } 
                 else
                 {
