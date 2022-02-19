@@ -81,11 +81,26 @@ class RevenueReport extends \yii\db\ActiveRecord
         $range = [];
         $year = date('Y');
         for ($i = 1; $i <= 12; $i ++){
+            $session = \Yii::$app->session;
+        if($session->get('isstationmanager')){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
             $data = RevenueReport::find()
                 ->select(['total'=>'SUM(total_revenue)'])  
                 ->where("MONTH(revenue_date)='$i'")
                 ->andWhere("YEAR(revenue_date)='$year'")
-                ->createCommand()->queryAll(); 
+                ->andWhere("station_id IN ($stations)")
+                ->createCommand()->queryAll();
+        }
+        else
+        {
+            $data = RevenueReport::find()
+                ->select(['total'=>'SUM(total_revenue)'])  
+                ->where("MONTH(revenue_date)='$i'")
+                ->andWhere("YEAR(revenue_date)='$year'")
+                ->createCommand()->queryAll();
+        }
             $sum[] = $data[0]['total'];
             $range[] = $i;
         }
@@ -103,10 +118,25 @@ class RevenueReport extends \yii\db\ActiveRecord
         $year = date('Y');
         
         for ($i = $start_date; $i <= $end_date; $i = date('Y-m-d',strtotime('+1 day', strtotime($i)))){
+             
+                $session = \Yii::$app->session;
+        if($session->get('isstationmanager')){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+                $data = RevenueReport::find()
+                ->select(['total'=>'SUM(total_revenue)'])  
+                ->where("revenue_date ='$i'")
+                ->andWhere("station_id IN ($stations)")
+                ->createCommand()->queryAll();
+        }
+        else
+        {
             $data = RevenueReport::find()
                 ->select(['total'=>'SUM(total_revenue)'])  
                 ->where("revenue_date ='$i'")
-                ->createCommand()->queryAll(); 
+                ->createCommand()->queryAll();
+        }
             $sum[] = $data[0]['total'] > 0 ? $data[0]['total']: 0;
             $range[] = $i;
         }
