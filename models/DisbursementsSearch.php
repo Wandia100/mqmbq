@@ -87,9 +87,12 @@ class DisbursementsSearch extends Disbursements
                 $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
                 $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
         }
-        $query->orderBy('created_at DESC');
         if(isset($_GET['t']) && $_GET['t'] == 'p'){
             $query->andWhere('disbursement_type = "presenter_commission"');
+        }
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager')){
+           $query->andWhere(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
         }
         $query->orderBy('created_at DESC');
         return $dataProvider;
