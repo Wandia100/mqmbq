@@ -205,21 +205,11 @@ class TransactionHistories extends \yii\db\ActiveRecord
      * @param type $limit
      * @param type $amount
      */
-    public static function processLosersDisbursements($limit,$amount){
+    public static function processLosersDisbursements($response,$amount){
         //delete today winners
         $today_winners=WinningHistories::getTodayWins();
         $today_winners=explode(",",$today_winners);
         Loser::deleteAll(['in','reference_phone',$today_winners]);
-        $response= Loser::find();
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
-            $stations = implode(",", array_map(function($string) {
-               return '"' . $string . '"';
-            }, \Yii::$app->myhelper->getStations()));
-            $response->andWhere("station_id IN ($stations)");
-        }
-        $response->orderBy("plays DESC")->limit($limit)->all();
-        
         for($i=0;$i< count($response); $i++){
             try {
                 $winnersmodel = new WinningHistories();

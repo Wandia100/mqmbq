@@ -199,13 +199,6 @@ class ReportController extends Controller{
             $loadcheck = FALSE;
             $limit = 100;
         }
-        
-        if(isset($_POST['amount']) && $_POST['amount'] > 0 && $loadcheck){//Disburse amount
-            TransactionHistories::processLosersDisbursements($limit, $_POST['amount']);
-            $this->redirect('adminpayout');
-        }
-        
-        $response= Loser::find()->orderBy("plays DESC")->limit($limit)->all();
         $session = \Yii::$app->session;
         if($session->get('isstationmanager')){
             $stations = implode(",", array_map(function($string) {
@@ -213,6 +206,16 @@ class ReportController extends Controller{
             }, \Yii::$app->myhelper->getStations()));
             $response= Loser::find()->where("station_id IN ($stations)")->orderBy("plays DESC")->limit($limit)->all();
         }
+        else
+        {
+            $response= Loser::find()->orderBy("plays DESC")->limit($limit)->all();
+        }
+        if(isset($_POST['amount']) && $_POST['amount'] > 0 && $loadcheck){//Disburse amount
+            TransactionHistories::processLosersDisbursements($response, $_POST['amount']);
+            $this->redirect('adminpayout');
+        }
+        
+
         return $this->render('adminpayout', [
             'limit' =>  $limit,
             'loadcheck'=>$loadcheck,
