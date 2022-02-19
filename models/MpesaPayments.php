@@ -382,7 +382,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
     public static function getPlayerTrend($created_at)
     {
         $sql="SELECT COUNT(MSISDN) AS frequency,MSISDN AS msisdn,station_id,BillRefNumber AS station FROM mpesa_payments WHERE created_at LIKE :created_at
-        GROUP BY MSISDN,BillRefNumber";
+        GROUP BY MSISDN,BillRefNumber,station_id";
         return Yii::$app->mpesa_db->createCommand($sql)
         ->bindValue(':created_at',"$created_at%")
         ->queryAll();

@@ -87,7 +87,7 @@ class PlayerTrendSearch extends PlayerTrend
         }
         $session = \Yii::$app->session;
         if($session->get('isstationmanager')){
-           $query->where(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
+           $query->andWhere(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
         }
         $query->orderBy('hour_date,frequency DESC');
         return $dataProvider;
