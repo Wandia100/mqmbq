@@ -94,6 +94,10 @@ class MpesaPaymentsSearch extends MpesaPayments
                $query->andWhere( "created_at >= '$from'" );
                $query->andWhere( "created_at <= '$to'" );
         }
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager')){
+           $query->andWhere(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
+        }
         $query->orderBy('created_at DESC');
         return $dataProvider;
     }
