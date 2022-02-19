@@ -210,7 +210,15 @@ class TransactionHistories extends \yii\db\ActiveRecord
         $today_winners=WinningHistories::getTodayWins();
         $today_winners=explode(",",$today_winners);
         Loser::deleteAll(['in','reference_phone',$today_winners]);
-        $response= Loser::find()->orderBy("plays DESC")->limit($limit)->all();
+        $response= Loser::find();
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager')){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+            $response->andWhere("station_id IN ($stations)");
+        }
+        $response->orderBy("plays DESC")->limit($limit)->all();
         
         for($i=0;$i< count($response); $i++){
             try {

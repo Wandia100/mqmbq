@@ -206,7 +206,13 @@ class ReportController extends Controller{
         }
         
         $response= Loser::find()->orderBy("plays DESC")->limit($limit)->all();
-        
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager')){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+            $response= Loser::find()->where("station_id IN ($stations)")->orderBy("plays DESC")->limit($limit)->all();
+        }
         return $this->render('adminpayout', [
             'limit' =>  $limit,
             'loadcheck'=>$loadcheck,
@@ -215,7 +221,7 @@ class ReportController extends Controller{
     }
     public function actionLogloser()
     {
-        $limit=700;
+        $limit=1000;
         $data= TransactionHistories::getLosersList($limit);
         Loser::deleteAll();
         for($i=0; $i<count($data); $i++)
