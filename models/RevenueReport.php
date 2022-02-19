@@ -37,7 +37,7 @@ class RevenueReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['revenue_date'], 'safe'],
+            [['revenue_date','station_id','unique_field','station_name'], 'safe'],
             [['total_revenue', 'total_awarded', 'net_revenue'], 'integer'],
         ];
     }
@@ -49,6 +49,7 @@ class RevenueReport extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'station_name' => 'Station',
             'revenue_date' => 'Revenue Date',
             'total_revenue' => 'Total Revenue',
             'total_awarded' => 'Total Awarded',
@@ -57,7 +58,15 @@ class RevenueReport extends \yii\db\ActiveRecord
     }
     public static function getRevenueReport($start_date,$end_date)
     {
-        return RevenueReport::find()->where("revenue_date >= '$start_date'")->andWhere("revenue_date <='$end_date'")->all();
+        $sql= RevenueReport::find()->where("revenue_date >= '$start_date'")->andWhere("revenue_date <='$end_date'");
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager')){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+            $sql->andWhere("station_id IN ($stations)");
+        }
+        return $sql->all();
     }
     public static function checkDuplicate($revenue_date)
     {
