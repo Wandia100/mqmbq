@@ -272,7 +272,7 @@ class WinningHistories extends \yii\db\ActiveRecord
         GROUP BY reference_phone)  q1
         ON q2.reference_phone = q1.reference_phone
         JOIN stations st ON q2.station_id = st.id
-        WHERE";
+        WHERE ";
         $session = \Yii::$app->session;
         if($session->get('isstationmanager')){
             $stations = implode(",", array_map(function($string) {

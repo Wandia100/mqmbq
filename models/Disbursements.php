@@ -250,7 +250,7 @@ class Disbursements extends \yii\db\ActiveRecord
         FROM disbursements d
         LEFT JOIN winning_histories w ON d.reference_id = w.id
         LEFT JOIN stations s ON w.station_id = s.id
-        WHERE";
+        WHERE ";
         $session = \Yii::$app->session;
         if($session->get('isstationmanager')){
             $stations = implode(",", array_map(function($string) {

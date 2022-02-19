@@ -81,7 +81,7 @@ class CommissionSummary extends \yii\db\ActiveRecord
         $sql="select station_name,show_name,show_timing,sum(target) as target,sum(achieved) as achieved,
             sum(payout) as payout,sum(net_revenue) as net_revenue,sum(presenter_commission) as presenter_commission,
             sum(station_commission) as station_commission from commission_summary 
-            WHERE";
+            WHERE ";
         if($session->get('isstationmanager')){
             $stations = implode(",", array_map(function($string) {
                 return '"' . $string . '"';
