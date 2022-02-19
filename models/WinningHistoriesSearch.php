@@ -155,7 +155,7 @@ class WinningHistoriesSearch extends WinningHistories
         }
         $session = \Yii::$app->session;
         if($session->get('isstationmanager')){
-           $query->where(['IN','winning_histories.station_id', \Yii::$app->myhelper->getStations()]); 
+           $query->andWhere(['IN','winning_histories.station_id', \Yii::$app->myhelper->getStations()]); 
         }
         $query->orderBy('winning_histories.created_at DESC');
         
