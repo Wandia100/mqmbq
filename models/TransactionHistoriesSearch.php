@@ -111,7 +111,7 @@ class TransactionHistoriesSearch extends TransactionHistories
         }
         $session = \Yii::$app->session;
         if($session->get('isstationmanager')){
-           $query->where(['IN','transaction_histories.station_id', \Yii::$app->myhelper->getStations()]); 
+           $query->andWhere(['IN','transaction_histories.station_id', \Yii::$app->myhelper->getStations()]); 
         }
         $query->orderBy('transaction_histories.created_at DESC');
         return $dataProvider;
