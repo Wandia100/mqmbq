@@ -70,7 +70,18 @@ class StationShows extends \yii\db\ActiveRecord
     }
     public static function getStationShows() {
         $arr   = [];
-        $model = StationShows::find()->orderBy("name ASC")->all();
+        
+        $session = \Yii::$app->session;
+        if($session->get('isstationmanager')){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+            $model = StationShows::find()->where("station_id IN ($stations)")->orderBy("name ASC")->all();
+        }
+        else
+        {
+            $model = StationShows::find()->orderBy("name ASC")->all();
+        }
         foreach ( $model as $value ) {
             $arr[ $value->id ] = $value->name;
         }
