@@ -270,13 +270,15 @@ class MpesapaymentsController extends Controller
 				while ( ( $data = fgetcsv( $handle, 2000, "," ) ) !== false ) {
                                     $transaction_number=trim(isset($data[1])?$data[1]:NULL);
                                     $reference=trim(isset($data[9])?$data[9]:NULL);
+                                    $trans_type=trim(isset($data[8])?$data[8]:NULL);
                                     $date=trim(isset($data[4])?$data[4]:NULL);
                                     $date=date("Y-m-d",strtotime($date));
                                     $phone=trim(isset($data[2])?$data[2]:NULL);
                                     $phone = "255".$phone;
                                     $amount=trim(isset($data[3])?$data[3]:NULL);
                                     $balance=trim(isset($data[11])?$data[11]:NULL);
-					if (!empty($transaction_number) && !empty($reference) 
+					if (!empty($transaction_number) && !empty($reference)
+                    && !empty($trans_type) && $trans_type=="Transaction Success"
                     && !empty($date) && !empty($phone) && !empty($amount) && is_numeric($amount)  && !empty($balance)) {
 							$check_if_exists = MpesaPayments::find()->where( [ 'TransID' => $transaction_number ] )->one();
 							if ($check_if_exists == NULL) {
