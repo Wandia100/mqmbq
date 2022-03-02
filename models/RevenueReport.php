@@ -68,9 +68,9 @@ class RevenueReport extends \yii\db\ActiveRecord
         }
         return $sql->all();
     }
-    public static function checkDuplicate($revenue_date)
+    public static function checkDuplicate($unique_field)
     {
-        return RevenueReport::find()->where("revenue_date='$revenue_date'")->one();
+        return RevenueReport::find()->where("unique_field='$unique_field'")->one();
     }
     /**
      * Method to get monthly growth trend

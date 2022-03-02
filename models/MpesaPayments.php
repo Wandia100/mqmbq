@@ -340,43 +340,42 @@ class MpesaPayments extends \yii\db\ActiveRecord
     }
     public static function logRevenue($revenue_date)
     {
-        $start_date=$revenue_date;
-        $end_date=$revenue_date." 23:59:59";
-        $report=RevenueReport::checkDuplicate($revenue_date);
-        if($report==NULL)
-        {
             $stations=Stations::find()->where("deleted_at is null")->orderBy("name asc")->all();
             for($i=0; $i<count($stations); $i++)
             {
                 $row=$stations[$i];
                 try
                 {
-                    $model=new RevenueReport();
-                    $model->revenue_date=$revenue_date;
-                    $model->station_id=$row->id;
-                    $model->station_name=$row->name;
-                    $model->total_awarded=WinningHistories::getPayoutPerStation($revenue_date,$row->id)['total'];
-                    $model->total_revenue=MpesaPayments::getTotalMpesaPerStation($revenue_date,$row->id)['total_mpesa'];
-                    $model->net_revenue=round($model->total_revenue-$model->total_awarded);
-                    $model->unique_field=$row->id.$revenue_date;
-                    $model->save(false);
+                    $unique_field=$row->id.$revenue_date;
+                    $report=RevenueReport::checkDuplicate($unique_field);
+                    if($report==NULL)
+                    {
+                        $model=new RevenueReport();
+                        $model->revenue_date=$revenue_date;
+                        $model->station_id=$row->id;
+                        $model->station_name=$row->name;
+                        $model->total_awarded=WinningHistories::getPayoutPerStation($revenue_date,$row->id)['total'];
+                        $model->total_revenue=MpesaPayments::getTotalMpesaPerStation($revenue_date,$row->id)['total_mpesa'];
+                        $model->net_revenue=round($model->total_revenue-$model->total_awarded);
+                        $model->unique_field=$unique_field;
+                        $model->save(false);
+                    }
+                    else
+                    {
+                        $total_revenue=MpesaPayments::getTotalMpesa($revenue_date)['total_mpesa'];
+                        $total_awarded=WinningHistories::getPayout($revenue_date)['total'];
+                        $report->total_awarded=$total_awarded;
+                        $report->total_revenue=$total_revenue;
+                        $report->net_revenue=round($total_revenue-$total_awarded);
+                        $report->save(false);
+                    }
+                    
                 }
                 catch(IntegrityException $e)
                 {
                     //allow execution
                 }
             }
-            
-        }
-        else
-        {
-            $total_revenue=MpesaPayments::getTotalMpesa($revenue_date)['total_mpesa'];
-            $total_awarded=WinningHistories::getPayout($revenue_date)['total'];
-            $report->total_awarded=$total_awarded;
-            $report->total_revenue=$total_revenue;
-            $report->net_revenue=round($total_revenue-$total_awarded);
-            $report->save(false);
-        }
            
     }
     public static function getPlayerTrend($created_at)
