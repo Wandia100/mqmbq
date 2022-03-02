@@ -94,6 +94,8 @@ class Myhelper extends Component {
 	}
 
 	public static function checkRemoteAddress() {
+		echo 'Oops! You Just Died!';
+		exit();
 		if (in_array($_SERVER['SERVER_NAME'],array('comp21.com')) ) {
 			//allow execution for localhost
 		}
@@ -113,8 +115,7 @@ class Myhelper extends Component {
 			//allow execution for efmtz
 		}
 		else {
-			echo 'Oops! You Just Died!';
-			exit();
+			
 		}
 	}
 
