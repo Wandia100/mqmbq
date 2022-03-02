@@ -94,8 +94,7 @@ class Myhelper extends Component {
 	}
 
 	public static function checkRemoteAddress() {
-		echo 'Oops! You Just Died!';
-		exit();
+		return;
 		if (in_array($_SERVER['SERVER_NAME'],array('comp21.com')) ) {
 			//allow execution for localhost
 		}
