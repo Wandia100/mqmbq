@@ -364,9 +364,9 @@ class MpesaPayments extends \yii\db\ActiveRecord
                     {
                         $total_revenue=MpesaPayments::getTotalMpesa($revenue_date)['total_mpesa'];
                         $total_awarded=WinningHistories::getPayout($revenue_date)['total'];
-                        $report->total_awarded=$total_awarded;
-                        $report->total_revenue=$total_revenue;
-                        $report->net_revenue=round($total_revenue-$total_awarded);
+                        $report->total_awarded=WinningHistories::getPayoutPerStation($revenue_date,$row->id)['total'];
+                        $report->total_revenue=MpesaPayments::getTotalMpesaPerStation($revenue_date,$row->id)['total_mpesa'];
+                        $report->net_revenue=round($report->total_revenue-$report->total_awarded);
                         $report->save(false);
                     }
                     
