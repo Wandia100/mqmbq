@@ -69,10 +69,9 @@ class ShowSummary extends \yii\db\ActiveRecord
     }
     public static function getShowSummary($start_date,$end_date)
     {
-        $session = \Yii::$app->session;
          $sql="SELECT station_name,station_show_name,COALESCE(SUM(total_revenue),0) AS revenue,COALESCE(SUM(total_commission),0) AS commission,
             COALESCE(SUM(total_payouts),0) AS payout FROM show_summary WHERE ";
-            if($session->get('isstationmanager')){
+            if(\Yii::$app->myhelper->isStationManager()){
                 $stations = implode(",", array_map(function($string) {
                    return '"' . $string . '"';
                 }, \Yii::$app->myhelper->getStations()));

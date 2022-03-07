@@ -199,8 +199,7 @@ class ReportController extends Controller{
             $loadcheck = FALSE;
             $limit = 100;
         }
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
             $stations = implode(",", array_map(function($string) {
                return '"' . $string . '"';
             }, \Yii::$app->myhelper->getStations()));

@@ -984,5 +984,13 @@ class Myhelper extends Component {
             }
             return $return;
         }
+		public  function  isStationManager()
+		{
+			if(in_array(\Yii::$app->user->identity->perm_group, [4,5])){
+                return true;
+            }else{
+                return false;
+            }
+		}
 }
 
