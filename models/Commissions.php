@@ -194,8 +194,7 @@ class Commissions extends \yii\db\ActiveRecord
         LEFT JOIN station_show_presenters sp ON sp.station_id = s.id
         LEFT JOIN users u ON sp.presenter_id = u.id
         WHERE ";
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
             $stations = implode(",", array_map(function($string) {
                return '"' . $string . '"';
             }, \Yii::$app->myhelper->getStations()));

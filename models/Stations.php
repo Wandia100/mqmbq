@@ -70,8 +70,7 @@ class Stations extends \yii\db\ActiveRecord
      */
     public static function getStations(){
         $list = [];
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
            $records =  Stations::find()->where(['IN','id', \Yii::$app->myhelper->getStations()])->andWhere(['enabled'=>1])->all();
         }else{
             $records = Stations::findAll(['enabled'=>1]);
@@ -118,8 +117,7 @@ class Stations extends \yii\db\ActiveRecord
     }
     public static function getActiveStations()
     {
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
            return Stations::find()->where(['IN','id', \Yii::$app->myhelper->getStations()])->andWhere("deleted_at is null")->orderBy("name asc")->all();
         }else{
             return Stations::find()->where("deleted_at is null")->orderBy("name asc")->all();

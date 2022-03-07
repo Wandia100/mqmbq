@@ -175,8 +175,7 @@ class WinningHistories extends \yii\db\ActiveRecord
     }
     public static function getPayout($the_day)
     {
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager'))
+        if(\Yii::$app->myhelper->isStationManager())
         {
             $stations = implode(",", array_map(function($string) {
                 return '"' . $string . '"';
@@ -273,8 +272,7 @@ class WinningHistories extends \yii\db\ActiveRecord
         ON q2.reference_phone = q1.reference_phone
         JOIN stations st ON q2.station_id = st.id
         WHERE ";
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
             $stations = implode(",", array_map(function($string) {
                return '"' . $string . '"';
             }, \Yii::$app->myhelper->getStations()));

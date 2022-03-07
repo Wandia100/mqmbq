@@ -85,8 +85,7 @@ class PlayerTrendSearch extends PlayerTrend
                 $query->andWhere( "DATE(hour_date)>= DATE('" . $from . "')" );
                 $query->andWhere( "DATE(hour_date)<= DATE('" . $to . "')" );
         }
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
            $query->andWhere(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
         }
         $query->orderBy('hour_date,frequency DESC');

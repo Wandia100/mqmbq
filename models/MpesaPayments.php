@@ -125,8 +125,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
     }
     public static function getTotalRevenue()
     {
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager'))
+        if(\Yii::$app->myhelper->isStationManager())
         {
             $stations = implode(",", array_map(function($string) {
                 return '"' . $string . '"';
@@ -150,8 +149,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
     }
     public static function getTotalMpesaInRange($from_time,$to_time)
     {
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager'))
+        if(\Yii::$app->myhelper->isStationManager())
         {
             $stations = implode(",", array_map(function($string) {
                 return '"' . $string . '"';

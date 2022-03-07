@@ -100,8 +100,7 @@ class SiteReport extends \yii\db\ActiveRecord
      * @param type $reportName
      */
     public static function getSiteReport($reportName){
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager'))
+        if(\Yii::$app->myhelper->isStationManager())
         {
             $stations = implode(",", array_map(function($string) {
                 return '"' . $string . '"';

@@ -66,8 +66,7 @@ class SentSmsSearch extends SentSms
         $query->andFilterWhere(['like', 'receiver', $this->receiver])
             ->andFilterWhere(['like', 'sender', $this->sender])
             ->andFilterWhere(['like', 'message', $this->message]);
-            $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
            $query->andWhere(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
         }
             $query->orderBy('id DESC');

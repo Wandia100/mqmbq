@@ -77,8 +77,7 @@ class WinnerSummary extends \yii\db\ActiveRecord
     {
         $sql="select station_name,show_name,prize_name,show_timing,sum(awarded) as awarded from winner_summary
         where ";
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
             $stations = implode(",", array_map(function($string) {
                return '"' . $string . '"';
             }, \Yii::$app->myhelper->getStations()));

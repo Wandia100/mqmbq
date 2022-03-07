@@ -59,8 +59,7 @@ class RevenueReport extends \yii\db\ActiveRecord
     public static function getRevenueReport($start_date,$end_date)
     {
         $sql= RevenueReport::find()->where("revenue_date >= '$start_date'")->andWhere("revenue_date <='$end_date'");
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
             $stations = implode(",", array_map(function($string) {
                return '"' . $string . '"';
             }, \Yii::$app->myhelper->getStations()));
@@ -81,8 +80,7 @@ class RevenueReport extends \yii\db\ActiveRecord
         $range = [];
         $year = date('Y');
         for ($i = 1; $i <= 12; $i ++){
-            $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
             $stations = implode(",", array_map(function($string) {
                return '"' . $string . '"';
             }, \Yii::$app->myhelper->getStations()));
@@ -119,8 +117,7 @@ class RevenueReport extends \yii\db\ActiveRecord
         
         for ($i = $start_date; $i <= $end_date; $i = date('Y-m-d',strtotime('+1 day', strtotime($i)))){
              
-                $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
             $stations = implode(",", array_map(function($string) {
                return '"' . $string . '"';
             }, \Yii::$app->myhelper->getStations()));

@@ -254,8 +254,7 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
     }
     public static function hourlyTotal($hour_date,$i)
     {
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
             $stations = implode(",", array_map(function($string) {
                return '"' . $string . '"';
             }, \Yii::$app->myhelper->getStations()));

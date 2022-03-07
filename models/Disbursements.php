@@ -251,8 +251,7 @@ class Disbursements extends \yii\db\ActiveRecord
         LEFT JOIN winning_histories w ON d.reference_id = w.id
         LEFT JOIN stations s ON w.station_id = s.id
         WHERE ";
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
             $stations = implode(",", array_map(function($string) {
                return '"' . $string . '"';
             }, \Yii::$app->myhelper->getStations()));

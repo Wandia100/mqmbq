@@ -43,7 +43,6 @@ class StationShowsSearch extends StationShows
      */
     public function search($params)
     {
-        $session = \Yii::$app->session;
         $query = StationShows::find();
 
         // add conditions that should always apply here
@@ -92,7 +91,7 @@ class StationShowsSearch extends StationShows
             ->andFilterWhere(['like', 'start_time', $this->start_time])
             ->andFilterWhere(['like', 'end_time', $this->end_time])
             ->andFilterWhere(['like', 'stations.name', $this->stationname]);
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
            $query->where(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
         }
         $query->orderBy('created_at DESC');

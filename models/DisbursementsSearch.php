@@ -90,8 +90,7 @@ class DisbursementsSearch extends Disbursements
         if(isset($_GET['t']) && $_GET['t'] == 'p'){
             $query->andWhere('disbursement_type = "presenter_commission"');
         }
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
            $query->andWhere(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
         }
         $query->orderBy('created_at DESC');

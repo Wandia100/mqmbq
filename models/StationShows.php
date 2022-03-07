@@ -71,8 +71,7 @@ class StationShows extends \yii\db\ActiveRecord
     public static function getStationShows() {
         $arr   = [];
         
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
             $stations = implode(",", array_map(function($string) {
                return '"' . $string . '"';
             }, \Yii::$app->myhelper->getStations()));

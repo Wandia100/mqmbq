@@ -85,8 +85,7 @@ class StationTargetLogSearch extends StationTargetLog
                 $query->andWhere( "DATE(range_date)>= DATE('" . $from . "')" );
                 $query->andWhere( "DATE(range_date)<= DATE('" . $to . "')" );
         }
-        $session = \Yii::$app->session;
-        if($session->get('isstationmanager')){
+        if(\Yii::$app->myhelper->isStationManager()){
            $query->where(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
         }
         $query->orderBy('range_date DESC');
