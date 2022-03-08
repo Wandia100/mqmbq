@@ -523,47 +523,48 @@ class ReportController extends Controller{
             $the_day=date("Y-m-d");
             $hr=$this->formatHour(date('H')-1);
         }
-        
         $from_time=$the_day." ".$hr;
-        $count=HourlyPerformanceReports::checkDuplicate($the_day,$hr);
-        if($count==0)
+        MpesaPayments::calculateStationPercentage($from_time);
+        $stations=Stations::getActiveStations();
+        for($i=0;$i<count($stations); $i++)
         {
-            $stations=Stations::getActiveStations();
-            for($i=0;$i<count($stations); $i++)
+            try
             {
-                try
-                {
                 $station=$stations[$i];
-                $model=new HourlyPerformanceReports();
-                $model->hour=$hr;
-                $model->hour_date=$the_day;
-                $model->unique_field=date('Ymd').$hr.$station->id;
-                $model->station_id=$station->id;
-
-                if(in_array(gethostname(),[COMP21_NET]) && strlen($station->station_code)==1)
+                $unique_field=date('Ymd').$hr.$station->id;
+                $model=HourlyPerformanceReports::findOne(['unique_field'=>$unique_field]);
+                if($model==NULL)
                 {
-                    $model->amount=MpesaPayments::getStationTotalMpesaNet($from_time,$station->station_code)['amount'];
-                    $model->day_total=MpesaPayments::getStationTotalMpesaNet($the_day,$station->station_code)['amount'];
+                    $model=new HourlyPerformanceReports();
+                }
+            $model->hour=$hr;
+            $model->hour_date=$the_day;
+            $model->unique_field=$unique_field;
+            $model->station_id=$station->id;
 
-                }
-                else
-                {
-                    $model->amount=MpesaPayments::getStationTotalMpesa($from_time,$station->station_code)['amount'];
-                    $model->day_total=MpesaPayments::getStationTotalMpesa($the_day,$station->station_code)['amount'];
+            if(in_array(gethostname(),[COMP21_NET]) && strlen($station->station_code)==1)
+            {
+                $model->amount=MpesaPayments::getStationTotalMpesaNet($from_time,$station->station_code)['amount'];
+                $model->day_total=MpesaPayments::getStationTotalMpesaNet($the_day,$station->station_code)['amount'];
 
-                }
-                $mpesa_payments = MpesaPayments::getTotalMpesa($from_time)['total_mpesa'];
-                $transaction_histories = TransactionHistories::getTotalTransactions($from_time)['total_history'];
-                $model->invalid_codes=$mpesa_payments - $transaction_histories;
-                $model->total_amount=$mpesa_payments;
-                $model->created_at=date("Y-m-d H:i:s");
-                $model->save(false);
-                }
-                catch (IntegrityException $e) {
-                    //allow execution
-                }
             }
-            
+            else
+            {
+                $model->amount=MpesaPayments::getStationTotalMpesa($from_time,$station->station_code)['amount'];
+                $model->day_total=MpesaPayments::getStationTotalMpesa($the_day,$station->station_code)['amount'];
+
+            }
+            $mpesa_payments = MpesaPayments::getTotalMpesa($from_time)['total_mpesa'];
+            //$transaction_histories = TransactionHistories::getTotalTransactions($from_time)['total_history'];
+            //$model->invalid_codes=$mpesa_payments - $transaction_histories;
+            $model->invalid_codes=0;
+            $model->total_amount=$mpesa_payments;
+            $model->created_at=date("Y-m-d H:i:s");
+            $model->save(false);
+            }
+            catch (IntegrityException $e) {
+                //allow execution
+            }
         }
     }
     public function actionLogdata($the_day)
@@ -991,5 +992,6 @@ class ReportController extends Controller{
         Yii::$app->end();
         return ob_get_clean();
     }
+
 }
 ?>

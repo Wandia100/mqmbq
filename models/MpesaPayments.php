@@ -389,14 +389,14 @@ class MpesaPayments extends \yii\db\ActiveRecord
         $sql="select count(station_id) as total from mpesa_payments where created_at like :created_at and station_id is not null";
         return Yii::$app->mpesa_db->createCommand($sql)
         ->bindValue(':created_at',"$created_at%")
-        ->queryAll();
+        ->queryOne();
     }
     public static function countUnAssignedCode($created_at)
     {
         $sql="select count(*) as total from mpesa_payments where created_at like :created_at and station_id is null";
         return Yii::$app->mpesa_db->createCommand($sql)
         ->bindValue(':created_at',"$created_at%")
-        ->queryAll();
+        ->queryOne();
     }
     public static function getAssignedPerStation($created_at)
     {
@@ -405,13 +405,31 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':created_at',"$created_at%")
         ->queryAll();
     }
-    public static function assignCode($station_id,$created_at,$stop)
+    public static function calculateStationPercentage($created_at)
     {
-        $sql="update mpesa_payments set station_id=:station_id where created_at like :created_at and station_id is null limit :stop";
+        $total=MpesaPayments::countAssignedCode($created_at)['total'];
+        $unassigned=MpesaPayments::countUnAssignedCode($created_at)['total'];
+        $data=MpesaPayments::getAssignedPerStation($created_at);
+        for($i=0; $i<count($data); $i++)
+        {
+            $row=$data[$i];
+            $percent=round(($row['total']/$total),2);
+            $stop=round($percent*$unassigned);
+            //update this percentage
+            if($stop > 0)
+            {
+                $station_code=Stations::findOne($row['station_id'])->station_code;
+                MpesaPayments::assignCode($row['station_id'],$created_at,$stop,$station_code);
+            }
+        }
+    }
+    public static function assignCode($station_id,$created_at,$stop,$station_code)
+    {
+        $sql="update mpesa_payments set station_id=:station_id,BillRefNumber=:station_code,updated_at=now() where created_at like :created_at and station_id is null limit $stop";
         return Yii::$app->mpesa_db->createCommand($sql)
         ->bindValue(':station_id',$station_id)
+        ->bindValue(':station_code',$station_code)
         ->bindValue(':created_at',"$created_at%")
-        ->bindValue(':stop',$stop)
-        ->queryAll();
+        ->execute();
     }
 }
