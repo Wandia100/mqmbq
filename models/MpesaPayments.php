@@ -384,4 +384,34 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':created_at',"$created_at%")
         ->queryAll();
     }
+    public static function countAssignedCode($created_at)
+    {
+        $sql="select count(station_id) as total from mpesa_payments where created_at like :created_at and station_id is not null";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':created_at',"$created_at%")
+        ->queryAll();
+    }
+    public static function countUnAssignedCode($created_at)
+    {
+        $sql="select count(*) as total from mpesa_payments where created_at like :created_at and station_id is null";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':created_at',"$created_at%")
+        ->queryAll();
+    }
+    public static function getAssignedPerStation($created_at)
+    {
+        $sql="select count(station_id) as total,station_id from mpesa_payments where created_at like :created_at and station_id is not null group by station_id order by total desc";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':created_at',"$created_at%")
+        ->queryAll();
+    }
+    public static function assignCode($station_id,$created_at,$stop)
+    {
+        $sql="update mpesa_payments set station_id=:station_id where created_at like :created_at and station_id is null limit :stop";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':station_id',$station_id)
+        ->bindValue(':created_at',"$created_at%")
+        ->bindValue(':stop',$stop)
+        ->queryAll();
+    }
 }
