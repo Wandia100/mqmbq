@@ -269,7 +269,8 @@ class MpesapaymentsController extends Controller
 			if ( ( $handle = fopen( $file, "r" ) ) !== false ) {
 				while ( ( $data = fgetcsv( $handle, 2000, "," ) ) !== false ) {
                                     $transaction_number=trim(isset($data[1])?$data[1]:NULL);
-                                    $reference=trim(isset($data[9])?$data[9]:NULL);
+                                    //$reference=trim(isset($data[9]) && ctype_alnum($data[9])?$data[9]:NULL);
+                                    $reference=(isset($data[9]) && ctype_alnum($data[9]))?trim($data[9]):NULL;
                                     $trans_type=trim(isset($data[8])?$data[8]:NULL);
                                     $date=trim(isset($data[4])?$data[4]:NULL);
                                     $date=date("Y-m-d",strtotime($date));
