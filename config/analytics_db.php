@@ -42,7 +42,7 @@ else if ( ( in_array($host_name,[MCHEZOBOMBA]))) {
         $db_password = "Zpa@!%vfrG34f";
         $db_name = "mchezo_analytics";
         }
- else if ( ( in_array($host_name,[MCHEZOBOMBA]))) {
+ else if ( ( in_array($host_name,[MCHEZOSUPA]))) {
           $db_host      = "analyticsdb.tzg255.com";
           $db_username = "itv2220";
           $db_password = "Zpa@!%vfrG34f";
