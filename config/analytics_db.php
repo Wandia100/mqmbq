@@ -19,13 +19,13 @@
     $db_name = "comp21_analytics";
     }
 	else if ( ( in_array($host_name,[CMEDIA_COTZ]))) {
-		$db_host      = "3.144.125.204";
+		$db_host      = "analyticsdb.cmedia.co.tz";
     $db_username = "cmedia2120";
     $db_password = "Zpa@!%vfrG34f";
     $db_name = "cmedia_analytics";
     }
 else if ( ( in_array($host_name,[EFMTZ_COM]))) {
-      $db_host      = "13.58.61.240";
+      $db_host      = "analyticsdb.efmtz.com";
       $db_username = "efmtz2120";
       $db_password = "Zpa@!%vfrG34f";
       $db_name = "efmtz_analytics";
