@@ -245,16 +245,38 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
         $sum = [];
         $range = [];
         for ($i = 1; $i <= $ceil; $i ++){
-            $data = HourlyPerformanceReports::find()
-                ->select(['total'=>'SUM(amount)'])  
-                ->where("hour_date='$hour_date'")
-                ->andWhere("hour = '$i'")
-                ->groupBy('hour')
-                ->createCommand()->queryAll(); 
+            //tobe added 
+            $data=HourlyPerformanceReports::hourlyTotal($hour_date,$i);
                 $sum[] =isset($data[0]['total'])?$data[0]['total']:0;
             $range[] = $i;
         }
         return  [ 'sum'=>$sum,'range' =>$range];
+    }
+    public static function hourlyTotal($hour_date,$i)
+    {
+        if(\Yii::$app->myhelper->isStationManager()){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+            return HourlyPerformanceReports::find()
+                ->select(['total'=>'SUM(amount)']) 
+                ->where("hour_date='$hour_date'")
+                ->andWhere("hour = '$i'")
+                ->andWhere("station_id IN ($stations)")
+                ->groupBy('hour')
+                ->createCommand()
+                ->queryAll();
+        }
+        else
+        {
+            return HourlyPerformanceReports::find()
+                ->select(['total'=>'SUM(amount)']) 
+                ->where("hour_date='$hour_date'")
+                ->andWhere("hour = '$i'")
+                ->groupBy('hour')
+                ->createCommand()
+                ->queryAll();
+        }
     }
     public static function getRangeTotal($start_time,$end_time,$hour_date,$station_id)
     {

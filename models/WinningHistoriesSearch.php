@@ -153,6 +153,9 @@ class WinningHistoriesSearch extends WinningHistories
                 $query->andWhere( "DATE(winning_histories.created_at)>= DATE('" . $from . "')" );
                 $query->andWhere( "DATE(winning_histories.created_at)<= DATE('" . $to . "')" );
         }
+        if(\Yii::$app->myhelper->isStationManager()){
+           $query->andWhere(['IN','winning_histories.station_id', \Yii::$app->myhelper->getStations()]); 
+        }
         $query->orderBy('winning_histories.created_at DESC');
         
         return $dataProvider;

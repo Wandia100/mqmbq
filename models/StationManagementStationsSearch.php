@@ -11,13 +11,15 @@ use app\models\StationManagementStations;
  */
 class StationManagementStationsSearch extends StationManagementStations
 {
+    public $stationname;
+    public $stationmanagementname;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'station_id', 'station_management_id', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['id', 'station_id', 'station_management_id', 'created_at', 'updated_at', 'deleted_at','unique_field','stationname','stationmanagementname'], 'safe'],
         ];
     }
 
@@ -63,8 +65,10 @@ class StationManagementStationsSearch extends StationManagementStations
         ]);
 
         $query->andFilterWhere(['like', 'id', $this->id])
-            ->andFilterWhere(['like', 'station_id', $this->station_id])
-            ->andFilterWhere(['like', 'station_management_id', $this->station_management_id]);
+            //->andFilterWhere(['like', 'station_id', $this->station_id])
+            //->andFilterWhere(['like', 'station_management_id', $this->station_management_id]);
+            ->andFilterWhere(['like', 'stations.name', $this->stationname])
+            ->andFilterWhere(['like', 'users.first_name', $this->stationmanagementname]);
 
         return $dataProvider;
     }

@@ -37,7 +37,7 @@ class RevenueReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['revenue_date'], 'safe'],
+            [['revenue_date','station_id','unique_field','station_name'], 'safe'],
             [['total_revenue', 'total_awarded', 'net_revenue'], 'integer'],
         ];
     }
@@ -49,6 +49,7 @@ class RevenueReport extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'station_name' => 'Station',
             'revenue_date' => 'Revenue Date',
             'total_revenue' => 'Total Revenue',
             'total_awarded' => 'Total Awarded',
@@ -57,11 +58,18 @@ class RevenueReport extends \yii\db\ActiveRecord
     }
     public static function getRevenueReport($start_date,$end_date)
     {
-        return RevenueReport::find()->where("revenue_date >= '$start_date'")->andWhere("revenue_date <='$end_date'")->all();
+        $sql= RevenueReport::find()->where("revenue_date >= '$start_date'")->andWhere("revenue_date <='$end_date'");
+        if(\Yii::$app->myhelper->isStationManager()){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+            $sql->andWhere("station_id IN ($stations)");
+        }
+        return $sql->all();
     }
-    public static function checkDuplicate($revenue_date)
+    public static function checkDuplicate($unique_field)
     {
-        return RevenueReport::find()->where("revenue_date='$revenue_date'")->one();
+        return RevenueReport::find()->where("unique_field='$unique_field'")->one();
     }
     /**
      * Method to get monthly growth trend
@@ -72,11 +80,25 @@ class RevenueReport extends \yii\db\ActiveRecord
         $range = [];
         $year = date('Y');
         for ($i = 1; $i <= 12; $i ++){
+        if(\Yii::$app->myhelper->isStationManager()){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
             $data = RevenueReport::find()
                 ->select(['total'=>'SUM(total_revenue)'])  
                 ->where("MONTH(revenue_date)='$i'")
                 ->andWhere("YEAR(revenue_date)='$year'")
-                ->createCommand()->queryAll(); 
+                ->andWhere("station_id IN ($stations)")
+                ->createCommand()->queryAll();
+        }
+        else
+        {
+            $data = RevenueReport::find()
+                ->select(['total'=>'SUM(total_revenue)'])  
+                ->where("MONTH(revenue_date)='$i'")
+                ->andWhere("YEAR(revenue_date)='$year'")
+                ->createCommand()->queryAll();
+        }
             $sum[] = $data[0]['total'];
             $range[] = $i;
         }
@@ -94,10 +116,24 @@ class RevenueReport extends \yii\db\ActiveRecord
         $year = date('Y');
         
         for ($i = $start_date; $i <= $end_date; $i = date('Y-m-d',strtotime('+1 day', strtotime($i)))){
+             
+        if(\Yii::$app->myhelper->isStationManager()){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+                $data = RevenueReport::find()
+                ->select(['total'=>'SUM(total_revenue)'])  
+                ->where("revenue_date ='$i'")
+                ->andWhere("station_id IN ($stations)")
+                ->createCommand()->queryAll();
+        }
+        else
+        {
             $data = RevenueReport::find()
                 ->select(['total'=>'SUM(total_revenue)'])  
                 ->where("revenue_date ='$i'")
-                ->createCommand()->queryAll(); 
+                ->createCommand()->queryAll();
+        }
             $sum[] = $data[0]['total'] > 0 ? $data[0]['total']: 0;
             $range[] = $i;
         }

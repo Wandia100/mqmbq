@@ -104,7 +104,10 @@ class CommissionsSearch extends Commissions
                 $query->andWhere( "DATE(commissions.created_at)>= DATE('" . $from . "')" );
                 $query->andWhere( "DATE(commissions.created_at)<= DATE('" . $to . "')" );
         }
-        $query ->where("c_type = '$t'");
+        $query ->andWhere("c_type = '$t'");
+        if(\Yii::$app->myhelper->isStationManager()){
+           $query->andWhere(['IN','commissions.station_id', \Yii::$app->myhelper->getStations()]); 
+        }
         $query->orderBy('commissions.created_at DESC');
         return $dataProvider;
     }

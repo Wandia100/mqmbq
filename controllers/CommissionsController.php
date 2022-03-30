@@ -78,7 +78,7 @@ class CommissionsController extends Controller
             //save disbursents
             for($i = 0; $i < $presenterscount; $i ++){
                 $pres = \app\models\Users::findOne($presenters[$i]);
-                \app\models\Disbursements::saveDisbursement($model->id, $pres->first_name.' '.$pres->last_name, $pres->phone_number, $indivudualamount, 'presenter_commission',0);   
+                \app\models\Disbursements::saveDisbursement($model->id, $pres->first_name.' '.$pres->last_name, $pres->phone_number, $indivudualamount, 'presenter_commission',0,$model->station_id);   
             }
             Yii::$app->session->setFlash('success', 'Success:  Commission split successfully');
             $model->status = 1;

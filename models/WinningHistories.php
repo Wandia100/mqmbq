@@ -175,10 +175,31 @@ class WinningHistories extends \yii\db\ActiveRecord
     }
     public static function getPayout($the_day)
     {
-        $sql="SELECT COALESCE(SUM(amount),0) AS total FROM winning_histories WHERE 
+        if(\Yii::$app->myhelper->isStationManager())
+        {
+            $stations = implode(",", array_map(function($string) {
+                return '"' . $string . '"';
+                }, \Yii::$app->myhelper->getStations()));
+            $sql="SELECT COALESCE(SUM(amount),0) AS total FROM winning_histories WHERE 
+            created_at LIKE :the_day AND station_id IN ($stations)";        
+        }
+        else
+        {
+            $sql="SELECT COALESCE(SUM(amount),0) AS total FROM winning_histories WHERE 
          created_at LIKE :the_day";
+        }
+        
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':the_day',"%$the_day%")
+        ->queryOne();
+    }
+    public static function getPayoutPerStation($the_day,$station_id)
+    {
+        $sql="SELECT COALESCE(SUM(amount),0) AS total FROM winning_histories WHERE 
+         created_at LIKE :the_day AND station_id=:station_id";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':the_day',"%$the_day%")
+        ->bindValue(':station_id',$station_id)
         ->queryOne();
     }
     public static function dailyAwarding($start_date,$end_date)
@@ -250,7 +271,14 @@ class WinningHistories extends \yii\db\ActiveRecord
         GROUP BY reference_phone)  q1
         ON q2.reference_phone = q1.reference_phone
         JOIN stations st ON q2.station_id = st.id
-        WHERE q2.created_at BETWEEN  :start_date AND :end_date
+        WHERE ";
+        if(\Yii::$app->myhelper->isStationManager()){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+            $sql .=" `station_id` IN ($stations) AND ";
+        } 
+        $sql .= "q2.created_at BETWEEN  :start_date AND :end_date
         ORDER BY q1.plays DESC";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':start_date',$start_date)

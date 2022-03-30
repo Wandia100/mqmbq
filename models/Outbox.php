@@ -38,6 +38,7 @@ class Outbox extends \yii\db\ActiveRecord
             [['created_date'], 'safe'],
             [['status', 'category'], 'integer'],
             [['receiver', 'sender'], 'string', 'max' => 20],
+            [['station_id'], 'string', 'max' => 50],
         ];
     }
 
@@ -147,6 +148,7 @@ class Outbox extends \yii\db\ActiveRecord
         $sentsms->receiver=$outbox->receiver;
         $sentsms->sender=$outbox->sender;
         $sentsms->message=$outbox->message;
+        $sentsms->station_id=$outbox->station_id;
         $sentsms->created_date=$outbox->created_date;
         $sentsms->category=$outbox->category;
         $sentsms->save(false);

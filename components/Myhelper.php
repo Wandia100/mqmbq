@@ -94,6 +94,7 @@ class Myhelper extends Component {
 	}
 
 	public static function checkRemoteAddress() {
+		return;
 		if (in_array($_SERVER['SERVER_NAME'],array('comp21.com')) ) {
 			//allow execution for localhost
 		}
@@ -113,8 +114,7 @@ class Myhelper extends Component {
 			//allow execution for efmtz
 		}
 		else {
-			echo 'Oops! You Just Died!';
-			exit();
+			
 		}
 	}
 
@@ -837,7 +837,7 @@ class Myhelper extends Component {
 	 * @param integer $receiver receiver mobile number
 	 * @param array $variables array maping the variable to replace in the sms templat
 	 */
-	public static function setSms( $name, $receiver, $variables = [], $sender = "PIGA KAZI" ) {
+	public static function setSms( $name, $receiver, $variables = [], $sender = SENDER_NAME,$station_id ) {
 		$outbox = new Outbox();
 		if ( $receiver != "") {
 			$temp = Template::getTemplate($name);
@@ -846,6 +846,7 @@ class Myhelper extends Component {
 				'receiver'     => $receiver,
 				'created_date' => date( 'Y-m-d H:i:s' ),
 				'category'     =>$temp->id,
+				'station_id'     =>$station_id,
 				'status'       => 0
 			];
 			$temp=$temp->message;
@@ -931,6 +932,32 @@ class Myhelper extends Component {
 
 		return $operator;
 	}
+	public static function getOperator($phone_number) {
+		$operator_prefix = substr( $phone_number, 0, 5 );
+		$operator        = "";
+		 if (in_array($operator_prefix,["25576","25575","25574"]))
+		{
+			$operator="vodacom";
+		}
+		else if (in_array($operator_prefix,["25568","25569","25578"]))
+		{
+			$operator="airtel";
+		}
+		else if (in_array($operator_prefix,["25565","25567","25571"]))
+		{
+			$operator="tigo";
+		}
+		else if (in_array($operator_prefix,["25472","25471","25470","25474","25475","25476","25479","25411"]))
+		{
+			$operator="safaricom";
+		}
+		else
+		{
+			$operator="notset";
+		}
+
+		return $operator;
+	}
 	public static function checkLocalToken() 
 	{
         $header  = getallheaders();
@@ -945,5 +972,25 @@ class Myhelper extends Component {
             return false;
         }
 	}
+        
+        public function getStations() {
+           $return = [];
+           $data = \app\models\StationManagementStations::find()
+                    ->select('station_id')
+                    ->where(['station_management_id'=> \Yii::$app->user->identity->id])
+                    ->all();
+            foreach ($data as $value) {
+                $return[]=$value->station_id;
+            }
+            return $return;
+        }
+		public  function  isStationManager()
+		{
+			if(isset(\Yii::$app->user->identity) && in_array(\Yii::$app->user->identity->perm_group, [4,5])){
+                return true;
+            }else{
+                return false;
+            }
+		}
 }
 

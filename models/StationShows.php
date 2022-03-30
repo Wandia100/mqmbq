@@ -70,7 +70,17 @@ class StationShows extends \yii\db\ActiveRecord
     }
     public static function getStationShows() {
         $arr   = [];
-        $model = StationShows::find()->orderBy("name ASC")->all();
+        
+        if(\Yii::$app->myhelper->isStationManager()){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+            $model = StationShows::find()->where("station_id IN ($stations)")->orderBy("name ASC")->all();
+        }
+        else
+        {
+            $model = StationShows::find()->orderBy("name ASC")->all();
+        }
         foreach ( $model as $value ) {
             $arr[ $value->id ] = $value->name;
         }
@@ -129,7 +139,7 @@ class StationShows extends \yii\db\ActiveRecord
     }
     public static function getStationShowSummary($start_date,$end_date)
     {
-        $sql="SELECT a.id,a.name AS station_show_name,b.name AS station_name,
+        $sql="SELECT a.id,a.station_id,a.name AS station_show_name,b.name AS station_name,
         COALESCE((SELECT SUM(amount) FROM transaction_histories WHERE station_show_id=a.id AND deleted_at IS NULL AND created_at BETWEEN :start_date AND :end_date),0) AS total_revenue,
         COALESCE((SELECT SUM(amount) FROM commissions WHERE station_show_id=a.id AND deleted_at IS NULL AND created_at BETWEEN :start_date AND :end_date),0) AS total_commission,
         COALESCE((SELECT SUM(amount) FROM winning_histories WHERE station_show_id=a.id AND deleted_at IS NULL AND created_at BETWEEN :start_date AND :end_date),0) AS total_payout

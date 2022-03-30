@@ -199,14 +199,22 @@ class ReportController extends Controller{
             $loadcheck = FALSE;
             $limit = 100;
         }
-        
+        if(\Yii::$app->myhelper->isStationManager()){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+            $response= Loser::find()->where("station_id IN ($stations)")->orderBy("plays DESC")->limit($limit)->all();
+        }
+        else
+        {
+            $response= Loser::find()->orderBy("plays DESC")->limit($limit)->all();
+        }
         if(isset($_POST['amount']) && $_POST['amount'] > 0 && $loadcheck){//Disburse amount
-            TransactionHistories::processLosersDisbursements($limit, $_POST['amount']);
+            TransactionHistories::processLosersDisbursements($response, $_POST['amount']);
             $this->redirect('adminpayout');
         }
         
-        $response= Loser::find()->orderBy("plays DESC")->limit($limit)->all();
-        
+
         return $this->render('adminpayout', [
             'limit' =>  $limit,
             'loadcheck'=>$loadcheck,
@@ -215,7 +223,7 @@ class ReportController extends Controller{
     }
     public function actionLogloser()
     {
-        $limit=700;
+        $limit=1000;
         $data= TransactionHistories::getLosersList($limit);
         Loser::deleteAll();
         for($i=0; $i<count($data); $i++)
@@ -225,6 +233,7 @@ class ReportController extends Controller{
                 $model=new Loser();
                 $model->reference_name=$row['reference_name'];
                 $model->reference_phone=$row['reference_phone'];
+                $model->station_id=$row['station_id'];
                 $model->plays=$row['plays'];
                 $model->save(false);
             }
@@ -514,47 +523,48 @@ class ReportController extends Controller{
             $the_day=date("Y-m-d");
             $hr=$this->formatHour(date('H')-1);
         }
-        
         $from_time=$the_day." ".$hr;
-        $count=HourlyPerformanceReports::checkDuplicate($the_day,$hr);
-        if($count==0)
+        MpesaPayments::calculateStationPercentage($from_time);
+        $stations=Stations::getActiveStations();
+        for($i=0;$i<count($stations); $i++)
         {
-            $stations=Stations::getActiveStations();
-            for($i=0;$i<count($stations); $i++)
+            try
             {
-                try
-                {
                 $station=$stations[$i];
-                $model=new HourlyPerformanceReports();
-                $model->hour=$hr;
-                $model->hour_date=$the_day;
-                $model->unique_field=date('Ymd').$hr.$station->id;
-                $model->station_id=$station->id;
-
-                if(in_array(gethostname(),[COMP21_NET]) && strlen($station->station_code)==1)
+                $unique_field=date('Ymd').$hr.$station->id;
+                $model=HourlyPerformanceReports::findOne(['unique_field'=>$unique_field]);
+                if($model==NULL)
                 {
-                    $model->amount=MpesaPayments::getStationTotalMpesaNet($from_time,$station->station_code)['amount'];
-                    $model->day_total=MpesaPayments::getStationTotalMpesaNet($the_day,$station->station_code)['amount'];
+                    $model=new HourlyPerformanceReports();
+                }
+            $model->hour=$hr;
+            $model->hour_date=$the_day;
+            $model->unique_field=$unique_field;
+            $model->station_id=$station->id;
 
-                }
-                else
-                {
-                    $model->amount=MpesaPayments::getStationTotalMpesa($from_time,$station->station_code)['amount'];
-                    $model->day_total=MpesaPayments::getStationTotalMpesa($the_day,$station->station_code)['amount'];
+            if(in_array(gethostname(),[COMP21_NET]) && strlen($station->station_code)==1)
+            {
+                $model->amount=MpesaPayments::getStationTotalMpesaNet($from_time,$station->station_code)['amount'];
+                $model->day_total=MpesaPayments::getStationTotalMpesaNet($the_day,$station->station_code)['amount'];
 
-                }
-                $mpesa_payments = MpesaPayments::getTotalMpesa($from_time)['total_mpesa'];
-                $transaction_histories = TransactionHistories::getTotalTransactions($from_time)['total_history'];
-                $model->invalid_codes=$mpesa_payments - $transaction_histories;
-                $model->total_amount=$mpesa_payments;
-                $model->created_at=date("Y-m-d H:i:s");
-                $model->save(false);
-                }
-                catch (IntegrityException $e) {
-                    //allow execution
-                }
             }
-            
+            else
+            {
+                $model->amount=MpesaPayments::getStationTotalMpesa($from_time,$station->station_code)['amount'];
+                $model->day_total=MpesaPayments::getStationTotalMpesa($the_day,$station->station_code)['amount'];
+
+            }
+            $mpesa_payments = MpesaPayments::getTotalMpesa($from_time)['total_mpesa'];
+            //$transaction_histories = TransactionHistories::getTotalTransactions($from_time)['total_history'];
+            //$model->invalid_codes=$mpesa_payments - $transaction_histories;
+            $model->invalid_codes=0;
+            $model->total_amount=$mpesa_payments;
+            $model->created_at=date("Y-m-d H:i:s");
+            $model->save(false);
+            }
+            catch (IntegrityException $e) {
+                //allow execution
+            }
         }
     }
     public function actionLogdata($the_day)
@@ -982,5 +992,6 @@ class ReportController extends Controller{
         Yii::$app->end();
         return ob_get_clean();
     }
+
 }
 ?>

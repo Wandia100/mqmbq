@@ -18,7 +18,7 @@ class PlayerTrendSearch extends PlayerTrend
     {
         return [
             [['id', 'frequency'], 'integer'],
-            [['msisdn', 'hour','station', 'hour_date', 'unique_field', 'created_at'], 'safe'],
+            [['msisdn', 'hour','station', 'hour_date', 'unique_field', 'created_at','station_id'], 'safe'],
         ];
     }
 
@@ -84,6 +84,9 @@ class PlayerTrendSearch extends PlayerTrend
         if ( $from != null && $to != null ) {
                 $query->andWhere( "DATE(hour_date)>= DATE('" . $from . "')" );
                 $query->andWhere( "DATE(hour_date)<= DATE('" . $to . "')" );
+        }
+        if(\Yii::$app->myhelper->isStationManager()){
+           $query->andWhere(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
         }
         $query->orderBy('hour_date,frequency DESC');
         return $dataProvider;

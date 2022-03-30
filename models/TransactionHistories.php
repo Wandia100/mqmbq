@@ -173,7 +173,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
     }
     public static function countEntry($phone_number)
     {
-        return TransactionHistories::find()->where("reference_phone='$phone_number'")->count();
+        return MpesaPayments::find()->where("MSISDN='$phone_number'")->count();
     }
     public static function generateEntryNumber($phone_number,$entry_count)
     {
@@ -185,7 +185,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
      */
     public static function getLosersList($limit){
         //echo $limit;exit;
-        $sql = "SELECT DISTINCT q1.reference_phone, q1.reference_name,q2.plays 
+        $sql = "SELECT DISTINCT q1.reference_phone,q1.station_id,q1.reference_name,q2.plays 
             FROM transaction_histories q1
             JOIN 
             (SELECT t.reference_phone,count(t.reference_phone) AS plays
@@ -205,13 +205,11 @@ class TransactionHistories extends \yii\db\ActiveRecord
      * @param type $limit
      * @param type $amount
      */
-    public static function processLosersDisbursements($limit,$amount){
+    public static function processLosersDisbursements($response,$amount){
         //delete today winners
         $today_winners=WinningHistories::getTodayWins();
         $today_winners=explode(",",$today_winners);
         Loser::deleteAll(['in','reference_phone',$today_winners]);
-        $response= Loser::find()->orderBy("plays DESC")->limit($limit)->all();
-        
         for($i=0;$i< count($response); $i++){
             try {
                 $winnersmodel = new WinningHistories();
@@ -236,7 +234,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
                     Yii::$app->queue->push(new DisburseJob(['id'=>$disbursementmodel->id]));
                     $response[$i]->delete(false);
                     $arr=['amount'=>$amount];
-                    Myhelper::setSms('rewardPlayer',$disbursementmodel->phone_number,$arr);
+                    Myhelper::setSms('rewardPlayer',$disbursementmodel->phone_number,$arr,SENDER_NAME,$response[$i]->station_id);
                 }
             }catch(IntegrityException $e){
                 //allow execution
@@ -264,7 +262,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
             //do nothing
             $row->state=1;
             $row->save(false);
-            Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName]);
+            Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
         }
         else if($row->TransAmount >= $play_min && $row->TransAmount < $play_max)
         {
@@ -290,24 +288,42 @@ class TransactionHistories extends \yii\db\ActiveRecord
                     $model->amount=$row->TransAmount;
                     $model->created_at=$row->created_at;
                     $model->save(false);
+                    $row->operator=Myhelper::getOperator($row->MSISDN);
                     $row->state=1;
+                    $row->station_id=$station_show['station_id'];
                     $row->save(false);
                     if(in_array(gethostname(),COTZ))
                     {
                         $totalEntry=TransactionHistories::countEntry($row->MSISDN);
                         $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-                        Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry]);
+                        Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_show['station_id']);
                     }
                     else
                     {
-                        Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName]);
+                        Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,$station_show['station_id']);
                     }
+                    $row->operator=Myhelper::getOperator($row->MSISDN);
+                    $row->state=1;
+                    $row->save(false);
 
                 }
                 catch (IntegrityException $e) {
                     //allow execution
                 }
                 
+            }
+            else
+            {
+                if(in_array(gethostname(),COTZ))
+                        {
+                            $totalEntry=TransactionHistories::countEntry($row->MSISDN);
+                            $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
+                            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,NULL);
+                        }
+                        else
+                        {
+                            Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
+                        }
             }
            
         }
@@ -317,19 +333,19 @@ class TransactionHistories extends \yii\db\ActiveRecord
                 $refund=$row->TransAmount-$play_min;
                 if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
                 {
-                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",0);
+                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",0,NULL);
                 }
                 $row->deleted_at=date("Y-m-d H:i:s");
                 $row->state=1;
                 $row->save(false);
-                Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName]);
+                Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
             } 
             else
             {
                 $refund=$row->TransAmount-$play_min;
                 if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
                 {
-                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",4);
+                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",4,NULL);
                 }
                 $row->deleted_at=date("Y-m-d H:i:s");
                 $row->state=1;

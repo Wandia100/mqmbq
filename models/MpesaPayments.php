@@ -53,6 +53,8 @@ class MpesaPayments extends \yii\db\ActiveRecord
             [['is_archived'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
+            [['operator'], 'string', 'max' => 20],
+            [['station_id'], 'string', 'max' => 50],
             [['excelfile'], 'required'],
             [['excelfile'], 'file', 'skipOnEmpty' => TRUE, 'extensions' => 'csv'],
             [['TransID', 'deleted_at'], 'string', 'max' => 100],
@@ -94,6 +96,15 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':from_time',"%$from_time%")
         ->queryOne();
     }
+    public static function getTotalMpesaPerStation($from_time,$station_id)
+    {
+        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments where deleted_at IS NULL AND created_at 
+        LIKE :from_time AND station_id=:station_id";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':from_time',"%$from_time%")
+        ->bindValue(':station_id',$station_id)
+        ->queryOne();
+    }
     public static function getStationTotalMpesa($from_time,$station_code)
     {
         $sql="SELECT COALESCE(SUM(b.TransAmount),0) as amount FROM mpesa_payments b WHERE b.deleted_at IS NULL AND b.created_at LIKE :from_time 
@@ -114,17 +125,59 @@ class MpesaPayments extends \yii\db\ActiveRecord
     }
     public static function getTotalRevenue()
     {
-        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments";
+        if(\Yii::$app->myhelper->isStationManager())
+        {
+            $stations = implode(",", array_map(function($string) {
+                return '"' . $string . '"';
+                }, \Yii::$app->myhelper->getStations()));
+            $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments 
+            AND station_id IN ($stations)";        
+        }
+        else
+        {
+            $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments";
+        }
+        
         return Yii::$app->mpesa_db->createCommand($sql)->queryOne();
+    }
+    public static function getTotalRevenuePerStation($station_id)
+    {
+        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments where station_id=:station_id";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':station_id',$station_id)
+        ->queryOne();
     }
     public static function getTotalMpesaInRange($from_time,$to_time)
     {
-        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from 
-        mpesa_payments where created_at > :from_time and
-        created_at <= :to_time";
+        if(\Yii::$app->myhelper->isStationManager())
+        {
+            $stations = implode(",", array_map(function($string) {
+                return '"' . $string . '"';
+                }, \Yii::$app->myhelper->getStations()));
+            $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from 
+                    mpesa_payments where created_at > :from_time and
+                    created_at <= :to_time AND station_id IN ($stations)";        
+        }
+        else
+        {
+            $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from 
+                mpesa_payments where created_at > :from_time and
+                created_at <= :to_time";
+        }
         return Yii::$app->mpesa_db->createCommand($sql)
         ->bindValue(':from_time',$from_time)
         ->bindValue(':to_time',$to_time)
+        ->queryOne();
+    }
+    public static function getTotalMpesaInRangePerStation($from_time,$to_time,$station_id)
+    {
+        $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from 
+        mpesa_payments where created_at > :from_time and
+        created_at <= :to_time and station_id=:station_id";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':from_time',$from_time)
+        ->bindValue(':to_time',$to_time)
+        ->bindValue(':station_id',$station_id)
         ->queryOne();
     }
     public static function revenueReport($start_date,$end_date)
@@ -174,6 +227,43 @@ class MpesaPayments extends \yii\db\ActiveRecord
             break;
         default :   
             $sum = MpesaPayments::getTotalRevenue()['total_mpesa'];
+        endswitch;
+        return $sum;    
+    }
+    public static function getMpesaCountsPerStation($type,$station_id){
+        $today = date('Y-m-d H:i:s');
+        $sum = 0;
+        switch ($type):
+        case 'today':
+            $midnight = date('Y-m-d 00:00:00');
+            $sum = MpesaPayments::getTotalMpesaInRangePerStation($midnight,$today,$station_id)['total_mpesa'];
+            break;
+        case 'yesterday':
+            $yestFloor = date( 'Y-m-d 00:00:00',strtotime('-1 day', time()));
+            $yestCeil = date( 'Y-m-d 23:59:59',strtotime('-1 day', time()));
+            $sum = MpesaPayments::getTotalMpesaInRangePerStation($yestFloor, $yestCeil,$station_id)['total_mpesa'];
+            break;
+        case 'last_7_days':
+           // $_7daysFloor = date( 'Y-m-d 00:00:00',strtotime('-7 day', time())); //Change to check from monday to today
+            $_lastMonday = date('Y-m-d 00:00:00',strtotime('Monday this week'));
+            $sum = MpesaPayments::getTotalMpesaInRangePerStation($_lastMonday, $today,$station_id)['total_mpesa'];
+            break;
+        case 'currentmonth':
+            $cFloor = date( 'Y-m-1 00:00:00');
+            $sum = MpesaPayments::getTotalMpesaInRangePerStation($cFloor, $today,$station_id)['total_mpesa'];
+            break;
+        case 'lastweek':
+            $floorDate = date("Y-m-d 00:00:00", strtotime(date("w") ? "2 sundays ago" : "last sunday"));
+            $ceilDate = date("Y-m-d 23:59:59", strtotime("last saturday"));
+            $sum = MpesaPayments::getTotalMpesaInRangePerStation($floorDate, $ceilDate,$station_id)['total_mpesa'];
+            break;
+        case 'lastmonth':
+            $lFloor = date( 'Y-m-1 00:00:00',strtotime('-1 month', time()));
+            $lCeil = date('Y-m-d 23:59:59', strtotime('last day of previous month'));
+            $sum = MpesaPayments::getTotalMpesaInRangePerStation($lFloor, $lCeil,$station_id)['total_mpesa'];
+            break;
+        default :   
+            $sum = MpesaPayments::getTotalRevenuePerStation($station_id)['total_mpesa'];
         endswitch;
         return $sum;    
     }
@@ -248,42 +338,96 @@ class MpesaPayments extends \yii\db\ActiveRecord
     }
     public static function logRevenue($revenue_date)
     {
-        $start_date=$revenue_date;
-        $end_date=$revenue_date." 23:59:59";
-        $report=RevenueReport::checkDuplicate($revenue_date);
-        if($report==NULL)
-        {
-            try
+            $stations=Stations::find()->where("deleted_at is null")->orderBy("name asc")->all();
+            for($i=0; $i<count($stations); $i++)
             {
-                $model=new RevenueReport();
-                $model->revenue_date=$revenue_date;
-                $model->total_awarded=WinningHistories::getPayout($revenue_date)['total'];;
-                $model->total_revenue=MpesaPayments::getTotalMpesa($revenue_date)['total_mpesa'];
-                $model->net_revenue=round($model->total_revenue-$model->total_awarded);
-                $model->save(false);
+                $row=$stations[$i];
+                try
+                {
+                    $unique_field=$row->id.$revenue_date;
+                    $report=RevenueReport::checkDuplicate($unique_field);
+                    if($report==NULL)
+                    {
+                        $model=new RevenueReport();
+                        $model->revenue_date=$revenue_date;
+                        $model->station_id=$row->id;
+                        $model->station_name=$row->name;
+                        $model->total_awarded=WinningHistories::getPayoutPerStation($revenue_date,$row->id)['total'];
+                        $model->total_revenue=MpesaPayments::getTotalMpesaPerStation($revenue_date,$row->id)['total_mpesa'];
+                        $model->net_revenue=round($model->total_revenue-$model->total_awarded);
+                        $model->unique_field=$unique_field;
+                        $model->save(false);
+                    }
+                    else
+                    {
+                        $report->total_awarded=WinningHistories::getPayoutPerStation($revenue_date,$row->id)['total'];
+                        $report->total_revenue=MpesaPayments::getTotalMpesaPerStation($revenue_date,$row->id)['total_mpesa'];
+                        $report->net_revenue=round($report->total_revenue-$report->total_awarded);
+                        $report->save(false);
+                    }
+                    
+                }
+                catch(IntegrityException $e)
+                {
+                    //allow execution
+                }
             }
-            catch(IntegrityException $e)
-            {
-                //allow execution
-            }
-        }
-        else
-        {
-            $total_revenue=MpesaPayments::getTotalMpesa($revenue_date)['total_mpesa'];
-            $total_awarded=WinningHistories::getPayout($revenue_date)['total'];
-            $report->total_awarded=$total_awarded;
-            $report->total_revenue=$total_revenue;
-            $report->net_revenue=round($total_revenue-$total_awarded);
-            $report->save(false);
-        }
            
     }
     public static function getPlayerTrend($created_at)
     {
-        $sql="SELECT COUNT(MSISDN) AS frequency,MSISDN AS msisdn,BillRefNumber AS station FROM mpesa_payments WHERE created_at LIKE :created_at
-        GROUP BY MSISDN,BillRefNumber";
+        $sql="SELECT COUNT(MSISDN) AS frequency,MSISDN AS msisdn,station_id,BillRefNumber AS station FROM mpesa_payments WHERE created_at LIKE :created_at
+        GROUP BY MSISDN,BillRefNumber,station_id";
         return Yii::$app->mpesa_db->createCommand($sql)
         ->bindValue(':created_at',"$created_at%")
         ->queryAll();
+    }
+    public static function countAssignedCode($created_at)
+    {
+        $sql="select count(station_id) as total from mpesa_payments where created_at like :created_at and station_id is not null";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':created_at',"$created_at%")
+        ->queryOne();
+    }
+    public static function countUnAssignedCode($created_at)
+    {
+        $sql="select count(*) as total from mpesa_payments where created_at like :created_at and station_id is null";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':created_at',"$created_at%")
+        ->queryOne();
+    }
+    public static function getAssignedPerStation($created_at)
+    {
+        $sql="select count(station_id) as total,station_id from mpesa_payments where created_at like :created_at and station_id is not null group by station_id order by total desc";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':created_at',"$created_at%")
+        ->queryAll();
+    }
+    public static function calculateStationPercentage($created_at)
+    {
+        $total=MpesaPayments::countAssignedCode($created_at)['total'];
+        $unassigned=MpesaPayments::countUnAssignedCode($created_at)['total'];
+        $data=MpesaPayments::getAssignedPerStation($created_at);
+        for($i=0; $i<count($data); $i++)
+        {
+            $row=$data[$i];
+            $percent=round(($row['total']/$total),2);
+            $stop=round($percent*$unassigned);
+            //update this percentage
+            if($stop > 0)
+            {
+                $station_code=Stations::findOne($row['station_id'])->station_code;
+                MpesaPayments::assignCode($row['station_id'],$created_at,$stop,$station_code);
+            }
+        }
+    }
+    public static function assignCode($station_id,$created_at,$stop,$station_code)
+    {
+        $sql="update mpesa_payments set station_id=:station_id,BillRefNumber=:station_code,updated_at=now() where created_at like :created_at and station_id is null limit $stop";
+        return Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':station_id',$station_id)
+        ->bindValue(':station_code',$station_code)
+        ->bindValue(':created_at',"$created_at%")
+        ->execute();
     }
 }

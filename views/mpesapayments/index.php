@@ -90,6 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'OrgAccountBalance',
             'BillRefNumber',
             'TransAmount',
+            'operator',
             //'is_archived',
             'created_at',
             //'updated_at',

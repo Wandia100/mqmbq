@@ -78,10 +78,17 @@ class CommissionSummary extends \yii\db\ActiveRecord
     public static function getCommissionReport($start_date,$end_date)
     {
         $sql="select station_name,show_name,show_timing,sum(target) as target,sum(achieved) as achieved,
-        sum(payout) as payout,sum(net_revenue) as net_revenue,sum(presenter_commission) as presenter_commission,
-        sum(station_commission) as station_commission from commission_summary 
-        WHERE commission_date >= :start_date AND commission_date <=:end_date 
-        GROUP BY station_name,show_name,show_timing";
+            sum(payout) as payout,sum(net_revenue) as net_revenue,sum(presenter_commission) as presenter_commission,
+            sum(station_commission) as station_commission from commission_summary 
+            WHERE ";
+        if(\Yii::$app->myhelper->isStationManager()){
+            $stations = implode(",", array_map(function($string) {
+                return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+             $sql .=" `station_id` IN ($stations) AND ";
+        }
+        $sql .="commission_date >= :start_date AND commission_date <=:end_date 
+            GROUP BY station_name,show_name,show_timing";
         return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':start_date',$start_date)
         ->bindValue(':end_date',$end_date)

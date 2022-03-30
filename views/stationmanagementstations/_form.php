@@ -12,18 +12,10 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'station_id')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'station_management_id')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?= $form->field($model, 'deleted_at')->textInput() ?>
-
+    <?= $form->field($model, 'station_id')->dropDownList(\app\models\Stations::getStations(),['prompt' => '--Select--']) ?>
+    <?= $form->field($model, 'station_management_id')->dropDownList(\app\models\Users::getUsersList(5),['prompt' => '--Select--']) ?>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

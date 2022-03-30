@@ -193,7 +193,14 @@ class Commissions extends \yii\db\ActiveRecord
         LEFT JOIN stations s ON c.station_id = s.id
         LEFT JOIN station_show_presenters sp ON sp.station_id = s.id
         LEFT JOIN users u ON sp.presenter_id = u.id
-        WHERE u.perm_group IN (3,5) AND c.created_at BETWEEN  :start_date AND :end_date
+        WHERE ";
+        if(\Yii::$app->myhelper->isStationManager()){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+            $sql .=" c.station_id IN ($stations) AND ";
+        }
+        $sql .= "u.perm_group IN (3,5) AND c.created_at BETWEEN  :start_date AND :end_date
         GROUP BY s.name,u.first_name,u.last_name,u.phone_number";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':start_date',$start_date)

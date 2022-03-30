@@ -91,6 +91,9 @@ class StationShowsSearch extends StationShows
             ->andFilterWhere(['like', 'start_time', $this->start_time])
             ->andFilterWhere(['like', 'end_time', $this->end_time])
             ->andFilterWhere(['like', 'stations.name', $this->stationname]);
+        if(\Yii::$app->myhelper->isStationManager()){
+           $query->where(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
+        }
         $query->orderBy('created_at DESC');
         return $dataProvider;
     }

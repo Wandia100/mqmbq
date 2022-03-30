@@ -8,7 +8,8 @@ use app\models\StationManagementStationsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use Webpatser\Uuid\Uuid;
+use yii\db\IntegrityException;
 /**
  * StationmanagementstationsController implements the CRUD actions for StationManagementStations model.
  */
@@ -81,8 +82,25 @@ class StationmanagementstationsController extends Controller
     {
         $model = new StationManagementStations();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $model->id=Uuid::generate()->string;
+                $model->unique_field=$model->station_id.$model->station_management_id;
+                $model->created_at = date('Y-m-d H:i:s');
+                $model->save(false);
+                $act = new \app\models\ActivityLog();
+                $act -> desc = "S.M.S create";
+                $act -> propts = "'{id:$model->id }'";
+                $act ->setLog();
+                //return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index']);
+            }
+            catch(IntegrityException $e)
+            {
+                //do nothing
+                return $this->redirect(['index']);
+            }
+            
         }
 
         return $this->render('create', [
@@ -101,7 +119,13 @@ class StationmanagementstationsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->updated_at=date('Y-m-d H:i:s');
+            $model->save();
+            $act = new \app\models\ActivityLog();
+            $act -> desc = "S.M.S update";
+            $act -> propts = "'{id:$model->id }'";
+            $act ->setLog();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

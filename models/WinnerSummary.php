@@ -76,7 +76,14 @@ class WinnerSummary extends \yii\db\ActiveRecord
     public static function getAwardedSummary($start_date,$end_date)
     {
         $sql="select station_name,show_name,prize_name,show_timing,sum(awarded) as awarded from winner_summary
-        where winning_date between :start_date and :end_date
+        where ";
+        if(\Yii::$app->myhelper->isStationManager()){
+            $stations = implode(",", array_map(function($string) {
+               return '"' . $string . '"';
+            }, \Yii::$app->myhelper->getStations()));
+            $sql .=" `station_id` IN ($stations) AND ";
+        }
+        $sql.="winning_date between :start_date and :end_date
         group by station_name,show_name,prize_name,show_timing";
         return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':start_date',$start_date)

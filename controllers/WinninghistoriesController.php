@@ -186,7 +186,7 @@ class WinninghistoriesController extends Controller
                         {
                             if($show_prize['mpesa_disbursement'])
                             {
-                                Disbursements::saveDisbursement($win_key,$transaction_history['reference_name'],$transaction_history['reference_phone'],$to_pay,"winning",0);
+                                Disbursements::saveDisbursement($win_key,$transaction_history['reference_name'],$transaction_history['reference_phone'],$to_pay,"winning",0,$transaction_history['station_id']);
                             }
                             else
                             {
@@ -197,7 +197,7 @@ class WinninghistoriesController extends Controller
                     $model=WinningHistories::saveWin($win_key,NULL,$transaction_history['reference_name'],$transaction_history['reference_phone']
                             ,$transaction_history['reference_code'],$transaction_history['station_id'],$transaction_history['station_show_id']
                         ,$presenter_id,$show_prize['disbursable_amount'],$unique_field);
-                                    Disbursements::saveDisbursement($win_key,$transaction_history['reference_name'],$transaction_history['reference_phone'],$show_prize['disbursable_amount'],"winning",0);
+                                    Disbursements::saveDisbursement($win_key,$transaction_history['reference_name'],$transaction_history['reference_phone'],$show_prize['disbursable_amount'],"winning",0,$transaction_history['station_id']);
                                 }
 
                             }
@@ -207,7 +207,7 @@ class WinninghistoriesController extends Controller
                             $arr=[$transaction_history['reference_name'],$show_prize['name'],$show_prize['amount'],$station_name];
                             //$message=Myhelper::winningMessage($transaction_history,$show_prize,$station_name);
                             //send an sms
-                            Myhelper::setSms('winningMessage',$transaction_history['reference_phone'],$arr);
+                            Myhelper::setSms('winningMessage',$transaction_history['reference_phone'],$arr,SENDER_NAME,$transaction_history['station_id']);
                         }
                         else
                         {

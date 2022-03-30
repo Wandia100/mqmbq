@@ -24,6 +24,21 @@ class StationManagementStations extends \yii\db\ActiveRecord
         return 'station_management_stations';
     }
 
+     /**
+        *   Stations relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getStations() {
+        return $this->hasOne(Stations::className(), [ 'id' => 'station_id' ] );
+    }
+     /**
+        *   Users relationship
+        * @return \yii\db\ActiveQuery
+    */
+    public function getUsers() {
+        return $this->hasOne(Users::className(), [ 'id' => 'station_management_id' ] );
+    }
+    
     /**
      * {@inheritdoc}
      */
@@ -33,7 +48,7 @@ class StationManagementStations extends \yii\db\ActiveRecord
             [['id'], 'required'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
-            [['station_id', 'station_management_id'], 'string', 'max' => 255],
+            [['station_id', 'station_management_id','unique_field'], 'string', 'max' => 255],
             [['id'], 'unique'],
         ];
     }

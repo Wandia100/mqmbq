@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <table class="table table-striped table-hover">
     <thead>
         <tr>
+        <th>Station</th>
         <th>Day</th>
         <th>Total Revenue</th>
         <th>Total Awarded</th>
@@ -45,6 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $total_net_revenue+=$row->net_revenue;
         ?>
             <tr>
+            <td><?=$row->station_name;?></td>
             <td><?=$row->revenue_date;?></td>
             <td><?=number_format($row->total_revenue);?></td>
             <td><?=number_format($row->total_awarded);?></td>
@@ -57,6 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
     {
         ?>
         <tr>
+        <td class="font-weight-bold" ></td>
         <td class="font-weight-bold" >TOTAL</td>
         <td class="font-weight-bold" ><?=number_format($total_revenue);?></td>
         <td class="font-weight-bold" ><?=number_format($total_awarded);?></td>

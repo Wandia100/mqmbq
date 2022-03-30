@@ -17,7 +17,7 @@ class MpesaPaymentsSearch extends MpesaPayments
     public function rules()
     {
         return [
-            [['id', 'TransID', 'FirstName', 'MiddleName', 'LastName', 'MSISDN', 'InvoiceNumber', 'BusinessShortCode', 'ThirdPartyTransID', 'TransactionType', 'OrgAccountBalance', 'BillRefNumber', 'TransAmount', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['id', 'TransID', 'FirstName', 'MiddleName', 'LastName', 'MSISDN', 'InvoiceNumber', 'BusinessShortCode', 'ThirdPartyTransID', 'TransactionType', 'OrgAccountBalance', 'BillRefNumber', 'TransAmount', 'created_at', 'updated_at', 'deleted_at','station_id','operator'], 'safe'],
             [['is_archived'], 'integer'],
         ];
     }
@@ -93,6 +93,9 @@ class MpesaPaymentsSearch extends MpesaPayments
                # $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
                $query->andWhere( "created_at >= '$from'" );
                $query->andWhere( "created_at <= '$to'" );
+        }
+        if(\Yii::$app->myhelper->isStationManager()){
+           $query->andWhere(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
         }
         $query->orderBy('created_at DESC');
         return $dataProvider;

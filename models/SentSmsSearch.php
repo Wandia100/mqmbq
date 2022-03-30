@@ -18,7 +18,7 @@ class SentSmsSearch extends SentSms
     {
         return [
             [['id', 'category'], 'integer'],
-            [['receiver', 'sender', 'message', 'created_date'], 'safe'],
+            [['receiver', 'sender', 'message', 'created_date','station_id'], 'safe'],
         ];
     }
 
@@ -66,6 +66,9 @@ class SentSmsSearch extends SentSms
         $query->andFilterWhere(['like', 'receiver', $this->receiver])
             ->andFilterWhere(['like', 'sender', $this->sender])
             ->andFilterWhere(['like', 'message', $this->message]);
+        if(\Yii::$app->myhelper->isStationManager()){
+           $query->andWhere(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
+        }
             $query->orderBy('id DESC');
         return $dataProvider;
     }

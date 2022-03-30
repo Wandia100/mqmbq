@@ -45,7 +45,7 @@ class PlayerTrend extends \yii\db\ActiveRecord
             [['hour_date', 'created_at'], 'safe'],
             [['msisdn'], 'string', 'max' => 12],
             [['hour'], 'string', 'max' => 2],
-            [['station', 'unique_field'], 'string', 'max' => 50],
+            [['station', 'unique_field','station_id'], 'string', 'max' => 50],
         ];
     }
 

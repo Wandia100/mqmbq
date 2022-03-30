@@ -32,14 +32,19 @@ $this->params['breadcrumbs'][] = $this->title;
     for($i=1;$i< count($response); $i++)
     {
         ?><tr><?php
-        for($j=0;$j<count($response[$i]); $j++)
+        $total=0;
+        for($j=0;$j<count($response[$i])-1; $j++)
         {
+            $total+=($j!=0)?$response[$i][$j]:0;
             ?>
             
             <td><?=$response[$i][$j];?></td>
             <?php
         }
-        ?></tr><?php
+    
+    ?>
+       <td><?=$total;?></td>
+    </tr><?php
     }
 
         ?>

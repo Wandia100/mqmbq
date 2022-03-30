@@ -36,6 +36,7 @@ class SentSms extends \yii\db\ActiveRecord
             [['created_date'], 'safe'],
             [['category'], 'integer'],
             [['receiver', 'sender'], 'string', 'max' => 20],
+            [['station_id'], 'string', 'max' => 50],
         ];
     }
 

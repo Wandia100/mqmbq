@@ -17,7 +17,7 @@ class DisbursementsSearch extends Disbursements
     public function rules()
     {
         return [
-            [['id', 'reference_id', 'reference_name', 'phone_number', 'conversation_id', 'disbursement_type', 'transaction_reference', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['id', 'reference_id', 'reference_name', 'phone_number', 'conversation_id', 'disbursement_type', 'transaction_reference', 'created_at', 'updated_at', 'deleted_at','station_id'], 'safe'],
             [['amount'], 'number'],
             [['status'], 'integer'],
         ];
@@ -87,9 +87,11 @@ class DisbursementsSearch extends Disbursements
                 $query->andWhere( "DATE(created_at)>= DATE('" . $from . "')" );
                 $query->andWhere( "DATE(created_at)<= DATE('" . $to . "')" );
         }
-        $query->orderBy('created_at DESC');
         if(isset($_GET['t']) && $_GET['t'] == 'p'){
             $query->andWhere('disbursement_type = "presenter_commission"');
+        }
+        if(\Yii::$app->myhelper->isStationManager()){
+           $query->andWhere(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
         }
         $query->orderBy('created_at DESC');
         return $dataProvider;

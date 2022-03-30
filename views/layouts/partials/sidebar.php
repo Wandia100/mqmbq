@@ -107,6 +107,9 @@ use luc\tourist\Tourist;
                     <?= Html::a('<i class="metismenu-icon fa fa-gift"></i> Prizes', Url::to(['/prizes/index']), ['class' => '', 'id' => 'newapp'])?>
                 </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
+                    <?= Html::a('<i class="metismenu-icon fa fa-gift"></i> Station Management Stations', Url::to(['/stationmanagementstations/index']), ['class' => '', 'id' => 'newapp'])?>
+                </li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-gift"></i> Station Target', Url::to(['/stationtarget/index']), ['class' => '', 'id' => 'newapp'])?>
                 </li>
                     </ul>
