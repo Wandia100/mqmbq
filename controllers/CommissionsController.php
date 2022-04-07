@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\CommissionJob;
 use Yii;
 use app\models\Commissions;
 use app\models\StationShows;
@@ -176,59 +177,9 @@ class CommissionsController extends Controller
     }
     public function actionProcess()
     {
-        Myhelper::checkRemoteAddress();
         //today processing
-        $current_day=strtolower(date("l"));
-        $current_date=date("Y-m-d");
-        $pending_show=StationShows::getShowForCommission($current_day);
-        $processed_shows=Commissions::processedCommission($current_date);
-        $this->setCommission($current_day,$current_date,$pending_show,$processed_shows);
-        if(date("H")=="00" && date("i") < 15)
-        {
-            $current_day=strtolower(date("l",strtotime('-1 day',time())));
-            $current_date=date("Y-m-d",strtotime('-1 day',time()));
-            $pending_show=StationShows::getShowForCommission($current_day);
-            $processed_shows=Commissions::processedCommission($current_date);
-            $this->setCommission($current_day,$current_date,$pending_show,$processed_shows);
-        }
+        Yii::$app->queue->push(new CommissionJob([]));
     }
-    //code to process commissions
-    public function setCommission($current_day,$current_date,$pending_show,$processed_shows)
-    {
-        for($i=0;$i<count($pending_show); $i++)
-        {
-            $show=$pending_show[$i];
-            if(!in_array($show['id'],$processed_shows))
-            {
-                
-                $target=$show['target'];//target
-                
-                $total_show_transactions=TransactionHistories::getTransactionTotal($show['id'],$current_date." ".$show['start_time'],$current_date." ".$show['end_time']);
-                if($total_show_transactions['total'] >= $target)
-                {
-                    
-                    $commissions=StationShowCommissions::getShowCommission($show['id']);
-                    $total_payout=WinningHistories::getDayPayout($show['id'],$current_date);
-                    $net_revenue=$total_show_transactions['total']-$total_payout['total'];
-                    for($j=0;$j<count($commissions); $j++)
-                    {
-                        $comm=$commissions[$j];
-                        $model=new Commissions();
-                        $model->id=Uuid::generate()->string;
-                        $model->station_id=$show['station_id'];
-                        $model->station_show_id=$show['id'];
-                        $model->c_type=$comm->perm_group;
-                        $model->amount=round(($net_revenue*($comm->commission/100)));
-                        $model->created_at=$current_date." ".date("H:i:s");
-                        $model->save(false);
-                    }
-                }
-                
-            }
-        }
-       
-    }
-
     /**
      * Finds the Commissions model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
