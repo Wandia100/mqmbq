@@ -162,4 +162,13 @@ class OutboxController extends Controller
             Outbox::jambobetBatch($batch_size);
         }
     }
+    public  function actionRemovedups()
+    {
+        $dups=Outbox::getDuplicates();
+        for($i=0;$i < count($dups); $i++)
+        {
+            $row=$dups[$i];
+            Outbox::removeDups($row['receiver'],$row['total']-1);
+        }
+    }
 }

@@ -219,4 +219,18 @@ class Outbox extends \yii\db\ActiveRecord
         $response = curl_exec($curl);
         curl_close($curl);
     }
+    public static function getDuplicates()
+    {
+        $sql='SELECT COUNT(receiver) AS total,receiver FROM outbox  GROUP BY receiver HAVING(total > 1)';
+        return Yii::$app->sms_db->createCommand($sql)
+        ->queryAll();
+    }
+    public static function removeDups($unique_field,$limits)
+    {
+        $sql='DELETE FROM outbox WHERE receiver=:receiver LIMIT :limits';
+        Yii::$app->mpesa_db->createCommand($sql)
+        ->bindValue(':receiver',$unique_field)
+        ->bindValue(':limits',$limits)
+        ->execute();
+    }
 }
