@@ -144,6 +144,10 @@ class Outbox extends \yii\db\ActiveRecord
     public static function sendOutbox($id)
     {
         $outbox=Outbox::findOne($id);
+        if($outbox==NULL)
+        {
+            return;
+        }
         $sentsms=new SentSms();
         $sentsms->receiver=$outbox->receiver;
         $sentsms->sender=$outbox->sender;
