@@ -336,8 +336,16 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':limits',$limits)
         ->execute();
     }
-    public static function logRevenue($revenue_date)
+    public static function logRevenue()
     {
+        if(date("H")=="00")
+        {
+            $revenue_date= date('Y-m-d',strtotime('yesterday'));
+        }
+        else
+        {
+            $revenue_date= date('Y-m-d');
+        }
             $stations=Stations::find()->where("deleted_at is null")->orderBy("name asc")->all();
             for($i=0; $i<count($stations); $i++)
             {

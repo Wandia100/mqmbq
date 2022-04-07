@@ -132,8 +132,16 @@ class Commissions extends \yii\db\ActiveRecord
         ->bindValue(':end_date',$end_date)
         ->queryAll();
     }
-    public static function logCommission($commission_date)
+    public static function logCommission()
     {
+        if(date("H")=="00")
+        {
+            $commission_date= date('Y-m-d',strtotime('yesterday'));
+        }
+        else
+        {
+            $commission_date= date('Y-m-d');
+        }
         $start_time=$commission_date." 00:00";
         $end_time=$commission_date." 23:59";
         $data=Commissions::commissionSummary($start_time,$end_time);

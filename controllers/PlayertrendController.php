@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\TrendJob;
 use Yii;
 use app\models\PlayerTrend;
 use app\models\PlayerTrendSearch;
@@ -128,28 +129,7 @@ class PlayertrendController extends Controller
     }
     public function actionLogtrend()
     {
-        $created_at=date("Y-m-d");
-        $hour=date("H",strtotime("- 1 hour"));
-        $data=MpesaPayments::getPlayerTrend($created_at." ".$hour);
-        for($i=0; $i< count($data); $i++)
-        {
-            try
-            {
-                $model=new PlayerTrend();
-                $model->msisdn=$data[$i]['msisdn'];
-                $model->frequency=$data[$i]['frequency'];
-                $model->hour=$hour;
-                $model->station=$data[$i]['station'];
-                $model->hour_date=$created_at;
-                $model->station_id=$data[$i]['station_id'];
-                $model->unique_field=$created_at.$hour.$model->station.$model->msisdn;
-                $model->save(false);
-            }
-            catch(IntegrityException $e)
-            {
-                //do nothing
-            }
-        }
+        Yii::$app->queue->push(new TrendJob());
     }
 
     /**

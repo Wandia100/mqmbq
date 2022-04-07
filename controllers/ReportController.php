@@ -1,5 +1,9 @@
 <?php
 namespace app\controllers;
+
+use app\components\AwardsJob;
+use app\components\LastHourJob;
+use app\components\LogCommissionJob;
 use Yii;
 use app\models\MpesaPayments;
 use app\models\TransactionHistories;
@@ -17,6 +21,9 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
 use app\components\Myhelper;
+use app\components\RevenueJob;
+use app\components\ShowSummaryJob;
+use app\components\SiteReportJob;
 use app\models\SiteReport;
 use app\models\Loser;
 use kartik\mpdf\Pdf;
@@ -510,63 +517,7 @@ class ReportController extends Controller{
         return ob_get_clean();
         
     }
-    public function actionLasthour()
-    {
-        Myhelper::checkRemoteAddress();
-        if(date("H")=="00")
-        {
-            $the_day=date('Y-m-d',strtotime("yesterday"));
-            $hr="23";
-        }
-        else
-        {
-            $the_day=date("Y-m-d");
-            $hr=$this->formatHour(date('H')-1);
-        }
-        $from_time=$the_day." ".$hr;
-        MpesaPayments::calculateStationPercentage($from_time);
-        $stations=Stations::getActiveStations();
-        for($i=0;$i<count($stations); $i++)
-        {
-            try
-            {
-                $station=$stations[$i];
-                $unique_field=date('Ymd').$hr.$station->id;
-                $model=HourlyPerformanceReports::findOne(['unique_field'=>$unique_field]);
-                if($model==NULL)
-                {
-                    $model=new HourlyPerformanceReports();
-                }
-            $model->hour=$hr;
-            $model->hour_date=$the_day;
-            $model->unique_field=$unique_field;
-            $model->station_id=$station->id;
 
-            if(in_array(gethostname(),[COMP21_NET]) && strlen($station->station_code)==1)
-            {
-                $model->amount=MpesaPayments::getStationTotalMpesaNet($from_time,$station->station_code)['amount'];
-                $model->day_total=MpesaPayments::getStationTotalMpesaNet($the_day,$station->station_code)['amount'];
-
-            }
-            else
-            {
-                $model->amount=MpesaPayments::getStationTotalMpesa($from_time,$station->station_code)['amount'];
-                $model->day_total=MpesaPayments::getStationTotalMpesa($the_day,$station->station_code)['amount'];
-
-            }
-            $mpesa_payments = MpesaPayments::getTotalMpesa($from_time)['total_mpesa'];
-            //$transaction_histories = TransactionHistories::getTotalTransactions($from_time)['total_history'];
-            //$model->invalid_codes=$mpesa_payments - $transaction_histories;
-            $model->invalid_codes=0;
-            $model->total_amount=$mpesa_payments;
-            $model->created_at=date("Y-m-d H:i:s");
-            $model->save(false);
-            }
-            catch (IntegrityException $e) {
-                //allow execution
-            }
-        }
-    }
     public function actionLogdata($the_day)
     {
         for($i=0;$i<24;$i++)
@@ -861,19 +812,7 @@ class ReportController extends Controller{
         $hourly = $json_array;
         return $hourly;
     }
-    public function actionLogshowsummary()
-    {
-        Myhelper::checkRemoteAddress();
-        if(date("H")=="00")
-        {
-            $start_date= date('Y-m-d',strtotime('yesterday'));
-        }
-        else
-        {
-            $start_date= date('Y-m-d');
-        }
-        ShowSummary::logShowSummary($start_date);
-    }
+
     public function actionShowlog($start_date,$end_date)
     {
         while($start_date <= $end_date)
@@ -882,44 +821,30 @@ class ReportController extends Controller{
             $start_date=date('Y-m-d', strtotime($start_date . ' +1 day'));
         }
     }
-    public function actionLogcommission()
+    public function actionLogsitereport()
     {
-        Myhelper::checkRemoteAddress();
-        if(date("H")=="00")
-        {
-            $commission_date= date('Y-m-d',strtotime('yesterday'));
-        }
-        else
-        {
-            $commission_date= date('Y-m-d');
-        }
-        Commissions::logCommission($commission_date);
+        Yii::$app->queue->push(new SiteReportJob());
+    }
+    public function actionLasthour()
+    {
+        Yii::$app->queue->push(new LastHourJob());
+    }
+    public function actionLogshowsummary()
+    {
+        Yii::$app->queue->push(new ShowSummaryJob());
+    }
+    public function actionLogcommission()
+    {        
+        Yii::$app->queue->push(new LogCommissionJob());
     }
     public function actionLogawards()
-    {
-        Myhelper::checkRemoteAddress();
-        if(date("H")=="00")
-        {
-            $winning_date= date('Y-m-d',strtotime('yesterday'));
-        }
-        else
-        {
-            $winning_date= date('Y-m-d');
-        }
-        WinningHistories::logDailyAwards($winning_date);
+    {        
+        Yii::$app->queue->push(new AwardsJob());
     }
     public function actionLogrevenue()
     {
-        Myhelper::checkRemoteAddress();
-        if(date("H")=="00")
-        {
-            $revenue_date= date('Y-m-d',strtotime('yesterday'));
-        }
-        else
-        {
-            $revenue_date= date('Y-m-d');
-        }
-        MpesaPayments::logRevenue($revenue_date);
+        
+        Yii::$app->queue->push(new RevenueJob());
     }
     public function actionLogger($m)
     {
@@ -956,11 +881,7 @@ class ReportController extends Controller{
         WinningHistories::logDailyAwards($log_date);
         MpesaPayments::logRevenue($log_date);
     }
-    public function actionLogsitereport()
-    {
-        Myhelper::checkRemoteAddress();
-        SiteReport::setSiteReport();
-    }
+
     //removed action
     public function actionPlayer()
     {

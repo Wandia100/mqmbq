@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\IntegrityException;
 
 /**
  * This is the model class for table "player_trend".
@@ -64,5 +65,30 @@ class PlayerTrend extends \yii\db\ActiveRecord
             'unique_field' => 'Unique Field',
             'created_at' => 'Created At',
         ];
+    }
+    public static function logTrend()
+    {
+        $created_at=date("Y-m-d");
+        $hour=date("H",strtotime("- 1 hour"));
+        $data=MpesaPayments::getPlayerTrend($created_at." ".$hour);
+        for($i=0; $i< count($data); $i++)
+        {
+            try
+            {
+                $model=new PlayerTrend();
+                $model->msisdn=$data[$i]['msisdn'];
+                $model->frequency=$data[$i]['frequency'];
+                $model->hour=$hour;
+                $model->station=$data[$i]['station'];
+                $model->hour_date=$created_at;
+                $model->station_id=$data[$i]['station_id'];
+                $model->unique_field=$created_at.$hour.$model->station.$model->msisdn;
+                $model->save(false);
+            }
+            catch(IntegrityException $e)
+            {
+                //do nothing
+            }
+        }
     }
 }

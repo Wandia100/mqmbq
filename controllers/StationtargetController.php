@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\TargetJob;
 use Yii;
 use app\models\StationTarget;
 use app\models\StationTargetSearch;
@@ -74,11 +75,7 @@ class StationtargetController extends Controller
     }
     public function actionLogtarget()
     {
-        
-        $hour_date=date("Y-m-d");
-        //$hour=date("H");
-        $hour=date("H", strtotime ("-1 hour"));
-        StationTarget::setTargetLog($hour,$hour_date);
+        Yii::$app->queue->push(new TargetJob());
     }
 
     /**

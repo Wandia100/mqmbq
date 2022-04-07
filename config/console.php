@@ -27,6 +27,9 @@ $config = [
                 ],
             ],
         ],
+        'myhelper'        => [
+            'class' => 'app\components\Myhelper',
+        ],
         'db' => $db,
         'mpesa_db' => $mpesa_db,
         'sms_db' => $sms_db,

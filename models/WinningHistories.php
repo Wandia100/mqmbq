@@ -213,8 +213,16 @@ class WinningHistories extends \yii\db\ActiveRecord
         ->bindValue(':end_date',$end_date)
         ->queryAll();
     }
-    public static function logDailyAwards($winning_date)
+    public static function logDailyAwards()
     {
+        if(date("H")=="00")
+        {
+            $winning_date= date('Y-m-d',strtotime('yesterday'));
+        }
+        else
+        {
+            $winning_date= date('Y-m-d');
+        }
         $start_date=$winning_date." 00:00";
         $end_date=$winning_date." 23:59";
         $data=WinningHistories::dailyAwarding($start_date,$end_date);

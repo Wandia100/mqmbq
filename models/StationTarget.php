@@ -67,8 +67,11 @@ class StationTarget extends \yii\db\ActiveRecord
         ->bindValue(':start_time',$start_time)
         ->queryAll();
     }
-    public static function setTargetLog($hour,$hour_date)
+    public static function setTargetLog()
     {
+        $hour_date=date("Y-m-d");
+        //$hour=date("H");
+        $hour=date("H", strtotime ("-1 hour"));
         $data=StationTarget::getTargets($hour);
         for($i=0; $i<count($data); $i++)
         {

@@ -2,11 +2,12 @@
 
 namespace app\models;
 
-
+use app\components\Myhelper;
 use Yii;
 use app\models\Stations;
 use app\models\MpesaPayments;
 use app\models\TransactionHistories;
+use yii\db\IntegrityException;
 
 /**
  * This is the model class for table "hourly_performance_reports".
@@ -289,5 +290,61 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
         ->bindValue(':station_id',$station_id)
         ->queryOne();
         return $resp['total'];
+    }
+    public static function LastHour()
+    {
+        if(date("H")=="00")
+        {
+            $the_day=date('Y-m-d',strtotime("yesterday"));
+            $hr="23";
+        }
+        else
+        {
+            $the_day=date("Y-m-d");
+            $hr=Myhelper::formatHour(date('H')-1);
+        }
+        $from_time=$the_day." ".$hr;
+        MpesaPayments::calculateStationPercentage($from_time);
+        $stations=Stations::getActiveStations();
+        for($i=0;$i<count($stations); $i++)
+        {
+            try
+            {
+                $station=$stations[$i];
+                $unique_field=date('Ymd').$hr.$station->id;
+                $model=HourlyPerformanceReports::findOne(['unique_field'=>$unique_field]);
+                if($model==NULL)
+                {
+                    $model=new HourlyPerformanceReports();
+                }
+            $model->hour=$hr;
+            $model->hour_date=$the_day;
+            $model->unique_field=$unique_field;
+            $model->station_id=$station->id;
+
+            if(in_array(gethostname(),[COMP21_NET]) && strlen($station->station_code)==1)
+            {
+                $model->amount=MpesaPayments::getStationTotalMpesaNet($from_time,$station->station_code)['amount'];
+                $model->day_total=MpesaPayments::getStationTotalMpesaNet($the_day,$station->station_code)['amount'];
+
+            }
+            else
+            {
+                $model->amount=MpesaPayments::getStationTotalMpesa($from_time,$station->station_code)['amount'];
+                $model->day_total=MpesaPayments::getStationTotalMpesa($the_day,$station->station_code)['amount'];
+
+            }
+            $mpesa_payments = MpesaPayments::getTotalMpesa($from_time)['total_mpesa'];
+            //$transaction_histories = TransactionHistories::getTotalTransactions($from_time)['total_history'];
+            //$model->invalid_codes=$mpesa_payments - $transaction_histories;
+            $model->invalid_codes=0;
+            $model->total_amount=$mpesa_payments;
+            $model->created_at=date("Y-m-d H:i:s");
+            $model->save(false);
+            }
+            catch (IntegrityException $e) {
+                //allow execution
+            }
+        }
     }
 }
