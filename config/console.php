@@ -40,6 +40,7 @@ $config = [
             'tableName' => '{{%queue}}', // Table name
             'channel' => 'default', // Queue channel key
             'mutex' => \yii\mutex\MysqlMutex::class, // Mutex used to sync queries
+            'ttr' => 43200,
         ],
     ],
     'params' => $params,

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\Myhelper;
 use Yii;
 use Webpatser\Uuid\Uuid;
 use app\models\RevenueReport;
@@ -437,5 +438,21 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':station_code',$station_code)
         ->bindValue(':created_at',"$created_at%")
         ->execute();
+    }
+    public static function setStation()
+    {
+        $data=TransactionHistories::find()->where('created_at < "2022-04-08"')->all();
+        foreach($data as $row)
+        {
+            $model=MpesaPayments::findOne($row->mpesa_payment_id);
+            if($model!=NULL)
+            {
+                $model->station_id=$row->station_id;
+                $model->updated_at=$row->updated_at;
+                $model->operator=Myhelper::getOperator($model->MSISDN);
+                $model->save(false);
+            }
+        }
+
     }
 }
