@@ -448,7 +448,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
             if($model!=NULL)
             {
                 $model->station_id=$row->station_id;
-                $model->updated_at=$row->updated_at;
+                $model->updated_at=date("Y-m-d H:i:s");
                 $model->operator=Myhelper::getOperator($model->MSISDN);
                 $model->save(false);
             }
