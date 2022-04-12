@@ -15,6 +15,7 @@ use yii\web\UploadedFile;
 use yii\db\IntegrityException;
 use app\components\DepositJob;
 use app\components\SetStationJob;
+use app\models\TransactionHistories;
 
 /**
  * MpesapaymentsController implements the CRUD actions for MpesaPayments model.
@@ -318,6 +319,10 @@ class MpesapaymentsController extends Controller
     public function actionSetstation()
     {
         Yii::$app->queue->push(new SetStationJob());
+    }
+    public function actionDemo($id)
+    {
+        TransactionHistories::processPayment($id);
     }
     public function beforeAction($action)
 {            

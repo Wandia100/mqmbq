@@ -309,6 +309,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
                 }
                 catch (IntegrityException $e) {
                     //allow execution
+                    var_dump($e);
                 }
                 
             }
