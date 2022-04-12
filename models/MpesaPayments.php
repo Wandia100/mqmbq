@@ -441,16 +441,16 @@ class MpesaPayments extends \yii\db\ActiveRecord
     }
     public static function setStation()
     {
-        $data=TransactionHistories::find()->where('created_at < "2022-04-08"')->all();
+        $data=MpesaPayments::find()->where("station_id IS NULL")->all();
         foreach($data as $row)
         {
-            $model=MpesaPayments::findOne($row->mpesa_payment_id);
+            $model=TransactionHistories::findOne(["mpesa_payment_id"=>$row->id]);
             if($model!=NULL)
             {
-                $model->station_id=$row->station_id;
-                $model->updated_at=date("Y-m-d H:i:s");
-                $model->operator=Myhelper::getOperator($model->MSISDN);
-                $model->save(false);
+                $row->station_id=$model->station_id;
+                $row->updated_at=date("Y-m-d H:i:s");
+                $row->operator=Myhelper::getOperator($row->MSISDN);
+                $row->save(false);
             }
         }
 
