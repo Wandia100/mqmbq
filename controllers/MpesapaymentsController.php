@@ -320,10 +320,10 @@ class MpesapaymentsController extends Controller
     {
         Yii::$app->queue->push(new SetStationJob());
     }
-    public function actionDemo($id)
+    /*public function actionDemo($id)
     {
         TransactionHistories::processPayment($id);
-    }
+    }*/
     public function beforeAction($action)
 {            
     if (in_array($action->id,array('save','insertpayment','pay'))) {
