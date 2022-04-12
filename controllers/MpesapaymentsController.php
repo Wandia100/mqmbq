@@ -253,7 +253,7 @@ class MpesapaymentsController extends Controller
         {
             $jsondata = file_get_contents('php://input');
             $data= json_decode($jsondata);
-            Yii::$app->queue->push(new DepositJob(['id'=>$data->id]));
+            Yii::$app->queue->priority(10)->push(new DepositJob(['id'=>$data->id]));
         }
     }
     public function actionAirtel() {
