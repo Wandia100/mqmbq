@@ -172,7 +172,7 @@ function saveRecord (instance, field, id) {
  */
 function toggleDisbursement(instance){
     //console.log('am here');
-    if(instance.val() == 0){
+    if(instance.val() == 1){
        $("#prizes-disbursable_amount").removeClass('hidden'); 
     }else{
         $("#prizes-disbursable_amount").addClass('hidden');
