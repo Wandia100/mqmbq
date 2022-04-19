@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'MSISDN',
             //'InvoiceNumber',
             //'BusinessShortCode',
-            //'ThirdPartyTransID',
+            'ThirdPartyTransID',
             //'TransactionType',
             //'OrgAccountBalance',
             'BillRefNumber',
