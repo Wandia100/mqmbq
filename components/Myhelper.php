@@ -865,7 +865,7 @@ class Myhelper extends Component {
 					$data['message'] = str_replace( $toreplace, $variables, $temp );
 					break;
 				case 'winningMessage':
-					$toreplace       = [ "[customer_name]", "[prize_name]", "[amount]", "[station_name]" ];
+					$toreplace       = [ "[customer_name]", "[prize_name]","[station_name]" ];
 					$data['message'] = str_replace( $toreplace, $variables, $temp );
 					break;
 				case 'rewardPlayer':

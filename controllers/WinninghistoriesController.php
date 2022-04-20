@@ -204,7 +204,7 @@ class WinninghistoriesController extends Controller
                             $draw_count_balance=$show_prize['draw_count']-$show_prize['prizes_given']-1;
                             $transaction_history['draw_count_balance']=$draw_count_balance;
                             $station_name=$presenter_show['station_name'];
-                            $arr=[$transaction_history['reference_name'],$show_prize['name'],$show_prize['amount'],$station_name];
+                            $arr=[$transaction_history['reference_name'],$show_prize['name'],$station_name];
                             //$message=Myhelper::winningMessage($transaction_history,$show_prize,$station_name);
                             //send an sms
                             Myhelper::setSms('winningMessage',$transaction_history['reference_phone'],$arr,SENDER_NAME,$transaction_history['station_id']);

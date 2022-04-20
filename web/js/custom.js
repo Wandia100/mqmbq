@@ -12,10 +12,10 @@ $(document).ready(function(){
         showprogress();
     });
      $("#prizes-mpesa_disbursement").on('change', function(e){
-        if($("#prizes-mpesa_disbursement").val() == 1){
+        if($("#prizes-mpesa_disbursement").val() == 0){
             $("#prizes-disbursable_amount").removeClass('hidden'); 
          }else{
-             $("#prizes-disbursable_amount").val('');
+             $("#prizes-disbursable_amount").val(0);
              $("#prizes-disbursable_amount").addClass('hidden');
          }
     });

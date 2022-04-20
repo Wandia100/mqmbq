@@ -50,7 +50,7 @@ class Prizes extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'description' => 'Description',
-            'mpesa_disbursement' => 'Mpesa Disbursement',
+            'mpesa_disbursement' => 'Mpesa Disbursable?',
             'enabled' => 'Enabled',
             'tax' => 'Tax',
             'created_at' => 'Created At',
