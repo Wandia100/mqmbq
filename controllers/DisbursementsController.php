@@ -25,10 +25,10 @@ class DisbursementsController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index'],
+                'only' => ['create', 'update','index','indexc','toggledisbursement','upload'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','indexc','toggledisbursement'],
+                        'actions' => ['create', 'update','index','indexc','toggledisbursement','upload'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -226,5 +226,41 @@ class DisbursementsController extends Controller
             Disbursements::removeDups($row['unique_field'],$row['total']-1);
         }
     }
+    public function actionUpload() {
+		$success = [];
+		$error   = [];
+		if ( isset( $_POST['submit'] ) ) {
+			$file = $_FILES['file']['tmp_name'];
+			$success = [];
+			$error   = [];
+			$row     = 1;
+			if ( ( $handle = fopen( $file, "r" ) ) !== false ) {
+				while ( ( $data = fgetcsv( $handle, 2000, "," ) ) !== false ) {
+                    $reference_name=trim(isset($data[0])?$data[0]:NULL);
+                    $phone_number=trim(isset($data[1])?$data[1]:NULL);
+                    $amount=trim(isset($data[2])?$data[2]:NULL);  
+					if (!empty($reference_name) && !empty($phone_number)
+                    && !empty($amount)  && is_numeric($amount) && is_numeric($phone_number)) {
+                        Disbursements::saveDisbursement("",$reference_name,$phone_number,$amount,"management_commission",0,NULL);
+                        array_push( $success, $row );
+					}
+                    else
+                    {
+                        array_push( $error, $row );
+                    }
+					$row ++;
+				}
+				fclose( $handle );
+			}
+            return $this->redirect(['index']);
+		}
+
+		return $this->render( 'upload', [
+				'success' => $success,
+				'error'   => $error
+			]
+		);
+
+	}
 
 }
