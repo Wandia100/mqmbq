@@ -65,6 +65,10 @@ class Outbox extends \yii\db\ActiveRecord
         $outbox->category=$category;
         $outbox->save(false);
     }
+    public static function tzOutbox($limit)
+    {
+        return Outbox::find()->limit($limit)->all();
+    }
     public static function getOutbox($limit)
     {
         $smses=Outbox::find()->where(['status'=>1])->limit($limit)->all();

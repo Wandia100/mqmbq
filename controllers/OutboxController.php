@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\components\Myhelper;
 use Yii;
 use app\models\Outbox;
 use app\models\OutboxSearch;
+use app\models\SentSms;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -71,6 +73,30 @@ class OutboxController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+    public function actionTzsms($limit)
+    {
+
+        $smses=Outbox::tzOutbox($limit);
+        for($i=0; $i<count($smses); $i++)
+        {
+            $outbox=$smses[$i];
+            if($outbox==NULL)
+        {
+            return;
+        }
+        $sentsms=new SentSms();
+        $sentsms->receiver=$outbox->receiver;
+        $sentsms->sender=$outbox->sender;
+        $sentsms->message=$outbox->message;
+        $sentsms->station_id=$outbox->station_id;
+        $sentsms->created_date=$outbox->created_date;
+        $sentsms->category=$outbox->category;
+        $sentsms->save(false);
+        $outbox->delete(false);
+        $channel=Myhelper::getSmsChannel($sentsms->receiver);
+            Myhelper::sendTzSms($sentsms->receiver,$sentsms->message,SENDER_NAME,$channel);
+        }
     }
 
     /**
