@@ -42,12 +42,18 @@
       $db_password = "Zpa@!%vfrG34f";
       $db_name = "efmtz_sms";
       }
-      else if ( ( in_array($host_name,[MCHEZOSUPA]))) {
+    else if ( ( in_array($host_name,[MCHEZOSUPA]))) {
         $db_host      = "smsdb.tzg255.com";
         $db_username = "itv2220";
         $db_password = "Zpa@!%vfrG34f";
         $db_name = "itv_sms";
         } 
+    else if ( ( in_array($host_name,[BETTER]))) {
+          $db_host      = "smsdb.zmg260.com";
+          $db_username = "better_sms";
+          $db_password = "Zpa@!%vfrG34f";
+          $db_name = "better_sms";
+          } 
       else {
 		$db_host      = "127.0.0.1";
 		$db_username = "com2120";

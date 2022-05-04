@@ -42,12 +42,18 @@
       $db_password = "Zpa@!%vfrG34f";
       $db_name = "efmtz";
       }
-      else if ( ( in_array($host_name,[MCHEZOSUPA]))) {
+    else if ( ( in_array($host_name,[MCHEZOSUPA]))) {
         $db_host      = "db.tzg255.com";
         $db_username = "itv2220";
         $db_password = "Zpa@!%vfrG34f";
         $db_name = "itv";
         }
+    else if ( ( in_array($host_name,[BETTER]))) {
+          $db_host      = "db.zmg260.com";
+          $db_username = "better";
+          $db_password = "Zpa@!%vfrG34f";
+          $db_name = "better";
+          }        
 	 else {
 		$db_host      = "127.0.0.1";
 		$db_username = "com2120";

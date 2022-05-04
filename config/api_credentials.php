@@ -8,7 +8,9 @@ define( 'EFMTZ_COM','ip-172-31-36-164');
 define( 'BANDIKABANDUA','ip-172-31-45-166');
 define( 'MCHEZOBOMBA', 'ip-172-31-35-168');
 define( 'MCHEZOSUPA', 'ip-172-31-45-246');
+define( 'BETTER', 'ip-172-31-44-210');
 define( 'COTZ',[CMEDIA_COTZ,EFMTZ_COM,BANDIKABANDUA,MCHEZOBOMBA,MCHEZOSUPA]);
+define( 'ZAMBIA',[BETTER]);
 
 
 define( 'NITEXTSMSURL',"https://nitext.co.ke/index.php/api/sendSmsMultiple");

@@ -48,7 +48,13 @@ else if ( ( in_array($host_name,[MCHEZOBOMBA]))) {
           $db_password = "Zpa@!%vfrG34f";
           $db_name = "itv_analytics";
           }        
-else {
+  else if ( ( in_array($host_name,[BETTER]))) {
+            $db_host      = "analyticsdb.zmg260.com";
+            $db_username = "better_analytics";
+            $db_password = "Zpa@!%vfrG34f";
+            $db_name = "better_analytics";
+            }   
+          else {
 		$db_host      = "127.0.0.1";
 		$db_username = "com2120";
     $db_password = "Zpa@!%vfrG34f";
