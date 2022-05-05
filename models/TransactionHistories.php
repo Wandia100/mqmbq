@@ -294,7 +294,8 @@ class TransactionHistories extends \yii\db\ActiveRecord
                     $row->save(false);
                     if(in_array(gethostname(),COTZ))
                     {
-                        $totalEntry=TransactionHistories::countEntry($row->MSISDN);
+                        //$totalEntry=TransactionHistories::countEntry($row->MSISDN);
+                        $totalEntry=Customer::customerTicket($row->MSISDN);
                         $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
                         Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_show['station_id']);
                     }
@@ -317,7 +318,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
             {
                 if(in_array(gethostname(),COTZ))
                         {
-                            $totalEntry=TransactionHistories::countEntry($row->MSISDN);
+                            $totalEntry=Customer::customerTicket($row->MSISDN);
                             $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
                             Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,NULL);
                         }

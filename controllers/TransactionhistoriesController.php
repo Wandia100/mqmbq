@@ -17,6 +17,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\Myhelper;
+use app\models\Customer;
 use Webpatser\Uuid\Uuid;
 use yii\db\IntegrityException;
 
@@ -335,7 +336,8 @@ class TransactionhistoriesController extends Controller
                         $row->save(false);
                         if(in_array($hostname,COTZ))
                         {
-                            $totalEntry=TransactionHistories::countEntry($row->MSISDN);
+                            //$totalEntry=TransactionHistories::countEntry($row->MSISDN);
+                            $totalEntry=Customer::customerTicket($row->MSISDN);
                             $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
                             Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_show['station_id']);
                         }
@@ -354,7 +356,8 @@ class TransactionhistoriesController extends Controller
                 {
                     if(in_array($hostname,COTZ))
                         {
-                            $totalEntry=TransactionHistories::countEntry($row->MSISDN);
+                            //$totalEntry=TransactionHistories::countEntry($row->MSISDN);
+                            $totalEntry=Customer::customerTicket($row->MSISDN);
                             $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
                             Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,NULL);
                         }
