@@ -37,10 +37,10 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout','growthtrend','player'],
+                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout','growthtrend','player','station'],
                 'rules' => [
                     [
-                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','growthtrend'],
+                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','growthtrend','station'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -887,6 +887,32 @@ class ReportController extends Controller{
     {
         $this->playerData();
 
+    }
+    public function actionStation($station)
+    {
+        $this->stationData($station);
+
+    }
+    private function stationData($station)
+    {
+        $response=[];
+        $response=TransactionHistories::find()->select('reference_phone')->where(["reference_code"=>$station])->distinct()->all();
+        $filename=$station."_".date("Y-m-d-His").".csv";
+        header( 'Content-Type: text/csv; charset=utf-8' );
+        header( 'Content-Disposition: attachment; filename='.$filename );
+        $output = fopen( 'php://output', 'w' );
+        ob_start();
+        
+        for($i=0;$i<count($response); $i++)
+        {
+            $arr=[];
+              $row=$response[$i];
+              array_push($arr,$row['reference_phone']);
+              fputcsv( $output,$arr);
+            
+        }
+        Yii::$app->end();
+        return ob_get_clean();
     }
     private function playerData()
     {
