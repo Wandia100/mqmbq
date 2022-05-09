@@ -7,10 +7,11 @@ use yii\base\BaseObject;
 
 class RevenueJob extends BaseObject implements \yii\queue\JobInterface
 {
+    public $revenue_date;
     public function execute($queue)
     {
         //code to send sms by id
-        MpesaPayments::logRevenue();
+        MpesaPayments::logRevenue($this->revenue_date);
     }
 
 }

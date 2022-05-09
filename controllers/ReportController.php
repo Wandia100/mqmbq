@@ -841,10 +841,21 @@ class ReportController extends Controller{
     {        
         Yii::$app->queue->push(new AwardsJob());
     }
-    public function actionLogrevenue()
+    public function actionLogrevenue($date=NULL)
     {
-        
-        Yii::$app->queue->push(new RevenueJob());
+        if($date!=NULL)
+        {
+            $revenue_date=$date;
+        }
+        else if(date("H")=="00")
+        {
+            $revenue_date= date('Y-m-d',strtotime('yesterday'));
+        }
+        else
+        {
+            $revenue_date= date('Y-m-d');
+        }
+        Yii::$app->queue->push(new RevenueJob(['revenue_date'=>$revenue_date]));
     }
     public function actionLogger($m)
     {
