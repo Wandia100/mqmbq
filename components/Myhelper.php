@@ -872,6 +872,10 @@ class Myhelper extends Component {
 					$toreplace       = ["[amount]" ];
 					$data['message'] = str_replace( $toreplace, $variables, $temp );
 					break;
+				case 'bonus':
+						$toreplace       = ["[amount]","[station_name]" ];
+						$data['message'] = str_replace( $toreplace, $variables, $temp );
+						break;						
 				default:
 					$data['message'] = isset( $variables['message'] ) ? $variables['message'] : '';
 					break;

@@ -132,6 +132,14 @@ class TransactionHistories extends \yii\db\ActiveRecord
         ->bindValue(':from_date',$from_date)
         ->queryOne();
     }
+    public static function pickBonusWinners($station_show_id,$past_winners,$from_date,$limit)
+    {
+        $sql="SELECT count(reference_phone) as total,reference_phone,station_id FROM transaction_histories WHERE station_show_id=:station_show_id AND created_at >:from_date AND reference_phone NOT IN (" . implode(',', $past_winners) . ") group by reference_phone,station_id ORDER BY total DESC LIMIT $limit";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':station_show_id',$station_show_id)
+        ->bindValue(':from_date',$from_date)
+        ->queryAll();
+    }
     public static function getTotalTransactions($from_time)
     {
         $sql="select COALESCE(sum(amount),0) as total_history from 

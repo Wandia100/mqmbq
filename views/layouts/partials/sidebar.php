@@ -177,6 +177,9 @@ use luc\tourist\Tourist;
                 <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(41) ) ) ? '':'hidden'?>  ">
                     <?=Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Admin Draws', Url::to(['/transactionhistories/admindraws']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
+                <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(41) ) ) ? '':'hidden'?>  ">
+                    <?=Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Bonus Draws', Url::to(['/bonus/draw']), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
                     </ul>
                 </li>
 
