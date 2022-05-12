@@ -37,7 +37,7 @@ class BonusController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
-                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(41) );
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(42) );
                                 return in_array( Yii::$app->user->identity->email, $users );
                             }
                         }
