@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\DepositJob;
 use Yii;
 use app\models\TransactionHistories;
 use app\models\StationShowPresenters;
@@ -278,6 +279,14 @@ class TransactionhistoriesController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    public function actionCleaner()
+    {
+        $data=MpesaPayments::find()->where("state=0")->andWhere("created_at > 2022-05-13")->all();
+        foreach($data as $row)
+        {
+            Yii::$app->queue->priority(10)->push(new DepositJob(['id'=>$row->id]));
+        }
     }
     public function actionAssignshows()
     {
