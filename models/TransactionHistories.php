@@ -263,7 +263,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
             $play_max=300;
         }
 
-        $row=MpesaPayments::findOne(['TransID'=>$id]);
+        $row=MpesaPayments::findOne($id);
         //check if amount > 300 and refund after deducting 100
         if($row->TransAmount <$play_min)
         {
