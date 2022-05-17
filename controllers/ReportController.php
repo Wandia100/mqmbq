@@ -589,6 +589,10 @@ class ReportController extends Controller{
             'data' => $data
         ]);
     }
+    public function actionHour($from_time)
+    {
+        MpesaPayments::calculateStationPercentage($from_time);
+    }
     /**
      * Method to export commission
      */
