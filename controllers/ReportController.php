@@ -589,8 +589,9 @@ class ReportController extends Controller{
             'data' => $data
         ]);
     }
-    public function actionHour($from_time)
+    public function actionDayupdate()
     {
+        $from_time=date("Y-m");
         MpesaPayments::calculateStationPercentage($from_time);
     }
     /**
