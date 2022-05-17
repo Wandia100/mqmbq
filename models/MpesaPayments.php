@@ -413,7 +413,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
         {
             $row=$data[$i];
             $percent=round(($row['total']/$total),2);
-            $stop=round($percent*$unassigned);
+            $stop=ceil($percent*$unassigned);
             //update this percentage
             if($stop > 0)
             {
