@@ -88,7 +88,7 @@ $this->title = 'Home';
                 </div>
                 
                 <div class="well well-lg" style="background-color: #E1F0FF">
-                    <h5 class="font-weight-bold"><?=$currency;?> <?=number_format(app\models\SiteReport::getSiteReport('totalrevenue') + $today_income) ?></h5>
+                    <h5 class="font-weight-bold"><?=$currency;?> <?=number_format(app\models\SiteReport::getSiteReport('totalrevenue')) ?></h5>
                     <p>Total revenue</p>
                 </div>
             </div>
