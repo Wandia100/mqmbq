@@ -7,6 +7,7 @@ use app\models\Users;
 use app\models\Outbox;
 use app\models\Template;
 use app\components\OutboxJob;
+use Webpatser\Uuid\Uuid;
 use Yii;
 use yii\base\Component;
 use yii\helpers\Html;
@@ -880,6 +881,7 @@ class Myhelper extends Component {
 					$data['message'] = isset( $variables['message'] ) ? $variables['message'] : '';
 					break;
 			}
+			$outbox->id=Uuid::generate()->string;
 			$outbox->attributes = $data;
 			$outbox->save(false);
 			Yii::$app->queue->push(new OutboxJob(['id'=>$outbox->id]));

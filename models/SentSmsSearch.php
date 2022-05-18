@@ -69,7 +69,7 @@ class SentSmsSearch extends SentSms
         if(\Yii::$app->myhelper->isStationManager()){
            $query->andWhere(['IN','station_id', \Yii::$app->myhelper->getStations()]); 
         }
-            $query->orderBy('id DESC');
+            $query->orderBy('created_date DESC');
         return $dataProvider;
     }
 }

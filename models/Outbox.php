@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use app\components\Myhelper;
+use Webpatser\Uuid\Uuid;
 
 /**
  * This is the model class for table "outbox".
@@ -35,7 +36,7 @@ class Outbox extends \yii\db\ActiveRecord
     {
         return [
             [['message'], 'string'],
-            [['created_date'], 'safe'],
+            [['created_date','id'], 'safe'],
             [['status', 'category'], 'integer'],
             [['receiver', 'sender'], 'string', 'max' => 20],
             [['station_id'], 'string', 'max' => 50],
@@ -153,6 +154,7 @@ class Outbox extends \yii\db\ActiveRecord
             return;
         }
         $sentsms=new SentSms();
+        $sentsms->id=Uuid::generate()->string;
         $sentsms->receiver=$outbox->receiver;
         $sentsms->sender=$outbox->sender;
         $sentsms->message=$outbox->message;
@@ -174,7 +176,7 @@ class Outbox extends \yii\db\ActiveRecord
         if(in_array($hostname,COTZ))
         {
             $channel=Myhelper::getSmsChannel($sentsms->receiver);
-            Myhelper::sendTzSms($sentsms->receiver,$sentsms->message,SENDER_NAME,$channel);
+            Myhelper::sendTzSms($sentsms->receiver,$sentsms->message,SENDER_NAME,$channel,$sentsms->id);
         }
         
                 
