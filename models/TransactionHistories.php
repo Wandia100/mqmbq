@@ -279,7 +279,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
             }
             else
             {
-                $station_show=StationShows::getStationShow($row->BillRefNumber);
+                $station_show=StationShows::getStationShow($row->BillRefNumber,date("H:i:s",strtotime($row->created_at)));
             }
             if($station_show!=NULL)
             {
