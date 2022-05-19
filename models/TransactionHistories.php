@@ -252,36 +252,15 @@ class TransactionHistories extends \yii\db\ActiveRecord
     }
     public static function processPayment($id)
     {
-        if (in_array(gethostname(),COTZ))
-        {
-            $play_min=1000;
-            $play_max=2000;
+        $row=MpesaPayments::findOne($id);
+        if (gethostname()==COMP21_NET && strlen($row->BillRefNumber)==1 && strtolower($row->BillRefNumber)=='j') {
+            $station_show=StationShows::getStationShowNet($row->BillRefNumber);
         }
         else
         {
-            $play_min=100;
-            $play_max=300;
+            $station_show=StationShows::getStationShow($row->BillRefNumber,date("H:i:s",strtotime($row->created_at)));
         }
-
-        $row=MpesaPayments::findOne($id);
-        //check if amount > 300 and refund after deducting 100
-        if($row->TransAmount <$play_min)
-        {
-            //do nothing
-            $row->state=1;
-            $row->save(false);
-            Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
-        }
-        else if($row->TransAmount >= $play_min && $row->TransAmount < $play_max)
-        {
-            if (gethostname()==COMP21_NET && strlen($row->BillRefNumber)==1 && strtolower($row->BillRefNumber)=='j') {
-                $station_show=StationShows::getStationShowNet($row->BillRefNumber);
-            }
-            else
-            {
-                $station_show=StationShows::getStationShow($row->BillRefNumber,date("H:i:s",strtotime($row->created_at)));
-            }
-            if($station_show!=NULL)
+        if($station_show!=NULL)
             {
                 try 
                 {
@@ -318,7 +297,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
                 }
                 catch (IntegrityException $e) {
                     //allow execution
-                    var_dump($e);
+                    //var_dump($e);
                 }
                 
             }
@@ -335,34 +314,5 @@ class TransactionHistories extends \yii\db\ActiveRecord
                             Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
                         }
             }
-           
-        }
-        else{
-            if($row->TransAmount < 10000)
-            {
-                $refund=$row->TransAmount-$play_min;
-                if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
-                {
-                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",0,NULL);
-                }
-                $row->deleted_at=date("Y-m-d H:i:s");
-                $row->state=1;
-                $row->save(false);
-                Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
-            } 
-            else
-            {
-                $refund=$row->TransAmount-$play_min;
-                if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
-                {
-                    Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",4,NULL);
-                }
-                $row->deleted_at=date("Y-m-d H:i:s");
-                $row->state=1;
-                $row->save(false);
-
-            }
-           
-        }
     }
 }

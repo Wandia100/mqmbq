@@ -290,82 +290,62 @@ class TransactionhistoriesController extends Controller
     }
     public function actionAssignshows()
     {
-        //Myhelper::checkRemoteAddress();
-        $hostname = gethostname(); //
-        if (in_array($hostname, COTZ))
-        {
-            $play_min=1000;
-            $play_max=2000;
-        }
-        else
-        {
-            $play_min=100;
-            $play_max=300;
-        }
-
         $data=MpesaPayments::find()->where("state=0")->all();
         for($i=0;$i<count($data); $i++)
         {
             $row=$data[$i];
-            //check if amount > 300 and refund after deducting 100
-            if($row->TransAmount <$play_min)
+        if (gethostname()==COMP21_NET && strlen($row->BillRefNumber)==1 && strtolower($row->BillRefNumber)=='j') {
+            $station_show=StationShows::getStationShowNet($row->BillRefNumber);
+        }
+        else
+        {
+            $station_show=StationShows::getStationShow($row->BillRefNumber,date("H:i:s",strtotime($row->created_at)));
+        }
+        if($station_show!=NULL)
             {
-                //do nothing
-                $row->state=1;
-                $row->save(false);
-                Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
-            }
-            else if($row->TransAmount >= $play_min && $row->TransAmount < $play_max)
-            {
-                if (in_array($hostname,[COMP21_NET]) && strlen($row->BillRefNumber)==1 && strtolower($row->BillRefNumber)=='j') {
-                    $station_show=StationShows::getStationShowNet($row->BillRefNumber);
-                }
-                else
+                try 
                 {
-                    $station_show=StationShows::getStationShow($row->BillRefNumber,date("H:i:s",strtotime($row->created_at)));
-                }
-                if($station_show!=NULL)
-                {
-                    try 
+                    $model=new TransactionHistories();
+                    $model->id=Uuid::generate()->string;
+                    $model->mpesa_payment_id=$row->id;
+                    $model->reference_name=$row->FirstName." ".$row->MiddleName." ".$row->LastName;
+                    $model->reference_phone=$row->MSISDN;
+                    $model->reference_code=$row->BillRefNumber;
+                    $model->station_id=$station_show['station_id'];
+                    $model->station_show_id=$station_show['show_id'];
+                    $model->amount=$row->TransAmount;
+                    $model->created_at=$row->created_at;
+                    $model->save(false);
+                    $row->operator=Myhelper::getOperator($row->MSISDN);
+                    $row->state=1;
+                    $row->station_id=$station_show['station_id'];
+                    $row->save(false);
+                    if(in_array(gethostname(),COTZ))
                     {
-                        $model=new TransactionHistories();
-                        $model->id=Uuid::generate()->string;
-                        $model->mpesa_payment_id=$row->id;
-                        $model->reference_name=$row->FirstName." ".$row->MiddleName." ".$row->LastName;
-                        $model->reference_phone=$row->MSISDN;
-                        $model->reference_code=$row->BillRefNumber;
-                        $model->station_id=$station_show['station_id'];
-                        $model->station_show_id=$station_show['show_id'];
-                        $model->amount=$row->TransAmount;
-                        $model->created_at=$row->created_at;
-                        $model->save(false);
-                        $row->operator=Myhelper::getOperator($row->MSISDN);
-                        $row->state=1;
-                        $row->station_id=$station_show['station_id'];
-                        $row->save(false);
-                        if(in_array($hostname,COTZ))
-                        {
-                            //$totalEntry=TransactionHistories::countEntry($row->MSISDN);
-                            $totalEntry=Customer::customerTicket($row->MSISDN);
-                            $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-                            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_show['station_id']);
-                        }
-                        else
-                        {
-                            Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,$station_show['station_id']);
-                        }
+                        //$totalEntry=TransactionHistories::countEntry($row->MSISDN);
+                        $totalEntry=Customer::customerTicket($row->MSISDN);
+                        $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
+                        Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_show['station_id']);
+                    }
+                    else
+                    {
+                        Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,$station_show['station_id']);
+                    }
+                    $row->operator=Myhelper::getOperator($row->MSISDN);
+                    $row->state=1;
+                    $row->save(false);
 
-                    }
-                    catch (IntegrityException $e) {
-                        //allow execution
-                    }
-                    
                 }
-                else
-                {
-                    if(in_array($hostname,COTZ))
+                catch (IntegrityException $e) {
+                    //allow execution
+                    //var_dump($e);
+                }
+                
+            }
+            else
+            {
+                if(in_array(gethostname(),COTZ))
                         {
-                            //$totalEntry=TransactionHistories::countEntry($row->MSISDN);
                             $totalEntry=Customer::customerTicket($row->MSISDN);
                             $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
                             Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,NULL);
@@ -374,79 +354,21 @@ class TransactionhistoriesController extends Controller
                         {
                             Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
                         }
-                        $row->operator=Myhelper::getOperator($row->MSISDN);
-                        $row->state=1;
-                        $row->save(false);
-                }
-               
             }
-            else{
-                if($row->TransAmount < 10000)
-                {
-                    $refund=$row->TransAmount-$play_min;
-                    if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
-                    {
-                        Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",0,NULL);
-                    }
-                    $row->deleted_at=date("Y-m-d H:i:s");
-                    $row->state=1;
-                    $row->save(false);
-                    Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
-                } 
-                else
-                {
-                    $refund=$row->TransAmount-$play_min;
-                    if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
-                    {
-                        Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",4,NULL);
-                    }
-                    $row->deleted_at=date("Y-m-d H:i:s");
-                    $row->state=1;
-                    $row->save(false);
-
-                }
-               
-            }
-
-            
+    
         }
     }
     public function actionAssign($created_at)
     {
-        //Myhelper::checkRemoteAddress();
-        $hostname = gethostname(); //
-        if (in_array($hostname, COTZ))
-        {
-            $play_min=1000;
-            $play_max=2000;
-        }
-        else
-        {
-            $play_min=100;
-            $play_max=300;
-        }
-
         $data=MpesaPayments::find()->where("created_at > '$created_at'")->all();
         for($i=0;$i<count($data); $i++)
         {
             $row=$data[$i];
-            //check if amount > 300 and refund after deducting 100
-            if($row->TransAmount <$play_min)
+            //get transaction histories
+            $model=TransactionHistories::findOne(["mpesa_payment_id"=>$row->id]);
+            if($model==NULL)
             {
-                //do nothing
-                $row->state=1;
-                $row->save(false);
-                Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
-            }
-            else if($row->TransAmount >= $play_min && $row->TransAmount < $play_max)
-            {
-                if (in_array($hostname,[COMP21_NET]) && strlen($row->BillRefNumber)==1 && strtolower($row->BillRefNumber)=='j') {
-                    $station_show=StationShows::getStationShowNet($row->BillRefNumber);
-                }
-                else
-                {
-                    $station_show=StationShows::getStationShow($row->BillRefNumber,date("H:i:s",strtotime($row->created_at)));
-                }
+                $station_show=StationShows::getStationShow($row->BillRefNumber,date("H:i:s",strtotime($row->created_at)));
                 if($station_show!=NULL)
                 {
                     try 
@@ -466,73 +388,14 @@ class TransactionhistoriesController extends Controller
                         $row->state=1;
                         $row->station_id=$station_show['station_id'];
                         $row->save(false);
-                        if(in_array($hostname,COTZ))
-                        {
-                            //$totalEntry=TransactionHistories::countEntry($row->MSISDN);
-                            $totalEntry=Customer::customerTicket($row->MSISDN);
-                            $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-                            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_show['station_id']);
-                        }
-                        else
-                        {
-                            Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,$station_show['station_id']);
-                        }
-
                     }
                     catch (IntegrityException $e) {
                         //allow execution
-                    }
-                    
+                    }     
                 }
-                else
-                {
-                    if(in_array($hostname,COTZ))
-                        {
-                            //$totalEntry=TransactionHistories::countEntry($row->MSISDN);
-                            $totalEntry=Customer::customerTicket($row->MSISDN);
-                            $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-                            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,NULL);
-                        }
-                        else
-                        {
-                            Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
-                        }
-                        $row->operator=Myhelper::getOperator($row->MSISDN);
-                        $row->state=1;
-                        $row->save(false);
-                }
-               
             }
-            else{
-                if($row->TransAmount < 10000)
-                {
-                    $refund=$row->TransAmount-$play_min;
-                    if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
-                    {
-                        Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",0,NULL);
-                    }
-                    $row->deleted_at=date("Y-m-d H:i:s");
-                    $row->state=1;
-                    $row->save(false);
-                    Myhelper::setSms('invalidDrawAmount',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
-                } 
-                else
-                {
-                    $refund=$row->TransAmount-$play_min;
-                    if(Disbursements::checkDuplicate($row->id,$row->MSISDN,$refund) ==0)
-                    {
-                        Disbursements::saveDisbursement($row->id,$row->FirstName.$row->LastName,$row->MSISDN,$refund,"refund",4,NULL);
-                    }
-                    $row->deleted_at=date("Y-m-d H:i:s");
-                    $row->state=1;
-                    $row->save(false);
-
-                }
-               
-            }
-
-            
-        }
+           
+        } 
     }
     public static function actionRemovedups()
     {
