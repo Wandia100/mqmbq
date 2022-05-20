@@ -303,6 +303,9 @@ class TransactionHistories extends \yii\db\ActiveRecord
             }
             else
             {
+                    $row->operator=Myhelper::getOperator($row->MSISDN);
+                    $row->state=1;
+                    $row->save(false);
                 if(in_array(gethostname(),COTZ))
                         {
                             $totalEntry=Customer::customerTicket($row->MSISDN);
