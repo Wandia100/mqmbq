@@ -15,6 +15,7 @@ use yii\web\UploadedFile;
 use yii\db\IntegrityException;
 use app\components\DepositJob;
 use app\components\SetStationJob;
+use app\models\Customer;
 use app\models\TransactionHistories;
 
 /**
@@ -316,6 +317,17 @@ class MpesapaymentsController extends Controller
 		);
 
 	}
+    public function actionTickets()
+    {
+        $data=Customer::find()->all();
+        foreach($data as $row)
+        {
+            $total=TransactionHistories::countEntry($row->msisdn);
+            $row->total=$total;
+            $row->updated_at=date("Y-m-d H:i:s");
+            $row->save();
+        }
+    }
     public function actionSetstation()
     {
         Yii::$app->queue->push(new SetStationJob());
