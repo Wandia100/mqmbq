@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use app\models\Outbox;
 use app\components\OutboxJob;
+use Webpatser\Uuid\Uuid;
 
 /**
  * ContactForm is the model behind the contact form.
@@ -76,6 +77,7 @@ class ForgotPass extends Model
         
         //Send sms
         $outbox= new Outbox();
+        $outbox->id=Uuid::generate()->string;
         $outbox->receiver=$userrecord->phone_number;
         $outbox->message="Your one time password is ".$userrecord->pass_code;
         $outbox->sender=SENDER_NAME;
