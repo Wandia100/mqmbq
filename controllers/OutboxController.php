@@ -197,4 +197,12 @@ class OutboxController extends Controller
             Outbox::removeDups($row['receiver'],$row['total']-1);
         }
     }
+    public function actionHello()
+    {
+        $sms=['receiver'=>"254728202194",'message'=>"hello world",'id'=>123456];
+        $sms=json_decode(json_encode($sms));
+       // echo $sms->receiver; exit();
+        $result=Outbox::niTextSms($sms);
+        var_dump($result);
+    }
 }

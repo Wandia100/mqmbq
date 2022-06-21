@@ -228,6 +228,7 @@ class Outbox extends \yii\db\ActiveRecord
 
         $response = curl_exec($curl);
         curl_close($curl);
+        return $response;
     }
     public static function getDuplicates()
     {
