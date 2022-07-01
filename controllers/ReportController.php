@@ -27,6 +27,7 @@ use app\components\SiteReportJob;
 use app\models\SiteReport;
 use app\models\Loser;
 use kartik\mpdf\Pdf;
+use yii\helpers\Url;
 
 class ReportController extends Controller{
         /**
@@ -954,6 +955,18 @@ class ReportController extends Controller{
         }
         Yii::$app->end();
         return ob_get_clean();
+    }
+    public function actionBacklog($month,$start,$end)
+    {
+        while($start <= $end)
+        {
+            $start=(strlen($start)==1)?"0$start":$start;
+           $url=Url::base('https')."/report/logrevenue?date=2022-$month-$start";
+           Myhelper::curlGet($url);
+           $start++;
+            
+        }
+
     }
 
 }
