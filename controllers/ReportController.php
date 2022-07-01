@@ -38,10 +38,10 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout','growthtrend','player','station'],
+                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout','growthtrend','player','station','backlog'],
                 'rules' => [
                     [
-                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','growthtrend','station'],
+                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','growthtrend','station','backlog'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
