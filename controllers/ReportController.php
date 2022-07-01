@@ -961,6 +961,7 @@ class ReportController extends Controller{
         while($start <= $end)
         {
             $start=(strlen($start)==1)?"0$start":$start;
+            $month=(strlen($month)==1)?"0$month":$month;
            $url=Url::base('https')."/report/logrevenue?date=2022-$month-$start";
            Myhelper::curlGet($url);
            $start++;
