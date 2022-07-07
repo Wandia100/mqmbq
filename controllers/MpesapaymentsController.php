@@ -17,6 +17,7 @@ use app\components\DepositJob;
 use app\components\SetStationJob;
 use app\models\Customer;
 use app\models\TransactionHistories;
+use Exception;
 
 /**
  * MpesapaymentsController implements the CRUD actions for MpesaPayments model.
@@ -396,9 +397,14 @@ class MpesapaymentsController extends Controller
         $data=MpesaPayments::find()->where("operator='airtel'")->andWhere("created_at > '2022-07-02'")->all();
         foreach($data as $row)
         {
-            $row->created_at=Myhelper::formatAirtelDate($row->TransID);
-            $row->updated_at=date("Y-m-d H:i:s");
-            $row->save(false);
+            try{
+                $row->created_at=Myhelper::formatAirtelDate($row->TransID);
+                $row->updated_at=date("Y-m-d H:i:s");
+                $row->save(false);
+            }
+            catch(Exception $e)
+            {}
+            
         }
     }
     /*public function actionDemo($id)
