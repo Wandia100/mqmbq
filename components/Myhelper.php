@@ -998,5 +998,15 @@ class Myhelper extends Component {
                 return false;
             }
 		}
+		public static function formatAirtelDate($str)
+		{
+			$year=substr($str,2,2);
+			$month=substr($str,4,2);
+			$day=substr($str,6,2);
+			$hour=substr($str,9,2);
+			$minute=substr($str,11,2);
+			$datetime="20$year-$month-$day $hour:$minute:00";
+			return $datetime;
+		}
 }
 
