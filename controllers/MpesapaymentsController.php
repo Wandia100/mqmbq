@@ -396,7 +396,7 @@ class MpesapaymentsController extends Controller
         $data=MpesaPayments::find()->where("operator='airtel'")->andWhere("created_at > '2022-07-02'")->all();
         foreach($data as $row)
         {
-            $row->created_at=Myhelper::formatAirtelDate($row->TransId);
+            $row->created_at=Myhelper::formatAirtelDate($row->TransID);
             $row->updated_at=date("Y-m-d H:i:s");
             $row->save(false);
         }
