@@ -291,18 +291,8 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
         ->queryOne();
         return $resp['total'];
     }
-    public static function LastHour()
+    public static function LastHour($the_day,$hr)
     {
-        if(date("H")=="00")
-        {
-            $the_day=date('Y-m-d',strtotime("yesterday"));
-            $hr="23";
-        }
-        else
-        {
-            $the_day=date("Y-m-d");
-            $hr=Myhelper::formatHour(date('H')-1);
-        }
         $from_time=$the_day." ".$hr;
         MpesaPayments::calculateStationPercentage($from_time);
         $stations=Stations::getActiveStations();
