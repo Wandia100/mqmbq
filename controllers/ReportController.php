@@ -38,10 +38,10 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout','growthtrend','player','station','backlog'],
+                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout','growthtrend','player','station','backlog','hourrefresh'],
                 'rules' => [
                     [
-                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','growthtrend','station','backlog'],
+                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','growthtrend','station','backlog','hourrefresh'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -856,6 +856,10 @@ class ReportController extends Controller{
                 Yii::$app->queue->push(new LastHourJob(['the_day'=>$log_date,'hr'=>$hr]));
             }
         }
+    }
+    public function actionHourrefresh($log_date,$hr)
+    {
+        Yii::$app->queue->push(new LastHourJob(['the_day'=>$log_date,'hr'=>$hr]));
     }
     public function actionLogshowsummary()
     {
