@@ -7,6 +7,7 @@ use Yii;
 use app\models\Outbox;
 use app\models\OutboxSearch;
 use app\models\SentSms;
+use Webpatser\Uuid\Uuid;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -86,6 +87,7 @@ class OutboxController extends Controller
             return;
         }
         $sentsms=new SentSms();
+        $sentsms->id=Uuid::generate()->string;
         $sentsms->receiver=$outbox->receiver;
         $sentsms->sender=$outbox->sender;
         $sentsms->message=$outbox->message;
@@ -95,7 +97,7 @@ class OutboxController extends Controller
         $sentsms->save(false);
         $outbox->delete(false);
         $channel=Myhelper::getSmsChannel($sentsms->receiver);
-            Myhelper::sendTzSms($sentsms->receiver,$sentsms->message,SENDER_NAME,$channel);
+            Myhelper::sendTzSms($sentsms->receiver,$sentsms->message,SENDER_NAME,$channel,$sentsms->id);
         }
     }
 
