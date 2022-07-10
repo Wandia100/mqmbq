@@ -7,11 +7,64 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\TransactionHistoriesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Presenter DashBoard';
+$this->title = 'JACKPOT DRAW';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transaction-histories-index">
+<div class="row">
+    <div class="col-md-12"> 
+    <?php
+    $action='/transactionhistories/jackpotdraw';
+    $id = str_replace( "/", "", $action );
+    echo Html::beginForm(
+        $action = yii\helpers\Url::base() . $action,
+        $method = 'get',
+        $hmtmlOptions = array('class' => 'form form-inline' )
+    );
+    ?>
+    
 
+        <div class="form-group">
+        <label for="from">STATION SHOW:&nbsp;&nbsp; </label>
+        <?php
+        echo Html::dropDownList("show_id", $selection = $show_id, $shows,['prompt'=>'--Select--']);
+        ?>
+        </div class="form-group">
+    <div class="form-group">
+                <label for="from">&nbsp;&nbsp; FROM: &nbsp;&nbsp;</label>
+                    <?= yii\jui\DatePicker::widget( [
+                            'name'          => 'from',
+                            'value'         => (!empty($from)?$from:date( 'Y-m-d 00:00:00',strtotime('-3 days', time()))),
+                            'dateFormat'    => 'yyyy-MM-dd',
+                            'clientOptions' => [ 'defaultDate' => '2015-01-01' ],
+                            'options'       => [ 'class' => 'form-control inmfield required', ]
+                    ] ) ?>
+            </div>
+            &nbsp;&nbsp;
+            <div class="form-group">
+                <label for="to">TO: &nbsp;&nbsp;</label>
+                    <?= yii\jui\DatePicker::widget( [
+                            'name'          => 'to',
+                            'value'         => (!empty($to)?$to:date("Y-m-d")),
+                            'dateFormat'    => 'yyyy-MM-dd',
+                            'clientOptions' => [ 'defaultDate' => '2015-01-01' ],
+                            'options'       => [ 'class' => 'form-control inmfield required', ]
+                    ] ) ?>
+            </div>
+            &nbsp;&nbsp;
+            <div class="form-group">
+                <label</label>
+                <br>
+                <button type="submit" class="form-control btn btn-primary">
+                    <span class="glyphicon glyphicon-move"></span> Search &nbsp;&nbsp;
+                </button>
+            </div>
+            <br>
+			<?php echo Html::endform();
+		?>
+     </div>
+    
+    </div>
     <h1><?= Html::encode(strtoupper($show_name)) ?></h1>
     <div class="row">
     <div class="col-md-6">
@@ -37,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="card text-dark bg-light mb-3">
     <div class="card-body">
     <?php
-    if (!empty($presenter_station_show) && $presenter_station_show['is_admin'])
+    if (!empty($presenter_station_show))
     {
         ?>
         <button class="btn btn-primary" onclick="runDraw()" type="button">DRAW WINNER</button>
@@ -138,7 +191,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     $presenter_id=$presenter_station_show['presenter_id'];
                                     $prize_id=$row['prize_id'];
                                     ?>
-                                    <button id="<?=$row['prize_id'];?>" class="btn btn-danger" onclick="drawPrize('<?=$station_show_id;?>','<?=$presenter_id;?>','<?=$prize_id;?>','<?=$from;?>',0,'<?=$from;?>')" type="button"><?=$row['name'];?></button>
+                                    <button id="<?=$row['prize_id'];?>" class="btn btn-danger" onclick="drawPrize('<?=$station_show_id;?>','<?=$presenter_id;?>','<?=$prize_id;?>','<?=$from;?>',2,'<?=$to;?>')" type="button"><?=$row['name'];?></button>
                                     <?php
                                 }
                                 ?>

@@ -264,6 +264,67 @@ class TransactionhistoriesController extends Controller
             'percent_pending' => $percent_pending
         ]);
     }
+    public function actionJackpotdraw($show_id="",$from="",$to="")
+    {
+        $today=date("Y-m-d");
+
+        $presenter=[];
+        $presenter_station_show=[];
+        $shows=StationShows::getJackpotShows();
+        if(!empty($show_id) && !empty($from) && !empty($to))
+        {
+            $from=$from." 00:00:00";
+            $to=$to." 23:59:59";
+            $presenter_station_show=StationShowPresenters::jackpotShow($show_id);
+        }
+        if(!empty($presenter_station_show))
+        {
+            $station_show_id=$presenter_station_show['station_show_id'];
+            $start_time=$from." ".$presenter_station_show['start_time'];
+            $end_time=$from." ".$presenter_station_show['end_time'];
+            $show_transactions=TransactionHistories::getJackpotTransactions($from,$to);
+            $transaction_total=TransactionHistories::getJackpotTransactionTotal($station_show_id,$start_time,$end_time)['total'];
+            $transaction_count=count($show_transactions);
+            $target_achievement=round(($transaction_total/$presenter_station_show['target'])*100,2);
+            $show_name=$presenter_station_show['show_name']." ".$from." - ".$to;
+            $recent_winners=WinningHistories::getRecentWinners($presenter_station_show['station_show_id'],$today);
+            $show_prizes=StationShowPrizes::getShowPrizes(strtolower(date("l",strtotime($today))),$presenter_station_show['station_show_id'],$today);
+            $percent_raised=round(($transaction_total/$presenter_station_show['target'])*100,2);
+            $percent_pending=round((($presenter_station_show['target']-$transaction_total)/$presenter_station_show['target'])*100,2);
+        }
+        else
+        {
+            $transaction_total=0;
+            $transaction_count=0;
+            $target_achievement=0;
+            $show_name="No draw at this moment";
+            $recent_winners=array();
+            $show_prizes=array();
+            $percent_raised=0;
+            $percent_pending=0;
+        }
+        //echo json_encode($show_prizes); exit();
+        
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "Jackpot Draw";
+        $act ->setLog();
+        
+        return $this->render('jackpot_draw', [
+            'show_id' => $show_id,
+            'from' => $from,
+            'to' => $to,
+            'shows' => $shows,
+            'show_name' => $show_name,
+            'transaction_total' => $transaction_total,
+            'transaction_count' => $transaction_count,
+            'target_achievement' => $target_achievement,
+            'presenter_station_show' => $presenter_station_show,
+            'recent_winners' => $recent_winners,
+            'show_prizes' => $show_prizes,
+            'percent_raised' => $percent_raised,
+            'percent_pending' => $percent_pending
+        ]);
+    }
 
     /**
      * Finds the TransactionHistories model based on its primary key value.

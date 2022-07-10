@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'sunday',
             'start_time',
             'end_time',
-            //'enabled',
+            'jackpot',
             //'created_at',
             //'updated_at',
             //'deleted_at',

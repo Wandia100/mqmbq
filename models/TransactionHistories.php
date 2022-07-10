@@ -113,6 +113,15 @@ class TransactionHistories extends \yii\db\ActiveRecord
         ->bindValue(':end_time',$end_time)
         ->queryAll();
     }
+    public static function getJackpotTransactions($start_time,$end_time)
+    {
+        $sql="SELECT reference_name,reference_phone,amount,created_at FROM transaction_histories 
+        WHERE deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':start_time',$start_time)
+        ->bindValue(':end_time',$end_time)
+        ->queryAll();
+    }
     public static function getTransactionTotal($station_show_id,$start_time,$end_time)
     {
         $sql="SELECT coalesce(sum(amount),0) as total FROM transaction_histories 
@@ -124,12 +133,30 @@ class TransactionHistories extends \yii\db\ActiveRecord
         ->bindValue(':end_time',$end_time)
         ->queryOne();
     }
+    public static function getJackpotTransactionTotal($start_time,$end_time)
+    {
+        $sql="SELECT coalesce(sum(amount),0) as total FROM transaction_histories 
+        WHERE deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':start_time',$start_time)
+        ->bindValue(':end_time',$end_time)
+        ->queryOne();
+    }
     public static function pickRandom($station_show_id,$past_winners,$from_date)
     {
         $sql="SELECT * FROM transaction_histories WHERE station_show_id=:station_show_id AND created_at >:from_date AND reference_phone NOT IN (" . implode(',', $past_winners) . ") ORDER BY RAND() LIMIT 1";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':station_show_id',$station_show_id)
         ->bindValue(':from_date',$from_date)
+        ->queryOne();
+    }
+    public static function pickJackpot($station_show_id,$past_winners,$from_date,$to_date)
+    {
+        $sql="SELECT * FROM transaction_histories WHERE station_show_id=:station_show_id AND created_at BETWEEN :from_date AND :to_date AND reference_phone NOT IN (" . implode(',', $past_winners) . ") ORDER BY RAND() LIMIT 1";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':station_show_id',$station_show_id)
+        ->bindValue(':from_date',$from_date)
+        ->bindValue(':to_date',$to_date)
         ->queryOne();
     }
     public static function pickBonusWinners($station_show_id,$past_winners,$from_date,$limit)

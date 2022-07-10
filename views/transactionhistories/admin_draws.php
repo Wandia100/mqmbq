@@ -179,7 +179,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     $presenter_id=$presenter_station_show['presenter_id'];
                                     $prize_id=$row['prize_id'];
                                     ?>
-                                    <button id="<?=$row['prize_id'];?>" class="btn btn-danger" onclick="drawPrize('<?=$station_show_id;?>','<?=$presenter_id;?>','<?=$prize_id;?>','<?=$from;?>',1)" type="button"><?=$row['name'];?></button>
+                                    <button id="<?=$row['prize_id'];?>" class="btn btn-danger" onclick="drawPrize('<?=$station_show_id;?>','<?=$presenter_id;?>','<?=$prize_id;?>','<?=$from;?>',1,'<?=$from;?>')" type="button"><?=$row['name'];?></button>
                                     <?php
                                 }
                                 ?>

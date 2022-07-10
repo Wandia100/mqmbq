@@ -97,6 +97,17 @@ class StationShowPresenters extends \yii\db\ActiveRecord
         ->bindValue(':station_show_id',$station_show_id)
         ->queryOne();
     }
+    public static function jackpotShow($station_show_id)
+    {
+        $sql="SELECT b.station_id,c.frequency,a.station_show_id,b.name AS show_name,c.name as station_name,b.description,b.show_code,
+        b.target,b.start_time,b.end_time,a.is_admin,a.presenter_id 
+        FROM station_show_presenters a LEFT JOIN station_shows b ON a.station_show_id=b.id 
+        LEFT JOIN stations c ON b.station_id=c.id 
+        WHERE a.station_show_id=:station_show_id  AND b.enabled=1 AND b.jackpot=1";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':station_show_id',$station_show_id)
+        ->queryOne();
+    }
     public static function getShowAdmin($station_show_id)
     {
         return StationShowPresenters::find()->where(['station_show_id'=>$station_show_id,'is_admin'=>1])->one();

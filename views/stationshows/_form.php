@@ -41,6 +41,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'end_time')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'enabled')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--']) ?>
+    <?= $form->field($model, 'jackpot')->dropDownList(['1'=>'Yes','0'=>'No'],['prompt'=>'--Select--']) ?>
 
 
     <div class="form-group">

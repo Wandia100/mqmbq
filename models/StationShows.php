@@ -51,7 +51,7 @@ class StationShows extends \yii\db\ActiveRecord
         return [
             [['id', 'station_id', 'name', 'show_code','monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'start_time', 'end_time', 'enabled'], 'required'],
             [['description'], 'string'],
-            [['target', 'invalid_percentage'], 'number'],
+            [['target', 'invalid_percentage','jackpot'], 'number'],
             [['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'enabled'], 'integer'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
@@ -86,6 +86,14 @@ class StationShows extends \yii\db\ActiveRecord
         }
         return $arr;
    }
+   public static function getJackpotShows() {
+    $arr   = [];
+    $model = StationShows::find()->where("jackpot=1")->orderBy("name ASC")->all();
+    foreach ( $model as $value ) {
+        $arr[ $value->id ] = $value->name;
+    }
+    return $arr;
+}
     /**
      * {@inheritdoc}
      */
