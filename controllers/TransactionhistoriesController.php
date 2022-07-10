@@ -35,7 +35,7 @@ class TransactionhistoriesController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index','presenter','admindraws'],
+                'only' => ['create', 'update','index','presenter','admindraws','jackpotdraw'],
                 'rules' => [
                     [
                         'actions' => ['create', 'update','index'],
@@ -63,6 +63,16 @@ class TransactionhistoriesController extends Controller
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
                                 $users = Yii::$app->myhelper->getMembers( array( '' ), array(41) );
+                                return in_array( Yii::$app->user->identity->email, $users );
+                            }
+                        }
+                    ],
+                    [
+                        'actions' => ['jackpotdraw'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if ( ! Yii::$app->user->isGuest ) {
+                                $users = Yii::$app->myhelper->getMembers( array( '' ), array(43) );
                                 return in_array( Yii::$app->user->identity->email, $users );
                             }
                         }
