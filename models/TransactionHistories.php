@@ -150,11 +150,10 @@ class TransactionHistories extends \yii\db\ActiveRecord
         ->bindValue(':from_date',$from_date)
         ->queryOne();
     }
-    public static function pickJackpot($station_show_id,$past_winners,$from_date,$to_date)
+    public static function pickJackpot($past_winners,$from_date,$to_date)
     {
-        $sql="SELECT * FROM transaction_histories WHERE station_show_id=:station_show_id AND created_at BETWEEN :from_date AND :to_date AND reference_phone NOT IN (" . implode(',', $past_winners) . ") ORDER BY RAND() LIMIT 1";
+        $sql="SELECT * FROM transaction_histories WHERE  created_at BETWEEN :from_date AND :to_date AND reference_phone NOT IN (" . implode(',', $past_winners) . ") ORDER BY RAND() LIMIT 1";
         return Yii::$app->db->createCommand($sql)
-        ->bindValue(':station_show_id',$station_show_id)
         ->bindValue(':from_date',$from_date)
         ->bindValue(':to_date',$to_date)
         ->queryOne();

@@ -166,7 +166,7 @@ class WinninghistoriesController extends Controller
             array_push($past_winners,'1');
             if($admin_draw=="2")
             {
-                $transaction_history=TransactionHistories::pickJackpot($station_show_id,$past_winners,$from,$to);
+                $transaction_history=TransactionHistories::pickJackpot($past_winners,$from,$to);
             }
             else
             {
@@ -180,15 +180,15 @@ class WinninghistoriesController extends Controller
                     if($show_prize['prizes_given'] < $show_prize['draw_count'])
                     {
                         $draw_count=$show_prize['prizes_given']+1;
-                        $unique_field=$draw_count."#".date("Ymd",strtotime($from))."#".$transaction_history['station_show_id']."#".$prize_id;
+                        $unique_field=$draw_count."#".date("Ymd",strtotime($from))."#".$station_show_id."#".$prize_id;
                     }
                     else
                     {
-                        $unique_field=$show_prize['prizes_given']."#".date("Ymd",strtotime($from))."#".$transaction_history['station_show_id']."#".$prize_id;
+                        $unique_field=$show_prize['prizes_given']."#".date("Ymd",strtotime($from))."#".$station_show_id."#".$prize_id;
                     }
                     $win_key=Uuid::generate()->string;
                     $model=WinningHistories::saveWin($win_key,$prize_id,$transaction_history['reference_name'],$transaction_history['reference_phone']
-                            ,$transaction_history['reference_code'],$transaction_history['station_id'],$transaction_history['station_show_id']
+                            ,$transaction_history['reference_code'],$transaction_history['station_id'],$station_show_id
                         ,$presenter_id,$show_prize['amount'],$unique_field);
                     if($model!=NULL)
                     {

@@ -76,7 +76,7 @@ class StationShowPresenters extends \yii\db\ActiveRecord
     }
     public static function presenterStationShow($presenter_id,$current_day)
     {
-        $sql="SELECT b.station_id,c.frequency,a.station_show_id,b.name AS show_name,c.name as station_name,b.description,b.show_code,
+        $sql="SELECT b.station_id,c.frequency,a.station_show_id,b.name AS show_name,c.name as station_name,b.description,b.show_code,b.jackpot,
         b.target,b.start_time,b.end_time,a.is_admin,a.presenter_id 
         FROM station_show_presenters a LEFT JOIN station_shows b ON a.station_show_id=b.id 
         LEFT JOIN stations c ON b.station_id=c.id 
@@ -88,7 +88,7 @@ class StationShowPresenters extends \yii\db\ActiveRecord
     }
     public static function adminStationShow($station_show_id,$current_day)
     {
-        $sql="SELECT b.station_id,c.frequency,a.station_show_id,b.name AS show_name,c.name as station_name,b.description,b.show_code,
+        $sql="SELECT b.station_id,c.frequency,a.station_show_id,b.name AS show_name,c.name as station_name,b.description,b.show_code,b.jackpot,
         b.target,b.start_time,b.end_time,a.is_admin,a.presenter_id 
         FROM station_show_presenters a LEFT JOIN station_shows b ON a.station_show_id=b.id 
         LEFT JOIN stations c ON b.station_id=c.id 
@@ -99,14 +99,16 @@ class StationShowPresenters extends \yii\db\ActiveRecord
     }
     public static function jackpotShow($station_show_id)
     {
-        $sql="SELECT b.station_id,c.frequency,a.station_show_id,b.name AS show_name,c.name as station_name,b.description,b.show_code,
-        b.target,b.start_time,b.end_time,a.is_admin,a.presenter_id 
-        FROM station_show_presenters a LEFT JOIN station_shows b ON a.station_show_id=b.id 
-        LEFT JOIN stations c ON b.station_id=c.id 
-        WHERE a.station_show_id=:station_show_id  AND b.enabled=1 AND b.jackpot=1";
-        return Yii::$app->db->createCommand($sql)
+        $sql="SELECT a.station_id,c.frequency,a.id as station_show_id,a.name AS show_name,c.name as station_name,a.description,a.show_code,a.jackpot,
+        a.target,a.enabled as is_admin
+        FROM station_shows a 
+        LEFT JOIN stations c ON a.station_id=c.id 
+        WHERE a.id=:station_show_id  AND a.enabled=1 AND a.jackpot=1";
+        $resp= Yii::$app->db->createCommand($sql)
         ->bindValue(':station_show_id',$station_show_id)
         ->queryOne();
+        $resp['presenter_id']=Yii::$app->user->identity->id;
+        return $resp;
     }
     public static function getShowAdmin($station_show_id)
     {
