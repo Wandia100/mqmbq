@@ -79,6 +79,9 @@ use luc\tourist\Tourist;
                 <li class="<?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Growth trend" title="Growth trend">
                     <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Growth trends', ['/report/growthtrend'], ['class' => ''])?>
                 </li> 
+                <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(42) ) ) ? '':'hidden'?>  ">
+                    <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Jackpot draw', ['/transactionhistories/jackpotdraw'], ['class' => ''])?>
+                </li> 
                 </ul>
                 </li>
 
