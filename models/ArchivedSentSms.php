@@ -24,7 +24,7 @@ class ArchivedSentSms extends \yii\db\ActiveRecord
         return 'sent_sms';
     }
     public static function getDb() {
-        return Yii::$app->sms_db;
+        return Yii::$app->analytics_db;
     }
     /**
      * {@inheritdoc}

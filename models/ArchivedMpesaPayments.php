@@ -93,7 +93,7 @@ class ArchivedMpesaPayments extends \yii\db\ActiveRecord
     {
         $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments where deleted_at IS NULL AND created_at 
         LIKE :from_time";
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':from_time',"%$from_time%")
         ->queryOne();
     }
@@ -101,7 +101,7 @@ class ArchivedMpesaPayments extends \yii\db\ActiveRecord
     {
         $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments where deleted_at IS NULL AND created_at 
         LIKE :from_time AND station_id=:station_id";
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':from_time',"%$from_time%")
         ->bindValue(':station_id',$station_id)
         ->queryOne();
@@ -110,7 +110,7 @@ class ArchivedMpesaPayments extends \yii\db\ActiveRecord
     {
         $sql="SELECT COALESCE(SUM(b.TransAmount),0) as amount FROM mpesa_payments b WHERE b.deleted_at IS NULL AND b.created_at LIKE :from_time 
         AND  (SUBSTRING(b.BillRefNumber,1,3)=SUBSTRING(:station_code,1,3) || RIGHT(b.BillRefNumber,3)=RIGHT(:station_code,3) || b.BillRefNumber LIKE :sname)";
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':from_time',"%$from_time%")
         ->bindValue(':station_code',$station_code)
         ->bindValue(':sname',"%$station_code%")
@@ -120,7 +120,7 @@ class ArchivedMpesaPayments extends \yii\db\ActiveRecord
     {
         $sql="SELECT COALESCE(SUM(b.TransAmount),0) as amount FROM mpesa_payments b WHERE b.deleted_at IS NULL AND b.created_at LIKE :from_time 
         AND  LENGTH(b.BillRefNumber)=1";
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':from_time',"%$from_time%")
         ->queryOne();
     }
@@ -139,12 +139,12 @@ class ArchivedMpesaPayments extends \yii\db\ActiveRecord
             $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments";
         }
         
-        return Yii::$app->mpesa_db->createCommand($sql)->queryOne();
+        return Yii::$app->analytics_db->createCommand($sql)->queryOne();
     }
     public static function getTotalRevenuePerStation($station_id)
     {
         $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from mpesa_payments where station_id=:station_id";
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':station_id',$station_id)
         ->queryOne();
     }
@@ -165,7 +165,7 @@ class ArchivedMpesaPayments extends \yii\db\ActiveRecord
                 mpesa_payments where created_at >= :from_time and
                 created_at <= :to_time";
         }
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':from_time',$from_time)
         ->bindValue(':to_time',$to_time)
         ->queryOne();
@@ -175,7 +175,7 @@ class ArchivedMpesaPayments extends \yii\db\ActiveRecord
         $sql="select COALESCE(sum(TransAmount),0) as total_mpesa from 
         mpesa_payments where created_at >= :from_time and
         created_at <= :to_time and station_id=:station_id";
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':from_time',$from_time)
         ->bindValue(':to_time',$to_time)
         ->bindValue(':station_id',$station_id)
@@ -185,7 +185,7 @@ class ArchivedMpesaPayments extends \yii\db\ActiveRecord
     {
         $sql='SELECT DATE_FORMAT(a.created_at, "%Y-%m-%d") AS the_day FROM mpesa_payments a
         WHERE a.created_at BETWEEN :start_date AND :end_date group by the_day ORDER BY the_day DESC;';
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':start_date',$start_date)
         ->bindValue(':end_date',$end_date)
         ->queryAll();
@@ -326,13 +326,13 @@ class ArchivedMpesaPayments extends \yii\db\ActiveRecord
     public static function getDuplicates()
     {
         $sql='SELECT COUNT(TransID) AS total,TransID FROM mpesa_payments  GROUP BY TransID HAVING(total > 1)';
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->queryAll();
     }
     public static function removeDups($unique_field,$limits)
     {
         $sql='DELETE FROM mpesa_payments WHERE TransID=:TransID LIMIT :limits';
-        Yii::$app->mpesa_db->createCommand($sql)
+        Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':TransID',$unique_field)
         ->bindValue(':limits',$limits)
         ->execute();
@@ -379,28 +379,28 @@ class ArchivedMpesaPayments extends \yii\db\ActiveRecord
     {
         $sql="SELECT COUNT(MSISDN) AS frequency,MSISDN AS msisdn,station_id,BillRefNumber AS station FROM mpesa_payments WHERE created_at LIKE :created_at
         GROUP BY MSISDN,BillRefNumber,station_id";
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':created_at',"$created_at%")
         ->queryAll();
     }
     public static function countAssignedCode($created_at)
     {
         $sql="select count(station_id) as total from mpesa_payments where created_at like :created_at and station_id is not null";
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':created_at',"$created_at%")
         ->queryOne();
     }
     public static function countUnAssignedCode($created_at)
     {
         $sql="select count(*) as total from mpesa_payments where created_at like :created_at and station_id is null";
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':created_at',"$created_at%")
         ->queryOne();
     }
     public static function getAssignedPerStation($created_at)
     {
         $sql="select count(station_id) as total,station_id from mpesa_payments where created_at like :created_at and station_id is not null group by station_id order by total desc";
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':created_at',"$created_at%")
         ->queryAll();
     }
@@ -425,7 +425,7 @@ class ArchivedMpesaPayments extends \yii\db\ActiveRecord
     public static function assignCode($station_id,$created_at,$stop,$station_code)
     {
         $sql="update mpesa_payments set station_id=:station_id,BillRefNumber=:station_code,updated_at=now() where created_at like :created_at and station_id is null limit $stop";
-        return Yii::$app->mpesa_db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':station_id',$station_id)
         ->bindValue(':station_code',$station_code)
         ->bindValue(':created_at',"$created_at%")

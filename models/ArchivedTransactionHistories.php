@@ -35,7 +35,7 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
 
     /**
         * Customer - Stations relationship
-        * @return \yii\db\ActiveQuery
+        * @return \yii\analytics_db\ActiveQuery
     */
     public function getStations() {
         return $this->hasOne(Stations::className(), [ 'id' => 'station_id' ] );
@@ -43,7 +43,7 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
     
     /**
         * Customer - Stations relationship
-        * @return \yii\db\ActiveQuery
+        * @return \yii\analytics_db\ActiveQuery
     */
     public function getMpesapayment() {
         return $this->hasOne(MpesaPayments::className(), ['id' => 'mpesa_payment_id']);
@@ -51,7 +51,7 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
     
     /**
         * Customer - Stations relationship
-        * @return \yii\db\ActiveQuery
+        * @return \yii\analytics_db\ActiveQuery
     */
     public function getStationshows(){
         return $this->hasOne(StationShows::className(), ['id' => 'station_show_id']);
@@ -107,7 +107,7 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
         $sql="SELECT reference_name,reference_phone,amount,created_at FROM transaction_histories 
         WHERE station_show_id=:station_show_id
         AND deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time";
-        return Yii::$app->db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':station_show_id',$station_show_id)
         ->bindValue(':start_time',$start_time)
         ->bindValue(':end_time',$end_time)
@@ -117,7 +117,7 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
     {
         $sql="SELECT reference_name,reference_phone,amount,created_at FROM transaction_histories 
         WHERE deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time";
-        return Yii::$app->db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':start_time',$start_time)
         ->bindValue(':end_time',$end_time)
         ->queryAll();
@@ -127,7 +127,7 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
         $sql="SELECT coalesce(sum(amount),0) as total FROM transaction_histories 
         WHERE station_show_id=:station_show_id
         AND deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time";
-        return Yii::$app->db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':station_show_id',$station_show_id)
         ->bindValue(':start_time',$start_time)
         ->bindValue(':end_time',$end_time)
@@ -137,7 +137,7 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
     {
         $sql="SELECT coalesce(sum(amount),0) as total FROM transaction_histories 
         WHERE deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time";
-        return Yii::$app->db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':start_time',$start_time)
         ->bindValue(':end_time',$end_time)
         ->queryOne();
@@ -145,7 +145,7 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
     public static function pickRandom($station_show_id,$past_winners,$from_date)
     {
         $sql="SELECT * FROM transaction_histories WHERE station_show_id=:station_show_id AND created_at >:from_date AND reference_phone NOT IN (" . implode(',', $past_winners) . ") ORDER BY RAND() LIMIT 1";
-        return Yii::$app->db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':station_show_id',$station_show_id)
         ->bindValue(':from_date',$from_date)
         ->queryOne();
@@ -153,7 +153,7 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
     public static function pickJackpot($past_winners,$from_date,$to_date)
     {
         $sql="SELECT * FROM transaction_histories WHERE  created_at BETWEEN :from_date AND :to_date AND reference_phone NOT IN (" . implode(',', $past_winners) . ") ORDER BY RAND() LIMIT 1";
-        return Yii::$app->db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':from_date',$from_date)
         ->bindValue(':to_date',$to_date)
         ->queryOne();
@@ -161,7 +161,7 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
     public static function pickBonusWinners($station_show_id,$past_winners,$from_date,$limit)
     {
         $sql="SELECT count(reference_phone) as total,reference_phone,station_id FROM transaction_histories WHERE station_show_id=:station_show_id AND created_at >:from_date AND reference_phone NOT IN (" . implode(',', $past_winners) . ") group by reference_phone,station_id ORDER BY total DESC LIMIT $limit";
-        return Yii::$app->db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':station_show_id',$station_show_id)
         ->bindValue(':from_date',$from_date)
         ->queryAll();
@@ -170,7 +170,7 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
     {
         $sql="select COALESCE(sum(amount),0) as total_history from 
         transaction_histories where created_at LIKE :from_time";
-        return Yii::$app->db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':from_time',"%$from_time%")
         ->queryOne();
     }
@@ -179,7 +179,7 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
         $sql="select COALESCE(sum(amount),0) as total_history from 
         transaction_histories where created_at >= :from_time and
         created_at <= :to_time";
-        return Yii::$app->db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':from_time',$from_time)
         ->bindValue(':to_time',$to_time)
         ->queryOne();
@@ -187,20 +187,20 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
     public static function getDuplicates()
     {
         $sql='SELECT COUNT(mpesa_payment_id) AS total,mpesa_payment_id FROM transaction_histories  GROUP BY mpesa_payment_id HAVING(total > 1)';
-        return Yii::$app->db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->queryAll();
     }
     public static function getUniquePlayers()
     {
         $sql='SELECT a.reference_name,a.reference_phone,b.name FROM transaction_histories a 
         LEFT JOIN stations b ON a.station_id=b.id GROUP BY a.reference_name,a.reference_phone,b.name';
-        return Yii::$app->db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->queryAll();
     }
     public static function removeDups($unique_field,$limits)
     {
         $sql='DELETE FROM transaction_histories WHERE mpesa_payment_id=:mpesa_payment_id LIMIT :limits';
-        Yii::$app->db->createCommand($sql)
+        Yii::$app->analytics_db->createCommand($sql)
         ->bindValue(':mpesa_payment_id',$unique_field)
         ->bindValue(':limits',$limits)
         ->execute();
@@ -231,7 +231,7 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
             ON q1.reference_phone = q2.reference_phone
             ORDER BY q2.plays DESC
             LIMIT $limit";
-        return Yii::$app->db->createCommand($sql)
+        return Yii::$app->analytics_db->createCommand($sql)
         ->queryAll();
     }
     /**

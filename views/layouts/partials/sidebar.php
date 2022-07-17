@@ -158,6 +158,15 @@ use luc\tourist\Tourist;
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$adminvisibility?> <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Player Trend Report', Url::to(['/playertrend/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?>  <?=$customercarevisibility?>">
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i>(Archived) Mpesa Report', Url::to(['/archived-mpesapayments/index']), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$customercarevisibility?>">
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i>(Archived) Transactions Report', Url::to(['/archived-transactionhistories/index']), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>">
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i>(Archived) Sent SMS',  Url::to(['/archived-sentsms/index','route'=>2]), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
                     </ul>
                 </li>
                 

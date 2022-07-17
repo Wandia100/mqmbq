@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\MpesaPayments;
+use app\models\ArchivedMpesaPayments;
 
 /**
  * ArchivedMpesaPaymentsSearch represents the model behind the search form of `app\models\MpesaPayments`.
  */
-class ArchivedMpesaPaymentsSearch extends MpesaPayments
+class ArchivedMpesaPaymentsSearch extends ArchivedMpesaPayments
 {
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ class ArchivedMpesaPaymentsSearch extends MpesaPayments
      */
     public function search($params, $daily = false, $monthly = false, $from = null, $to = null)
     {
-        $query = MpesaPayments::find();
+        $query = ArchivedMpesaPayments::find();
 
         // add conditions that should always apply here
 
