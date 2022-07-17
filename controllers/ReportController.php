@@ -38,10 +38,10 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout','growthtrend','player','station','backlog','hourrefresh'],
+                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout','growthtrend','player','station','backlog','updateshow'],
                 'rules' => [
                     [
-                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','growthtrend','station','backlog','hourrefresh'],
+                        'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','growthtrend','station','backlog','updateshow'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -864,6 +864,10 @@ class ReportController extends Controller{
     public function actionLogshowsummary()
     {
         Yii::$app->queue->push(new ShowSummaryJob());
+    }
+    public function actionUpdateshow($start_date)
+    {
+        ShowSummary::updateShowSummary($start_date);
     }
     public function actionLogcommission()
     {        
