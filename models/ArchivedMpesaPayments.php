@@ -29,7 +29,7 @@ use yii\db\IntegrityException;
  * @property string|null $updated_at
  * @property string|null $deleted_at
  */
-class MpesaPayments extends \yii\db\ActiveRecord
+class ArchivedMpesaPayments extends \yii\db\ActiveRecord
 {
     
     public  $excelfile;
@@ -41,7 +41,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
         return 'mpesa_payments';
     }
     public static function getDb() {
-        return Yii::$app->mpesa_db;
+        return Yii::$app->analytics_db;
     }
 
     /**
@@ -200,34 +200,34 @@ class MpesaPayments extends \yii\db\ActiveRecord
         switch ($type):
         case 'today':
             $midnight = date('Y-m-d 00:00:00');
-            $sum = MpesaPayments::getTotalMpesaInRange($midnight,$today)['total_mpesa'];
+            $sum = ArchivedMpesaPayments::getTotalMpesaInRange($midnight,$today)['total_mpesa'];
             break;
         case 'yesterday':
             $yestFloor = date( 'Y-m-d 00:00:00',strtotime('-1 day', time()));
             $yestCeil = date( 'Y-m-d 23:59:59',strtotime('-1 day', time()));
-            $sum = MpesaPayments::getTotalMpesaInRange($yestFloor, $yestCeil)['total_mpesa'];
+            $sum = ArchivedMpesaPayments::getTotalMpesaInRange($yestFloor, $yestCeil)['total_mpesa'];
             break;
         case 'last_7_days':
            // $_7daysFloor = date( 'Y-m-d 00:00:00',strtotime('-7 day', time())); //Change to check from monday to today
             $_lastMonday = date('Y-m-d 00:00:00',strtotime('Monday this week'));
-            $sum = MpesaPayments::getTotalMpesaInRange($_lastMonday, $today)['total_mpesa'];
+            $sum = ArchivedMpesaPayments::getTotalMpesaInRange($_lastMonday, $today)['total_mpesa'];
             break;
         case 'currentmonth':
             $cFloor = date( 'Y-m-1 00:00:00');
-            $sum = MpesaPayments::getTotalMpesaInRange($cFloor, $today)['total_mpesa'];
+            $sum = ArchivedMpesaPayments::getTotalMpesaInRange($cFloor, $today)['total_mpesa'];
             break;
         case 'lastweek':
             $floorDate = date("Y-m-d 00:00:00", strtotime(date("w") ? "2 sundays ago" : "last sunday"));
             $ceilDate = date("Y-m-d 23:59:59", strtotime("last saturday"));
-            $sum = MpesaPayments::getTotalMpesaInRange($floorDate, $ceilDate)['total_mpesa'];
+            $sum = ArchivedMpesaPayments::getTotalMpesaInRange($floorDate, $ceilDate)['total_mpesa'];
             break;
         case 'lastmonth':
             $lFloor = date( 'Y-m-1 00:00:00',strtotime('-1 month', time()));
             $lCeil = date('Y-m-d 23:59:59', strtotime('last day of previous month'));
-            $sum = MpesaPayments::getTotalMpesaInRange($lFloor, $lCeil)['total_mpesa'];
+            $sum = ArchivedMpesaPayments::getTotalMpesaInRange($lFloor, $lCeil)['total_mpesa'];
             break;
         default :   
-            $sum = MpesaPayments::getTotalRevenue()['total_mpesa'];
+            $sum = ArchivedMpesaPayments::getTotalRevenue()['total_mpesa'];
         endswitch;
         return $sum;    
     }
@@ -237,36 +237,34 @@ class MpesaPayments extends \yii\db\ActiveRecord
         switch ($type):
         case 'today':
             $midnight = date('Y-m-d 00:00:00');
-            $sum = MpesaPayments::getTotalMpesaInRangePerStation($midnight,$today,$station_id)['total_mpesa'];
+            $sum = ArchivedMpesaPayments::getTotalMpesaInRangePerStation($midnight,$today,$station_id)['total_mpesa'];
             break;
         case 'yesterday':
             $yestFloor = date( 'Y-m-d 00:00:00',strtotime('-1 day', time()));
             $yestCeil = date( 'Y-m-d 23:59:59',strtotime('-1 day', time()));
-            $sum = MpesaPayments::getTotalMpesaInRangePerStation($yestFloor, $yestCeil,$station_id)['total_mpesa'];
+            $sum = ArchivedMpesaPayments::getTotalMpesaInRangePerStation($yestFloor, $yestCeil,$station_id)['total_mpesa'];
             break;
         case 'last_7_days':
            // $_7daysFloor = date( 'Y-m-d 00:00:00',strtotime('-7 day', time())); //Change to check from monday to today
             $_lastMonday = date('Y-m-d 00:00:00',strtotime('Monday this week'));
-            $sum = MpesaPayments::getTotalMpesaInRangePerStation($_lastMonday, $today,$station_id)['total_mpesa'];
+            $sum = ArchivedMpesaPayments::getTotalMpesaInRangePerStation($_lastMonday, $today,$station_id)['total_mpesa'];
             break;
         case 'currentmonth':
             $cFloor = date( 'Y-m-1 00:00:00');
-            $sum = MpesaPayments::getTotalMpesaInRangePerStation($cFloor, $today,$station_id)['total_mpesa'];
+            $sum = ArchivedMpesaPayments::getTotalMpesaInRangePerStation($cFloor, $today,$station_id)['total_mpesa'];
             break;
         case 'lastweek':
             $floorDate = date("Y-m-d 00:00:00", strtotime(date("w") ? "2 sundays ago" : "last sunday"));
             $ceilDate = date("Y-m-d 23:59:59", strtotime("last saturday"));
-            $sum = MpesaPayments::getTotalMpesaInRangePerStation($floorDate, $ceilDate,$station_id)['total_mpesa'];
+            $sum = ArchivedMpesaPayments::getTotalMpesaInRangePerStation($floorDate, $ceilDate,$station_id)['total_mpesa'];
             break;
         case 'lastmonth':
             $lFloor = date( 'Y-m-1 00:00:00',strtotime('-1 month', time()));
             $lCeil = date('Y-m-d 23:59:59', strtotime('last day of previous month'));
-            $sum = MpesaPayments::getTotalMpesaInRangePerStation($lFloor, $lCeil,$station_id)['total_mpesa'];
+            $sum = ArchivedMpesaPayments::getTotalMpesaInRangePerStation($lFloor, $lCeil,$station_id)['total_mpesa'];
             break;
         default :   
-            $sum1 = MpesaPayments::getTotalRevenuePerStation($station_id)['total_mpesa'];
-            $sum2 = ArchivedMpesaPayments::getTotalRevenuePerStation($station_id)['total_mpesa'];
-            $sum=$sum1+$sum2;
+            $sum = ArchivedMpesaPayments::getTotalRevenuePerStation($station_id)['total_mpesa'];
         endswitch;
         return $sum;    
     }
@@ -290,7 +288,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
                 $col1 = trim($fileop[0]);
                 $namespn = explode('-', trim($fileop[10]));
                 $names = isset($namespn[1])?explode(' ', trim($namespn[1])):[];
-                $mod = MpesaPayments::find()->where("TransID = '$col1'")->one();
+                $mod = ArchivedMpesaPayments::find()->where("TransID = '$col1'")->one();
                 if(!$mod){
                     if (isset($fileop[0]) && isset($fileop[2]) && isset($fileop[5])  && isset($fileop[10]) )
                     {
@@ -304,7 +302,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
                     {
                         $msisdn=trim($msisdn);
                     }
-                    $mod= new MpesaPayments();
+                    $mod= new ArchivedMpesaPayments();
                     $mod->id=Uuid::generate()->string;
                     $mod ->TransID = $col1;
                     $mod -> TransAmount = $fileop[5];
@@ -356,7 +354,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
                         $model->station_id=$row->id;
                         $model->station_name=$row->name;
                         $model->total_awarded=WinningHistories::getPayoutPerStation($revenue_date,$row->id)['total'];
-                        $model->total_revenue=MpesaPayments::getTotalMpesaPerStation($revenue_date,$row->id)['total_mpesa'];
+                        $model->total_revenue=ArchivedMpesaPayments::getTotalMpesaPerStation($revenue_date,$row->id)['total_mpesa'];
                         $model->net_revenue=round($model->total_revenue-$model->total_awarded);
                         $model->unique_field=$unique_field;
                         $model->save(false);
@@ -364,7 +362,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
                     else
                     {
                         $report->total_awarded=WinningHistories::getPayoutPerStation($revenue_date,$row->id)['total'];
-                        $report->total_revenue=MpesaPayments::getTotalMpesaPerStation($revenue_date,$row->id)['total_mpesa'];
+                        $report->total_revenue=ArchivedMpesaPayments::getTotalMpesaPerStation($revenue_date,$row->id)['total_mpesa'];
                         $report->net_revenue=round($report->total_revenue-$report->total_awarded);
                         $report->save(false);
                     }
@@ -408,9 +406,9 @@ class MpesaPayments extends \yii\db\ActiveRecord
     }
     public static function calculateStationPercentage($created_at)
     {
-        $total=MpesaPayments::countAssignedCode($created_at)['total'];
-        $unassigned=MpesaPayments::countUnAssignedCode($created_at)['total'];
-        $data=MpesaPayments::getAssignedPerStation($created_at);
+        $total=ArchivedMpesaPayments::countAssignedCode($created_at)['total'];
+        $unassigned=ArchivedMpesaPayments::countUnAssignedCode($created_at)['total'];
+        $data=ArchivedMpesaPayments::getAssignedPerStation($created_at);
         for($i=0; $i<count($data); $i++)
         {
             $row=$data[$i];
@@ -420,7 +418,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
             if($stop > 0)
             {
                 $station_code=Stations::findOne($row['station_id'])->station_code;
-                MpesaPayments::assignCode($row['station_id'],$created_at,$stop,$station_code);
+                ArchivedMpesaPayments::assignCode($row['station_id'],$created_at,$stop,$station_code);
             }
         }
     }
@@ -435,7 +433,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
     }
     public static function setStation()
     {
-        $data=MpesaPayments::find()->where("station_id IS NULL")->all();
+        $data=ArchivedMpesaPayments::find()->where("station_id IS NULL")->all();
         foreach($data as $row)
         {
             $model=TransactionHistories::findOne(["mpesa_payment_id"=>$row->id]);
