@@ -351,7 +351,7 @@ class MpesapaymentsController extends Controller
                                 $mod -> TransAmount = $amount;
                                 $mod -> FirstName = NULL; 
                                 $mod -> MiddleName = NULL; 
-                                $mod -> LastName = NULL; 
+                                $mod -> LastName = "vodacom"; 
                                 $mod -> MSISDN = $phone; 
                                 $mod -> BillRefNumber = $reference;
                                 $mod -> OrgAccountBalance =$balance;
