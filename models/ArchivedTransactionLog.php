@@ -26,7 +26,7 @@ class ArchivedTransactionLog extends \yii\db\ActiveRecord
         return 'transaction_log';
     }
     public static function getDb() {
-        return Yii::$app->cmedia_mpesa;
+        return Yii::$app->analytics_db;
     }
     /**
      * {@inheritdoc}
@@ -104,37 +104,7 @@ class ArchivedTransactionLog extends \yii\db\ActiveRecord
     public static function saveMpesa($record)
     {
         
-        $data=json_decode($record->json_data)->request->transaction;
-        $receipt=$data->mpesaReceipt;
-        $check=CmediaPayments::find()->where("TransID='$receipt'")->count();
-        if($check==0)
-        {
-            try
-            {
-                $model = new CmediaPayments();
-                $model->id=Uuid::generate()->string;
-                $model->TransID = $data->mpesaReceipt;
-                //$model->FirstName = $data['FirstName'];
-                //$model->MiddleName = $data['MiddleName'];
-                //$model->LastName = $data['LastName'];
-                $model->MSISDN = $data->initiator;
-                //$model->InvoiceNumber = $data['InvoiceNumber'];
-                $model->BusinessShortCode = $data->recipient;
-                //$model->ThirdPartyTransID = $data['125189974'];
-                //$model->TransactionType = $data['TransactionType'];
-                //$model->OrgAccountBalance = $data['OrgAccountBalance'];
-                $model->BillRefNumber =$data->accountReference;
-                $model->TransAmount = $data->amount;
-                $model->created_at=$data->transactionDate;
-                $model->updated_at=date("Y-m-d H:i:s");
-                $model->save(false);
-                Yii::$app->cmediaqueue->push(new CmediaDepositJob(['id'=>$model->id]));
-            }
-            catch (IntegrityException $e) {
-                //allow execution
-            }
-   
-        }
+        
     }
     public static function updateState($resp,$record)
     {
@@ -158,7 +128,7 @@ class ArchivedTransactionLog extends \yii\db\ActiveRecord
             $model->date=date("Y-m-d H:i:s");
             $model->state=$state;
             $model->save(false);
-            Yii::$app->cmediaqueue->priority(10)->push(new CmediaPaymentJob(['id'=>$model->id]));
+            //Yii::$app->cmediaqueue->priority(10)->push(new CmediaPaymentJob(['id'=>$model->id]));
     }
     public static function log($data,$api_type,$state)
     {

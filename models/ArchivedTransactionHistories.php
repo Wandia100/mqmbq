@@ -32,7 +32,9 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
     {
         return 'transaction_histories';
     }
-
+    public static function getDb() {
+        return Yii::$app->analytics_db;
+    }
     /**
         * Customer - Stations relationship
         * @return \yii\analytics_db\ActiveQuery
