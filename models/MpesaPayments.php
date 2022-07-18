@@ -292,7 +292,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
                 $names = isset($namespn[1])?explode(' ', trim($namespn[1])):[];
                 $mod = MpesaPayments::find()->where("TransID = '$col1'")->one();
                 if(!$mod){
-                    if (isset($fileop[0]) && isset($fileop[2]) && isset($fileop[5])  && isset($fileop[10]) )
+                    if (isset($fileop[0]) && isset($fileop[2]) && isset($fileop[5]) && is_numeric($fileop[5]) && isset($fileop[10]) )
                     {
                     $msisdn=explode("-",$fileop[10]);
                     $msisdn=trim($msisdn[0]);

@@ -76,13 +76,14 @@ class Disbursements extends \yii\db\ActiveRecord
     {
         return [
             [['id','amount','disbursement_type','phone_number','reference_name'], 'required'],
-            [['amount'], 'number'],
+            [['amount'], 'number','max' => MAX_AMOUNT],
             [['status'], 'integer'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],
+            [['phone_number'], 'string', 'max' => 12,'min' => 12],
             [['unique_field','station_id'], 'string', 'max' => 50],
             [['reference_id', 'disbursement_type', 'transaction_reference'], 'string', 'max' => 100],
-            [['reference_name', 'phone_number', 'conversation_id'], 'string', 'max' => 255],
+            [['reference_name','conversation_id'], 'string', 'max' => 255],
             [['id'], 'unique'],
         ];
     }

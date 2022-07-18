@@ -33,3 +33,4 @@ tests/_support/_generated
 #configs
 components/Keys.php
 config/credentials.php
+web/uploads/*
