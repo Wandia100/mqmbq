@@ -75,7 +75,7 @@ class SiteController extends Controller
             $currency="Tsh ";
         }
         else{
-            $currency="Ksh ";
+            $currency="ZK ";
         }
         if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group==3){
             return $this->redirect( [ '/transactionhistories/presenter' ] );
