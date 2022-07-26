@@ -291,7 +291,7 @@ class TransactionhistoriesController extends Controller
         {
             $station_show_id=$presenter_station_show['station_show_id'];
             $show_transactions=TransactionHistories::getJackpotTransactions($from,$to);
-            $transaction_total=TransactionHistories::getJackpotTransactionTotal($station_show_id,$from,$to)['total'];
+            $transaction_total=TransactionHistories::getJackpotTransactionTotal($from,$to)['total'];
             $transaction_count=count($show_transactions);
             $target_achievement=round(($transaction_total/$presenter_station_show['target'])*100,2);
             $show_name=$presenter_station_show['show_name']." ".$from." - ".$to;
