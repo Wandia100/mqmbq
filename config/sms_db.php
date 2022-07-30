@@ -37,7 +37,7 @@
     $db_name = "cmedia_sms";
     }
     else if ( ( in_array($host_name,[EFMTZ_COM]))) {
-      $db_host      = "smsdb.efmtz.com";
+      $db_host      = "18.216.61.174";
       $db_username = "efmtz2120";
       $db_password = "Zpa@!%vfrG34f";
       $db_name = "efmtz_sms";

@@ -38,7 +38,7 @@
     $db_name = "cmedia_mpesa";
     }
     else if ( ( in_array($host_name,[EFMTZ_COM]))) {
-      $db_host      = "moneydb.efmtz.com";
+      $db_host      = "18.216.231.0";
       $db_username = "efmtz_mpesa";
       $db_password = "Zpa@!%vfrG34f";
       $db_name = "efmtz_mpesa";
