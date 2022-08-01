@@ -992,8 +992,10 @@ class ReportController extends Controller{
         {
             $start=(strlen($start)==1)?"0$start":$start;
             $month=(strlen($month)==1)?"0$month":$month;
-           $url=Url::base('https')."/report/logrevenue?date=2022-$month-$start";
-           Myhelper::curlGet($url);
+            $revenue_date=date("Y")."-$month-$start";
+            MpesaPayments::logRevenue($revenue_date);
+           //$url=Url::base('https')."/report/logrevenue?date=2022-$month-$start";
+           //Myhelper::curlGet($url);
            $start++;
             
         }
