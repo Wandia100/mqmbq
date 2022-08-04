@@ -238,7 +238,7 @@ class OutboxController extends Controller
 						$sentSms->message      = $outbox_mod->message;
 						$sentSms->created_date = $outbox_mod->created_date;
 						$sentSms->category     = $outbox_mod->category;
-						$sentSms->sms_id       = $outbox_mod->id;
+						//$sentSms->sms_id       = $outbox_mod->id;
 						$sentSms->status       = $outbox_mod->status;
 						$sentSms->save(FALSE);
 						$outbox_mod->delete(false);
