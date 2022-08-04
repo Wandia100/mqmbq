@@ -12,7 +12,7 @@ use Yii;
 use yii\base\Component;
 use yii\helpers\Html;
 use yii\models;
-
+use DateTime;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -1008,5 +1008,45 @@ class Myhelper extends Component {
 			$datetime="20$year-$month-$day $hour:$minute:00";
 			return $datetime;
 		}
+		/**
+	 * Method to calc time diff btn dates
+	 * @param string $start_date
+	 * @param string $end_date
+	 * @param int $diff
+	 * @return int time_diff
+	 */
+	public static function getTimeDiff($start_date,$end_date,$diff='',$sign=true){
+		$first_date = new DateTime($start_date);
+		$second_date = new DateTime($end_date);
+		$interval = $first_date->diff($second_date);
+		$days_passed = $interval->format('%a');
+		$hours_diff = $interval->format('%H');
+		$minutes_diff = $interval->format('%I');
+		$seconds_diff = $interval->format('%S');
+		$time_diff='';
+		switch ($diff) {
+			case 'seconds':
+				$total_minutes = (($days_passed*24 + $hours_diff) * 60 + $minutes_diff);
+				$time_diff = $total_minutes*60 + $seconds_diff;
+				break;
+			case 'minutes':
+				$time_diff = (($days_passed*24 + $hours_diff) * 60 + $minutes_diff);
+				break;
+			case 'hours':
+				$time_diff = ($days_passed*24 + $hours_diff);
+				break;
+			case 'days':
+				$time_diff = $interval->format('%a');
+				break;      
+			default:
+				# code...
+				break;
+		}
+		if((strtotime($start_date) > strtotime($end_date)) && $sign==true){
+			return $time_diff*(-1);
+		}else{
+			return $time_diff;
+		}
+	}	
 }
 

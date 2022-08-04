@@ -11,7 +11,7 @@ use Webpatser\Uuid\Uuid;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\web\Response;
 /**
  * OutboxController implements the CRUD actions for Outbox model.
  */
@@ -207,4 +207,48 @@ class OutboxController extends Controller
         $result=Outbox::niTextSms($sms);
         var_dump($result);
     }
+    /**
+	 * Method to check delivery sms
+	 */
+	public function actionDlr(){
+		// overwrite the server time limit
+		set_time_limit(0);
+        $headers=getallheaders();
+        Yii::$app->response->format = Response::FORMAT_RAW;
+        Yii::$app->response->headers->add('Content-Type', 'application/json');
+        $data = file_get_contents('php://input');
+        if($data==NULL)
+        {
+            return;
+        }
+        if(!isset($headers['Authorization']) || $headers['Authorization']!=SMPP_TOKEN)
+        {
+            return;
+        }
+			$value = json_decode( $data);
+			$outbox_mod = Outbox::findOne($value->message_id);
+			if($outbox_mod != NULL){
+				$outbox_mod->status = $value->status;
+				if($outbox_mod->save(FALSE)){
+					//if success delivered --> move to sentsms and delete it in outbox
+					if(in_array($value->status,[1,8])){
+						$sentSms               = new SentSms();
+						$sentSms->sender       = $outbox_mod->sender;
+						$sentSms->receiver     = $outbox_mod->receiver;
+						$sentSms->message      = $outbox_mod->message;
+						$sentSms->created_date = $outbox_mod->created_date;
+						$sentSms->category     = $outbox_mod->category;
+						$sentSms->sms_id       = $outbox_mod->id;
+						$sentSms->status       = $outbox_mod->status;
+						$sentSms->save(FALSE);
+						$outbox_mod->delete(false);
+					}
+					// if not delivered and retry time is less 10min --> assign to pending for resend
+					if(in_array($value->status,[2,4,16]) && Myhelper::getTimeDiff($outbox_mod->created_date,date('Y-m-d H:i:s'),'minutes',true) < 10){
+						$outbox_mod->status=0;
+						$outbox_mod->save(FALSE);
+					}	
+				}
+			}
+	}
 }
