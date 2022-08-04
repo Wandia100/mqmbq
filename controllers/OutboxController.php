@@ -233,12 +233,13 @@ class OutboxController extends Controller
 					//if success delivered --> move to sentsms and delete it in outbox
 					if(in_array($value->status,[1,8])){
 						$sentSms               = new SentSms();
+                        $sentSms->id=Uuid::generate()->string;
 						$sentSms->sender       = $outbox_mod->sender;
 						$sentSms->receiver     = $outbox_mod->receiver;
 						$sentSms->message      = $outbox_mod->message;
 						$sentSms->created_date = $outbox_mod->created_date;
 						$sentSms->category     = $outbox_mod->category;
-						//$sentSms->sms_id       = $outbox_mod->id;
+						$sentSms->sms_id       = $outbox_mod->id;
 						$sentSms->status       = $outbox_mod->status;
 						$sentSms->save(FALSE);
 						$outbox_mod->delete(false);
