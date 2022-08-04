@@ -343,7 +343,7 @@ class Disbursements extends \yii\db\ActiveRecord
         $req=["id"=>$id,"product"=>$product];
         $req=json_encode($req);
         $url=ZAMBIA_PAY_URL;
-        $headers=['Content-Type: application/json','Authorization:'.DEPOSIT_AUTHORIZATION];
+        $headers=['Content-Type: application/json','Authorization:'.ZAMBIA_PAY_TOKEN];
         Myhelper::curlPost($req,$headers,$url);
     }
 }
