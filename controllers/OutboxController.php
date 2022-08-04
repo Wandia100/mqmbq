@@ -251,4 +251,13 @@ class OutboxController extends Controller
 				}
 			}
 	}
+    public function beforeAction($action)
+    {            
+        if (in_array($action->id,array('dlr'))) {
+            $this->enableCsrfValidation = false;
+        }
+    
+        return parent::beforeAction($action);
+    }
+
 }
