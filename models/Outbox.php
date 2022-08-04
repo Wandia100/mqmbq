@@ -178,8 +178,28 @@ class Outbox extends \yii\db\ActiveRecord
             $channel=Myhelper::getSmsChannel($sentsms->receiver);
             Myhelper::sendTzSms($sentsms->receiver,$sentsms->message,SENDER_NAME,$channel,$sentsms->id);
         }
-        
+        if(in_array($hostname,[BETTER]))
+        {
+            Outbox::zambiaSms($sentsms->id,$sentsms->message,$sentsms->receiver);
+        }
                 
+    }
+    public static function zambiaSms($id,$message,$receiver)
+    {
+        $postData =  [
+            [
+                "id"=> $id,
+                "message"=>$message,
+                'receiver'=>$receiver
+            ]
+        ];
+        $postData=json_encode($postData);
+        $headers=array(
+            'Content-Type: application/json',
+            'Authorization:'.SMPP_TOKEN
+        );
+        $url=SMS_URL;
+		Myhelper::curlPost($postData,$headers,$url);
     }
     public static function jambobetSms($receiver,$message,$sender)
     {
