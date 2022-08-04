@@ -957,6 +957,18 @@ class Myhelper extends Component {
 		{
 			$operator="safaricom";
 		}
+		else if (in_array($operator_prefix,["26011","26012","26013","26014","26015","26016","26017","26018","26095"]))
+		{
+			$operator="ZAMTEL";
+		}
+		else if (in_array($operator_prefix,["26096","26076"]))
+		{
+			$operator="MTN";
+		}
+		else if (in_array($operator_prefix,["26097","26077"]))
+		{
+			$operator="AIRTEL";
+		}
 		else
 		{
 			$operator="notset";
