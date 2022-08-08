@@ -967,7 +967,6 @@ class ReportController extends Controller{
         $response=[];
         $archived=ArchivedTransactionHistories::getUniquePlayers();
         $response=TransactionHistories::getUniquePlayers();
-        $response=array_merge_recursive($archived,$response);
         $filename="unique_players_".date("Y-m-d-His").".csv";
         header( 'Content-Type: text/csv; charset=utf-8' );
         header( 'Content-Disposition: attachment; filename='.$filename );
@@ -975,15 +974,33 @@ class ReportController extends Controller{
         ob_start();
         $data=['CUSTOMER NAME','PHONE NUMBER','STATION'];
         fputcsv( $output,$data);
-        
+        $seen=[];
         for($i=0;$i<count($response); $i++)
         {
             $arr=[];
-              $row=$response[$i];
-              array_push($arr,$row['reference_name']);
-              array_push($arr,$row['reference_phone']);
-              array_push($arr,$row['name']);
-              fputcsv( $output,$arr);
+            $row=$response[$i];
+            if(!in_array($row['reference_phone'],$seen))
+            {
+                array_push($arr,$row['reference_name']);
+                array_push($arr,$row['reference_phone']);
+                array_push($arr,$row['name']);
+                fputcsv( $output,$arr);
+                array_push($seen,$row['reference_phone']);
+            }
+            
+        }
+        for($i=0;$i<count($archived); $i++)
+        {
+            $arr=[];
+            $row=$archived[$i];
+            if(!in_array($row['reference_phone'],$seen))
+            {
+                array_push($arr,$row['reference_name']);
+                array_push($arr,$row['reference_phone']);
+                array_push($arr,$row['name']);
+                fputcsv( $output,$arr);
+                array_push($seen,$row['reference_phone']);
+            }
             
         }
         Yii::$app->end();
