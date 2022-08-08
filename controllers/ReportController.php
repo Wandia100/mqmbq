@@ -24,6 +24,7 @@ use app\components\Myhelper;
 use app\components\RevenueJob;
 use app\components\ShowSummaryJob;
 use app\components\SiteReportJob;
+use app\models\ArchivedTransactionHistories;
 use app\models\SiteReport;
 use app\models\Loser;
 use kartik\mpdf\Pdf;
@@ -964,7 +965,9 @@ class ReportController extends Controller{
     private function playerData()
     {
         $response=[];
+        $archived=ArchivedTransactionHistories::getUniquePlayers();
         $response=TransactionHistories::getUniquePlayers();
+        $response=array_merge_recursive($archived,$response);
         $filename="unique_players_".date("Y-m-d-His").".csv";
         header( 'Content-Type: text/csv; charset=utf-8' );
         header( 'Content-Disposition: attachment; filename='.$filename );
