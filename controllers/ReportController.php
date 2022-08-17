@@ -1002,6 +1002,56 @@ class ReportController extends Controller{
         }
 
     }
+    public function actionMerge()
+    {
+        $file1="/mnt/c/Users/kutal/Downloads/old_cmedia.csv";
+        $file2="/mnt/c/Users/kutal/Downloads/new_cmedia.csv";
+        $handle = fopen($file1, "r");
+        $seen=[];
+        $final=[];
+        $filename="unique_players_".date("Y-m-d-His").".csv";
+        header( 'Content-Type: text/csv; charset=utf-8' );
+        header( 'Content-Disposition: attachment; filename='.$filename );
+        $output = fopen( 'php://output', 'w' );
+        ob_start();
+        $data=['CUSTOMER NAME','PHONE NUMBER','STATION'];
+        fputcsv( $output,$data);
+        while (($row = fgetcsv($handle, 1000, ",")) !== false) 
+        {
+            $unique_field=trim($row[0]).trim($row[1]).trim($row[2]);
+            $new=[];
+            if(!in_array($unique_field,$seen))
+            {
+                $new=[$row[0],$row[1],$row[2],$unique_field];
+                array_push($final,$new);
+                $arr=[];
+                array_push($arr,$row[0]);
+                array_push($arr,$row[1]);
+                array_push($arr,$row[2]);
+                fputcsv( $output,$arr);
+            }
+
+        }
+        $handle1 = fopen($file2, "r");
+        while (($row = fgetcsv($handle1, 1000, ",")) !== false) 
+        {
+            $unique_field=trim($row[0]).trim($row[1]).trim($row[2]);
+            $new=[];
+            if(!in_array($unique_field,$seen))
+            {
+                $new=[$row[0],$row[1],$row[2],$unique_field];
+                array_push($final,$new);
+                $arr=[];
+                array_push($arr,$row[0]);
+                array_push($arr,$row[1]);
+                array_push($arr,$row[2]);
+                fputcsv( $output,$arr);
+            }
+
+        }
+        Yii::$app->end();
+        return ob_get_clean();
+    }
 
 }
 ?>
