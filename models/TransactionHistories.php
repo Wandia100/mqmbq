@@ -279,13 +279,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
     public static function processPayment($id)
     {
         $row=MpesaPayments::findOne($id);
-        if (gethostname()==COMP21_NET && strlen($row->BillRefNumber)==1 && strtolower($row->BillRefNumber)=='j') {
-            $station_show=StationShows::getStationShowNet($row->BillRefNumber);
-        }
-        else
-        {
-            $station_show=StationShows::getStationShow($row->BillRefNumber,date("H:i:s",strtotime($row->created_at)));
-        }
+        $station_show=StationShows::getStationShow($row->BillRefNumber,date("H:i:s",strtotime($row->created_at)));
         if($station_show!=NULL)
             {
                 try 
