@@ -433,6 +433,63 @@ class MpesapaymentsController extends Controller
 		);
 
 	}
+    public function actionHalotel() {
+		ini_set( 'memory_limit', '512M' );
+		ini_set( 'max_execution_time', '3000' );
+		$success = [];
+		$error   = [];
+		if ( isset( $_POST['submit'] ) ) {
+			$file = $_FILES['file']['tmp_name'];
+            $platform=trim($_POST['platform']);
+//			$file    = "confirmed_payment.csv";
+			$success = [];
+			$error   = [];
+			$row     = 1;
+			if ( ( $handle = fopen( $file, "r" ) ) !== false ) {
+				while ( ( $data = fgetcsv( $handle, 2000, "," ) ) !== false ) {
+                    
+                                    $transaction_number=trim(isset($data[0])?$data[0]:NULL);
+                                    $phone=trim(isset($data[6])?$data[6]:NULL);
+                                    $business_code=trim(isset($data[5])?$data[5]:NULL);
+                                    $reference=trim(isset($data[8])?$data[8]:NULL);
+                                    $datetime=trim(isset($data[1])?$data[1]:NULL);
+                                    $amount=trim(isset($data[7])?$data[7]:NULL);
+                                    $balance=0;
+					if (!empty($transaction_number) && !empty($reference)
+                    && !empty($datetime) && !empty($phone) && !empty($amount) && is_numeric($amount) && $amount==1000 && $business_code==$platform) {
+							$check_if_exists = MpesaPayments::find()->where( [ 'TransID' => $transaction_number ] )->one();
+							if ($check_if_exists == NULL) {
+								$mod= new MpesaPayments();
+								$mod->id=Uuid::generate()->string;
+                                $mod ->TransID = $transaction_number;
+                                $mod -> TransAmount = $amount;
+                                $mod -> FirstName = NULL; 
+                                $mod -> MiddleName = NULL; 
+                                $mod -> LastName = "Halotel"; 
+                                $mod -> MSISDN = $phone; 
+                                $mod -> BillRefNumber = $reference;
+                                $mod -> OrgAccountBalance =$balance;
+                                $mod -> created_at = date("Y-m-d H:i:s",strtotime($datetime));
+                                $mod -> updated_at = date('Y-m-d H:i:s');
+                                $mod ->save(FALSE);
+                                Yii::$app->queue->push(new DepositJob(['id'=>$mod->id]));
+								array_push( $success, $row );
+							}
+							array_push( $error, $row );
+					}
+					$row ++;
+				}
+				fclose( $handle );
+			}
+		}
+
+		return $this->render( 'halotel', [
+				'success' => $success,
+				'error'   => $error
+			]
+		);
+
+	}
     
     public function actionTickets()
     {
