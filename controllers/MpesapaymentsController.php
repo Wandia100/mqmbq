@@ -32,10 +32,10 @@ class MpesapaymentsController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo'],
+                'only' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo'],
+                        'actions' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
