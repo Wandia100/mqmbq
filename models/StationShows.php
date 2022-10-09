@@ -158,6 +158,14 @@ class StationShows extends \yii\db\ActiveRecord
         ->bindValue(':end_date',$end_date)
         ->queryAll();
     }
+    public static function getPayout($start_date,$end_date)
+    {
+        $sql="SELECT COALESCE(SUM(amount),0) AS total_payout FROM winning_histories WHERE station_show_id=a.id AND deleted_at IS NULL AND created_at BETWEEN :start_date AND :end_date";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':start_date',$start_date)
+        ->bindValue(':end_date',$end_date)
+        ->queryAll();
+    }    
     public static function getShowForCommission($current_day)
     {
         $sql="SELECT * FROM station_shows WHERE ".$current_day."=1 AND enabled=1 AND deleted_at IS NULL AND end_time < CURRENT_TIME()";
