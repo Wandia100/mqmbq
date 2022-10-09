@@ -874,10 +874,13 @@ class ReportController extends Controller{
     {        
         Yii::$app->queue->push(new LogCommissionJob());
     }
-    public function actionShow($start_date=NULL)
+    public function actionShow()
     {
-        if($start_date!=NULL)
+        $i=1;
+        for($i=1;$i <=30; $i++)
         {
+            $day=(strlen($i)==1)?'0'.$i:$i;
+            $start_date="2022-09-".$day;
             ShowSummary::log($start_date);
         }
     }
