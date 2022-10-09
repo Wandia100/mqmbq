@@ -874,6 +874,13 @@ class ReportController extends Controller{
     {        
         Yii::$app->queue->push(new LogCommissionJob());
     }
+    public function actionShow($start_date=NULL)
+    {
+        if($start_date!=NULL)
+        {
+            ShowSummary::log($start_date);
+        }
+    }
     public function actionLogawards()
     {        
         Yii::$app->queue->push(new AwardsJob());

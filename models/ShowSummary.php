@@ -127,6 +127,40 @@ class ShowSummary extends \yii\db\ActiveRecord
             }
         
     }
+    public static function log($start_date)
+    {
+        $end_date = date("$start_date 23:59:59");
+            $data=StationShows::getStationShowSummary($start_date,$end_date);
+            for($i=0;$i<count($data); $i++)
+            {
+                $row=$data[$i];
+                $show=ShowSummary::findShow($start_date,$row['id']);
+                if($show==NULL)
+                {
+                    $model=new ShowSummary();
+                    $model->station_show_id=$row['id'];
+                    $model->station_id=$row['station_id'];
+                    $model->total_revenue=$row['total_revenue'];
+                    $model->total_commission=$row['total_commission'];
+                    $model->total_payouts=$row['total_payout'];
+                    $model->report_date= $start_date;
+                    $model->created_at=date("Y-m-d H:i:s");
+                    $model->station_show_name=$row['station_show_name'];
+                    $model->station_name=$row['station_name'];
+                    $model->save();
+                }
+                else
+                {
+                    $show->total_revenue=$row['total_revenue'];
+                    $show->total_commission=$row['total_commission'];
+                    $show->total_payouts=$row['total_payout'];
+                    $show->save();
+                }
+                
+                
+            }
+        
+    }
     public static function updateShowSummary($start_date)
     {
         $end_date = date("$start_date 23:59:59");
