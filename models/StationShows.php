@@ -160,7 +160,10 @@ class StationShows extends \yii\db\ActiveRecord
     }
     public static function getPayout($start_date,$end_date)
     {
-        $sql="SELECT COALESCE(SUM(amount),0) AS total_payout FROM winning_histories WHERE station_show_id=a.id AND deleted_at IS NULL AND created_at BETWEEN :start_date AND :end_date";
+        $sql="SELECT a.id,a.station_id,a.name AS station_show_name,b.name AS station_name,
+        COALESCE((SELECT SUM(amount) FROM winning_histories WHERE station_show_id=a.id AND deleted_at IS NULL AND created_at BETWEEN :start_date AND :end_date),0) AS total_payout
+         FROM station_shows a LEFT JOIN stations b ON a.station_id=b.id 
+         WHERE a.deleted_at IS NULL AND a.enabled=1 ORDER BY total_revenue DESC";
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':start_date',$start_date)
         ->bindValue(':end_date',$end_date)
