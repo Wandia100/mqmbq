@@ -449,11 +449,11 @@ class MpesapaymentsController extends Controller
 				while ( ( $data = fgetcsv( $handle, 2000, "," ) ) !== false ) {
                     
                                     $transaction_number=trim(isset($data[0])?$data[0]:NULL);
-                                    $phone=trim(isset($data[6])?$data[6]:NULL);
-                                    $business_code=trim(isset($data[5])?$data[5]:NULL);
-                                    $reference=trim(isset($data[8])?$data[8]:NULL);
+                                    $phone=trim(isset($data[5])?$data[5]:NULL);
+                                    $business_code=trim(isset($data[4])?$data[4]:NULL);
+                                    $reference=trim(isset($data[7])?$data[7]:NULL);
                                     $datetime=trim(isset($data[1])?$data[1]:NULL);
-                                    $amount=trim(isset($data[7])?$data[7]:NULL);
+                                    $amount=trim(isset($data[6])?$data[6]:NULL);
                                     $balance=0;
 					if (!empty($transaction_number) && !empty($reference)
                     && !empty($datetime) && !empty($phone) && !empty($amount) && is_numeric($amount) && $amount==1000 && $business_code==$platform) {
