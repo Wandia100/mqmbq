@@ -1014,8 +1014,8 @@ class ReportController extends Controller{
     }
     public function actionMerge()
     {
-        $file1="/mnt/c/Users/kutal/Downloads/old_cmedia.csv";
-        $file2="/mnt/c/Users/kutal/Downloads/new_cmedia.csv";
+        $file1="/mnt/c/Users/kutal/Downloads/dbs/old_cmedia.csv";
+        $file2="/mnt/c/Users/kutal/Downloads/dbs/new_cmedia.csv";
         $handle = fopen($file1, "r");
         $seen=[];
         $final=[];
