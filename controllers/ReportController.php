@@ -975,8 +975,8 @@ class ReportController extends Controller{
     private function playerData()
     {
         $response=[];
-        $response=ArchivedTransactionHistories::getUniquePlayers();
-        //$response=TransactionHistories::getUniquePlayers();
+        //$response=ArchivedTransactionHistories::getUniquePlayers();
+        $response=TransactionHistories::getUniquePlayers();
         $filename="unique_players_".date("Y-m-d-His").".csv";
         header( 'Content-Type: text/csv; charset=utf-8' );
         header( 'Content-Disposition: attachment; filename='.$filename );
