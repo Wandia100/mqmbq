@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'showPageSummary'=>true,
     'toolbar' => [
         '{toggleData}',
-                '{export}',
+        '{export}',
     ],
         'panel'=>[
             'type'=>'default',
