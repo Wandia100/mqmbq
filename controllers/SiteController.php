@@ -70,13 +70,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        if(in_array(gethostname(),COTZ))
-        {
-            $currency="Tsh ";
-        }
-        else{
-            $currency="ZK ";
-        }
+        $currency="Tsh ";
         if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group==3){
             return $this->redirect( [ '/transactionhistories/presenter' ] );
         }else if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group==6){
