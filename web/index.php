@@ -1,7 +1,6 @@
 <?php
 $hostname=gethostname();
-$test_server=array('kuta');
-if((in_array($server_name,$test_server)))
+if((in_array($hostname,['kuta'])))
 {
     // comment out the following two lines when deployed to production
     defined('YII_DEBUG') or define('YII_DEBUG', true);
