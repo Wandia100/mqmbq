@@ -363,13 +363,7 @@ class TransactionhistoriesController extends Controller
         for($i=0;$i<count($data); $i++)
         {
             $row=$data[$i];
-        if (gethostname()==COMP21_NET && strlen($row->BillRefNumber)==1 && strtolower($row->BillRefNumber)=='j') {
-            $station_show=StationShows::getStationShowNet($row->BillRefNumber);
-        }
-        else
-        {
             $station_show=StationShows::getStationShow($row->BillRefNumber,date("H:i:s",strtotime($row->created_at)));
-        }
         if($station_show!=NULL)
             {
                 try 
