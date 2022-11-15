@@ -294,7 +294,7 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
     public static function LastHour($the_day,$hr)
     {
         $from_time=$the_day." ".$hr;
-        MpesaPayments::calculateStationPercentage($from_time);
+        //MpesaPayments::calculateStationPercentage($from_time);
         $stations=Stations::getActiveStations();
         for($i=0;$i<count($stations); $i++)
         {
