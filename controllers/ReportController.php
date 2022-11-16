@@ -593,6 +593,7 @@ class ReportController extends Controller{
     }
     public function actionDayupdate()
     {
+        exit();//disabled to be run monthly
         $from_time=date("Y-m");
         MpesaPayments::calculateStationPercentage($from_time);
     }
