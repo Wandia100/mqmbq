@@ -10,19 +10,6 @@ class DisburseJob extends BaseObject implements \yii\queue\JobInterface
     public $id;
     public function execute($queue)
     {
-        //code to send sms by id
-        if(in_array(gethostname(),[COMP21_COKE]))
-        {
-            Disbursements::cokePayout($this->id);
-        }
-        if(in_array(gethostname(),[COMP21_NET]))
-        {
-            Disbursements::netPayout($this->id);
-        }
-        if(in_array(gethostname(),[COMP21_DEV]))
-        {
-            Disbursements::devPayout($this->id);
-        }
         if(in_array(gethostname(),[EFMTZ_COM]))
         {
             Disbursements::tzPayout($this->id,"mshindo");
@@ -30,10 +17,6 @@ class DisburseJob extends BaseObject implements \yii\queue\JobInterface
         if(in_array(gethostname(),[CMEDIA_COTZ]))
         {
             Disbursements::tzPayout($this->id,"mchongo");
-        }
-        if(in_array(gethostname(),[BETTER]))
-        {
-            Disbursements::zambiaPayout($this->id,"power");
         }
         
     }
