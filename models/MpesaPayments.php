@@ -106,22 +106,13 @@ class MpesaPayments extends \yii\db\ActiveRecord
         ->bindValue(':station_id',$station_id)
         ->queryOne();
     }
-    public static function getStationTotalMpesa($from_time,$station_code)
+    public static function getStationTotalMpesa($from_time,$station_id)
     {
-        $sql="SELECT COALESCE(SUM(b.TransAmount),0) as amount FROM mpesa_payments b WHERE b.deleted_at IS NULL AND b.created_at LIKE :from_time 
-        AND  (SUBSTRING(b.BillRefNumber,1,3)=SUBSTRING(:station_code,1,3) || RIGHT(b.BillRefNumber,3)=RIGHT(:station_code,3) || b.BillRefNumber LIKE :sname)";
+        $sql="SELECT COALESCE(SUM(b.TransAmount),0) as amount FROM mpesa_payments b 
+        WHERE b.deleted_at IS NULL AND b.created_at LIKE :from_time AND b.station_id=:station_id";
         return Yii::$app->mpesa_db->createCommand($sql)
         ->bindValue(':from_time',"%$from_time%")
-        ->bindValue(':station_code',$station_code)
-        ->bindValue(':sname',"%$station_code%")
-        ->queryOne();
-    }
-    public static function getStationTotalMpesaNet($from_time)
-    {
-        $sql="SELECT COALESCE(SUM(b.TransAmount),0) as amount FROM mpesa_payments b WHERE b.deleted_at IS NULL AND b.created_at LIKE :from_time 
-        AND  LENGTH(b.BillRefNumber)=1";
-        return Yii::$app->mpesa_db->createCommand($sql)
-        ->bindValue(':from_time',"%$from_time%")
+        ->bindValue(':station_id',"$station_id")
         ->queryOne();
     }
     public static function getTotalRevenue()

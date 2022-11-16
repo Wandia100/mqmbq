@@ -312,21 +312,9 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
             $model->unique_field=$unique_field;
             $model->station_id=$station->id;
 
-            if(in_array(gethostname(),[COMP21_NET]) && strlen($station->station_code)==1)
-            {
-                $model->amount=MpesaPayments::getStationTotalMpesaNet($from_time,$station->station_code)['amount'];
-                $model->day_total=MpesaPayments::getStationTotalMpesaNet($the_day,$station->station_code)['amount'];
-
-            }
-            else
-            {
-                $model->amount=MpesaPayments::getStationTotalMpesa($from_time,$station->station_code)['amount'];
-                $model->day_total=MpesaPayments::getStationTotalMpesa($the_day,$station->station_code)['amount'];
-
-            }
+            $model->amount=MpesaPayments::getStationTotalMpesa($from_time,$station->id)['amount'];
+            $model->day_total=MpesaPayments::getStationTotalMpesa($the_day,$station->id)['amount'];
             $mpesa_payments = MpesaPayments::getTotalMpesa($from_time)['total_mpesa'];
-            //$transaction_histories = TransactionHistories::getTotalTransactions($from_time)['total_history'];
-            //$model->invalid_codes=$mpesa_payments - $transaction_histories;
             $model->invalid_codes=0;
             $model->total_amount=$mpesa_payments;
             $model->created_at=date("Y-m-d H:i:s");
