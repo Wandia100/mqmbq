@@ -279,7 +279,17 @@ class TransactionHistories extends \yii\db\ActiveRecord
     public static function processPayment($id)
     {
         $row=MpesaPayments::findOne($id);
-        $station_show=StationShows::getStationShow($row->BillRefNumber,date("H:i:s",strtotime($row->created_at)));
+        $station=Stations::getStation($row->BillRefNumber);
+        if($station!=NULL)
+        {
+            $station_show=StationShows::getStationShow($station['id'],date("H:i:s",strtotime($row->created_at)),date("Y-m-d",strtotime($row->created_at)));
+            $row->station_id=$station['id'];
+            $station_id=$row->station_id;
+        }
+        else{
+            $station_show=NULL;
+            $station_id=NULL;
+        }
         if($station_show!=NULL)
             {
                 try 
@@ -295,24 +305,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
                     $model->amount=$row->TransAmount;
                     $model->created_at=$row->created_at;
                     $model->save(false);
-                    $row->operator=Myhelper::getOperator($row->MSISDN);
-                    $row->state=1;
-                    $row->station_id=$station_show['station_id'];
-                    $row->save(false);
-                    if(in_array(gethostname(),COTZ))
-                    {
-                        //$totalEntry=TransactionHistories::countEntry($row->MSISDN);
-                        $totalEntry=Customer::customerTicket($row->MSISDN);
-                        $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-                        Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_show['station_id']);
-                    }
-                    else
-                    {
-                        Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,$station_show['station_id']);
-                    }
-                    $row->operator=Myhelper::getOperator($row->MSISDN);
-                    $row->state=1;
-                    $row->save(false);
+                    
 
                 }
                 catch (IntegrityException $e) {
@@ -323,19 +316,13 @@ class TransactionHistories extends \yii\db\ActiveRecord
             }
             else
             {
-                    $row->operator=Myhelper::getOperator($row->MSISDN);
-                    $row->state=1;
-                    $row->save(false);
-                if(in_array(gethostname(),COTZ))
-                        {
-                            $totalEntry=Customer::customerTicket($row->MSISDN);
-                            $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-                            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,NULL);
-                        }
-                        else
-                        {
-                            Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
-                        }
+                //do nothing
             }
+            $totalEntry=Customer::customerTicket($row->MSISDN);
+            $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
+            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_id);
+            $row->operator=Myhelper::getOperator($row->MSISDN);
+            $row->state=1;
+            $row->save(false);
     }
 }

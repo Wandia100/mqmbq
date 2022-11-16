@@ -115,6 +115,17 @@ class Stations extends \yii\db\ActiveRecord
         ->bindValue(':the_day',"%$the_day%")
         ->queryAll();
     }
+    public static function getStation($stat_code)
+    {
+        $scode=$stat_code;
+        $sql="SELECT a.id,a.name,a.station_code FROM stations a 
+        WHERE a.deleted_at IS NULL AND  (SUBSTRING(a.station_code,1,3)=SUBSTRING(:stat_code,1,3) || 
+        RIGHT(a.station_code,3)=RIGHT(:stat_code,3) || a.station_code LIKE :scode) ";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':stat_code',$stat_code)
+        ->bindValue(':scode',"%$scode%")
+        ->queryOne();
+    }
     public static function getActiveStations()
     {
         if(\Yii::$app->myhelper->isStationManager()){

@@ -359,109 +359,11 @@ class TransactionhistoriesController extends Controller
     }
     public function actionAssignshows()
     {
-        $data=MpesaPayments::find()->where("state=0")->all();
-        for($i=0;$i<count($data); $i++)
+        $data=MpesaPayments::find()->select(['id'])->where("state=0")->all();
+        foreach($data as $row)
         {
-            $row=$data[$i];
-            $station_show=StationShows::getStationShow($row->BillRefNumber,date("H:i:s",strtotime($row->created_at)));
-        if($station_show!=NULL)
-            {
-                try 
-                {
-                    $model=new TransactionHistories();
-                    $model->id=Uuid::generate()->string;
-                    $model->mpesa_payment_id=$row->id;
-                    $model->reference_name=$row->FirstName." ".$row->MiddleName." ".$row->LastName;
-                    $model->reference_phone=$row->MSISDN;
-                    $model->reference_code=$row->BillRefNumber;
-                    $model->station_id=$station_show['station_id'];
-                    $model->station_show_id=$station_show['show_id'];
-                    $model->amount=$row->TransAmount;
-                    $model->created_at=$row->created_at;
-                    $model->save(false);
-                    $row->operator=Myhelper::getOperator($row->MSISDN);
-                    $row->state=1;
-                    $row->station_id=$station_show['station_id'];
-                    $row->save(false);
-                    if(in_array(gethostname(),COTZ))
-                    {
-                        //$totalEntry=TransactionHistories::countEntry($row->MSISDN);
-                        $totalEntry=Customer::customerTicket($row->MSISDN);
-                        $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-                        Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_show['station_id']);
-                    }
-                    else
-                    {
-                        Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,$station_show['station_id']);
-                    }
-                    $row->operator=Myhelper::getOperator($row->MSISDN);
-                    $row->state=1;
-                    $row->save(false);
-
-                }
-                catch (IntegrityException $e) {
-                    //allow execution
-                    //var_dump($e);
-                }
-                
-            }
-            else
-            {
-                $row->operator=Myhelper::getOperator($row->MSISDN);
-                $row->state=1;
-                $row->save(false);
-                if(in_array(gethostname(),COTZ))
-                        {
-                            $totalEntry=Customer::customerTicket($row->MSISDN);
-                            $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-                            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,NULL);
-                        }
-                        else
-                        {
-                            Myhelper::setSms('validDraw',$row->MSISDN,[$row->FirstName],SENDER_NAME,NULL);
-                        }
-            }
-    
+            TransactionHistories::processPayment($row->id);  
         }
-    }
-    public function actionAssign($created_at)
-    {
-        $data=MpesaPayments::find()->where("created_at > '$created_at'")->all();
-        for($i=0;$i<count($data); $i++)
-        {
-            $row=$data[$i];
-            //get transaction histories
-            $model=TransactionHistories::findOne(["mpesa_payment_id"=>$row->id]);
-            if($model==NULL)
-            {
-                $station_show=StationShows::getStationShow($row->BillRefNumber,date("H:i:s",strtotime($row->created_at)));
-                if($station_show!=NULL)
-                {
-                    try 
-                    {
-                        $model=new TransactionHistories();
-                        $model->id=Uuid::generate()->string;
-                        $model->mpesa_payment_id=$row->id;
-                        $model->reference_name=$row->FirstName." ".$row->MiddleName." ".$row->LastName;
-                        $model->reference_phone=$row->MSISDN;
-                        $model->reference_code=$row->BillRefNumber;
-                        $model->station_id=$station_show['station_id'];
-                        $model->station_show_id=$station_show['show_id'];
-                        $model->amount=$row->TransAmount;
-                        $model->created_at=$row->created_at;
-                        $model->save(false);
-                        $row->operator=Myhelper::getOperator($row->MSISDN);
-                        $row->state=1;
-                        $row->station_id=$station_show['station_id'];
-                        $row->save(false);
-                    }
-                    catch (IntegrityException $e) {
-                        //allow execution
-                    }     
-                }
-            }
-           
-        } 
     }
     public static function actionRemovedups()
     {

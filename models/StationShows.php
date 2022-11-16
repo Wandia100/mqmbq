@@ -122,27 +122,13 @@ class StationShows extends \yii\db\ActiveRecord
             'deleted_at' => 'Deleted At',
         ];
     }
-    public static function getStationShow($stat_code,$time)
+    public static function getStationShow($station_id,$time,$date)
     {
-        $scode=$stat_code;
-        $current_day=strtolower(date("l"));
-        $sql="SELECT a.name,a.station_code,b.station_id,b.id AS show_id,b.start_time,b.end_time FROM stations a 
-        LEFT JOIN station_shows b ON a.id=b.station_id  WHERE b.enabled=1 AND b.deleted_at IS NULL AND 
-        a.deleted_at IS NULL AND  (SUBSTRING(a.station_code,1,3)=SUBSTRING(:stat_code,1,3) || RIGHT(a.station_code,3)=RIGHT(:stat_code,3) || a.station_code LIKE :scode) 
+        $current_day=strtolower(date("l",strtotime($date)));
+        $sql="SELECT b.station_id,b.id AS show_id,b.start_time,b.end_time FROM  station_shows b  WHERE b.station_id=:station_id AND b.enabled=1 AND b.deleted_at IS NULL  
         AND b.".$current_day."=1  AND start_time <='$time'  AND end_time >='$time'";
         return Yii::$app->db->createCommand($sql)
-        ->bindValue(':stat_code',$stat_code)
-        ->bindValue(':scode',"%$scode%")
-        ->queryOne();
-    }
-    public static function getStationShowNet($stat_code)
-    {
-        $current_day=strtolower(date("l"));
-        $sql="SELECT a.name,a.station_code,b.station_id,b.id AS show_id,b.start_time,b.end_time FROM stations a 
-        LEFT JOIN station_shows b ON a.id=b.station_id  WHERE b.enabled=1 AND b.deleted_at IS NULL AND 
-        a.deleted_at IS NULL AND a.station_code=:stat_code AND b.".$current_day."=1  AND start_time <= CURRENT_TIME()  AND end_time >=CURRENT_TIME();";
-        return Yii::$app->db->createCommand($sql)
-        ->bindValue(':stat_code',$stat_code)
+        ->bindValue(':station_id',$station_id)
         ->queryOne();
     }
     public static function getStationShowSummary($start_date,$end_date)

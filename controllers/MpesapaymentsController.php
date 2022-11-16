@@ -148,7 +148,10 @@ class MpesapaymentsController extends Controller
     }
     public function actionInsertpayment($reference_code,$amount,$limit)
     {
-        Myhelper::checkRemoteAddress();
+        if(gethostname()!='kuta')
+        {
+            exit();
+        }
         for($i=0;$i< $limit; $i++)
         {
             try
@@ -160,7 +163,6 @@ class MpesapaymentsController extends Controller
                 $model->FirstName = "first".$name_suffix;
                 $model->MiddleName ="mid".$name_suffix;
                 $model->LastName = "last".$name_suffix;
-                //$model->MSISDN = "254728202197";
                 $model->MSISDN = "2547".rand(10000000,99999999);
                 $model->InvoiceNumber = "demo";
                 $model->BusinessShortCode = "demo";
@@ -172,15 +174,7 @@ class MpesapaymentsController extends Controller
                 $model->created_at=date("Y-m-d H:i:s");
                 $model->updated_at=date("Y-m-d H:i:s");
                 $model->save(false);
-                $first_name="demo ";
-                    if($amount >=100 && $amount < 300)
-                    {
-                        Myhelper::setSms('validDraw',$model->MSISDN,[$model->FirstName],SENDER_NAME,NULL);
-                    }
-                    else
-                    {
-                        Myhelper::setSms('invalidDrawAmount',$model->MSISDN,[$model->FirstName],SENDER_NAME,NULL);
-                    }
+                Yii::$app->queue->priority(10)->push(new DepositJob(['id'=>$model->id]));
             }
             catch (IntegrityException $e) {
                 //allow execution

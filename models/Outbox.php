@@ -163,25 +163,13 @@ class Outbox extends \yii\db\ActiveRecord
         $sentsms->category=$outbox->category;
         $sentsms->save(false);
         $outbox->delete(false);
-        #handle coke&net,dev and cotz
-        $hostname=gethostname();
-        if(in_array($hostname,[COMP21_COKE,COMP21_NET]))
+        $channel=Myhelper::getSmsChannel($sentsms->receiver);
+        if(gethostname()!='kuta')
         {
-            Outbox::niTextSms($sentsms);
-        }
-        if(in_array($hostname,[COMP21_DEV]))
-        {
-            Outbox::jambobetSms($sentsms->receiver,$sentsms->message,$sentsms->sender);
-        }
-        if(in_array($hostname,COTZ))
-        {
-            $channel=Myhelper::getSmsChannel($sentsms->receiver);
             Myhelper::sendTzSms($sentsms->receiver,$sentsms->message,SENDER_NAME,$channel,$sentsms->id);
         }
-        if(in_array($hostname,[BETTER]))
-        {
-            Outbox::zambiaSms($sentsms->id,$sentsms->message,$sentsms->receiver);
-        }
+        
+        
                 
     }
     public static function zambiaSms($id,$message,$receiver)

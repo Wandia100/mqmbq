@@ -76,6 +76,7 @@ class MpesaPaymentsSearch extends MpesaPayments
             ->andFilterWhere(['like', 'OrgAccountBalance', $this->OrgAccountBalance])
             ->andFilterWhere(['like', 'BillRefNumber', $this->BillRefNumber])
             ->andFilterWhere(['like', 'TransAmount', $this->TransAmount])
+            ->andFilterWhere(['like', 'operator', $this->operator])
             ->andFilterWhere(['like', 'deleted_at', $this->deleted_at])
             ->andFilterWhere(['like', 'created_at', $this->created_at]);
         $today     = date( 'Y-m-d' );
