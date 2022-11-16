@@ -16,6 +16,7 @@ use yii\db\IntegrityException;
 use app\components\DepositJob;
 use app\components\SetStationJob;
 use app\models\Customer;
+use app\models\Stations;
 use app\models\TransactionHistories;
 use Exception;
 
@@ -515,10 +516,26 @@ class MpesapaymentsController extends Controller
             
         }
     }
-    /*public function actionDemo($id)
+    public function actionReference()
     {
-        TransactionHistories::processPayment($id);
-    }*/
+        $data=MpesaPayments::find()->where('created_at > "2022-11-01"')->all();
+        foreach($data as $row)
+        {
+            if($row->station_id !=NULL)
+            {
+                $station=Stations::find()->select(['station_code'])->where(['id'=>$row->station_id])->one();
+                $model=TransactionHistories::find()->where(['mpesa_payment_id'=>$row->id])->one();
+                if($model)
+                {
+                    $model->reference_code=$station->station_code;
+                    $model->save(false);
+                }
+                $row->BillRefNumber=$station->station_code;
+                $row->save(false);
+            }
+            
+        }
+    }
     public function beforeAction($action)
 {            
     if (in_array($action->id,array('save','insertpayment','pay'))) {
