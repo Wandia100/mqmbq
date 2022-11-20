@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\components\Myhelper;
+use app\components\OutboxJob;
 use Yii;
 use app\models\Outbox;
 use app\models\OutboxSearch;
@@ -111,6 +112,7 @@ class OutboxController extends Controller
         $model = new Outbox();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->queue->push(new OutboxJob(['id'=>$model->id]));
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
