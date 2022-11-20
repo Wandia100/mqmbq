@@ -233,7 +233,7 @@ class ReportController extends Controller{
     }
     public function actionLogloser($limit)
     {
-        Yii::$app->queue->priority(1025)->push(new LogLoserJob(['limit'=>$limit]));
+        Yii::$app->queue->priority(100)->push(new LogLoserJob(['limit'=>$limit]));
     }
     /**
         * Method to render growth trend graph
