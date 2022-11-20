@@ -82,6 +82,12 @@ use luc\tourist\Tourist;
                 <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(42) ) ) ? '':'hidden'?>  ">
                     <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Jackpot draw', ['/transactionhistories/jackpotdraw'], ['class' => ''])?>
                 </li> 
+                <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(41) ) ) ? '':'hidden'?>  ">
+                    <?=Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Admin Draws', Url::to(['/transactionhistories/admindraws']), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
+                <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(42) ) ) ? '':'hidden'?>  ">
+                    <?=Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Bonus Draws', Url::to(['/bonus/draw']), ['class' => '', 'id' => 'appmenu'])?>
+                </li>
                 </ul>
                 </li>
 
@@ -185,12 +191,6 @@ use luc\tourist\Tourist;
                 </li>
                 <li class="<?=$adminvisibility?> <?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?>  <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i>Station manager Disbursement', Url::to(['/commissions/index','t'=>'m']), ['class' => '', 'id' => 'appmenu'])?>
-                </li>
-                <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(41) ) ) ? '':'hidden'?>  ">
-                    <?=Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Admin Draws', Url::to(['/transactionhistories/admindraws']), ['class' => '', 'id' => 'appmenu'])?>
-                </li>
-                <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(42) ) ) ? '':'hidden'?>  ">
-                    <?=Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Bonus Draws', Url::to(['/bonus/draw']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                     </ul>
                 </li>
