@@ -40,7 +40,7 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','adminpayout','growthtrend','player','station','backlog','updateshow'],
+                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','loserpayout','growthtrend','player','station','backlog','updateshow'],
                 'rules' => [
                     [
                         'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','growthtrend','station','backlog','updateshow'],
@@ -93,7 +93,7 @@ class ReportController extends Controller{
                         }
                     ],
                     [
-                        'actions' => ['adminpayout','player'],
+                        'actions' => ['loserpayout','player'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -201,7 +201,7 @@ class ReportController extends Controller{
         * Method to render admin payout for losers
         * @return type
     */
-    public function actionAdminpayout(){
+    public function actionLoserpayout(){
         if(isset($_POST['limit']) && $_POST['limit'] > 0 ){
             $limit = (int)$_POST['limit'];
             $loadcheck = true;
@@ -221,11 +221,11 @@ class ReportController extends Controller{
         }
         if(isset($_POST['amount']) && $_POST['amount'] > 0 && $loadcheck){//Disburse amount
             TransactionHistories::processLosersDisbursements($response, $_POST['amount']);
-            $this->redirect('adminpayout');
+            $this->redirect('loserpayout');
         }
         
 
-        return $this->render('adminpayout', [
+        return $this->render('loserpayout', [
             'limit' =>  $limit,
             'loadcheck'=>$loadcheck,
             'response' => $response

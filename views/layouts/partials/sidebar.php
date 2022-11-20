@@ -73,8 +73,8 @@ use luc\tourist\Tourist;
                 <li class="<?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Payouts" title="payouts">
                     <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Payouts', ['/report/payouts'], ['class' => ''])?>
                 </li> 
-                <li class="<?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Admin payout" title="Admin payout">
-                    <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Admin payout', ['/report/adminpayout'], ['class' => ''])?>
+                <li class="<?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Admin payout" title="Loser payout">
+                    <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Loser payout', ['/report/loserpayout'], ['class' => ''])?>
                 </li>  
                 <li class="<?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Growth trend" title="Growth trend">
                     <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Growth trends', ['/report/growthtrend'], ['class' => ''])?>
