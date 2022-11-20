@@ -932,8 +932,12 @@ class Myhelper extends Component {
 			$operator = "TANZANIA.VODACOM.RELAY";
 		} elseif ( $operator_prefix == "068" || $operator_prefix == "069" || $operator_prefix == "078" ) {
 			$operator = "TANZANIA.AIRTEL.RELAY";
-		} elseif ( $operator_prefix == "065" || $operator_prefix == "067" || $operator_prefix == "071" ) {
+		}
+		 elseif ( $operator_prefix == "065" || $operator_prefix == "067" || $operator_prefix == "071" ) {
 			$operator = "TANZANIA.TIGO.RELAY";
+		} 
+		elseif ( $operator_prefix == "062" ) {
+			$operator = "TANZANIA.HALOTEL.RELAY";
 		} 
 
 		return $operator;
@@ -952,6 +956,10 @@ class Myhelper extends Component {
 		else if (in_array($operator_prefix,["25565","25567","25571"]))
 		{
 			$operator="tigo";
+		}
+		else if (in_array($operator_prefix,["25562"]))
+		{
+			$operator="halotel";
 		}
 		else
 		{
