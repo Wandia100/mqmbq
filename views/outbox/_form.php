@@ -17,13 +17,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'sender')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'message')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'created_date')->textInput() ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
-
-    <?= $form->field($model, 'category')->textInput() ?>
-
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

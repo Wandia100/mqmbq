@@ -110,7 +110,7 @@ class OutboxController extends Controller
     public function actionCreate()
     {
         $model = new Outbox();
-
+        $model->id=Uuid::generate()->string;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->queue->push(new OutboxJob(['id'=>$model->id]));
             return $this->redirect(['view', 'id' => $model->id]);
