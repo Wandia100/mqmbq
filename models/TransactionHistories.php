@@ -325,4 +325,26 @@ class TransactionHistories extends \yii\db\ActiveRecord
             $row->state=1;
             $row->save(false);
     }
+    public static function logLoser($limit)
+    {
+        $data= TransactionHistories::getLosersList($limit);
+        Loser::deleteAll();
+        for($i=0; $i<count($data); $i++)
+        {
+            $row=$data[$i];
+            try{
+                $model=new Loser();
+                $model->reference_name=$row['reference_name'];
+                $model->reference_phone=$row['reference_phone'];
+                $model->station_id=$row['station_id'];
+                $model->plays=$row['plays'];
+                $model->save(false);
+            }
+            catch(IntegrityException $e){
+                //allow execution
+            }
+            
+            
+        }
+    }
 }

@@ -4,6 +4,7 @@ namespace app\controllers;
 use app\components\AwardsJob;
 use app\components\LastHourJob;
 use app\components\LogCommissionJob;
+use app\components\LogLoserJob;
 use Yii;
 use app\models\MpesaPayments;
 use app\models\TransactionHistories;
@@ -230,28 +231,9 @@ class ReportController extends Controller{
             'response' => $response
         ]);
     }
-    public function actionLogloser()
+    public function actionLogloser($limit)
     {
-        $limit=1000;
-        $data= TransactionHistories::getLosersList($limit);
-        Loser::deleteAll();
-        for($i=0; $i<count($data); $i++)
-        {
-            $row=$data[$i];
-            try{
-                $model=new Loser();
-                $model->reference_name=$row['reference_name'];
-                $model->reference_phone=$row['reference_phone'];
-                $model->station_id=$row['station_id'];
-                $model->plays=$row['plays'];
-                $model->save(false);
-            }
-            catch(IntegrityException $e){
-                //allow execution
-            }
-            
-            
-        }
+        Yii::$app->queue->priority(1025)->push(new LogLoserJob(['limit'=>$limit]));
     }
     /**
         * Method to render growth trend graph
