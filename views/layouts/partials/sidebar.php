@@ -74,16 +74,16 @@ use luc\tourist\Tourist;
                     <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Payouts', ['/report/payouts'], ['class' => ''])?>
                 </li> 
                 <li class="<?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Admin payout" title="Loser payout">
-                    <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Loser payout', ['/report/loserpayout'], ['class' => ''])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Loser Bonus', ['/report/loserpayout'], ['class' => ''])?>
                 </li>  
                 <li class="<?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Growth trend" title="Growth trend">
                     <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Growth trends', ['/report/growthtrend'], ['class' => ''])?>
                 </li> 
                 <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(42) ) ) ? '':'hidden'?>  ">
-                    <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Jackpot draw', ['/transactionhistories/jackpotdraw'], ['class' => ''])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Jackpot Draws', ['/transactionhistories/jackpotdraw'], ['class' => ''])?>
                 </li> 
                 <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(41) ) ) ? '':'hidden'?>  ">
-                    <?=Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Admin Draws', Url::to(['/transactionhistories/admindraws']), ['class' => '', 'id' => 'appmenu'])?>
+                    <?=Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Draws', Url::to(['/transactionhistories/admindraws']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(42) ) ) ? '':'hidden'?>  ">
                     <?=Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Bonus Draws', Url::to(['/bonus/draw']), ['class' => '', 'id' => 'appmenu'])?>
