@@ -936,7 +936,7 @@ class Myhelper extends Component {
 		 elseif ( $operator_prefix == "065" || $operator_prefix == "067" || $operator_prefix == "071" ) {
 			$operator = "TANZANIA.TIGO.RELAY";
 		} 
-		elseif ( $operator_prefix == "062" ) {
+		elseif ( $operator_prefix == "062" || $operator_prefix == "061" ) {
 			$operator = "TANZANIA.HALOTEL.RELAY";
 		} 
 
@@ -957,7 +957,7 @@ class Myhelper extends Component {
 		{
 			$operator="tigo";
 		}
-		else if (in_array($operator_prefix,["25562"]))
+		else if (in_array($operator_prefix,["25562","25561"]))
 		{
 			$operator="halotel";
 		}
