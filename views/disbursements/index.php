@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-           // 'id',
+            'id',
            # 'reference_id',
             
            /* [
@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'phone_number',
             'amount',
             //'conversation_id',
-            'status',
+            //'status',
             'disbursement_type',
             //'transaction_reference',
             'created_at',
