@@ -69,10 +69,10 @@ class SentSms extends \yii\db\ActiveRecord
                 $model->message=$row->message;
                 $model->created_date=$row->created_date;
                 $model->save(false);
-                $row->delete(false);
             }
             catch(IntegrityException $e)
             {}
+            $row->delete(false);
         }
 
     }
