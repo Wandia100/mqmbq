@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\IntegrityException;
 
 /**
  * This is the model class for table "sent_sms".
@@ -53,5 +54,26 @@ class SentSms extends \yii\db\ActiveRecord
             'created_date' => 'Created Date',
             'category' => 'Category',
         ];
+    }
+    public static function archive($created_date)
+    {
+        $data=SentSms::find()->where("created_date like '%$created_date%'")->all();
+        foreach($data as $row)
+        {
+            try
+            {
+                $model=new ArchivedSentSms();
+                $model->id=$row->id;
+                $model->receiver=$row->receiver;
+                $model->sender=$row->sender;
+                $model->message=$row->message;
+                $model->created_date=$row->created_date;
+                $model->save(false);
+                $row->delete(false);
+            }
+            catch(IntegrityException $e)
+            {}
+        }
+
     }
 }

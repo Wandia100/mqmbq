@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\ArchiveJob;
 use Yii;
 use app\models\SentSms;
 use app\models\SentSmsSearch;
@@ -23,10 +24,10 @@ class SentsmsController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index'],
+                'only' => ['create', 'update','index','archive'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index'],
+                        'actions' => ['create', 'update','index','archive'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if(!Yii::$app->user->isGuest){
@@ -123,6 +124,10 @@ class SentsmsController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+    public function actionArchive($created_date)
+    {
+       Yii::$app->queue->push(new ArchiveJob(['created_date'=>$created_date]));
     }
 
     /**
