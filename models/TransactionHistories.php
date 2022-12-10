@@ -122,6 +122,15 @@ class TransactionHistories extends \yii\db\ActiveRecord
         ->bindValue(':end_time',$end_time)
         ->queryAll();
     }
+    public static function getTvTransactions($start_time,$end_time)
+    {
+        $sql="SELECT group_concat(reference_phone) as numbers FROM transaction_histories 
+        WHERE deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time LIMIT 500";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':start_time',$start_time)
+        ->bindValue(':end_time',$end_time)
+        ->queryOne();
+    }
     public static function getTransactionTotal($station_show_id,$start_time,$end_time)
     {
         $sql="SELECT coalesce(sum(amount),0) as total FROM transaction_histories 
@@ -320,7 +329,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
             }
             $totalEntry=Customer::customerTicket($row->MSISDN);
             $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_id);
+            //Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_id);
             $row->operator=Myhelper::getOperator($row->MSISDN);
             $row->state=1;
             $row->save(false);

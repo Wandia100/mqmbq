@@ -175,7 +175,7 @@ class MpesapaymentsController extends Controller
                 $model->created_at=date("Y-m-d H:i:s");
                 $model->updated_at=date("Y-m-d H:i:s");
                 $model->save(false);
-                Yii::$app->queue->priority(10)->push(new DepositJob(['id'=>$model->id]));
+                //Yii::$app->queue->priority(10)->push(new DepositJob(['id'=>$model->id]));
             }
             catch (IntegrityException $e) {
                 //allow execution

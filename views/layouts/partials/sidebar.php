@@ -82,6 +82,9 @@ use luc\tourist\Tourist;
                 <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(42) ) ) ? '':'hidden'?>  ">
                     <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Jackpot Draws', ['/transactionhistories/jackpotdraw'], ['class' => ''])?>
                 </li> 
+                <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(42) ) ) ? '':'hidden'?>  ">
+                    <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Tv Draws', ['/transactionhistories/tvdraw'], ['class' => ''])?>
+                </li> 
                 <li class="<?= in_array( Yii::$app->user->identity->email, Yii::$app->myhelper->getMembers( array( '' ), array(41) ) ) ? '':'hidden'?>  ">
                     <?=Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Presenter Draws', Url::to(['/transactionhistories/admindraws']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>

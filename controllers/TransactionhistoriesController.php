@@ -35,7 +35,7 @@ class TransactionhistoriesController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index','presenter','admindraws','jackpotdraw'],
+                'only' => ['create', 'update','index','presenter','admindraws','jackpotdraw','tv','tvdraw'],
                 'rules' => [
                     [
                         'actions' => ['create', 'update','index'],
@@ -68,7 +68,7 @@ class TransactionhistoriesController extends Controller
                         }
                     ],
                     [
-                        'actions' => ['jackpotdraw'],
+                        'actions' => ['jackpotdraw','tv','tvdraw'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -333,7 +333,82 @@ class TransactionhistoriesController extends Controller
             'percent_pending' => $percent_pending
         ]);
     }
+    public function actionTvdraw($show_id="",$from="",$to="")
+    {
+        $today=date("Y-m-d");
 
+        $presenter=[];
+        $presenter_station_show=[];
+        $shows=StationShows::getJackpotShows();
+        if(!empty($show_id) && !empty($from) && !empty($to))
+        {
+            $from=$from." 00:00:00";
+            $to=$to." 23:59:59";
+            $presenter_station_show=StationShowPresenters::jackpotShow($show_id);
+        }
+        if(!empty($presenter_station_show))
+        {
+            $station_show_id=$presenter_station_show['station_show_id'];
+            $show_transactions=TransactionHistories::getJackpotTransactions($from,$to);
+            $transaction_total=TransactionHistories::getJackpotTransactionTotal($from,$to)['total'];
+            $transaction_count=count($show_transactions);
+            $target_achievement=round(($transaction_total/$presenter_station_show['target'])*100,2);
+            $show_name=$presenter_station_show['show_name']." ".$from." - ".$to;
+            $recent_winners=WinningHistories::getRecentWinners($presenter_station_show['station_show_id'],$today);
+            $show_prizes=StationShowPrizes::getShowPrizes(strtolower(date("l",strtotime($today))),$presenter_station_show['station_show_id'],$today);
+            $percent_raised=round(($transaction_total/$presenter_station_show['target'])*100,2);
+            $percent_pending=round((($presenter_station_show['target']-$transaction_total)/$presenter_station_show['target'])*100,2);
+        }
+        else
+        {
+            $transaction_total=0;
+            $transaction_count=0;
+            $target_achievement=0;
+            $show_name="No draw at this moment";
+            $recent_winners=array();
+            $show_prizes=array();
+            $percent_raised=0;
+            $percent_pending=0;
+        }
+        //echo json_encode($show_prizes); exit();
+        
+        $act = new \app\models\ActivityLog();
+        $act -> desc = "Tv Draw";
+        $act ->setLog();
+        
+        return $this->render('tv_draw', [
+            'show_id' => $show_id,
+            'from' => $from,
+            'to' => $to,
+            'shows' => $shows,
+            'show_name' => $show_name,
+            'transaction_total' => $transaction_total,
+            'transaction_count' => $transaction_count,
+            'target_achievement' => $target_achievement,
+            'presenter_station_show' => $presenter_station_show,
+            'recent_winners' => $recent_winners,
+            'show_prizes' => $show_prizes,
+            'percent_raised' => $percent_raised,
+            'percent_pending' => $percent_pending
+        ]);
+    }
+    public function actionTv($show_id="",$from="",$to="")
+    {
+        $today=date("Y-m-d");
+        $this->layout = 'tv_layout';
+        $data=TransactionHistories::getTvTransactions($from,$to);
+        $presenter_station_show=StationShowPresenters::jackpotShow($show_id);
+        $show_prizes=StationShowPrizes::getShowPrizes(strtolower(date("l",strtotime($today))),$show_id,$today);
+        $data=json_encode(explode(",",$data['numbers']));
+        return $this->render('tv', [
+            'data'=>$data,
+            'show_id'=>$show_id,
+            'prize_id'=>$show_prizes[0]['prize_id'],
+            'presenter_id'=>$presenter_station_show['presenter_id'],
+            'from'=>$from,
+            'to'=>$to
+        ]);  
+    }
     /**
      * Finds the TransactionHistories model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
