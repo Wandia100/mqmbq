@@ -329,7 +329,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
             }
             $totalEntry=Customer::customerTicket($row->MSISDN);
             $entryNumber=TransactionHistories::generateEntryNumber($row->MSISDN,$totalEntry);
-            //Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_id);
+            Myhelper::setSms('validDrawEntry',$row->MSISDN,['Habari',$entryNumber,$totalEntry],SENDER_NAME,$station_id);
             $row->operator=Myhelper::getOperator($row->MSISDN);
             $row->state=1;
             $row->save(false);
