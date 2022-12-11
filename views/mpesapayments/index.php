@@ -79,8 +79,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
            // 'id',
             'TransID',
-            'FirstName',
-            'MiddleName',
+            //'FirstName',
+            //'MiddleName',
             'LastName',
             'MSISDN',
             //'InvoiceNumber',
@@ -93,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'operator',
             //'is_archived',
             'created_at',
-            //'updated_at',
+            'updated_at',
             //'deleted_at',
 
         ],
