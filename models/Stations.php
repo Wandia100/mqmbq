@@ -35,7 +35,7 @@ class Stations extends \yii\db\ActiveRecord
     {
         return [
             [['id', 'name', 'station_code','frequency'], 'required'],
-            [['enabled','frequency'], 'integer'],
+            [['enabled','frequency','is_default'], 'integer'],
             [['invalid_percentage'], 'number'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['id'], 'string', 'max' => 36],

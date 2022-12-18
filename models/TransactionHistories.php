@@ -296,8 +296,10 @@ class TransactionHistories extends \yii\db\ActiveRecord
             $station_id=$row->station_id;
         }
         else{
+            $station=Stations::findOne(['is_default'=>1]);
             $station_show=NULL;
-            $station_id=NULL;
+            $station_id=$station->id;
+            $row->station_id=$station_id;
         }
         if($station_show!=NULL)
             {
