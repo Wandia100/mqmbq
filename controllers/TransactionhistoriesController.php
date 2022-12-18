@@ -39,7 +39,7 @@ class TransactionhistoriesController extends Controller
                 'only' => ['create', 'update','index','presenter','admindraws','jackpotdraw','tv','tvdraw','migrate'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index'],
+                        'actions' => ['create', 'update','index','migrate'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {

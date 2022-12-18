@@ -37,7 +37,7 @@ class MpesapaymentsController extends Controller
                 'only' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel','migrate'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel'],
+                        'actions' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel','migrate'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
