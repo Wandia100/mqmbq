@@ -24,10 +24,10 @@ class SentsmsController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index','archive'],
+                'only' => ['create', 'update','index','migrate'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','archive'],
+                        'actions' => ['create', 'update','index','migrate'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if(!Yii::$app->user->isGuest){
