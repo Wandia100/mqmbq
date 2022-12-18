@@ -15,6 +15,7 @@ use yii\web\UploadedFile;
 use yii\db\IntegrityException;
 use app\components\DepositJob;
 use app\components\SetStationJob;
+use app\models\ArchivedMpesaPayments;
 use app\models\Customer;
 use app\models\Stations;
 use app\models\TransactionHistories;
@@ -534,6 +535,32 @@ class MpesapaymentsController extends Controller
                 $row->save(false);
             }
             
+        }
+    }
+    public function actionMigrate($created_at,$limit)
+    {
+        $data=MpesaPayments::find()->where("created_at < '$created_at'")->limit($limit)->all();
+        foreach($data as $row)
+        {
+            try
+            {
+                $model=new ArchivedMpesaPayments();
+                $model->id=$row->id;
+                $model->TransID =$row->TransID;
+                $model->MSISDN = $row->MSISDN;
+                $model->InvoiceNumber = $row->InvoiceNumber;
+                $model->BusinessShortCode =$row->BusinessShortCode;
+                $model->ThirdPartyTransID =$row->ThirdPartyTransID;
+                $model->TransactionType = $row->TransactionType;
+                $model->BillRefNumber = $row->BillRefNumber;
+                $model->TransAmount = $row->TransAmount;
+                $model->created_at=$row->created_at;
+                $model->updated_at=$row->updated_at;
+                $model->save(false);
+                $row->delete(false);
+            }
+            catch(IntegrityException $e)
+            {}
         }
     }
     public function beforeAction($action)

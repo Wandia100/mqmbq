@@ -3,9 +3,9 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\MpesaPayments;
+use app\models\ArchivedMpesaPayments;
 use app\models\Outbox;
-use app\models\MpesaPaymentsSearch;
+use app\models\ArchivedMpesaPaymentsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -62,8 +62,8 @@ class ArchivedMpesapaymentsController extends Controller
     public function actionIndex()
     {
        try {
-            $searchModel  = new MpesaPaymentsSearch();
-            $model        = new MpesaPayments();
+            $searchModel  = new ArchivedMpesaPaymentsSearch();
+            $model        = new ArchivedMpesaPayments();
             $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
             if ($model->load(Yii::$app->request->post()) && isset($_POST['MpesaPayments']['excelfile'])) {
                 $model->excelfile = UploadedFile::getInstance($model, 'excelfile');
