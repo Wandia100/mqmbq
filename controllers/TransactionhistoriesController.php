@@ -36,7 +36,7 @@ class TransactionhistoriesController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index','presenter','admindraws','jackpotdraw','tv','tvdraw'],
+                'only' => ['create', 'update','index','presenter','admindraws','jackpotdraw','tv','tvdraw','migrate'],
                 'rules' => [
                     [
                         'actions' => ['create', 'update','index'],

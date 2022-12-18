@@ -34,7 +34,7 @@ class MpesapaymentsController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel'],
+                'only' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel','migrate'],
                 'rules' => [
                     [
                         'actions' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel'],
