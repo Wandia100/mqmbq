@@ -44,7 +44,7 @@ class ArchivedTransactionHistoriesSearch extends TransactionHistories
      */
     public function search($params, $daily = false, $monthly = false, $from = null, $to = null)
     {
-        $query = TransactionHistories::find();
+        $query = ArchivedTransactionHistories::find();
 
         // add conditions that should always apply here
 

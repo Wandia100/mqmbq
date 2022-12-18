@@ -4,14 +4,14 @@ namespace app\controllers;
 
 use app\components\DepositJob;
 use Yii;
-use app\models\TransactionHistories;
+use app\models\ArchivedTransactionHistories;
 use app\models\StationShowPresenters;
 use app\models\Users;
 use app\models\WinningHistories;
 use app\models\MpesaPayments;
 use app\models\Disbursements;
 use app\models\StationShowPrizes;
-use app\models\TransactionHistoriesSearch;
+use app\models\ArchivedTransactionHistoriesSearch;
 use app\models\ProcessedMpesaPayments;
 use app\models\StationShows;
 use yii\web\Controller;
@@ -94,7 +94,7 @@ class ArchivedTransactionhistoriesController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new TransactionHistoriesSearch();
+        $searchModel = new ArchivedTransactionHistoriesSearch();
         $dataProvider = Yii::$app->myhelper->getdataprovider($searchModel);
 
         return $this->render('index', [

@@ -18,6 +18,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\Myhelper;
+use app\models\ArchivedTransactionHistories;
 use app\models\Customer;
 use Webpatser\Uuid\Uuid;
 use yii\db\IntegrityException;
@@ -438,6 +439,30 @@ class TransactionhistoriesController extends Controller
         foreach($data as $row)
         {
             TransactionHistories::processPayment($row->id);  
+        }
+    }
+    public function actionMigrate($created_at,$limit)
+    {
+        $data=TransactionHistories::find()->where("created_at < '$created_at'")->limit($limit)->all();
+        foreach($data as $row)
+        {
+            try
+            {
+                $model=new ArchivedTransactionHistories();
+                $model->id=$row->id;
+                $model->mpesa_payment_id=$row->mpesa_payment_id;
+                $model->reference_name=$row->reference_name;
+                $model->reference_phone=$row->reference_phone;
+                $model->reference_code=$row->reference_code;
+                $model->station_id=$row->station_id;
+                $model->station_show_id=$row->station_show_id;
+                $model->amount=$row->amount;
+                $model->created_at=$row->created_at;
+                $model->save(false);
+                $row->delete(false);
+            }
+            catch(IntegrityException $e)
+            {}
         }
     }
     public static function actionRemovedups()
