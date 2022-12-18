@@ -55,9 +55,9 @@ class SentSms extends \yii\db\ActiveRecord
             'category' => 'Category',
         ];
     }
-    public static function archive($created_date)
+    public static function archive($created_date,$limit)
     {
-        $data=SentSms::find()->where("created_date like '%$created_date%'")->all();
+        $data=SentSms::find()->where("created_date < '$created_date'")->limit($limit)->all();
         foreach($data as $row)
         {
             try
@@ -69,10 +69,11 @@ class SentSms extends \yii\db\ActiveRecord
                 $model->message=$row->message;
                 $model->created_date=$row->created_date;
                 $model->save(false);
+                $row->delete(false);
             }
             catch(IntegrityException $e)
             {}
-            $row->delete(false);
+            
         }
 
     }

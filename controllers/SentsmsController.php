@@ -125,9 +125,10 @@ class SentsmsController extends Controller
 
         return $this->redirect(['index']);
     }
-    public function actionArchive($created_date)
+    public function actionMigrate($created_date,$limit)
     {
-       Yii::$app->queue->push(new ArchiveJob(['created_date'=>$created_date]));
+        SentSms::archive($created_date,$limit);
+       //Yii::$app->queue->push(new ArchiveJob(['created_date'=>$created_date]));
     }
 
     /**
