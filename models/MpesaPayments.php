@@ -441,4 +441,36 @@ class MpesaPayments extends \yii\db\ActiveRecord
         }
 
     }
+    public static function archive($created_at,$limit)
+    {
+        $data=MpesaPayments::find()->where("created_at < '$created_at'")->limit($limit)->all();
+        $rows="";
+        $length=count($data);
+        $sql="INSERT INTO `mpesa_payments` (`id`, `TransID`, `FirstName`, `MiddleName`, `LastName`, `MSISDN`,
+         `InvoiceNumber`, `BusinessShortCode`, `ThirdPartyTransID`, `TransactionType`, `OrgAccountBalance`,
+          `BillRefNumber`, `TransAmount`, `is_archived`, `created_at`,`state`, `station_id`, `operator`) VALUES ";
+        for($i=0;$i<$length;$i++)
+        {
+            $row=$data[$i];
+            $sql.="('$row->id','$row->TransID','$row->FirstName','$row->MiddleName','$row->LastName','$row->MSISDN',
+            '$row->InvoiceNumber','$row->BusinessShortCode','$row->ThirdPartyTransID','$row->TransactionType',
+            '$row->OrgAccountBalance','$row->BillRefNumber','$row->TransAmount','$row->is_archived','$row->created_at',
+            '$row->state','$row->station_id','$row->operator')";
+            $rows.="'".$row->id."'";
+            if($i!=$length-1)
+            {
+                $rows.=",";
+                $sql.=",";
+            }
+        }
+        $sql.=" ON DUPLICATE KEY UPDATE id=id;";
+        if(strlen($rows) > 0)
+        {
+            Yii::$app->analytics_db->createCommand($sql)->execute();
+            Yii::$app->mpesa_db->createCommand("DELETE FROM mpesa_payments  WHERE id IN ($rows)")->execute();
+        }
+        
+        
+
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\ArchiveMoneyJob;
 use Yii;
 use app\models\MpesaPayments;
 use app\models\Outbox;
@@ -539,26 +540,7 @@ class MpesapaymentsController extends Controller
     }
     public function actionMigrate($created_at,$limit)
     {
-        $data=MpesaPayments::find()->where("created_at < '$created_at'")->limit($limit)->all();
-        $rows="";
-        $length=count($data);
-        for($i=0;$i<$length;$i++)
-        {
-            $row=$data[$i];
-            $rows.="'".$row->id."'";
-            if($i!=$length-1)
-            {
-                $rows.=",";
-            }
-        }
-        Yii::$app->mpesa_db->createCommand("DELETE FROM mpesa_payments  WHERE id IN ($rows)")->execute();
-        $columns=['id','TransID','FirstName','MiddleName','LastName','MSISDN','InvoiceNumber',
-                'BusinessShortCode','ThirdPartyTransID','TransactionType','OrgAccountBalance',
-                'BillRefNumber','TransAmount','is_archived','created_at','updated_at','deleted_at',
-                'state','station_id','operator'];
-        Yii::$app->analytics_db->createCommand()->batchInsert('mpesa_payments',$columns,$data)->execute();
-        
-
+        Yii::$app->queue->push(new ArchiveMoneyJob(['created_at'=>$created_at,'limit'=>$limit]));
     }
     public function beforeAction($action)
 {            

@@ -9,10 +9,11 @@ use yii\base\BaseObject;
 class ArchiveJob extends BaseObject implements \yii\queue\JobInterface
 {
     public $created_date;
+    public $limit;
     public function execute($queue)
     {
         //code to send sms by id
-       SentSms::archive($this->created_date);
+       SentSms::archive($this->created_date,$this->limit);
     }
 
 }
