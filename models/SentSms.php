@@ -55,26 +55,32 @@ class SentSms extends \yii\db\ActiveRecord
             'category' => 'Category',
         ];
     }
-    public static function archive($created_date,$limit)
+    public static function archive($created_at,$limit)
     {
-        $data=SentSms::find()->where("created_date < '$created_date'")->limit($limit)->all();
-        foreach($data as $row)
+        $data=SentSms::find()->where("created_date < '$created_at'")->limit($limit)->all();
+        $rows="";
+        $length=count($data);
+        $sql="INSERT INTO `sent_sms` (`id`, `receiver`, `sender`, `message`,`created_date`) VALUES ";
+        for($i=0;$i<$length;$i++)
         {
-            try
+            $row=$data[$i];
+            $message=str_replace("'","",$row->message);
+            $sql.="('$row->id','$row->receiver','$row->sender','message','$row->created_date')";
+            $rows.="'".$row->id."'";
+            if($i!=$length-1)
             {
-                $model=new ArchivedSentSms();
-                $model->id=$row->id;
-                $model->receiver=$row->receiver;
-                $model->sender=$row->sender;
-                $model->message=$row->message;
-                $model->created_date=$row->created_date;
-                $model->save(false);
-                $row->delete(false);
+                $rows.=",";
+                $sql.=",";
             }
-            catch(IntegrityException $e)
-            {}
-            
         }
+        $sql.=" ON DUPLICATE KEY UPDATE id=id;";
+        if(strlen($rows) > 0)
+        {
+            Yii::$app->analytics_db->createCommand($sql)->execute();
+            Yii::$app->sms_db->createCommand("DELETE FROM sent_sms  WHERE id IN ($rows)")->execute();
+        }
+        
+        
 
-    }
+    }    
 }

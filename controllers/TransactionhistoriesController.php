@@ -36,10 +36,10 @@ class TransactionhistoriesController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index','presenter','admindraws','jackpotdraw','tv','tvdraw','migrate'],
+                'only' => ['create', 'update','index','presenter','admindraws','jackpotdraw','tv','tvdraw'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','migrate'],
+                        'actions' => ['create', 'update','index'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -441,8 +441,9 @@ class TransactionhistoriesController extends Controller
             TransactionHistories::processPayment($row->id);  
         }
     }
-    public function actionMigrate($created_at,$limit)
+    public function actionArchive($limit)
     {
+        $created_at="2022-11-01";
         TransactionHistories::archive($created_at,$limit);
     }
     public static function actionRemovedups()

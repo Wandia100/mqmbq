@@ -35,10 +35,10 @@ class MpesapaymentsController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel','migrate','archive'],
+                'only' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel','migrate','archive'],
+                        'actions' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -542,8 +542,9 @@ class MpesapaymentsController extends Controller
     {
         Yii::$app->queue->push(new ArchiveMoneyJob(['created_at'=>$created_at,'limit'=>$limit]));
     }
-    public function actionArchive($created_at,$limit)
+    public function actionArchive($limit)
     {
+        $created_at="2022-11-01";
         MpesaPayments::archive($created_at,$limit);
     }
     public function beforeAction($action)

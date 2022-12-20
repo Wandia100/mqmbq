@@ -24,10 +24,10 @@ class SentsmsController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index','migrate'],
+                'only' => ['create', 'update','index'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','migrate'],
+                        'actions' => ['create', 'update','index'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if(!Yii::$app->user->isGuest){
@@ -125,10 +125,10 @@ class SentsmsController extends Controller
 
         return $this->redirect(['index']);
     }
-    public function actionMigrate($created_date,$limit)
+    public function actionArchive($limit)
     {
-        SentSms::archive($created_date,$limit);
-       //Yii::$app->queue->push(new ArchiveJob(['created_date'=>$created_date]));
+        $created_at="2022-11-01";
+        SentSms::archive($created_at,$limit);
     }
 
     /**
