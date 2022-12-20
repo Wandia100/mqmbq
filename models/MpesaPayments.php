@@ -453,8 +453,9 @@ class MpesaPayments extends \yii\db\ActiveRecord
         {
             $row=$data[$i];
             $reference=str_replace("'","",$row->BillRefNumber);
+            $invoice=str_replace("'","",$row->InvoiceNumber);
             $sql.="('$row->id','$row->TransID','$row->FirstName','$row->MiddleName','$row->LastName','$row->MSISDN',
-            '$row->InvoiceNumber','$row->BusinessShortCode','$row->ThirdPartyTransID','$row->TransactionType',
+            '$invoice','$row->BusinessShortCode','$row->ThirdPartyTransID','$row->TransactionType',
             '$row->OrgAccountBalance','$reference','$row->TransAmount','$row->is_archived','$row->created_at',
             '$row->state','$row->station_id','$row->operator')";
             $rows.="'".$row->id."'";
