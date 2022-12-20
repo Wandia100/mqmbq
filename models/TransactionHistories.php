@@ -358,4 +358,35 @@ class TransactionHistories extends \yii\db\ActiveRecord
             
         }
     }
+    public static function archive($created_at,$limit)
+    {
+        $data=TransactionHistories::find()->where("created_at < '$created_at'")->limit($limit)->all();
+        $rows="";
+        $length=count($data);
+        $sql="INSERT INTO `transaction_histories` (`id`, `mpesa_payment_id`, `reference_name`, `reference_phone`,
+         `reference_code`, `station_id`, `station_show_id`, `amount`, `status`, `created_at`) VALUES ";
+        for($i=0;$i<$length;$i++)
+        {
+            $row=$data[$i];
+            $reference_name=str_replace("'","",$row->reference_name);
+            $reference_code=str_replace("'","",$row->reference_code);
+            $sql.="('$row->id','$row->mpesa_payment_id','$reference_name','$row->reference_phone',
+            '$reference_code','$row->station_id','$row->station_show_id','$row->amount','$row->status','$row->created_at')";
+            $rows.="'".$row->id."'";
+            if($i!=$length-1)
+            {
+                $rows.=",";
+                $sql.=",";
+            }
+        }
+        $sql.=" ON DUPLICATE KEY UPDATE id=id;";
+        if(strlen($rows) > 0)
+        {
+            Yii::$app->analytics_db->createCommand($sql)->execute();
+            Yii::$app->db->createCommand("DELETE FROM transaction_histories  WHERE id IN ($rows)")->execute();
+        }
+        
+        
+
+    }
 }

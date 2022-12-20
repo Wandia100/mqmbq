@@ -443,27 +443,7 @@ class TransactionhistoriesController extends Controller
     }
     public function actionMigrate($created_at,$limit)
     {
-        $data=TransactionHistories::find()->where("created_at < '$created_at'")->limit($limit)->all();
-        foreach($data as $row)
-        {
-            try
-            {
-                $model=new ArchivedTransactionHistories();
-                $model->id=$row->id;
-                $model->mpesa_payment_id=$row->mpesa_payment_id;
-                $model->reference_name=$row->reference_name;
-                $model->reference_phone=$row->reference_phone;
-                $model->reference_code=$row->reference_code;
-                $model->station_id=$row->station_id;
-                $model->station_show_id=$row->station_show_id;
-                $model->amount=$row->amount;
-                $model->created_at=$row->created_at;
-                $model->save(false);
-                $row->delete(false);
-            }
-            catch(IntegrityException $e)
-            {}
-        }
+        TransactionHistories::archive($created_at,$limit);
     }
     public static function actionRemovedups()
     {
