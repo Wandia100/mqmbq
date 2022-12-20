@@ -540,28 +540,25 @@ class MpesapaymentsController extends Controller
     public function actionMigrate($created_at,$limit)
     {
         $data=MpesaPayments::find()->where("created_at < '$created_at'")->limit($limit)->all();
-        foreach($data as $row)
+        $rows="";
+        $length=count($data);
+        for($i=0;$i<$length;$i++)
         {
-            try
+            $row=$data[$i];
+            $rows.="'".$row->id."'";
+            if($i!=$length-1)
             {
-                $model=new ArchivedMpesaPayments();
-                $model->id=$row->id;
-                $model->TransID =$row->TransID;
-                $model->MSISDN = $row->MSISDN;
-                $model->InvoiceNumber = $row->InvoiceNumber;
-                $model->BusinessShortCode =$row->BusinessShortCode;
-                $model->ThirdPartyTransID =$row->ThirdPartyTransID;
-                $model->TransactionType = $row->TransactionType;
-                $model->BillRefNumber = $row->BillRefNumber;
-                $model->TransAmount = $row->TransAmount;
-                $model->created_at=$row->created_at;
-                $model->updated_at=$row->updated_at;
-                $model->save(false);
-                $row->delete(false);
+                $rows.=",";
             }
-            catch(IntegrityException $e)
-            {}
         }
+        Yii::$app->analytics_db->createCommand("DELETE FROM mpesa_payments  WHERE id IN ($rows)")->execute();
+        $columns=['id','TransID','FirstName','MiddleName','LastName','MSISDN','InvoiceNumber',
+                'BusinessShortCode','ThirdPartyTransID','TransactionType','OrgAccountBalance',
+                'BillRefNumber','TransAmount','is_archived','created_at','updated_at','deleted_at',
+                'state','station_id','operator'];
+        Yii::$app->analytics_db->createCommand()->batchInsert('mpesa_payments',$columns,$data)->execute();
+        
+
     }
     public function beforeAction($action)
 {            
