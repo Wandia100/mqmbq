@@ -551,7 +551,7 @@ class MpesapaymentsController extends Controller
                 $rows.=",";
             }
         }
-        Yii::$app->db->createCommand("DELETE FROM mpesa_payments  WHERE id IN ($rows)")->execute();
+        Yii::$app->mpesa_db->createCommand("DELETE FROM mpesa_payments  WHERE id IN ($rows)")->execute();
         $columns=['id','TransID','FirstName','MiddleName','LastName','MSISDN','InvoiceNumber',
                 'BusinessShortCode','ThirdPartyTransID','TransactionType','OrgAccountBalance',
                 'BillRefNumber','TransAmount','is_archived','created_at','updated_at','deleted_at',
