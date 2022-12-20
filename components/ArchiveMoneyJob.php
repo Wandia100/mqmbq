@@ -15,7 +15,7 @@ class ArchiveMoneyJob extends BaseObject implements \yii\queue\JobInterface
     public function execute($queue)
     {
         //code to send sms by id
-       MpesaPayments::archive($this->created_at,$this->limit);
+       //MpesaPayments::archive($this->created_at,$this->limit);
     }
 
 }
