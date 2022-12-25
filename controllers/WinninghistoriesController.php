@@ -166,7 +166,7 @@ class WinninghistoriesController extends Controller
             array_push($past_winners,'1');
             if($admin_draw=="2")
             {
-                $transaction_history=TransactionHistories::pickJackpot($past_winners,$from,$to);
+                $transaction_history=TransactionHistories::pickJackpot($past_winners,$from,$to,$presenter_show['station_id']);
             }
             else
             {
