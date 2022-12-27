@@ -102,9 +102,16 @@ class WinninghistoriesController extends Controller
     public function actionCreate()
     {
         $model = new WinningHistories();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $model->id=Uuid::generate()->string;
+            $model->status=0;
+            $model->station_show_prize_id=$model->prize_id;
+            if($model->save())
+            {
+                return $this->redirect(['create']);
+            }
         }
 
         return $this->render('create', [
