@@ -889,7 +889,7 @@ class ReportController extends Controller{
     }
     public function actionLogger($m,$y)
     {
-        if($m > date('m') && $y=date('Y'))
+        if($m > date('m') && $y>= date('Y'))
         {
             return;
         }
