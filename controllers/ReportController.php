@@ -922,6 +922,10 @@ class ReportController extends Controller{
         WinningHistories::logDailyAwards($log_date);
         MpesaPayments::logRevenue($log_date);
     }
+    public function actionLogy($date)
+    {
+        MpesaPayments::logRevenue($date);
+    }
 
     //removed action
     public function actionPlayer()
