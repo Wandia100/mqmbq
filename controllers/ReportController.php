@@ -921,8 +921,12 @@ class ReportController extends Controller{
         //WinningHistories::logDailyAwards($log_date);
         MpesaPayments::logRevenue($log_date);
     }
-    public function actionLogy($date)
+    public function actionLogy($date=NULL)
     {
+        if($date==NULL)
+        {
+            $date=date("Y-m-d",strtotime("- 1 day"));
+        }
         MpesaPayments::logRevenue($date);
     }
 
