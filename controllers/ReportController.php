@@ -925,7 +925,7 @@ class ReportController extends Controller{
     {
         if($date==NULL)
         {
-            $date=date("Y-m-d",strtotime("- 1 day"));
+            $date=date("Y-m-d",strtotime("- 2 day"));
         }
         MpesaPayments::logRevenue($date);
     }
