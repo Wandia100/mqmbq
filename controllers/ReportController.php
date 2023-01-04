@@ -887,14 +887,13 @@ class ReportController extends Controller{
         }
         Yii::$app->queue->push(new RevenueJob(['revenue_date'=>$revenue_date]));
     }
-    public function actionLogger($m)
+    public function actionLogger($m,$y)
     {
-        Myhelper::checkRemoteAddress();
         if($m > date('m'))
         {
             return;
         }
-        $days=cal_days_in_month(CAL_GREGORIAN,date($m),date('Y'));
+        $days=cal_days_in_month(CAL_GREGORIAN,date($m),date($y));
         for($i=1;$i<=$days; $i++)
         {
             if($m==date('m') )
@@ -918,8 +917,8 @@ class ReportController extends Controller{
     }
     public function runLogs($log_date)
     {
-        Commissions::logCommission($log_date);
-        WinningHistories::logDailyAwards($log_date);
+        //Commissions::logCommission($log_date);
+        //WinningHistories::logDailyAwards($log_date);
         MpesaPayments::logRevenue($log_date);
     }
     public function actionLogy($date)
