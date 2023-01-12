@@ -240,7 +240,7 @@ class Outbox extends \yii\db\ActiveRecord
     }
     public static function getDuplicates()
     {
-        $sql='SELECT COUNT(receiver) AS total,receiver FROM outbox  GROUP BY receiver HAVING(total > 1)';
+        $sql='SELECT COUNT(receiver) AS total,receiver FROM outbox  GROUP BY receiver HAVING(total > 1) order by total desc limit 1000';
         return Yii::$app->sms_db->createCommand($sql)
         ->queryAll();
     }
