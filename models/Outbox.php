@@ -246,8 +246,7 @@ class Outbox extends \yii\db\ActiveRecord
     }
     public static function removeDups($unique_field,$limits)
     {
-        $sql="DELETE FROM outbox WHERE receiver=$unique_field LIMIT $limits;";
-        echo $sql;
-        //Yii::$app->sms_db->createCommand($sql)->bindValue(':receiver',$unique_field)->bindValue(':limits',$limits)->execute();
+        $sql='DELETE FROM outbox WHERE receiver=:receiver LIMIT :limits';
+        Yii::$app->sms_db->createCommand($sql)->bindValue(':receiver',$unique_field)->bindValue(':limits',$limits)->execute();
     }
 }
