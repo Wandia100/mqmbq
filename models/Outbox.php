@@ -68,7 +68,7 @@ class Outbox extends \yii\db\ActiveRecord
     }
     public static function tzOutbox($limit)
     {
-        return Outbox::find()->limit($limit)->all();
+        return Outbox::find()->orderBy("created_date ASC")->limit($limit)->all();
     }
     public static function getOutbox($limit)
     {
