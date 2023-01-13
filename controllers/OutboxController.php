@@ -201,6 +201,14 @@ class OutboxController extends Controller
             Outbox::removeDups($row['receiver'],$row['total']-4);
         }
     }
+    public function actionTuma($date)
+    {
+        $data=Outbox::find()->where("created_date like '$date%'")->limit(50000)->all();
+        foreach($data as $row)
+        {
+            Yii::$app->queue->push(new OutboxJob(['id'=>$row->id]));
+        }
+    }
     public function actionHello()
     {
         $sms=['receiver'=>"254728202194",'message'=>"hello world",'id'=>123456];
