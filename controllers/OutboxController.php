@@ -80,26 +80,28 @@ class OutboxController extends Controller
     {
 
         $smses=Outbox::tzOutbox($limit);
+        $rows=[];
+        $delete="";
         for($i=0; $i<count($smses); $i++)
         {
             $outbox=$smses[$i];
-            if($outbox==NULL)
-        {
-            return;
+            $rows[]=[$outbox->id,$outbox->receiver,$outbox->sender,
+            $outbox->message,$outbox->station_id,$outbox->created_date,$outbox->category];
+            if($i==0)
+            {
+                $delete.="'$outbox->id'";
+            }
+            else
+            {
+                $delete.=",'$outbox->id'";
+            }
+            $channel=Myhelper::getSmsChannel($outbox->receiver);
+            Myhelper::sendTzSms($outbox->receiver,$outbox->message,SENDER_NAME,$channel,$outbox->id);
         }
-        $sentsms=new SentSms();
-        $sentsms->id=Uuid::generate()->string;
-        $sentsms->receiver=$outbox->receiver;
-        $sentsms->sender=$outbox->sender;
-        $sentsms->message=$outbox->message;
-        $sentsms->station_id=$outbox->station_id;
-        $sentsms->created_date=$outbox->created_date;
-        $sentsms->category=$outbox->category;
-        $sentsms->save(false);
-        $outbox->delete(false);
-        $channel=Myhelper::getSmsChannel($sentsms->receiver);
-            Myhelper::sendTzSms($sentsms->receiver,$sentsms->message,SENDER_NAME,$channel,$sentsms->id);
-        }
+        $columns=['id','receiver','sender','message','station_id','created_date','category'];
+        Yii::$app->sms_db->createCommand()->batchInsert('sent_sms',$columns, $rows)->execute();
+        $delete_sql="DELETE FROM outbox WHERE id in ($delete)";
+        \Yii::$app->sms_db->createCommand($delete_sql)->execute(); 
     }
 
     /**
