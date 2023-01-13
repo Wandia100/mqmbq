@@ -198,7 +198,7 @@ class OutboxController extends Controller
         for($i=0;$i < count($dups); $i++)
         {
             $row=$dups[$i];
-            Outbox::removeDups($row['receiver'],$row['total']-1);
+            Outbox::removeDups($row['receiver'],$row['total']-4);
         }
     }
     public function actionHello()
