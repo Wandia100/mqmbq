@@ -65,7 +65,7 @@ class RevenueReport extends \yii\db\ActiveRecord
             }, \Yii::$app->myhelper->getStations()));
             $sql->andWhere("station_id IN ($stations)");
         }
-        return $sql->orderBy("order by revenue_date DESC")->all();
+        return $sql->orderBy("revenue_date DESC")->all();
     }
     public static function checkDuplicate($unique_field)
     {
