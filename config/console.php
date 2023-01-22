@@ -34,16 +34,15 @@ $config = [
         'mpesa_db' => $mpesa_db,
         'sms_db' => $sms_db,
         'analytics_db'=>$analytics_db,
-        'queue' => [
-            'class' => \yii\queue\amqp_interop\Queue::class,
-            'port' => 5672,
-            'user' => QUEUE_NAME,
-            'password' => QUEUE_PASSWORD,
-            'queueName' => QUEUE_NAME,
-            'driver' => yii\queue\amqp_interop\Queue::ENQUEUE_AMQP_LIB,
-            'dsn' => 'amqp://'.QUEUE_NAME.':'.QUEUE_PASSWORD.'@127.0.0.1:5672/'.QUEUE_VHOST,
-            'ttr' => 43200,
-           
+        'queue' =>  [
+            'class' => \yii\queue\db\Queue::class,
+            'db' => $sms_db, // DB connection component or its config
+            'tableName' => '{{%queue}}', // Table name
+            'channel' => 'default', // Queue channel key
+            'mutex' => [
+                'class'=>\yii\mutex\MysqlMutex::class, // Mutex used to sync queries
+                'db' => $sms_db // DB connection component or its config
+            ]
         ],
     ],
     'params' => $params,
