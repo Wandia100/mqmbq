@@ -433,9 +433,9 @@ class TransactionhistoriesController extends Controller
             Yii::$app->queue->priority(10)->push(new DepositJob(['id'=>$row->id]));
         }
     }
-    public function actionAssignshows()
+    public function actionAssignshows($limit)
     {
-        $data=MpesaPayments::find()->select(['id'])->where("state=0")->all();
+        $data=MpesaPayments::find()->select(['id'])->where("state=0")->orderBy("created_at DESC")->limit($limit)->all();
         foreach($data as $row)
         {
             TransactionHistories::processPayment($row->id);  
