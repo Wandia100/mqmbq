@@ -884,7 +884,8 @@ class Myhelper extends Component {
 			$outbox->id=Uuid::generate()->string;
 			$outbox->attributes = $data;
 			$outbox->save(false);
-			//Yii::$app->queue->push(new OutboxJob(['id'=>$outbox->id]));
+			//Outbox::sendOutbox($outbox->id);
+			Yii::$app->queue->push(new OutboxJob(['id'=>$outbox->id]));
 		}
 	}
 
