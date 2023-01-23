@@ -373,6 +373,63 @@ class MpesapaymentsController extends Controller
 		);
 
 	}
+    public function actionVoda() {
+		ini_set( 'memory_limit', '512M' );
+		ini_set( 'max_execution_time', '3000' );
+		$success = [];
+		$error   = [];
+		if ( isset( $_POST['submit'] ) ) {
+			$file = $_FILES['file']['tmp_name'];
+            $reference=$_POST['reference'];
+//			$file    = "confirmed_payment.csv";
+			$success = [];
+			$error   = [];
+			$row     = 1;
+			if ( ( $handle = fopen( $file, "r" ) ) !== false ) {
+				while ( ( $data = fgetcsv( $handle, 2000, "," ) ) !== false ) {
+                    
+                                    $transaction_number=trim(isset($data[2])?$data[2]:NULL);
+                                    $date=trim(isset($data[0])?$data[0]:NULL);
+                                    $date=date("Y-m-d H:i:s",strtotime($date));
+                                    $phone=trim(isset($data[3])?explode( "-",$data[3] )[0]:NULL);
+                                    $amount=trim(isset($data[4])?$data[4]:NULL);
+                                    $balance=0;
+					if (!empty($transaction_number) && !empty($reference)
+                    && !empty($date) && !empty($phone) && !empty($amount) && is_numeric($amount) && $amount==1000) {
+							$check_if_exists = MpesaPayments::find()->where( [ 'TransID' => $transaction_number ] )->one();
+							if ($check_if_exists == NULL) {
+                                $phone=explode(" ",$phone)[3];
+								$mod= new MpesaPayments();
+								$mod->id=Uuid::generate()->string;
+                                $mod ->TransID = $transaction_number;
+                                $mod -> TransAmount = $amount;
+                                $mod -> FirstName = NULL; 
+                                $mod -> MiddleName = NULL; 
+                                $mod -> LastName = "vodacom"; 
+                                $mod -> MSISDN = $phone; 
+                                $mod -> BillRefNumber = $reference;
+                                $mod -> OrgAccountBalance =$balance;
+                                $mod -> created_at = $date;
+                                $mod -> updated_at = date('Y-m-d H:i:s');
+                                $mod ->save(FALSE);
+                                Yii::$app->queue->push(new DepositJob(['id'=>$mod->id]));
+								array_push( $success, $row );
+							}
+							array_push( $error, $row );
+					}
+					$row ++;
+				}
+				fclose( $handle );
+			}
+		}
+
+		return $this->render( 'voda', [
+				'success' => $success,
+				'error'   => $error
+			]
+		);
+
+	}    
     public function actionTigo() {
 		ini_set( 'memory_limit', '512M' );
 		ini_set( 'max_execution_time', '3000' );
