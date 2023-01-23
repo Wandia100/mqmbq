@@ -399,6 +399,7 @@ class MpesapaymentsController extends Controller
 							$check_if_exists = MpesaPayments::find()->where( [ 'TransID' => $transaction_number ] )->one();
 							if ($check_if_exists == NULL) {
                                 $phone=explode(" ",$phone)[3];
+                                $reference_data=explode(".",$data[3])[1];
 								$mod= new MpesaPayments();
 								$mod->id=Uuid::generate()->string;
                                 $mod ->TransID = $transaction_number;
@@ -407,7 +408,7 @@ class MpesapaymentsController extends Controller
                                 $mod -> MiddleName = NULL; 
                                 $mod -> LastName = "vodacom"; 
                                 $mod -> MSISDN = $phone; 
-                                $mod -> BillRefNumber = $reference;
+                                $mod -> BillRefNumber = $reference_data;
                                 $mod -> OrgAccountBalance =$balance;
                                 $mod -> created_at = $date;
                                 $mod -> updated_at = date('Y-m-d H:i:s');
