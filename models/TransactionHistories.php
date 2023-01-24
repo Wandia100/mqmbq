@@ -288,7 +288,11 @@ class TransactionHistories extends \yii\db\ActiveRecord
     }
     public static function processPayment($id)
     {
-        $row=MpesaPayments::findOne($id);
+        $row=MpesaPayments::findOne(['id'=>$id,'state'=>0]);
+        if($row==NULL)
+        {
+            exit();
+        }
         $station=Stations::getStation($row->BillRefNumber);
         if($station!=NULL)
         {
