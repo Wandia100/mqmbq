@@ -42,7 +42,8 @@ $config = [
             'mutex' => [
                 'class'=>\yii\mutex\MysqlMutex::class, // Mutex used to sync queries
                 'db' => $sms_db // DB connection component or its config
-            ]
+            ],
+            'ttr' => 43200
         ],
     ],
     'params' => $params,
