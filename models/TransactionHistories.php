@@ -207,6 +207,33 @@ class TransactionHistories extends \yii\db\ActiveRecord
         return Yii::$app->db->createCommand($sql)
         ->queryAll();
     }
+    public static function merge($archive,$current)
+    {
+        $seen=[];
+        $filename=SENDER_NAME.date("Y-m-d-His").".csv";
+        header( 'Content-Type: text/csv; charset=utf-8' );
+        header( 'Content-Disposition: attachment; filename='.$filename );
+        $output = fopen( 'php://output', 'w' );
+        ob_start();
+        $data=['CUSTOMER NAME','PHONE NUMBER','STATION'];
+        fputcsv( $output,$data);
+        foreach($archive as $row)
+        {
+            array_push($seen,$row['reference_phone']);
+            fputcsv($output,$row);
+        }
+        foreach($current as $row)
+        {
+            array_push($seen,$row['reference_phone']);
+            if(!in_array($row['reference_phone'],$seen))
+            {
+                fputcsv($output,$row);
+            }
+            
+        }
+        Yii::$app->end();
+        return ob_get_clean();
+    }
     public static function removeDups($unique_field,$limits)
     {
         $sql='DELETE FROM transaction_histories WHERE mpesa_payment_id=:mpesa_payment_id LIMIT :limits';

@@ -964,28 +964,11 @@ class ReportController extends Controller{
     }
     private function playerData()
     {
-        $response=[];
-        //$response=ArchivedTransactionHistories::getUniquePlayers();
-        $response=TransactionHistories::getUniquePlayers();
-        $filename="unique_players_".date("Y-m-d-His").".csv";
-        header( 'Content-Type: text/csv; charset=utf-8' );
-        header( 'Content-Disposition: attachment; filename='.$filename );
-        $output = fopen( 'php://output', 'w' );
-        ob_start();
-        $data=['CUSTOMER NAME','PHONE NUMBER','STATION'];
-        fputcsv( $output,$data);
-        for($i=0;$i<count($response); $i++)
-        {
-            $arr=[];
-            $row=$response[$i];
-            array_push($arr,$row['reference_name']);
-            array_push($arr,$row['reference_phone']);
-            array_push($arr,$row['name']);
-            fputcsv( $output,$arr);
-            
-        }
-        Yii::$app->end();
-        return ob_get_clean();
+        $archive=[];
+        $current=[];
+        $archive=ArchivedTransactionHistories::getUniquePlayers();
+        $current=TransactionHistories::getUniquePlayers();
+        TransactionHistories::merge($archive,$current);
     }
     public function actionBacklog($month,$start,$end)
     {
