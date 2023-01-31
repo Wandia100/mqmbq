@@ -929,6 +929,17 @@ class ReportController extends Controller{
         }
         MpesaPayments::logRevenue($date);
     }
+    public function actionFullmonth()
+    {
+        $start=1;
+        $end=31;
+        for($i=$start;$i<=$end; $i++)
+        {
+            $day=Myhelper::formatHour($i);
+            $revenue_date=date("Y-01-$day");
+            MpesaPayments::logRevenue($revenue_date);
+        }
+    }
 
     //removed action
     public function actionPlayer()
