@@ -1040,20 +1040,20 @@ class ReportController extends Controller{
         }
 
     }
-    public function actionMerge($filename1,$filename2)
+    public function actionMerge($file1,$file2,$file3)
     {
-        $file1="/mnt/c/Users/kutal/Downloads/dbs/".$filename1.".csv";
-        $file2="/mnt/c/Users/kutal/Downloads/dbs/".$filename2.".csv";
+        $file1="/mnt/c/Users/kutal/Downloads/dbs/".$file1.".csv";
+        $file2="/mnt/c/Users/kutal/Downloads/dbs/".$file2.".csv";
         $handle = fopen($file1, "r");
         $seen=[];
         $final=[];
-        $filename="unique_players_".date("Y-m-d-His").".csv";
+        $filename=$file3.date("Ymd").".csv";
         header( 'Content-Type: text/csv; charset=utf-8' );
         header( 'Content-Disposition: attachment; filename='.$filename );
         $output = fopen( 'php://output', 'w' );
         ob_start();
-        $data=['CUSTOMER NAME','PHONE NUMBER','STATION'];
-        fputcsv( $output,$data);
+        //$data=['CUSTOMER NAME','PHONE NUMBER','STATION'];
+        //fputcsv( $output,$data);
         while (($row = fgetcsv($handle, 1000, ",")) !== false) 
         {
             $unique_field=trim($row[0]).trim($row[1]).trim($row[2]);
