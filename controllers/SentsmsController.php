@@ -127,7 +127,7 @@ class SentsmsController extends Controller
     }
     public function actionArchive($limit)
     {
-        $created_at="2022-11-01";
+        $created_at=date("Y-m-d",strtotime("- 2 months"));
         SentSms::archive($created_at,$limit);
     }
 

@@ -40,7 +40,7 @@ class ReportController extends Controller{
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','loserpayout','growthtrend','player','station','backlog','updateshow'],
+                'only' => ['hourlyperformance','exporthourlyperformance', 'presentercommission','dailyawarding','exportdailyawarding','revenue','revenueexport','exportcommissionsummary','commissionsummary','showsummary','exportshowsummary','customerreport','exportpayouts','loserpayout','growthtrend','playercurrent','playerarchive','station','backlog','updateshow'],
                 'rules' => [
                     [
                         'actions' => ['hourlyperformance','exporthourlyperformance','customerreport','payouts','exportpayouts','growthtrend','station','backlog','updateshow'],
@@ -93,7 +93,7 @@ class ReportController extends Controller{
                         }
                     ],
                     [
-                        'actions' => ['loserpayout','player'],
+                        'actions' => ['loserpayout','playercurrent','playerarchive'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -942,9 +942,14 @@ class ReportController extends Controller{
     }
 
     //removed action
-    public function actionPlayer()
+    public function actionPlayercurrent()
     {
-        $this->playerData();
+        $this->playerDataCurrent();
+
+    }
+    public function actionPlayerarchive()
+    {
+        $this->playerDataarchive();
 
     }
     public function actionStation($station)
@@ -973,14 +978,53 @@ class ReportController extends Controller{
         Yii::$app->end();
         return ob_get_clean();
     }
-    private function playerData()
+    private function playerDataCurrent()
     {
-        $archive=[];
+       /* $archive=[];
         $current=[];
         $archive=ArchivedTransactionHistories::getUniquePlayers();
         $current=TransactionHistories::getUniquePlayers();
-        TransactionHistories::merge($archive,$current);
+        TransactionHistories::merge($archive,$current);*/
+        $current=TransactionHistories::getUniquePlayers();
+        $filename=SENDER_NAME."current".".csv";
+        header( 'Content-Type: text/csv; charset=utf-8' );
+        header( 'Content-Disposition: attachment; filename='.$filename );
+        $output = fopen( 'php://output', 'w' );
+        ob_start();
+        $data=['CUSTOMER NAME','PHONE NUMBER','STATION'];
+        fputcsv( $output,$data);
+        foreach($current as $row)
+        {
+            $arr=[];
+            array_push($arr,$row['reference_name']);
+            array_push($arr,$row['reference_phone']);
+            array_push($arr,$row['name']);
+            fputcsv( $output,$arr);
+        }
+        Yii::$app->end();
+        return ob_get_clean();
     }
+    private function playerDataArchive()
+    {
+        $archive=ArchivedTransactionHistories::getUniquePlayers();
+        $filename=SENDER_NAME."archive".".csv";
+        header( 'Content-Type: text/csv; charset=utf-8' );
+        header( 'Content-Disposition: attachment; filename='.$filename );
+        $output = fopen( 'php://output', 'w' );
+        ob_start();
+        $data=['CUSTOMER NAME','PHONE NUMBER','STATION'];
+        fputcsv( $output,$data);
+        foreach($archive as $row)
+        {
+            $arr=[];
+            array_push($arr,$row['reference_name']);
+            array_push($arr,$row['reference_phone']);
+            array_push($arr,$row['name']);
+            fputcsv( $output,$arr);
+        }
+        Yii::$app->end();
+        return ob_get_clean();
+    }    
     public function actionBacklog($month,$start,$end)
     {
         while($start <= $end)
@@ -996,10 +1040,10 @@ class ReportController extends Controller{
         }
 
     }
-    public function actionMerge()
+    public function actionMerge($filename1,$filename2)
     {
-        $file1="/mnt/c/Users/kutal/Downloads/dbs/old_cmedia.csv";
-        $file2="/mnt/c/Users/kutal/Downloads/dbs/new_cmedia.csv";
+        $file1="/mnt/c/Users/kutal/Downloads/dbs/".$filename1.".csv";
+        $file2="/mnt/c/Users/kutal/Downloads/dbs/".$filename2.".csv";
         $handle = fopen($file1, "r");
         $seen=[];
         $final=[];
