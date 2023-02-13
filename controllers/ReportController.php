@@ -841,9 +841,9 @@ class ReportController extends Controller{
             }
         }
     }
-    public function actionHourrefresh($log_date,$hr)
+    public function actionHourclean($log_date,$hr)
     {
-        Yii::$app->queue->push(new LastHourJob(['the_day'=>$log_date,'hr'=>$hr]));
+        HourlyPerformanceReports::LastHour($log_date,$hr);
     }
     public function actionLogshowsummary()
     {
