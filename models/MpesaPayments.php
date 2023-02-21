@@ -245,8 +245,8 @@ class MpesaPayments extends \yii\db\ActiveRecord
             $sum = MpesaPayments::getTotalMpesaInRangePerStation($cFloor, $today,$station_id)['total_mpesa'];
             break;
         case 'lastweek':
-            $floorDate = date("Y-m-d 00:00:00", strtotime(date("w") ? "2 sundays ago" : "last sunday"));
-            $ceilDate = date("Y-m-d 23:59:59", strtotime("last saturday"));
+            $floorDate = date("Y-m-d 00:00:00", strtotime("Monday last week"));
+            $ceilDate = date("Y-m-d 23:59:59", strtotime("Sunday last week"));
             $sum = MpesaPayments::getTotalMpesaInRangePerStation($floorDate, $ceilDate,$station_id)['total_mpesa'];
             break;
         case 'lastmonth':
