@@ -164,6 +164,12 @@ class WinninghistoriesController extends Controller
         }
         else{
             $show_prize=StationShowPrizes::getShowPrize(strtolower(date("l",strtotime($from))),$station_show_id,$prize_id,$from);
+            $plus30=date("H:i",(strtotime($presenter_show['start_time'])+1800));
+            if(date("H:i") < $plus30)
+            {
+                $show_prize=NULL;
+            }
+
         }
         
         if($show_prize)
