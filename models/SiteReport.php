@@ -64,6 +64,7 @@ class SiteReport extends \yii\db\ActiveRecord
         $ReportNames = ['yesterday','last_7_days','currentmonth','lastweek','lastmonth','totalrevenue','today_payout','yesterday_payout'];
         $payInReportName = ['yesterday','last_7_days','currentmonth','lastweek','lastmonth','totalrevenue'];
         $stations=Stations::getActiveStations();
+        SiteReport::deleteAll(false);
         for($i=0;$i< count($stations); $i++)
         {
             $station=$stations[$i];
