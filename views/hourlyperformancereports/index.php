@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'updated_at',
             //'deleted_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
         ],
         'pjax'=>true,
         'showPageSummary'=>true,

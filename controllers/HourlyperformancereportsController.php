@@ -48,7 +48,7 @@ class HourlyperformancereportsController extends Controller
      * Lists all HourlyPerformanceReports models.
      * @return mixed
      */
-    public function actionIndex()
+    public function Index()
     {
         $searchModel = new HourlyPerformanceReportsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -67,7 +67,7 @@ class HourlyperformancereportsController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function View($id)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -79,7 +79,7 @@ class HourlyperformancereportsController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function Create()
     {
         $model = new HourlyPerformanceReports();
 
@@ -99,7 +99,7 @@ class HourlyperformancereportsController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function Update($id)
     {
         $model = $this->findModel($id);
 
@@ -119,7 +119,7 @@ class HourlyperformancereportsController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function Delete($id)
     {
         $this->findModel($id)->delete();
 
