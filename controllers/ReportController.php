@@ -829,17 +829,13 @@ class ReportController extends Controller{
         }
         Yii::$app->queue->push(new LastHourJob(['the_day'=>$the_day,'hr'=>$hr]));
     }
-    public function actionCleanhourly()
+    public function actionCleanhourly($log_date)
     {
-        for($i=1;$i<=7;$i++)
-        {
-            $log_date=date("Y-07-$i");
-            for($j=0;$j<24;$j++)
+        for($j=0;$j<24;$j++)
             {
                 $hr=Myhelper::formatHour($j);
-                Yii::$app->queue->push(new LastHourJob(['the_day'=>$log_date,'hr'=>$hr]));
+                HourlyPerformanceReports::LastHour($log_date,$hr);
             }
-        }
     }
     public function actionHourclean($log_date,$hr)
     {
