@@ -301,7 +301,7 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
             try
             {
                 $station=$stations[$i];
-                $unique_field=date('Ymd').$hr.$station->id;
+                $unique_field=date('Ymd',strtotime($the_day)).$hr.$station->id;
                 $model=HourlyPerformanceReports::findOne(['unique_field'=>$unique_field]);
                 if($model==NULL)
                 {
