@@ -925,14 +925,12 @@ class ReportController extends Controller{
         }
         MpesaPayments::logRevenue($date);
     }
-    public function actionFullmonth()
+    public function actionFullmonth($month,$start,$end)
     {
-        $start=1;
-        $end=31;
         for($i=$start;$i<=$end; $i++)
         {
             $day=Myhelper::formatHour($i);
-            $revenue_date=date("Y-01-$day");
+            $revenue_date=date("Y-$month-$day");
             MpesaPayments::logRevenue($revenue_date);
         }
     }
