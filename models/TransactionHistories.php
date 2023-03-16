@@ -207,6 +207,13 @@ class TransactionHistories extends \yii\db\ActiveRecord
         return Yii::$app->db->createCommand($sql)
         ->queryAll();
     }
+    public static function getUniquePlayersInRange()
+    {
+        $sql='SELECT a.reference_name,a.reference_phone,b.name FROM transaction_histories a 
+        LEFT JOIN stations b ON a.station_id=b.id WHERE a.created_at > "2023-02-14" GROUP BY a.reference_name,a.reference_phone,b.name';
+        return Yii::$app->db->createCommand($sql)
+        ->queryAll();
+    }
     public static function merge($archive,$current)
     {
         $seen=[];

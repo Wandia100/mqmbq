@@ -946,6 +946,11 @@ class ReportController extends Controller{
         $this->playerDataarchive();
 
     }
+    public function actionPlayerlastmonth()
+    {
+        $this->lastMonth();
+
+    }
     public function actionStation($station)
     {
         $this->stationData($station);
@@ -1018,7 +1023,28 @@ class ReportController extends Controller{
         }
         Yii::$app->end();
         return ob_get_clean();
-    }    
+    } 
+    private function lastMonth()
+    {
+        $current=TransactionHistories::getUniquePlayersInRange();
+        $filename=SENDER_NAME."lastmonth".".csv";
+        header( 'Content-Type: text/csv; charset=utf-8' );
+        header( 'Content-Disposition: attachment; filename='.$filename );
+        $output = fopen( 'php://output', 'w' );
+        ob_start();
+        $data=['CUSTOMER NAME','PHONE NUMBER','STATION'];
+        fputcsv( $output,$data);
+        foreach($current as $row)
+        {
+            $arr=[];
+            array_push($arr,$row['reference_name']);
+            array_push($arr,$row['reference_phone']);
+            array_push($arr,$row['name']);
+            fputcsv( $output,$arr);
+        }
+        Yii::$app->end();
+        return ob_get_clean();
+    }   
     public function actionBacklog($month,$start,$end)
     {
         while($start <= $end)
