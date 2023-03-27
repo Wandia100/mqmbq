@@ -74,6 +74,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'showConfirmAlert'=>false,
             'target'=> \kartik\grid\GridView::TARGET_BLANK
         ],
+        'pjax'=>true,
+        'showPageSummary'=>true,
+        'toolbar' => [
+            '{toggleData}',
+                    '{export}',
+        ],
+        'panel'=>[
+            'type'=>'primary',
+            'heading'=>'Collection'
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -105,7 +115,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'panel'=>[
             'type'=>'default',
-            'heading'=>'mpesa transactions'
+            'heading'=>$this->title
         ]
     ]); ?>
 
