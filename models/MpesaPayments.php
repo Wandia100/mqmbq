@@ -480,7 +480,7 @@ class MpesaPayments extends \yii\db\ActiveRecord
         if(!empty($from) && !empty($to) && !empty($reference))
         {
             $current=MpesaPayments::find()->where("created_at >= '$from'")
-            ->andWhere("created_at <= '$to'")->andWhere("reference = '$reference'")->all();
+            ->andWhere("created_at <= '$to'")->andWhere("BillRefNumber = '$reference'")->all();
         }
         else
         {
