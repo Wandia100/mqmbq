@@ -475,4 +475,37 @@ class MpesaPayments extends \yii\db\ActiveRecord
         
 
     }
+    public static  function getData($from,$to,$reference)
+    {
+        if(!empty($from) && !empty($to) && !empty($reference))
+        {
+            $current=MpesaPayments::find()->where("created_at >= '$from'")
+            ->andWhere("created_at <= '$to'")->andWhere("reference = '$reference'")->all();
+        }
+        else
+        {
+            $current=MpesaPayments::find()->where("created_at >= '$from'")
+            ->andWhere("created_at <= '$to'")->all();
+        }
+        $filename=SENDER_NAME."collection".".csv";
+        header( 'Content-Type: text/csv; charset=utf-8' );
+        header( 'Content-Disposition: attachment; filename='.$filename );
+        $output = fopen( 'php://output', 'w' );
+        ob_start();
+        $data=['TRANSID','PHONE NUMBER','REFERENCE','AMOUNT','DATE','OPERATOR'];
+        fputcsv( $output,$data);
+        foreach($current as $row)
+        {
+            $arr=[];
+            array_push($arr,$row['TransID']);
+            array_push($arr,$row['MSISDN']);
+            array_push($arr,$row['BillRefNumber']);
+            array_push($arr,$row['TransAmount']);
+            array_push($arr,$row['created_at']);
+            array_push($arr,$row['operator']);
+            fputcsv( $output,$arr);
+        }
+        Yii::$app->end();
+        return ob_get_clean();
+    }    
 }

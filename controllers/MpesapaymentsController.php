@@ -35,10 +35,10 @@ class MpesapaymentsController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel'],
+                'only' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel','download'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel'],
+                        'actions' => ['create', 'update','index','airtel','vodacom','correctairteldate','tigo','halotel','download'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if ( ! Yii::$app->user->isGuest ) {
@@ -718,6 +718,25 @@ class MpesapaymentsController extends Controller
         $created_at=date("Y-m-d",strtotime("- 2 months"));
         MpesaPayments::archive($created_at,$limit);
     }
+    public function actionDownload() {
+		if ( isset( $_POST['submit'] ) )
+        {
+            $from=$_POST['from'];
+            $to=$_POST['to'];
+            $reference=$_POST['reference'];
+            if(!empty($from) && !empty($to) && empty($reference))
+            {
+                MpesaPayments::getData($from,$to,$reference);
+            }
+            if(!empty($from) && !empty($to) && !empty($reference))
+            {
+                MpesaPayments::getData($from,$to,$reference);
+            }
+        }
+		return $this->render( 'download');
+	}
+
+
     public function beforeAction($action)
 {            
     if (in_array($action->id,array('save','insertpayment','pay'))) {
