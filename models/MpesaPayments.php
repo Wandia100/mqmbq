@@ -479,12 +479,12 @@ class MpesaPayments extends \yii\db\ActiveRecord
     {
         if(!empty($from) && !empty($to) && !empty($reference))
         {
-            $current=MpesaPayments::find()->where("created_at >= '$from'")
+            $current=ArchivedMpesaPayments::find()->where("created_at >= '$from'")
             ->andWhere("created_at <= '$to'")->andWhere("BillRefNumber = '$reference'")->all();
         }
         else
         {
-            $current=MpesaPayments::find()->where("created_at >= '$from'")
+            $current=ArchivedMpesaPayments::find()->where("created_at >= '$from'")
             ->andWhere("created_at <= '$to'")->all();
         }
         $filename=SENDER_NAME."collection".".csv";
