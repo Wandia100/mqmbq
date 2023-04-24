@@ -857,7 +857,7 @@ class Myhelper extends Component {
 					$data['message'] = str_replace( $toreplace, $variables, $temp );
 					break;
 				case 'validDrawEntry':
-					$toreplace       = ["[customer_name]","[entryNumber]","[totalEntry]"];
+					$toreplace       = ["[customer_name]","[entryNumber]"];
 					$data['message'] = str_replace( $toreplace, $variables, $temp );
 					break;
 
