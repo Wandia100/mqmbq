@@ -327,6 +327,12 @@ class TransactionHistories extends \yii\db\ActiveRecord
         {
             exit();
         }
+        if($row->BillRefNumber=="553111")
+        {
+            $row->BillRefNumber="invalid";
+            $row->save(false);
+        }
+
         $station=Stations::getStation($row->BillRefNumber);
         if($station!=NULL)
         {
