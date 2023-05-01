@@ -122,6 +122,16 @@ class TransactionHistories extends \yii\db\ActiveRecord
         ->bindValue(':end_time',$end_time)
         ->queryAll();
     }
+    public static function getJackpotTransactionsByStation($start_time,$end_time,$station_id)
+    {
+        $sql="SELECT reference_name,reference_phone,amount,created_at FROM transaction_histories 
+        WHERE station_id=:station_id AND deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':start_time',$start_time)
+        ->bindValue(':end_time',$end_time)
+        ->bindValue(':station_id',$station_id)
+        ->queryAll();
+    }
     public static function getTvTransactions($start_time,$end_time)
     {
         $sql="SELECT group_concat(reference_phone) as numbers FROM transaction_histories 
@@ -149,6 +159,16 @@ class TransactionHistories extends \yii\db\ActiveRecord
         return Yii::$app->db->createCommand($sql)
         ->bindValue(':start_time',$start_time)
         ->bindValue(':end_time',$end_time)
+        ->queryOne();
+    }
+    public static function getJackpotTransactionTotalByStation($start_time,$end_time,$station_id)
+    {
+        $sql="SELECT coalesce(sum(amount),0) as total FROM transaction_histories 
+        WHERE station_id =:station_id AND deleted_at IS NULL AND created_at BETWEEN :start_time AND :end_time";
+        return Yii::$app->db->createCommand($sql)
+        ->bindValue(':start_time',$start_time)
+        ->bindValue(':end_time',$end_time)
+        ->bindValue(':station_id',$station_id)
         ->queryOne();
     }
     public static function pickRandom($station_show_id,$past_winners,$from_date)
