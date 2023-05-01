@@ -280,7 +280,9 @@ class MpesapaymentsController extends Controller
                                     $balance=trim(isset($data[11])?$data[11]:NULL);
 					if (!empty($transaction_number) && !empty($reference)
                     && !empty($trans_type) && $trans_type=="Transaction Success"
-                    && !empty($date) && !empty($phone) && !empty($amount) && is_numeric($amount) && $amount==1000  && !empty($balance)) {
+                    && !empty($date) && !empty($phone) && !empty($amount) && is_numeric($amount) 
+                    && (($amount==1000 && !Myhelper::compareCode($reference,'YANGA/111')) || ($amount==2000 && Myhelper::compareCode($reference,'YANGA/111')))  
+                    && !empty($balance)) {
 							$check_if_exists = MpesaPayments::find()->where( [ 'TransID' => $transaction_number ] )->one();
 							if ($check_if_exists == NULL) {
 								$mod= new MpesaPayments();

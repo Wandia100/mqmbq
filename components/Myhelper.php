@@ -1065,5 +1065,22 @@ class Myhelper extends Component {
 			return $time_diff;
 		}
 	}	
+	public static function compareCode($a,$b)
+	{
+		$a=strtolower($a);
+		$b=strtolower($b);
+		if(substr($a,0,3)==substr($b,0,3))
+		{
+			return true;
+		}
+		else if(substr($a,0,3)==substr($b,-3,3))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}	
 }
 
