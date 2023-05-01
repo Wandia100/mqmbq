@@ -886,11 +886,11 @@ class Myhelper extends Component {
             {
 				if($name=='validDrawEntry')
 				{
-					$data['message']='HONGERA MWANANCHI!Umeingia droo ya YANGA unaweza kushinda zawadi lukuki&TIKETI kusafiri na TIMU.Cheza Zaidi USHINDE.Vigezo&Masharti kuzingatiwa.Piga 0659070070';
+					$data['message']='HONGERA MWANANCHI!Umeingia droo ya YANGA unaweza kushinda zawadi lukuki&TIKETI kusafiri na TIMU.Cheza Zaidi USHINDE.Vigezo&Masharti kuzingatiwa.Piga 0659070070';
 				}
 				if($name=='winningMessage')
 				{
-					$data['message']='HONGERA MWANANCHI! Umejishindia TIKETI kutoka YANGA.Kwa maelezo zaidi piga simu 0659070070. Endelea Kucheza USHINDE ZAIDI.Vigezo na masharti kuzingatiwa';
+					$data['message']='HONGERA MWANANCHI! Umejishindia TIKETI kutoka YANGA.Kwa maelezo zaidi piga simu 0659070070. Endelea Kucheza USHINDE ZAIDI.Vigezo na masharti kuzingatiwa';
 				}
 				
 			}
