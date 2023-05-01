@@ -882,6 +882,18 @@ class Myhelper extends Component {
 					break;
 			}
 			$outbox->id=Uuid::generate()->string;
+			if($station_id=="f50262b0-e4c3-11ed-a1ec-1972e3e43059")
+            {
+				if($name=='validDrawEntry')
+				{
+					$data['message']='HONGERA MWANANCHI!Umeingia droo ya YANGA unaweza kushinda zawadi lukuki&TIKETI kusafiri na TIMU.Cheza Zaidi USHINDE.Vigezo&Masharti kuzingatiwa.Piga 0659070070';
+				}
+				if($name=='winningMessage')
+				{
+					$data['message']='HONGERA MWANANCHI! Umejishindia TIKETI kutoka YANGA.Kwa maelezo zaidi piga simu 0659070070. Endelea Kucheza USHINDE ZAIDI.Vigezo na masharti kuzingatiwa';
+				}
+				
+			}
 			$outbox->attributes = $data;
 			$outbox->save(false);
 			//Outbox::sendOutbox($outbox->id);
