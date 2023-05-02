@@ -32,24 +32,30 @@ $this->params['breadcrumbs'][] = $this->title;
         </div class="form-group">
     <div class="form-group">
                 <label for="from">&nbsp;&nbsp; FROM: &nbsp;&nbsp;</label>
-                    <?= yii\jui\DatePicker::widget( [
-                            'name'          => 'from',
-                            'value'         => (!empty($from)?$from:date( 'Y-m-d 00:00:00',strtotime('-3 days', time()))),
-                            'dateFormat'    => 'yyyy-MM-dd',
-                            'clientOptions' => [ 'defaultDate' => '2015-01-01' ],
-                            'options'       => [ 'class' => 'form-control inmfield required', ]
-                    ] ) ?>
+                    <?=kartik\datetime\DateTimePicker:: widget([
+                                'name' => 'from',
+                                'type' => kartik\datetime\DateTimePicker::TYPE_INPUT,
+                                'value' => (!empty($from)?$from:date( 'Y-m-d 00:00:00',strtotime('-3 days', time()))),
+                                'pluginOptions' => [
+                                    'autoclose'=>true,
+                                    //'format' => 'yyyy-MM-dd hh:ii'
+                                ]
+                            ]);
+                    ?>
             </div>
             &nbsp;&nbsp;
             <div class="form-group">
                 <label for="to">TO: &nbsp;&nbsp;</label>
-                    <?= yii\jui\DatePicker::widget( [
-                            'name'          => 'to',
-                            'value'         => (!empty($to)?$to:date("Y-m-d")),
-                            'dateFormat'    => 'yyyy-MM-dd',
-                            'clientOptions' => [ 'defaultDate' => '2015-01-01' ],
-                            'options'       => [ 'class' => 'form-control inmfield required', ]
-                    ] ) ?>
+                    <?=kartik\datetime\DateTimePicker:: widget([
+                                'name' => 'from',
+                                'type' => kartik\datetime\DateTimePicker::TYPE_INPUT,
+                                'value' => (!empty($to)?$to:date("Y-m-d H:i:s")),
+                                'pluginOptions' => [
+                                    'autoclose'=>true,
+                                    //'format' => 'yyyy-MM-dd hh:ii'
+                                ]
+                            ]);
+                    ?>
             </div>
             &nbsp;&nbsp;
             <div class="form-group">

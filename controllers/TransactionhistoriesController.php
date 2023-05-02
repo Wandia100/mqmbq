@@ -277,15 +277,13 @@ class TransactionhistoriesController extends Controller
     }
     public function actionJackpotdraw($show_id="",$from="",$to="")
     {
-        $today=date("Y-m-d");
+        $today=date("Y-m-d H:i:s");
 
         $presenter=[];
         $presenter_station_show=[];
         $shows=StationShows::getJackpotShows();
         if(!empty($show_id) && !empty($from) && !empty($to))
         {
-            $from=$from." 00:00:00";
-            $to=$to." 23:59:59";
             $presenter_station_show=StationShowPresenters::jackpotShow($show_id);
         }
         if(!empty($presenter_station_show))
@@ -343,8 +341,6 @@ class TransactionhistoriesController extends Controller
         $shows=StationShows::getJackpotShows();
         if(!empty($show_id) && !empty($from) && !empty($to))
         {
-            $from=$from." 00:00:00";
-            $to=$to." 23:59:59";
             $presenter_station_show=StationShowPresenters::jackpotShow($show_id);
         }
         if(!empty($presenter_station_show))
