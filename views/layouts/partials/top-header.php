@@ -49,8 +49,11 @@ use app\modules\user\models\User;
                 <button class="close"></button>
             </div>
             <ul class="header-menu nav">
+            <li class="nav-item tour-step <?= $presentervisibility?> <?=$managementvisibility?> <?=$customercarevisibility?>">
+                    <?= Html::a('<i class="metismenu-icon fa fa-home"></i> Home', Url::home(), ['class' => ''])?>
+                </li>
                 <li class="nav-item tour-step <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Hourly Performance" title="Hourly Performance">
-                    <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Hourly Performance', ['/report/hourlyperformance'], ['class' => 'text-light'])?>
+                    <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Hourly Report', ['/report/hourlyperformance'], ['class' => 'text-light'])?>
                 </li>
                 <li class="nav-item tour-step <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Show Summary" title="Show Summary">
                     <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Show Summary', ['/report/showsummary'], ['class' => 'text-light'])?>
@@ -65,7 +68,7 @@ use app\modules\user\models\User;
                     <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Commission Summary', ['/report/commissionsummary'], ['class' => 'text-light'])?>
                 </li>
                 <li class="dropdown nav-item tour-step <?= $presentervisibility?> <?=$customercarevisibility?>" data-content="Daily Awarding Report" title="Daily Awarding Report">
-                    <?= Html::a('<i class="nav-link-icon fa fa-address-book"></i> Daily Awarding Report', ['/report/dailyawarding'], ['class' => 'text-light'])?>
+                    <?= Html::a('<i class="nav-link-icon fa fa-address-book"></i> Daily Awarding ', ['/report/dailyawarding'], ['class' => 'text-light'])?>
                 </li>
                 <li class="dropdown nav-item tour-step <?= $presentervisibility?> <?=$customercarevisibility?>" data-content="Revenue Report" title="Revenue Report">
                     <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Revenue Report', ['/report/revenue'], ['class' => 'text-light'])?>
