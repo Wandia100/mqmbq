@@ -217,6 +217,7 @@ class Commissions extends \yii\db\ActiveRecord
     }
     public static function process()
     {
+        return;
         $current_day=strtolower(date("l"));
         $current_date=date("Y-m-d");
         $pending_show=StationShows::getShowForCommission($current_day);
