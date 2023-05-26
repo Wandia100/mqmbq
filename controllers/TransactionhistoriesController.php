@@ -431,7 +431,7 @@ class TransactionhistoriesController extends Controller
     }
     public function actionAssignshows($limit)
     {
-        $data=MpesaPayments::find()->select(['id'])->orderBy("created_at DESC")->limit($limit)->all();
+        $data=MpesaPayments::find()->select(['id'])->where(["state"=>0])->orderBy("created_at DESC")->limit($limit)->all();
         foreach($data as $row)
         {
             TransactionHistories::processPayment($row->id);  
