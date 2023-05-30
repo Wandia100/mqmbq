@@ -27,10 +27,10 @@ class OutboxController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update','index','bulk'],
+                'only' => ['create', 'update','index','bulk','test'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update','index','bulk'],
+                        'actions' => ['create', 'update','index','bulk','test'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             if(!Yii::$app->user->isGuest){
@@ -250,6 +250,17 @@ class OutboxController extends Controller
                 }
 			}
 	}
+    public function actionTest($msisdn)
+    {
+        $channel=Myhelper::getSmsChannel($msisdn);
+        $id=Uuid::generate()->string;
+        $message=date("YmdHis");
+        $res=Myhelper::sendTzSms($msisdn,$message,SENDER_NAME,$channel,$id);
+        var_dump($id);
+        var_dump($msisdn);
+        var_dump($message);
+        var_dump($res);
+    }
     public function beforeAction($action)
     {            
         if (in_array($action->id,array('dlr'))) {
