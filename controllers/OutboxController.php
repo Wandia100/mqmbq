@@ -256,9 +256,7 @@ class OutboxController extends Controller
         $id=Uuid::generate()->string;
         $message=date("YmdHis");
         $res=Myhelper::sendTzSms($msisdn,$message,SENDER_NAME,$channel,$id);
-        var_dump($id);
-        var_dump($msisdn);
-        var_dump($message);
+        var_dump($id."#".$msisdn."#".$message);
         var_dump($res);
     }
     public function beforeAction($action)
