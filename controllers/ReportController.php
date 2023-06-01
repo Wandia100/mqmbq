@@ -930,6 +930,7 @@ class ReportController extends Controller{
         for($i=$start;$i<=$end; $i++)
         {
             $day=Myhelper::formatHour($i);
+            $month=Myhelper::formatHour($month);
             $revenue_date=date("Y-$month-$day");
             MpesaPayments::logRevenue($revenue_date);
         }
