@@ -548,13 +548,11 @@ class MpesapaymentsController extends Controller
 
 	}    
     public function actionHalotel() {
-		ini_set( 'memory_limit', '512M' );
-		ini_set( 'max_execution_time', '3000' );
 		$success = [];
 		$error   = [];
 		if ( isset( $_POST['submit'] ) ) {
 			$file = $_FILES['file']['tmp_name'];
-            $platform=trim($_POST['platform']);
+            $platform=PAYBILL;
 //			$file    = "confirmed_payment.csv";
 			$success = [];
 			$error   = [];

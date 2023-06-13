@@ -68,11 +68,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 )
             );
             ?>
-            <div class="form-group ">
-                <div class="col-sm-4">
-                    <input  class="form-control"type="text" name="platform" placeholder="Enter Platform" value=""/>
-                </div>
-            </div>
             <div class="form-group field-file ">
                 <label class="control-label" for="file">Choose File</label>
                 <input type="file" name="file" class="form-control-file" required="required">
