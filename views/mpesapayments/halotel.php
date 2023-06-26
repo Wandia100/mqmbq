@@ -43,10 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <li>The format should be as follows:
                                 <ul>
                                     <li>Column[0]-transaction number</li>
-                                    <li>Column[8]-reference code</li>
+                                    <li>Column[7]-reference code</li>
                                     <li>Column[1]-date</li>
-                                    <li>Column[6]-phone</li>
-                                    <li>Column[7]-amount</li>
+                                    <li>Column[5]-phone</li>
+                                    <li>Column[6]-amount</li>
                                 </ul>
                             </li>
                             <li>Then ensure file is in csv format.</li>
