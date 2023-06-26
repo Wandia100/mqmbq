@@ -885,31 +885,15 @@ class ReportController extends Controller{
     }
     public function actionLogger($m,$y)
     {
-        if($m > date('m') && $y>= date('Y'))
-        {
-            return;
-        }
+        
         $days=cal_days_in_month(CAL_GREGORIAN,date($m),date($y));
         for($i=1;$i<=$days; $i++)
         {
-            if($m==date('m') )
-            {
-                if($i <= date('d'))
-                {
-                    #execution happens here
-                    $log_date=date("Y-$m-$i");
-                    $this->runLogs($log_date);
-                }
-            }
-            else
-            {
-                 $log_date=date("Y-$m-$i");
-                 $this->runLogs($log_date);
-            }
-            
-            
+            $day=Myhelper::formatHour($i);
+            $month=Myhelper::formatHour($m);
+            $date=date("$y-$month-$day");
+            MpesaPayments::logRevenue($date);
         }
-
     }
     public function runLogs($log_date)
     {
@@ -921,7 +905,7 @@ class ReportController extends Controller{
     {
         if($date==NULL)
         {
-            $date=date("Y-m-d",strtotime("- 2 day"));
+            $date=date("Y-m-d",strtotime("- 1 day"));
         }
         MpesaPayments::logRevenue($date);
     }
