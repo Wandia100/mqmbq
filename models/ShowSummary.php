@@ -85,15 +85,19 @@ class ShowSummary extends \yii\db\ActiveRecord
         #->bindValue(":stations",$stations)
         ->queryAll();
     }
-    public static function logShowSummary()
+    public static function logShowSummary($start_date=NULL)
     {
         if(date("H")=="00")
         {
             $start_date= date('Y-m-d',strtotime('yesterday'));
         }
-        else
+        else if($start_date==NULL)
         {
             $start_date= date('Y-m-d');
+        }
+        else
+        {
+            //do nothing
         }
         $end_date = date("$start_date 23:59:59");
             $data=StationShows::getStationShowSummary($start_date,$end_date);

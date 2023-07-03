@@ -853,14 +853,15 @@ class ReportController extends Controller{
     {        
         Yii::$app->queue->push(new LogCommissionJob());
     }
-    public function actionShow()
+    public function actionShow($m,$y)
     {
-        $i=1;
-        for($i=1;$i <=30; $i++)
+        $days=cal_days_in_month(CAL_GREGORIAN,date($m),date($y));
+        for($i=1;$i<=$days; $i++)
         {
-            $day=(strlen($i)==1)?'0'.$i:$i;
-            $start_date="2022-09-".$day;
-            ShowSummary::log($start_date);
+            $day=Myhelper::formatHour($i);
+            $month=Myhelper::formatHour($m);
+            $date=date("$y-$month-$day");
+            ShowSummary::logShowSummary($date);
         }
     }
     public function actionLogawards()
