@@ -229,11 +229,13 @@ class DisbursementsController extends Controller
     public function actionUpload() {
 		$success = [];
 		$error   = [];
-		if ( isset( $_POST['submit'] ) ) {
+		if ( isset( $_POST['submit'] )  && isset($_POST['total']) ) {
 			$file = $_FILES['file']['tmp_name'];
 			$success = [];
 			$error   = [];
 			$row     = 1;
+			$total=$_POST['total'];
+            $arr=[];
 			if ( ( $handle = fopen( $file, "r" ) ) !== false ) {
 				while ( ( $data = fgetcsv( $handle, 2000, "," ) ) !== false ) {
                     $reference_name=trim(isset($data[0])?$data[0]:NULL);
@@ -241,7 +243,12 @@ class DisbursementsController extends Controller
                     $amount=trim(isset($data[2])?$data[2]:NULL);  
 					if (!empty($reference_name) && !empty($phone_number)
                     && !empty($amount)  && is_numeric($amount) && is_numeric($phone_number)) {
-                        Disbursements::saveDisbursement("",$reference_name,$phone_number,$amount,"management_commission",0,NULL);
+                        $pay=[
+                            "reference_name"=>$reference_name,
+                            "phone_number"=>$phone_number,
+                            "amount"=>$amount
+                        ];
+                        array_push($arr,$pay);
                         array_push( $success, $row );
 					}
                     else
@@ -250,8 +257,17 @@ class DisbursementsController extends Controller
                     }
 					$row ++;
 				}
-				fclose( $handle );
+				fclose($handle);
+                if(count($arr)==$total)
+                {
+                    foreach($arr as $row)
+                    {
+                        $row = (object)$row;
+                        Disbursements::saveDisbursement("",$row->reference_name,$row->phone_number,$row->amount,"management_commission",0,NULL);
+                    }
+                }
 			}
+            
             return $this->redirect(['index']);
 		}
 
