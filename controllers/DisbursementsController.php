@@ -240,6 +240,14 @@ class DisbursementsController extends Controller
 				while ( ( $data = fgetcsv( $handle, 2000, "," ) ) !== false ) {
                     $reference_name=trim(isset($data[0])?$data[0]:NULL);
                     $phone_number=trim(isset($data[1])?$data[1]:NULL);
+                    if($reference_name!=null)
+                    {
+                        $reference_name=Myhelper::removeSpecialChars($reference_name);
+                    }
+                    if($phone_number!=null)
+                    {
+                        $phone_number=Myhelper::cleanNumber($phone_number);
+                    }
                     $amount=trim(isset($data[2])?$data[2]:NULL);  
 					if (!empty($reference_name) && !empty($phone_number)
                     && !empty($amount)  && is_numeric($amount) && is_numeric($phone_number)) {
@@ -267,7 +275,6 @@ class DisbursementsController extends Controller
                     }
                 }
 			}
-            
             return $this->redirect(['index']);
 		}
 
