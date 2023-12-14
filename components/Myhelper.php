@@ -1081,6 +1081,30 @@ class Myhelper extends Component {
 		{
 			return false;
 		}
+	}
+	public static function removeSpecialChars($str) {
+		$cleanStr = '';
+		$allowedChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ';
+	
+		for ($i = 0; $i < strlen($str); $i++) {
+			if (strpos($allowedChars, $str[$i]) !== false) {
+				$cleanStr .= $str[$i];
+			}
+		}
+	
+		return $cleanStr;
+	}	
+	public static function cleanNumber($str) {
+		$cleanStr = '';
+		$allowedChars = '0123456789';
+	
+		for ($i = 0; $i < strlen($str); $i++) {
+			if (strpos($allowedChars, $str[$i]) !== false) {
+				$cleanStr .= $str[$i];
+			}
+		}
+	
+		return $cleanStr;
 	}	
 }
 
