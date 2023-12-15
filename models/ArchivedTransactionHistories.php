@@ -194,8 +194,8 @@ class ArchivedTransactionHistories extends \yii\db\ActiveRecord
     }
     public static function getUniquePlayers()
     {
-        $sql='SELECT a.reference_name,a.reference_phone,b.name FROM transaction_histories a 
-        LEFT JOIN stations b ON a.station_id=b.id WHERE a.created_at > "2023-06-01" GROUP BY a.reference_name,a.reference_phone,b.name';
+        $sql="SELECT a.reference_name,a.reference_phone,b.name FROM transaction_histories a 
+        LEFT JOIN stations b ON a.station_id=b.id WHERE a.created_at BETWEEN '2022-01-01' AND '2022-12-31 23:59:59' GROUP BY a.reference_name,a.reference_phone,b.name";
         return Yii::$app->analytics_db->createCommand($sql)
         ->queryAll();
     }
