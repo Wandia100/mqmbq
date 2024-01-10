@@ -223,7 +223,7 @@ class TransactionHistories extends \yii\db\ActiveRecord
     public static function getUniquePlayers()
     {
         $sql="SELECT a.reference_name,a.reference_phone,b.name FROM transaction_histories a 
-        LEFT JOIN stations b ON a.station_id=b.id WHERE a.created_at BETWEEN '2022-01-01' AND '2022-12-31 23:59:59' GROUP BY a.reference_name,a.reference_phone,b.name";
+        LEFT JOIN stations b ON a.station_id=b.id WHERE a.created_at BETWEEN '2023-11-01' AND '2024-01-31 23:59:59' GROUP BY a.reference_name,a.reference_phone,b.name";
         return Yii::$app->db->createCommand($sql)
         ->queryAll();
     }
