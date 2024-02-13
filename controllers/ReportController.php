@@ -1048,6 +1048,7 @@ class ReportController extends Controller{
     }
     public function actionMerge($file1,$file2,$file3)
     {
+        ini_set('memory_limit', '1024M');
         $file1="/mnt/c/Users/walummbe/Downloads/dbs/".$file1.".csv";
         $file2="/mnt/c/Users/walummbe/Downloads/dbs/".$file2.".csv";
         $handle = fopen($file1, "r");
@@ -1095,6 +1096,37 @@ class ReportController extends Controller{
         }
         Yii::$app->end();
         return ob_get_clean();
+    }
+
+    public function actionTotaluniqueplayers($file)
+    {
+        ini_set('memory_limit', '1024M');
+        // Read the CSV file into an array
+        $rows = array_map('str_getcsv', file($file));
+        $phoneNumbers = array_column($rows, 1); 
+
+        if (!empty($phoneNumbers) && $phoneNumbers[0] == 'PHONE NUMBER') {
+            array_shift($phoneNumbers);
+        }
+        $phoneNumbers = array_map('trim', $phoneNumbers);
+
+        $uniquePhoneNumbers = array_unique($phoneNumbers);
+        $filename="UNIQUE_PLAYERS.csv";
+        header( 'Content-Type: text/csv; charset=utf-8' );
+        header( 'Content-Disposition: attachment; filename='.$filename );
+        $output = fopen( 'php://output', 'w' );
+        ob_start();
+        $data=['PHONE NUMBER'];
+        fputcsv( $output,$data);
+        foreach($uniquePhoneNumbers as $row)
+        {
+            $arr=[];
+            array_push($arr,$row);
+            fputcsv( $output,$arr);
+        }
+        Yii::$app->end();
+        return ob_get_clean();
+
     }
 
 }
