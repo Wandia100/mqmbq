@@ -1048,8 +1048,8 @@ class ReportController extends Controller{
     }
     public function actionMerge($file1,$file2,$file3)
     {
-        $file1="/mnt/c/Users/kutal/Downloads/dbs/".$file1.".csv";
-        $file2="/mnt/c/Users/kutal/Downloads/dbs/".$file2.".csv";
+        $file1="/mnt/c/Users/walummbe/Downloads/dbs/".$file1.".csv";
+        $file2="/mnt/c/Users/walummbe/Downloads/dbs/".$file2.".csv";
         $handle = fopen($file1, "r");
         $seen=[];
         $final=[];
