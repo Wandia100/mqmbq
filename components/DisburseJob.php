@@ -16,7 +16,7 @@ class DisburseJob extends BaseObject implements \yii\queue\JobInterface
         }
         if(in_array(gethostname(),[CMEDIA_COTZ]))
         {
-            Disbursements::tzPayout($this->id,"mchongo");
+            // Disbursements::tzPayout($this->id,"mchongo");
         }
         
     }
