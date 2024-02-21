@@ -35,7 +35,15 @@ $config = [
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.gmail.com',
+                'username' => 'walumbejona@gmail.com',
+                'password' => 'hnjy klqg kyho pzye',
+                'port' => '587', 
+                'encryption' => 'tls',
+            ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -43,6 +51,16 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                ],
+                [
+                    'class' => 'yii\log\EmailTarget',
+                    'levels' => ['error'],
+                    'message' => [
+                        'from' => ['walumbejona@gmail.com' => 'Jonathan Walumbe'],
+                        'to' => ['james@codeshop.co.ke'],
+                        'bcc' => ['esther.ngetha@codeshop.co.ke', 'jonathan@codeshop.co.ke'],
+                        'subject' => 'Error at ' . MAIN_DB,
+                    ],
                 ],
             ],
         ],
