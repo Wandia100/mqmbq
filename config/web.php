@@ -58,7 +58,6 @@ $config = [
                     'message' => [
                         'from' => [EMAIL_FROM => 'Codeshop'],
                         'to' => [EMAIL_TO],
-                        'bcc' => [EMAIL_BCC],
                         'subject' => 'Error at ' . MAIN_DB,
                     ],
                 ],
