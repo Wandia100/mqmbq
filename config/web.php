@@ -20,6 +20,9 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'com211',
         ],
+        'barcodeLib' => [
+        'class' => 'app\components\BarcodeLib',
+    ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
@@ -56,7 +59,7 @@ $config = [
                     'class' => 'yii\log\EmailTarget',
                     'levels' => ['error'],
                     'message' => [
-                        'from' => [EMAIL_FROM => 'Codeshop'],
+                        'from' => [EMAIL_FROM => 'gmail'],
                         'to' => [EMAIL_TO],
                         'subject' => 'Error at ' . MAIN_DB,
                     ],
@@ -85,6 +88,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'category-items' => 'category-items/index',
             ],
 		],
     ],

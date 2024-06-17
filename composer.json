@@ -28,7 +28,8 @@
         "kartik-v/yii2-export": "dev-master",
         "igorescobar/jquery-mask-plugin":"dev-master",
         "yiisoft/yii2-queue": "^2.3",
-        "enqueue/amqp-lib": "^0.10.9"
+        "enqueue/amqp-lib": "^0.10.9",
+        "zendframework/zend-barcode": "^2.8"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

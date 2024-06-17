@@ -87,7 +87,7 @@ class HourlyPerformanceReports extends \yii\db\ActiveRecord
         $transaction_history_result = array();
         $start=0;
         $end=24;
-        $stations=Stations::getActiveStations();
+        $stations=Categories::getActiveCategories();
         
         $response=array();
         $day_total=[];

@@ -9,7 +9,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="col-md-12">
                         <?=$this->renderFile('@app/views/layouts/partials/_date_filter.php', [
                                 'data' => [],
-                                'url'  => '/report/dailyawarding',
+                                'url'  => '/report/dailyprofit',
                                 'from' => date( 'Y-m-d' )
                         ])?>
                 </div>

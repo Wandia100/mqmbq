@@ -31,7 +31,7 @@ use yii\helpers\Html;
 $action              = isset( $action ) && $action != "" ? $action : $url;
 $start               = isset( $from ) && $from != "" ? $from : date( 'Y-m-d', strtotime( '-14 days' ) );
 $end                 = isset( $to ) && $to != "" ? $to : date( 'Y-m-d' );
-$params              = $data;
+//$params              = $data;
 $new_params          = '';
 $count               = 0;
 $vt                  = 0;

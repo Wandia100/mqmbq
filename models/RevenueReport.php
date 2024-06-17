@@ -28,7 +28,7 @@ class RevenueReport extends \yii\db\ActiveRecord
      */
     public static function getDb()
     {
-        return Yii::$app->get('analytics_db');
+        return Yii::$app->get('db');
     }
 
     /**
@@ -37,7 +37,7 @@ class RevenueReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['revenue_date','station_id','unique_field','station_name'], 'safe'],
+            [['revenue_date','category_id','unique_field','category_name'], 'safe'],
             [['total_revenue', 'total_awarded', 'net_revenue'], 'integer'],
         ];
     }
@@ -49,7 +49,7 @@ class RevenueReport extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'station_name' => 'Station',
+            'category_name' => 'Category',
             'revenue_date' => 'Revenue Date',
             'total_revenue' => 'Total Revenue',
             'total_awarded' => 'Total Awarded',
@@ -63,7 +63,7 @@ class RevenueReport extends \yii\db\ActiveRecord
             $stations = implode(",", array_map(function($string) {
                return '"' . $string . '"';
             }, \Yii::$app->myhelper->getStations()));
-            $sql->andWhere("station_id IN ($stations)");
+            $sql->andWhere("category_id IN ($stations)");
         }
         return $sql->orderBy("revenue_date DESC")->all();
     }
@@ -124,7 +124,7 @@ class RevenueReport extends \yii\db\ActiveRecord
                 $data = RevenueReport::find()
                 ->select(['total'=>'SUM(total_revenue)'])  
                 ->where("revenue_date ='$i'")
-                ->andWhere("station_id IN ($stations)")
+                ->andWhere("category_id IN ($stations)")
                 ->createCommand()->queryAll();
         }
         else

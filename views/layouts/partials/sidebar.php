@@ -74,7 +74,7 @@ use luc\tourist\Tourist;
                     <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Payouts', ['/report/payouts'], ['class' => ''])?>
                 </li> 
                 <li class="<?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Admin payout" title="Loser payout">
-                    <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Loser Bonus', ['/report/loserpayout'], ['class' => ''])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Returned Items', ['/returnedback/index'], ['class' => ''])?>
                 </li>  
                 <li class="<?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Growth trend" title="Growth trend">
                     <?= Html::a('<i class="metismenu-icon fa fa-clock"></i> Growth trends', ['/report/growthtrend'], ['class' => ''])?>
@@ -107,13 +107,13 @@ use luc\tourist\Tourist;
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?>  <?=$customercarevisibility?>" title="User Administration"
                     data-content="User Management Module. Menu options to manage, edit, view, create users.">
                     
-                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> STATION MANAGEMENT <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>', "#", ['class' => ''])?>               
+                    <?= Html::a('<i class="metismenu-icon fa fa-list"></i> CATEGORIES MANAGEMENT <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>', "#", ['class' => ''])?>               
                     <ul>
                     <li class="<?= $presentervisibility?> <?=$managementvisibility?>  <?=$customercarevisibility?>">
-                    <?= Html::a('<i class="metismenu-icon fa fa-signal"></i> Stations', Url::to(['/stations/index']), ['class' => '', 'id'=>'manage_categories'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-signal"></i> Categories', Url::to(['/categories/index']), ['class' => '', 'id'=>'manage_categories'])?>
                 </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?>  <?=$customercarevisibility?>">
-                    <?= Html::a('<i class="metismenu-icon fa fa-microphone"></i> Station Shows', Url::to(['/stationshows/index']), ['class' => '', 'id'=>'manage_categories'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-microphone"></i> Categories Items', Url::to(['/category-items/index']), ['class' => '', 'id'=>'manage_categories'])?>
                 </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$stationmanagementvisibility?> <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-gift"></i> Prizes', Url::to(['/prizes/index']), ['class' => '', 'id' => 'newapp'])?>
@@ -132,7 +132,7 @@ use luc\tourist\Tourist;
                     <?= Html::a('<i class="metismenu-icon fa fa-list"></i> REPORTS <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>', "#", ['class' => ''])?>               
                     <ul>
                     <li class="<?= $presentervisibility?> <?=$managementvisibility?>  <?=$customercarevisibility?>">
-                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Mpesa Report', Url::to(['/mpesapayments/index']), ['class' => '', 'id' => 'appmenu'])?>
+                    <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Transactions Report', Url::to(['/transactions/index']), ['class' => '', 'id' => 'appmenu'])?>
                 </li>
                 <li class="<?= $presentervisibility?> <?=$managementvisibility?> <?=$customercarevisibility?>">
                     <?= Html::a('<i class="metismenu-icon fa fa-chart-bar"></i> Transactions Report', Url::to(['/transactionhistories/index']), ['class' => '', 'id' => 'appmenu'])?>

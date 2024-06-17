@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use app\models\MpesaPayments;
+use app\models\Transactions;
 use app\models\WinningHistories;
 use Yii;
 use yii\db\IntegrityException;
@@ -30,7 +30,7 @@ class SiteReport extends \yii\db\ActiveRecord
      */
     public static function getDb()
     {
-        return Yii::$app->get('analytics_db');
+        return Yii::$app->get('db');
     }
 
     /**
@@ -63,24 +63,24 @@ class SiteReport extends \yii\db\ActiveRecord
     public static function setSiteReport(){
         $ReportNames = ['yesterday','last_7_days','currentmonth','lastweek','lastmonth','totalrevenue','today_payout','yesterday_payout'];
         $payInReportName = ['yesterday','last_7_days','currentmonth','lastweek','lastmonth','totalrevenue'];
-        $stations=Stations::getActiveStations();
+        $categories=Categories::getActiveCategories();
         //SiteReport::deleteAll(false);
-        for($i=0;$i< count($stations); $i++)
+        for($i=0;$i< count($categories); $i++)
         {
-            $station=$stations[$i];
+            $category=$categories[$i];
             foreach ($ReportNames as $value) {
                 if(in_array($value, $payInReportName)){
-                    $sum = MpesaPayments::getMpesaCountsPerStation($value,$station->id);
+                    $sum = Transactions::getMpesaCountsPerCategory($value,$category->id);
                 }else if($value == 'yesterday_payout'){
-                    $sum = WinningHistories::getPayoutPerStation(date("Y-m-d",strtotime("yesterday")),$station->id)['total'];
+                    $sum = Transactions::getPayoutPerCategory(date("Y-m-d",strtotime("yesterday")),$category->id)['total'];
                 }
                 try{
-                    $unique_field=$station->id.$value;
+                    $unique_field=$category->id.$value;
                     $model = SiteReport::find()->where("unique_field = '$unique_field'")->one();
                     if(!$model){
                         $model = new SiteReport();
                     }
-                    $model -> station_id = $station->id;
+                    $model -> category_id = $category->id;
                     $model -> report_name = $value;
                     $model -> report_value = $sum;
                     $model -> unique_field = $unique_field;
@@ -103,11 +103,11 @@ class SiteReport extends \yii\db\ActiveRecord
     public static function getSiteReport($reportName){
         if(\Yii::$app->myhelper->isStationManager())
         {
-            $stations = implode(",", array_map(function($string) {
+            $categories = implode(",", array_map(function($string) {
                 return '"' . $string . '"';
                 }, \Yii::$app->myhelper->getStations()));
             $sql="select COALESCE(sum(report_value),0) as report_value from 
-                    site_report where report_name = '$reportName' AND station_id IN ($stations)";        
+                    site_report where report_name = '$reportName' AND category_id IN ($categories)";        
         }
         else
         {
@@ -118,7 +118,7 @@ class SiteReport extends \yii\db\ActiveRecord
         if($model){
             return $model->report_value > 0 ? $model->report_value: 0;
         }*/
-        return Yii::$app->analytics_db->createCommand($sql)
+        return Yii::$app->db->createCommand($sql)
         ->queryOne()['report_value'];
     }
 }

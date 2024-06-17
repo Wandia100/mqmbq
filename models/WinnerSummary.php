@@ -26,7 +26,7 @@ class WinnerSummary extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'winner_summary';
+        return 'profit_summary';
     }
 
     /**
@@ -34,7 +34,7 @@ class WinnerSummary extends \yii\db\ActiveRecord
      */
     public static function getDb()
     {
-        return Yii::$app->get('analytics_db');
+        return Yii::$app->get('db');
     }
 
     /**
@@ -43,12 +43,11 @@ class WinnerSummary extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['awarded'], 'integer'],
-            [['winning_date'], 'safe'],
-            [['station_id', 'station_show_id', 'prize_id'], 'string', 'max' => 36],
-            [['station_name', 'prize_name'], 'string', 'max' => 50],
-            [['show_name'], 'string', 'max' => 50],
-            [['show_timing'], 'string', 'max' => 25],
+            [['profit'], 'integer'],
+            [['transaction_date'], 'safe'],
+            [['category_id', 'category_item_id'], 'string', 'max' => 36],
+            [['category_name'], 'string', 'max' => 50],
+            [['item_name'], 'string', 'max' => 50],
             [['unique_field'], 'string', 'max' => 500],
             [['unique_field'], 'unique'],
         ];
@@ -61,31 +60,28 @@ class WinnerSummary extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'station_id' => 'Station ID',
-            'station_show_id' => 'Station Show ID',
-            'station_name' => 'Station Name',
-            'show_name' => 'Show Name',
-            'prize_name' => 'Prize Name',
-            'prize_id' => 'Prize ID',
-            'show_timing' => 'Show Timing',
-            'awarded' => 'Awarded',
-            'winning_date' => 'Winning Date',
+            'category_id' => 'Category ID',
+            'category_item_id' => 'Category Item ID',
+            'category_name' => 'Category Name',
+            'item_name' => 'Item Name',
+            'profit' => 'Profit',
+            'transaction_date' => 'Transaction Date',
             'unique_field' => 'Unique Field',
         ];
     }
-    public static function getAwardedSummary($start_date,$end_date)
+    public static function getProfitSummary($start_date,$end_date)
     {
-        $sql="select station_name,show_name,prize_name,show_timing,sum(awarded) as awarded from winner_summary
+        $sql="select category_name,item_name,profit,sum(profit) as profit from profit_summary
         where ";
         if(\Yii::$app->myhelper->isStationManager()){
-            $stations = implode(",", array_map(function($string) {
+            $categories = implode(",", array_map(function($string) {
                return '"' . $string . '"';
-            }, \Yii::$app->myhelper->getStations()));
-            $sql .=" `station_id` IN ($stations) AND ";
+            }, \Yii::$app->myhelper->getCategories()));
+            $sql .=" `category_id` IN ($categories) AND ";
         }
-        $sql.="winning_date between :start_date and :end_date
-        group by station_name,show_name,prize_name,show_timing";
-        return Yii::$app->analytics_db->createCommand($sql)
+        $sql.="transaction_date between :start_date and :end_date
+        group by category_name,item_name,profit";
+        return Yii::$app->db->createCommand($sql)
         ->bindValue(':start_date',$start_date)
         ->bindValue(':end_date',$end_date)
         ->queryAll();

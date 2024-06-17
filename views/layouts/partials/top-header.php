@@ -56,7 +56,7 @@ use app\modules\user\models\User;
                     <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Hourly Report', ['/report/hourlyperformance'], ['class' => 'text-light'])?>
                 </li>
                 <li class="nav-item tour-step <?= $presentervisibility?>  <?=$customercarevisibility?>" data-content="Show Summary" title="Show Summary">
-                    <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Show Summary', ['/report/showsummary'], ['class' => 'text-light'])?>
+                    <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Item summary', ['/report/showsummary'], ['class' => 'text-light'])?>
                 </li>
                 <li class="btn-group nav-item tour-step <?=$stationmanagementvisibility?> <?=$managementvisibility?> <?=$adminvisibility?> <?=$superadminvisibility?> <?=$customercarevisibility?>" data-content="Live" title="Live Transaction">
                     <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Live', ['/transactionhistories/presenter'], ['class' => 'text-light'])?>
@@ -65,14 +65,17 @@ use app\modules\user\models\User;
                     <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Commission Report', ['/report/presentercommission'], ['class' => 'text-light'])?>
                 </li>
                 <li class="btn-group nav-item tour-step <?=$presentervisibility?> <?=$managementvisibility?> <?=$customercarevisibility?>" data-content="Commission Summary" title="Commission Summary">
-                    <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Commission Summary', ['/report/commissionsummary'], ['class' => 'text-light'])?>
+                    <?= Html::a('<i class="nav-link-icon fa fa-chalkboard"></i> Profit summary', ['/report/commissionsummary'], ['class' => 'text-light'])?>
                 </li>
                 <li class="dropdown nav-item tour-step <?= $presentervisibility?> <?=$customercarevisibility?>" data-content="Daily Awarding Report" title="Daily Awarding Report">
-                    <?= Html::a('<i class="nav-link-icon fa fa-address-book"></i> Daily Awarding ', ['/report/dailyawarding'], ['class' => 'text-light'])?>
+                    <?= Html::a('<i class="nav-link-icon fa fa-address-book"></i> Daily Profit ', ['/report/dailyprofit'], ['class' => 'text-light'])?>
                 </li>
                 <li class="dropdown nav-item tour-step <?= $presentervisibility?> <?=$customercarevisibility?>" data-content="Revenue Report" title="Revenue Report">
                     <?= Html::a('<i class="nav-link-icon fa fa-chart-bar"></i> Revenue Report', ['/report/revenue'], ['class' => 'text-light'])?>
-                 </li>   
+                 </li> 
+                 <li class="nav-item tour-step">
+                    <?= Html::a('<i class="metismenu-icon fa fa-cart-plus"></i> Item Sale', ['/itemsale/index'], ['class' => '']) ?>
+                </li>
                 
                 <?php if(Yii::$app->request->userIP !== '127.0.0.1'): ?>
                 <li class="dropdown nav-item tour-step" data-content="Click to go to the configuration for the applications module" title="Settings/Apps Setup">

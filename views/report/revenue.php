@@ -25,31 +25,31 @@ $this->params['breadcrumbs'][] = $this->title;
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-        <th>Station</th>
+        <th>Category</th>
         <th>Day</th>
         <th>Total Revenue</th>
-        <th>Total Awarded</th>
+        <th>Total Profit</th>
         <th>Net Revenue</th>
         </tr>
     </thead>
     <tbody>
     <?php
     $total_revenue=0;
-    $total_awarded=0;
+    $total_profit=0;
     $total_net_revenue=0;
     $count=count($data);
     for($i=0;$i<$count; $i++)
     {
         $row=$data[$i];
         $total_revenue+=$row->total_revenue;
-        $total_awarded+=$row->total_awarded;
+        $total_awarded+=$row->total_profit;
         $total_net_revenue+=$row->net_revenue;
         ?>
             <tr>
             <td><?=$row->station_name;?></td>
             <td><?=$row->revenue_date;?></td>
             <td><?=number_format($row->total_revenue);?></td>
-            <td><?=number_format($row->total_awarded);?></td>
+            <td><?=number_format($row->total_profit);?></td>
             <td><?=number_format($row->net_revenue);?></td>
             </tr>
             <?php
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <td class="font-weight-bold" ></td>
         <td class="font-weight-bold" >TOTAL</td>
         <td class="font-weight-bold" ><?=number_format($total_revenue);?></td>
-        <td class="font-weight-bold" ><?=number_format($total_awarded);?></td>
+        <td class="font-weight-bold" ><?=number_format($total_profit);?></td>
         <td class="font-weight-bold" ><?=number_format($total_net_revenue);?></td>
         </tr>
         <?php

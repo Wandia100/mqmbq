@@ -49,25 +49,28 @@ $this->title = 'Home';
             </div>
             <div class="col-md-6">
                 <div class="well well-lg" style="background-color: #FFFFFF">
-                    <kbd>Recent winners</kbd><br/>
+                    <kbd>Recent Sales</kbd><br/>
                     <span>
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
                            // 'filterModel' => $searchModel,
                             'layout' => "{items}",
                             'columns' => [
+                                'quantity',
                                 [
-                                    'attribute' => 'prizename',
-                                    'value'     => 'prizes.name'
-                                ],
-                                'reference_name',
-                                [
-                                    'attribute' => 'stationname',
-                                    'value'     => 'stations.name'
+                                    'attribute' => 'category_id',
+                                    'value'     => 'category.name',
+                                    'label' => 'Category',
                                 ],
                                 [
-                                    'attribute' => 'stationshowname',
-                                    'value'     => 'stationshows.name'
+                                    'attribute' => 'category_item_id',
+                                    'value' => 'category_item.name',
+                                    'label'    => 'items'
+                                ],
+                                [
+                                   'attribute' => 'user_id',
+                                   'value' => 'user.first_name',
+                                   'label' => 'First Name',
                                 ],
                                 'amount',
 

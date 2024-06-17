@@ -614,7 +614,7 @@ class ReportController extends Controller{
         Yii::$app->end();
         return ob_get_clean();
     }
-    public function actionDailyawarding()
+    public function actionDailyprofit()
     {
         if(isset($_GET['criterion']) && $_GET['criterion']=="monthly")
         {
@@ -625,11 +625,11 @@ class ReportController extends Controller{
             $start_date=(isset($_GET['from'])?$_GET['from']:date("Y-m-d"));
             $end_date=(isset($_GET['to'])?date('Y-m-d', strtotime($_GET['to']. ' + 1 day')):date("Y-m-d",strtotime("+1 day",time())));
         }
-        $data=WinnerSummary::getAwardedSummary($start_date,$end_date);
+        $data=WinnerSummary::getProfitSummary($start_date,$end_date);
         $act = new \app\models\ActivityLog();
-        $act -> desc = "daily_awarding report";
+        $act -> desc = "daily_profit report";
         $act ->setLog();
-        return $this->render('daily_awarding', [
+        return $this->render('daily_profit', [
             'data' => $data
         ]);
     }
@@ -1127,6 +1127,10 @@ class ReportController extends Controller{
         Yii::$app->end();
         return ob_get_clean();
 
+    }
+    public function actionNewsale(){
+        
+        return render ('index');
     }
 
 }

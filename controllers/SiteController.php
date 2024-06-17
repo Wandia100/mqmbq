@@ -9,7 +9,10 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Expenses;
 use app\models\ForgotPass;
+use app\models\Transactions;
+use app\models\TransactionsSearch;
 use yii\helpers\Url;
 use app\models\WinningHistories;
 use app\models\WinningHistoriesSearch;
@@ -70,16 +73,16 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $currency="Tsh ";
+        $currency="KSH ";
         if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group==3){
-            return $this->redirect( [ '/transactionhistories/presenter' ] );
+            return $this->redirect( [ '/transactions/presenter' ] );
         }else if(isset(Yii::$app->user->identity->perm_group) && Yii::$app->user->identity->perm_group==6){
-            return $this->redirect( [ '/winninghistories/index' ] );
+            return $this->redirect( [ '/transactions/index' ] );
         }else{
-            $searchModel = new WinningHistoriesSearch();
+            $searchModel = new TransactionsSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','','','',1);
-            $today_income = \app\models\MpesaPayments::getMpesaCounts('today');
-            $today_payout=WinningHistories::getPayout(date("Y-m-d"))['total'];
+            $today_income = \app\models\Transactions::getMpesaCounts('today');
+            $today_payout=Transactions::getPayout(date("Y-m-d"))['total'];
             $yesterday_payout= \app\models\SiteReport::getSiteReport('yesterday_payout');
             return $this->render('index', [
                 'currency' => $currency,
